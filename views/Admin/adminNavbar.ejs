@@ -1,0 +1,93 @@
+
+<nav class="bg-orange-500 py-5 px-5 flex justify-between items-center included-content">
+    <div class="flex justify-between text-white items-center">
+        <div class="mx-2"><span class="cursor-pointer"><i id="open"
+                    class="text-lg font-bold fa-solid fa-bars"></i></span></div>
+        <h2 onclick="redirectTo('/admin/')" class="mx-2 text-xl font-bold cursor-pointer">Dashboard</h2>
+    </div>
+
+    <div class="mx-4 relative px-5 text-center flex justify-center">
+        <div class="bg-slate-300 mx-auto rounded-full py-2 px-3 cursor-pointer" id="profileOpens"><i class="fa-regular fa-user"></i></div>
+        <div class="transition duration-1000 ease-in-out hidden absolute mx-auto py-3  bg-white text-center rounded-md" id="profileMenu">
+           <div class="text-right" > <i id="profileClose"
+            class="cursor-pointer fa-solid mx-2 hover:text-orange-500  fa-xmark text-xl"></i></div>
+            <a class="text-gray-600 hover:text-orange-500 px-4 text-xl" href="/admin/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+<div id="sidebar"
+    class="transition duration-1000 ease-in-out -translate-x-full rounded flex flex-col bg-orange-500 px-3 py-4 w-60 absolute top-0 z-10">
+    <div class="flex justify-between items-center text-white py-5">
+        <h2 class="mx-2 text-xl font-bold">FoodWo</h2><i id="close"
+            class="transition duration-1000 ease-linear cursor-pointer fa-solid mx-2 fa-xmark text-xl"></i>
+    </div>
+    <hr class="w-full pb-4" />
+    <span onclick="redirectTo('/admin/products')"
+        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Products</span>
+    <span onclick="redirectTo('/admin/category')"
+        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Categories</span>
+    <span
+        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Product
+        Details</span>
+    <span
+        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Product
+        Details</span>
+    <span
+        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Product
+        Details</span>
+    <span
+        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Product
+        Details</span>
+    <span
+        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Product
+        Details</span>
+    <span
+        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Product
+        Details</span>
+    <span
+        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Product
+        Details</span>
+    <span
+        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Product
+        Details</span>
+</div>
+
+<script>
+    const open = document.getElementById('open');
+    const closes = document.getElementById('close');
+    const profileOpens = document.getElementById('profileOpens');
+    const profileClose = document.getElementById('profileClose');
+    const profileMenu = document.getElementById('profileMenu');
+    const sidebar = document.getElementById('sidebar');
+
+    open.addEventListener('click', (event) => {
+        sidebar.classList.remove('-translate-x-full');
+        sidebar.classList.add('left-0');
+        event.style.display = "none";
+        closes.style.display = "block";
+    })
+
+    closes.addEventListener('click', (event) => {
+        sidebar.classList.remove('left-0');
+        sidebar.classList.add('-translate-x-full');
+        event.style.display = "none";
+        open.style.display = "block";
+    })
+
+    profileOpens.addEventListener('click', (event) => {
+        profileMenu.classList.remove('hidden');
+        event.style.display = "none";
+        profileClose.style.display = "block";
+    })
+
+    profileClose.addEventListener('click', (event) => {
+        profileMenu.classList.add('hidden');
+        event.style.display = "none";
+        profileOpens.style.display = "block";
+    })
+
+    function redirectTo(endpoint){
+            window.location.href=endpoint;
+        }
+
+</script>

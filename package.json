@@ -1,0 +1,31 @@
+{
+  "name": "foodwo",
+  "version": "1.0.0",
+  "description": "Welcome to FoodWo, your one-stop destination for online food ordering in Kannur District! FoodWo provides a convenient platform for customers to browse and order delicious food items from a single restaurant without leaving the comfort of their homes. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon node index",
+    "style": "npx tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch"
+  },
+  "author": "Richu Sony",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^10.4.16",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "moment": "^2.29.4",
+    "mongoose": "^7.5.2",
+    "nodemon": "^3.0.1",
+    "postcss-cli": "^10.1.0",
+    "springedge": "^1.0.6",
+    "twilio": "^4.18.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.6",
+    "tailwindcss": "^3.3.3"
+  }
+}

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <% if(data){ %>
+        <% data.forEach((item,index)=>{ %>
+            <title>FoodWo - <%=item.productName %> Update</title>
+            <link href="/public/css/output.css" rel="stylesheet">
+            <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+            <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+            <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+            <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <%- include('adminNavbar') %>
+        <div id="alert" class="transition delay-150 ease-linear hidden py-4 px-3 bg-red-400 text-white text-center"><i
+                class="fa-solid fa-triangle-exclamation text-xl"></i> We are facing some issues.Please try later.</div>
+        <section class="px-5 py-3">
+            <div class="">
+                
+                <div class="w-56 h-56 mx-auto">
+                    <!-- image upload -->
+                    <label for="doc"
+                        class="md:w-2/3 md:mx-auto bg-orange-100 rounded w-full h-full text-center flex flex-col justify-center items-centerd cursor-pointer">
+                        <img src="<%=item.productImage%>" class="w-full h-full rounded" alt="" id="imagetag">
+                        <input type="file" name="" placeholder="upload profile" id="doc" class="" hidden>
+                    </label>
+
+                </div>
+                <div class="md:w-1/2 md:px-4 mx-auto">
+                    <!-- Input Fields -->
+                    <form action="">
+                        <input type="text" id="id" value="<%=item._id%>" hidden>
+                        <div class="flex flex-col my-2">
+                            <label for="">Product Name</label>
+                            <input type="text" name="" maxlength="20" id="productName" placeholder="Product Name" value="<%=item.productName%>"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                            </div>
+                        <div class="flex flex-col my-2">
+                            <label for="">Description</label>
+                            <textarea type="text" name="" id="description"  placeholder="Product Description" cols="3" rows="5" value="<%=item.description%>"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500"><%=item.description%></textarea>
+                        </div>
+                        <div class="flex flex-col my-2">
+                            <label for="">Price</label>
+                            <input type="tel" maxlength="4" name="" id="productPrice" placeholder="Product Price" value="<%=item.productPrice%>"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="flex flex-col my-2">
+                            <label for="">Type</label>
+                            <select name="" id="productType"  class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500" value="<%=item.productType%>">
+                                <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500" value="none">None</option>
+                                <%if(item.productType=== "kg"){ %><option selected class="px-2  py-2 rounded outline-orange-500 border border-orange-500" value="<%=item.productType%>">Per Kilogram(/kg)</option> <% }else{ %><option class="px-2  py-2 rounded outline-orange-500 border border-orange-500" value="kg">Per Kilogram(/kg)</option> <% } %>
+                                <%if(item.productType=== "plate"){ %><option selected class="px-2  py-2 rounded outline-orange-500 border border-orange-500" value="plate">Per Plate</option> <% }else{ %><option class="px-2  py-2 rounded outline-orange-500 border border-orange-500" value="plate">Per Plate</option> <% } %>
+                            </select>
+                        </div>
+                        <div class="flex flex-col my-2">
+                            <label for="">Category</label>
+                            <select name="" id="category"  class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500" value="<%=item.categroy%>">
+                                <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500" value="none">None</option>
+                                <option selected class="px-2  py-2 rounded outline-orange-500 border border-orange-500" value="<%=item.category%>"><%=item.category%></option>
+                                <% if (category) { %>
+                                    <% category.forEach((cat) => { %>
+                                      <option class="px-2 py-2 rounded outline-orange-500 border border-orange-500" value="<%= cat.category %>"><%= cat.category %></option>
+                                    <% }); %>
+                                  <% } %>
+                            </select>
+                        </div>
+                        <div class="flex flex-col my-2">
+                            <label for="">Sold</label>
+                            <input type="text" disabled name="" id="sold" placeholder="" value="<%=item.productSold%>"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                            </div>
+                        <div class="flex flex-col my-2">
+                            <label for="">In Stock</label>
+                            <input type="number" name="" id="inStock" autocomplete="new-password" value="<%=item.productInStock%>"
+                                placeholder="Number of stock"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="my-8 text-center">
+                            <button type="submit" onclick="updateitem(event)"
+                                class="bg-orange-500 rounded-full py-2 px-6 md:px-6 text-white text-xl md:text-xl">Update</button>
+                        </div>
+                        <div class="md:w-1/2 relative flex justify-center items-center mx-auto mb-5">
+                            <div id="toast"
+                                class="transition duration-[0.5s] md:w-80 bg-orange-500 py-5 px-3 hidden ease-linear rounded-md text-center text-white">
+                            </div>
+                        </div>
+                    </form>
+                </div>  
+                <% }) %>
+            </div>
+            <% }%>
+        </section>
+        <!-- Footer  -->
+        <%- include('adminFooter') %>
+
+
+        <script>
+                let baseImage = "";
+                // Image Details
+                const image = document.getElementById('doc');
+                const imagetag = document.getElementById('imagetag');
+                const alert = document.getElementById('alert');
+
+                image.addEventListener('change', async (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                        baseImage = await ImagetoBase64(file);
+                        imagetag.setAttribute("src", baseImage);
+                    }
+                });
+
+                async function ImagetoBase64(file) {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+
+                    return new Promise((resolve, reject) => {
+                        reader.onload = () => resolve(reader.result);
+                        reader.onerror = err => reject(err);
+                    });
+                }
+
+                async function updateitem(event) {
+                    const id = document.getElementById('id').value;
+                    const productName = document.getElementById('productName').value;
+                    const description = document.getElementById('description').value;
+                    const productPrice = document.getElementById('productPrice').value;
+                    const productType = document.getElementById('productType').value;
+                    const category = document.getElementById('category').value;
+                    const sold = document.getElementById('sold').value;
+                    const inStock = document.getElementById('inStock').value;
+                    const image = document.getElementById('imagetag').src;
+
+                    const formData = {
+                        id:id,
+                        productName: productName,
+                        description: description,
+                        productPrice: productPrice,
+                        productType: productType,
+                        category:category,
+                        sold: sold,
+                        inStock: inStock,
+                        image: image
+                    }
+                    const updateDetails = await JSON.stringify(formData);
+
+                    const response = await fetch('/admin/update-product', {
+                        method: 'PATCH',
+                        headers: {
+                            "Content-Type": "application/json",
+                            // 'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: updateDetails
+                    })
+                    console.log('response')
+                    if (!response.ok) {
+                        alert.classList.remove('hidden')
+                        alert.innerHTML=`<span>Something went wrong..</span>`
+                    } else {
+                        alert.classList.remove('bg-red-400')
+                        alert.classList.add('bg-green-400')
+                        alert.innerHTML=`<span>item Details updated</span>`
+                    }
+                }
+            </script>
+
+</body>
+
+</html>

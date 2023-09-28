@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodWo - Admin Login</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- navigation -->
+    <nav class="py-4 px-5 md:px-10 flex justify-between items-center shadow-2xl">
+        <div class="text-center p-2 bg-MainSearchBg">
+            <a href="/" class="text-orange-500 font-bold text-2xl md:text-3xl ">FoodWo</a>
+        </div>
+    </nav>
+
+    <!-- main section -->
+    <section class="mt-10 px-5">
+        <h1 class="mt-20 text-center font-bold text-orange-500 text-2xl md:text-3xl">Admin Login</h1>
+
+        <div class="my-6 md:w-1/3 mx-auto">
+            <!-- Input Fields -->
+            <div class="flex flex-col my-2">
+                <label for="">Email</label>
+                <input type="text" name=""  id="email" placeholder="Enter Email"
+                    class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+            </div>
+            <div class="flex flex-col my-2">
+                <label for="">Password</label>
+                <input type="password" name="" maxlength="20" id="password" placeholder="Enter Password"
+                    class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+            </div>
+        </div>
+
+        <div class="my-8 text-center">
+            <button type="submit" onclick="handleLogIn(event)"
+                class="bg-orange-500 rounded-full py-2 px-6 md:px-6 text-white text-xl md:text-xl">Login</button>
+        </div>
+
+        <div class="md:w-1/2 relative flex justify-center items-center mx-auto mb-5">
+            <div id="toast"
+                class="transition duration-[0.5s] md:w-80 bg-orange-500 py-5 px-3 hidden ease-linear rounded-md text-center text-white">
+            </div>
+    </section>
+
+    <!-- footer -->
+    <footer class="py-10 bg-[#02060C] bottom-0 absolute w-full">
+        <p class="text-white text-center">Developed By Richu Sony</p>
+    </footer>
+
+    <script> async function handleLogIn(event) {
+            event.preventDefault();
+            //User Details
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+            // Check if the email address matches the regular expression
+            const isEmailValid = emailRegex.test(email);
+
+
+            console.log(email, password);
+            if (!email || !password) {
+                toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> All fields are required.</span>`;
+                toast.classList.remove("hidden");
+                toast.classList.remove("translate-y-96");
+                setTimeout(() => {
+                    toast.classList.add("hidden");
+                    toast.classList.add("translate-y-96");
+                }, 3000)
+            }
+            else if (!isEmailValid) {
+                toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Please enter a valid email address.</span>`;
+                toast.classList.remove("hidden");
+                toast.classList.remove("translate-y-96");
+                setTimeout(() => {
+                    toast.classList.add("hidden");
+                    toast.classList.add("translate-y-96");
+                }, 3000);
+            }
+            else {
+                const formData = {
+                    email: email,
+                    password: password,
+                }
+
+                const userData = await JSON.stringify(formData);
+                try {
+                    // Send a POST request to the server using async/await
+                    const response = await fetch(`/admin/login`, {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json",
+                            // 'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: userData,
+                    });
+                    if(!response.ok){
+                        const data = await response.json();
+                        console.log()
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data?.err}</span>`;
+                        toast.classList.remove("hidden");
+                        toast.classList.remove("translate-y-96");
+                        setTimeout(() => {
+                            toast.classList.add("hidden");
+                            toast.classList.add("translate-y-96");
+                        }, 3000);
+                       
+                    }else{
+                        const data = await response.json();
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-check text-xl"></i> ${data?.success}</span>`;
+                        toast.classList.remove("hidden");
+                        toast.classList.remove("translate-y-96");
+                        setTimeout(() => {
+                            toast.classList.add("hidden");
+                            toast.classList.add("translate-y-96");
+                            window.location.href="/admin"
+                        }, 3000);
+                    }
+                
+                } catch (error) {
+                    // Handle any network, request, or other errors here
+                    console.error(error);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

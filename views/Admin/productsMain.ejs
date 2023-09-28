@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodWo - Products</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-[#EAEFF8]">
+    <!-- Navigation -->
+    <%- include('adminNavbar') %>
+
+        <section class="px-5 py-2 md:h-screen mb-5">
+            <div class="flex justify-between mx-3 items-center my-3">
+                <h1 class="font-bold py-3 border-green-300 text-xl">Product List</h1> <a
+                    class="bg-orange-500 py-2 px-3 rounded text-white" href="/admin/addProducts">New Product</a>
+            </div>
+            <% if(data){%>
+                <div class="overflow-x-auto md:overflow-x-hidden md:flex md:justify-center md:items-center">
+                    <table class="mx-3 py-3">
+                        <thead class=" text-center py-3 px-4 bg-[#F8F9FB] rounded-full shadow-md">
+                            <th class="px-4 py-2 font-bold text-center mx-4 rounded-l-xl">No.</th>
+                            <th class="px-4 py-2 font-bold text-center mx-4">Product Name</th>
+                            <th class="px-4 py-2 font-bold text-center mx-4">Description</th>
+                            <th class="px-4 py-2 font-bold text-center mx-4">Price</th>
+                            <th class="px-4 py-2 font-bold text-center mx-4">Category</th>
+                            <th class="px-4 py-2 font-bold text-center mx-4">Sold</th>
+                            <th class="px-4 py-2 font-bold text-center mx-4">In Stock</th>
+                            <th class="px-4 py-2 font-bold text-center mx-4 rounded-r-xl">Action</th>
+                        </thead>
+                        <tbody class="bg-blue-400 py-3 px-5">
+                            <% data.forEach((item,index)=>{ %>
+
+                                <tr
+                                    class="transition h-full w-full delay-150 text-center shadow-md rounded-xl bg-gray-200 ease-linear hover:bg-white hover:scale-105">
+                                    <td class="px-5 rounded-l-xl">
+                                        <%= index + 1 %>
+                                    </td>
+                                    <td class="px-5 text-start">
+                                        <span class="font-semibold">
+                                            <%= item.productName %>
+                                        </span>
+                                    </td>
+                                    <td class=" px-5 text-start"><span class="text-sm font-thin w-32">
+                                            <%= item.description %>
+                                        </span></td>
+                                    <td class=" px-5">
+                                        <%= item.productPrice %> / <% if(item.productType==="kg" ){%>Kg<% }else{%>
+                                                    Plate <% } %>
+                                    </td>
+                                    <td class=" px-5 text-start">
+                                        <%= item.category %> 
+                                    </td>
+                                    <td class=" px-5">
+                                        <%= item.productSold %>
+                                    </td>
+                                    <td class=" px-5">
+                                        <%= item.productInStock %>
+                                    </td>
+                                    <td
+                                        class=" px-5 rounded-r-xl flex flex-col md:flex-row justify-between items-center">
+                                        <a href="/admin/productUpdateDetails/<%= item._id %>"
+                                            class="bg-blue-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
+                                                class="fa-solid fa-pencil"></i></a>
+                                        <a href="/admin/user-block/"
+                                            class="bg-gray-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm">
+                                            <i class="fa-solid fa-lock-open"></i>
+                                            <!-- <i class="fa-solid fa-lock"></i> -->
+
+                                        </a>
+                                        <a href="/admin/product-delete/<%= item._id %>"
+                                            class="bg-red-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
+                                                class="fa-solid fa-trash-can"></i></a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <% } %>
+        </section>
+
+        <!-- Footer -->
+        <%- include('adminFooter') %>
+</body>
+
+</html>

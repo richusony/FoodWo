@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodWo</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+        .text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+    </style>
+</head>
+
+<body>
+    <!-- navigation -->
+    <nav class="py-4 px-5 md:px-10 flex justify-between items-center shadow-2xl">
+        <div class="text-center p-2 bg-MainSearchBg">
+            <span class="text-orange-500 font-bold text-2xl md:text-3xl ">FoodWo</span>
+        </div>
+        <div class="flex justify-between items-center">
+            <span id="open" class="md:hidden text-2xl"><i class="fa-solid fa-bars"></i></span>
+            <ul id="menubar"
+                class="transition ease-linear delay-1000 hidden md:flex absolute md:static top-3 md:top-0 right-3 md:right-0 rounded md:rounded-none bg-orange-500 md:bg-white text-white md:text-black p-5 md:p-0">
+                <div class="md:hidden text-2xl w-full text-end"><i id="close" class="fa-solid fa-xmark text-end"></i>
+                </div>
+                <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/search"><i
+                            class="fa-solid fa-magnifying-glass"></i> Search</a></li>
+                <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/offers"><i
+                            class="fa-solid fa-tag"></i> Offers</a></li>
+                <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/help"><i
+                            class="fa-solid fa-life-ring"></i> Help</a></li>
+                <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/user/login"><i
+                            class="fa-solid fa-life-ring"></i> Login</a></li>
+                <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/cart"><i
+                            class="fa-solid fa-cart-shopping"></i> Cart</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- main section -->
+    <section class="px-10 my-5">
+        <!-- Banners -->
+        <div class="md:px-10 my-4 md:mt-8 flex justify-between">
+            <h2 class="font-bold text-xl md:text-2xl">Best offers for you</h2>
+            <div class="flex justify-between">
+                <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i class="fa-solid fa-arrow-left"></i></span>
+                <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+        </div>
+        <div class="my-2 md:my-6 overflow-hidden flex justify-center items-center">
+            <div class="foodContainer md:py-3 overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
+                <div class="md:w-96 h-full mx-3 inline-block">
+                    <img class="w-full h-full" src="/public/images/banner.svg" alt="banner">
+                </div>
+                <div class="md:w-96 h-full mx-3 inline-block">
+                    <img class="w-full h-full" src="/public/images/banner2.svg" alt="banner">
+                </div>
+                <div class="md:w-96 h-full mx-3 inline-block">
+                    <img class="w-full h-full" src="/public/images/banner3.svg" alt="banner">
+                </div>
+                <div class="md:w-96 h-full mx-3 inline-block">
+                    <img class="w-full h-full" src="/public/images/banner4.svg" alt="banner">
+                </div>
+                <div class="md:w-96 h-full mx-3 inline-block">
+                    <img class="w-full h-full" src="/public/images/banner5.svg" alt="banner">
+                </div>
+            </div>
+        </div>
+
+        <!-- category -->
+        <div class="md:px-10 my-4 md:mt-8 flex justify-between">
+            <h2 class="font-bold text-sm md:text-2xl">Richu, what's on your mind?</h2>
+            <div class="hidden md:flex md:justify-between">
+                <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                        class="fa-solid fa-arrow-left"></i></span>
+                <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                        class="fa-solid fa-arrow-right"></i></span>
+            </div>
+        </div>
+        <div class="my-3 overflow-hidden flex justify-center items-center">
+            <div class="foodContainer overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
+                <div class="w-36 h-40 inline-block">
+                    <div class="w-full h-full"><img class="w-full h-full"
+                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/rng/md/carousel/production/e20c602ba8ed5d8ec2204e7a7b19d9f6"
+                            alt=""></div>
+                </div>
+                <div class="w-36 h-40 inline-block">
+                    <div class="w-full h-full"><img class="w-full h-full"
+                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667625/PC_Creative%20refresh/Biryani_2.png"
+                            alt=""></div>
+                </div>
+                <div class="w-36 h-40 inline-block">
+                    <div class="w-full h-full"><img class="w-full h-full"
+                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029848/PC_Creative%20refresh/3D_bau/banners_new/Chinese.png"
+                            alt=""></div>
+                </div>
+                <div class="w-36 h-40 inline-block">
+                    <div class="w-full h-full"><img class="w-full h-full"
+                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029845/PC_Creative%20refresh/3D_bau/banners_new/Burger.png"
+                            alt=""></div>
+                </div>
+                <div class="w-36 h-40 inline-block">
+                    <div class="w-full h-full"><img class="w-full h-full"
+                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667626/PC_Creative%20refresh/South_Indian_4.png"
+                            alt=""></div>
+                </div>
+                <div class="w-36 h-40 inline-block">
+                    <div class="w-full h-full"><img class="w-full h-full"
+                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029858/PC_Creative%20refresh/3D_bau/banners_new/Rolls.png"
+                            alt=""></div>
+                </div>
+                <div class="w-36 h-40 inline-block">
+                    <div class="w-full h-full"><img class="w-full h-full"
+                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029851/PC_Creative%20refresh/3D_bau/banners_new/Ice_Creams.png"
+                            alt=""></div>
+                </div>
+                <div class="w-36 h-40 inline-block">
+                    <div class="w-full h-full"><img class="w-full h-full"
+                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667630/PC_Creative%20refresh/Desserts_2.png"
+                            alt=""></div>
+                </div>
+                <div class="w-36 h-40 inline-block">
+                    <div class="w-full h-full"><img class="w-full h-full"
+                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029853/PC_Creative%20refresh/3D_bau/banners_new/Parotta.png"
+                            alt=""></div>
+                </div>
+                <div class="w-36 h-40 inline-block">
+                    <div class="w-full h-full"><img class="w-full h-full"
+                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029859/PC_Creative%20refresh/3D_bau/banners_new/Shawarma.png"
+                            alt=""></div>
+                </div>
+                <div class="w-36 h-40 inline-block">
+                    <div class="w-full h-full"><img class="w-full h-full"
+                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667625/PC_Creative%20refresh/North_Indian_4.png"
+                            alt=""></div>
+                </div>
+                <div class="w-36 h-40 inline-block">
+                    <div class="w-full h-full"><img class="w-full h-full"
+                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029846/PC_Creative%20refresh/3D_bau/banners_new/Idli.png"
+                            alt=""></div>
+                </div>
+                <div class="w-36 h-40 inline-block">
+                    <div class="w-full h-full"><img class="w-full h-full"
+                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029850/PC_Creative%20refresh/3D_bau/banners_new/Dosa.png"
+                            alt=""></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Food Items -->
+        <div class="md:px-10 my-4 md:mt-8 flex justify-between">
+            <h2 class="font-bold text-xl md:text-2xl">Popular Items</h2>
+            <div class="flex justify-between">
+                <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                        class="fa-solid fa-arrow-left"></i></span>
+                <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                        class="fa-solid fa-arrow-right"></i></span>
+            </div>
+        </div>
+        <div class="md:px-10">
+            <div class="overflow-hidden flex justify-center items-center">
+                <div class="foodContainer overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
+                    <!-- items -->
+                    <% if(data){ data.forEach((food)=>{ %>
+                    <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
+                        <div class="w-full h-36 rounded-2xl"><img class="w-full h-full rounded-2xl object-cover"
+                                src="<%= food.productImage %>"
+                                alt=""></div>
+                        <h3 class="font-bold my-1 text-xl"><%= food.productName %></h3>
+                        <div><i class="fa-regular fa-star text-orange-500"></i> <span class="font-semibold">4.2</span></div>
+                        <div class="max-w-full bg-slate-500"><span class="text-red-500 text-sm w-full"><%= food.description %> </span></div>
+                        <div><span class="font-bold text-lg my-2">Price : <span class="text-orange-500">₹<%= food.productPrice %> </span>/ <%= food.productType %></span></div>
+                        <div class="my-2 w-full flex justify-between items-center "><span
+                                class="text-3xl cursor-pointer"><i
+                                    class="wishlist fa-regular fa-heart text-orange-500"></i></span> <button
+                                class="bg-orange-500 rounded-full px-6 py-1 text-xl text-white text-center"> <i
+                                    class="fa-solid fa-cart-shopping"></i></button></div>
+                    </div>
+                    <% }) } %>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- footer -->
+    <footer class="py-10 bg-[#02060C]">
+        <p class="text-white text-center">Developed By Richu Sony</p>
+    </footer>
+
+
+    <script>
+        const open = document.getElementById('open');
+        const closes = document.getElementById('close');
+        const menu = document.getElementById('menubar');
+
+        open.addEventListener('click', (event) => {
+            menu.classList.remove('hidden');
+            event.style.display = "none";
+            closes.style.display = "block";
+        })
+
+        closes.addEventListener('click', (event) => {
+            menu.classList.add('hidden');
+            event.style.display = "none";
+            open.style.display = "block";
+        })
+
+// Get references to the scroll buttons and the container of food items
+const scrollLeftButtons = document.querySelectorAll('.scroll-left');
+const scrollRightButtons = document.querySelectorAll('.scroll-right');
+const foodContainers = document.querySelectorAll('.foodContainer');
+
+// Set the amount to scroll when the buttons are clicked (adjust as needed)
+const scrollAmount = 200;
+
+function updateScrollButtonsState(container, leftButton, rightButton) {
+    // Check if there's content to scroll to the left
+    if (container.scrollLeft > 0) {
+        leftButton.style.display = "block";
+    } else {
+        leftButton.style.display = "none";
+    }
+
+    // Check if there's content to scroll to the right
+    if (container.scrollLeft < container.scrollWidth - container.clientWidth) {
+        rightButton.style.display = "block";
+    } else {
+        rightButton.style.display = "none";
+    }
+}
+
+scrollLeftButtons.forEach((leftButton, index) => {
+    leftButton.addEventListener('click', () => {
+        // Scroll the container to the left
+        foodContainers[index].scrollLeft -= scrollAmount;
+        updateScrollButtonsState(foodContainers[index], leftButton, scrollRightButtons[index]);
+    });
+});
+
+scrollRightButtons.forEach((rightButton, index) => {
+    rightButton.addEventListener('click', () => {
+        // Scroll the container to the right
+        foodContainers[index].scrollLeft += scrollAmount;
+        updateScrollButtonsState(foodContainers[index], scrollLeftButtons[index], rightButton);
+    });
+});
+
+// Initial state of the buttons
+foodContainers.forEach((container, index) => {
+    updateScrollButtonsState(container, scrollLeftButtons[index], scrollRightButtons[index]);
+});
+
+const wishElements = document.querySelectorAll('.wishlist');
+
+wishElements.forEach((like,index)=>{
+    like.addEventListener('click',()=>{
+    if(wishElements[index].classList.contains('fa-regular')){
+        wishElements[index].classList.remove('fa-regular');
+        wishElements[index].classList.add('fa-solid');
+    }else{
+        wishElements[index].classList.remove('fa-solid');
+        wishElements[index].classList.add('fa-regular');
+
+    }
+    })
+}
+)
+
+    </script>
+</body>
+
+</html>

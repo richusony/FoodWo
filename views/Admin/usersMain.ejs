@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodWo - Users List</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-[#FFF9F9]">
+    <!-- Navigation -->
+    <%- include('adminNavbar') %>
+
+        <section class="px-5 py-2 md:h-screen mb-5">
+            <h1 class="font-bold py-3 border-green-300 text-xl">User's List</h1>
+
+            <div class="overflow-x-auto md:flex md:justify-center md:items-center">
+                <% if(data){ %>
+                    <table class="mx-3 py-3">
+                        <thead class=" text-center py-3 px-4 bg-[#F8F9FB] rounded-full shadow-md">
+                            <th class="px-4 py-2 font-bold text-center mx-4 rounded-l-xl">No.</th>
+                            <th class="px-4 py-2 font-bold text-center mx-4">Fullname</th>
+                            <th class="px-4 py-2 font-bold text-center mx-4">Address</th>
+                            <th class="px-4 py-2 font-bold text-center mx-4">Created At</th>
+                            <th class="px-4 py-2 font-bold text-center mx-4 rounded-r-xl">Action</th>
+                        </thead>
+                        <tbody>
+                            <% data.forEach((user,index)=>{ %>
+                                <tr
+                                    class="transition delay-150 text-center shadow-md rounded-xl bg-gray-200 ease-linear hover:bg-white hover:scale-105">
+                                    <td class="px-5 rounded-l-xl">
+                                        <%= index+1 %>
+                                    </td>
+                                    <td class="px-5 text-start">
+                                        <span class="font-semibold">
+                                            <%= user.fullname %>
+                                        </span>
+                                    </td>
+                                    <td class=" px-5 text-start"><span class="text-sm font-thin w-32">
+                                            <%= user.address %>
+                                        </span></td>
+                                    <td class=" px-5">
+                                        <%= user.created_at %>
+                                    </td>
+                                    <td
+                                        class=" px-5 rounded-r-xl flex flex-col md:flex-row justify-between items-center">
+                                        <a href="/admin/userUpdateDetails/<%=user._id%>"
+                                            class="bg-blue-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
+                                                class="fa-solid fa-pencil"></i></a>
+                                        <a href="/admin/user-block/<%=user._id%>/<%=user.blocked%>"
+                                            class="<%if(user.blocked){%>bg-green-500 <%}else{%>bg-gray-500<% }%> m-2 py-2 px-3 rounded cursor-pointer text-white text-sm">
+                                            <% if(user.blocked){%><i class="fa-solid fa-lock-open"></i>
+                                                <%}else{%><i class="fa-solid fa-lock"></i>
+                                                    <% }%>
+                                        </a>
+                                        <a href="/admin/user-delete/<%=user._id%>"
+                                            class="bg-red-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
+                                                class="fa-solid fa-trash-can"></i></a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                    <% } %>
+            </div>
+        </section>
+
+        <!-- Footer  -->
+        <%- include('adminFooter') %>
+
+
+            <!-- <script>
+            const alert = document.getElementById('alert');
+          async  function handleUserList(){
+              const response = await fetch('/admin/users',{
+                  method:'POST',
+                  headers: {
+                      "Content-Type": "application/json",
+                      // 'Content-Type': 'application/x-www-form-urlencoded',
+                    }
+                })
+
+                if(!response.ok){
+                    alert.classList.remove('hidden')
+                }
+
+            }
+            handleUserList();
+        </script> -->
+</body>
+
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodWo OTP Verification</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- navigation -->
+    <nav class="py-4 px-5 md:px-10 flex justify-between items-center shadow-2xl">
+        <div class="text-center p-2 bg-MainSearchBg">
+            <a href="/" class="text-orange-500 font-bold text-2xl md:text-3xl">FoodWo</a>
+        </div>
+        <div class="flex justify-between items-center">
+            <a href="/user/login" class="font-semibold text-xl mx-2">Login</a>
+            <a href="/user/signup"
+                class="px-4 text-center py-2 text-white bg-orange-500 rounded-full mx-2 md:text-xl">Signup</a>
+        </div>
+    </nav>
+
+    <!-- main section -->
+    <div class="container mx-auto mt-10 text-center">
+        <h1 class="my-5 text-center font-bold text-orange-500 text-2xl md:text-3xl">OTP Verification</h1>
+        <form id="otpForm">
+            <div class="my-4">
+                <label for="otp" class="block text-gray-700">Enter OTP:</label>
+                <input type="number" name="otp" id="otp"
+                    class="px-2 py-2 rounded outline-orange-500 border border-orange-500" required>
+                <div id="timer" class="text-gray-500 text-sm">OTP will Expire in: <span id="countdown">20</span> seconds
+                </div>
+            </div>
+            <div class="my-8">
+                <button type="submit"
+                    class="bg-orange-500 rounded-full py-2 px-6 md:px-6 text-white text-xl md:text-xl">Verify</button>
+            </div>
+        </form>
+        <div id="errorMessage" class="text-red-500"></div>
+    </div>
+
+     <!-- footer -->
+     <footer class="py-10 bg-[#02060C]">
+        <p class="text-white text-center">Developed By Richu Sony</p>
+    </footer>
+
+    <script>
+        const otpForm = document.getElementById('otpForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const countdownElement = document.getElementById('countdown');
+        const timer = document.getElementById('timer');
+        let timerInterval = undefined;
+        let countdown = 20; // Initial countdown time in seconds
+
+        function updateCountdown() {
+            countdownElement.textContent = countdown;
+        }
+        // Start the timer
+        function startTimer() {
+            updateCountdown();
+             timerInterval = setInterval(() => {
+                countdown--;
+                updateCountdown();
+                if (countdown <= 0) {
+                    clearInterval(timerInterval); // Stop the timer when it reaches 0
+                    timer.innerHTML = '<span class="text-orange-500">OTP has been Expired</span><br><span><a class="hover:underline hover:text-orange-500" href="/user/signup">Go back to SignUp.</a></span>';
+                    // You can also take some action here when the timer expires
+                }
+            }, 1000); // Update every 1 second (1000 milliseconds)
+        }
+
+        // Call the startTimer function when the page loads
+        startTimer();
+
+        otpForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const otp = document.getElementById('otp').value;
+
+            // Send a POST request to the server to verify the OTP
+            try {
+                const response = await fetch('/user/otpVerify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ otp })
+                });
+                console.log("response ", response);
+
+                const data = await response.json();
+                if (data.success) {
+                    // Redirect the user to a success page or perform necessary actions
+                    errorMessage.textContent = 'Account Created Successfully.';
+                    setTimeout(() => {
+                        window.location.href = '/user/login';
+                    }, 2000);
+                    // After successful OTP verification, you can stop or reset the timer as needed
+                    clearInterval(timerInterval); // Stop the timer
+                } else if (data.failed) {
+                    errorMessage.textContent = 'Invalid OTP. Please try again.';
+                }
+                else {
+                    errorMessage.textContent = 'Something went wrong';
+                }
+            } catch (error) {
+                console.error(error);
+                errorMessage.textContent = 'An error occurred while verifying OTP. Please try again later.';
+            }
+        });
+    </script>
+</body>
+
+</html>
