@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {userAuth} = require('../middleware/sessionAuth')
-const {signInUser,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser} = require('../controllers/user')
+const {signInUser,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage} = require('../controllers/user')
 
 
 
@@ -30,6 +30,9 @@ router.route('/otpVerify')
 
 // User Session Middleware
 router.use(userAuth)
+
+router.route('/cart')
+.get(viewCartPage)
 
 router.route('/logout')
 .get(logoutUser)

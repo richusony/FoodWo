@@ -21,7 +21,7 @@ async function sendOTP(phone, otp) {
     const accountSid = process.env.TWILIO_SID;
     const authToken = process.env.TWILIO_ACCESS_TOKEN;
     const client = require('twilio')(accountSid, authToken);
-   
+
     const message = `Your FoodWo verification OTP(One-Time-Password) is ${otp}`;
 
     await client.messages.create({
@@ -36,15 +36,15 @@ async function sendOTP(phone, otp) {
 async function signInUser(req, res) {
     console.log(req.body);
     const { fullname, email, phone, address, password, baseImage } = req.body;
-    const userExistsEmail = await userModel.findOne({ email: email});
-    const userExistsPhone = await userModel.findOne({ phone: phone});
+    const userExistsEmail = await userModel.findOne({ email: email });
+    const userExistsPhone = await userModel.findOne({ phone: phone });
     if (!fullname || !email || !phone || !address || !password) {
         return res.json({ msg: "All fields required!!" });
-    }else if(userExistsEmail){
-        return res.status(401).json({failed:"User already exists with this email"})
-    } 
-    else if(userExistsPhone){
-        return res.status(401).json({failed:"User already exists with this phone no."})
+    } else if (userExistsEmail) {
+        return res.status(401).json({ failed: "User already exists with this email" })
+    }
+    else if (userExistsPhone) {
+        return res.status(401).json({ failed: "User already exists with this phone no." })
     } else {
         try {
             // Generate and send OTP
@@ -93,7 +93,7 @@ async function loginUser(req, res) {
         res.status(401).json({ failed: 'user doesnot exists.' });
     }
 }
-function otppage(req,res){
+function otppage(req, res) {
     res.render('otpVerify')
 }
 
@@ -103,8 +103,8 @@ function otpVerification(req, res) {
     const userInputOtp = parseInt(req.body.otp);
     const storedOtp = parseInt(req.session.otp);
 
-    console.log("userInput : "+userInputOtp+" storeotp : "+storedOtp)
-    
+    console.log("userInput : " + userInputOtp + " storeotp : " + storedOtp)
+
     if (userInputOtp === storedOtp) {
         // OTP is valid, retrieve user input data from session
         const userData = req.session.userData;
@@ -127,7 +127,7 @@ function otpVerification(req, res) {
             password: hashedPassword,
             image: baseImage,
             blocked: false,
-            purchaseCount:0,
+            purchaseCount: 0,
         });
 
         newUser.save()
@@ -150,17 +150,32 @@ function otpVerification(req, res) {
 
 async function productPage(req, res) {
     const products = await productModel.find({});
-    const categories = await categoryModel.aggregate([{$sample:{size:1}}]);
+    const categories = await categoryModel.aggregate([{ $sample: { size: 1 } }]);
     console.log(categories[0].category)
-    const catProducts = await productModel.find({category:categories[0].category})
+    const catProducts = await productModel.find({ category: categories[0].category })
     // console.log("random :: ",categories);
-    res.render('mainProducts',{data:products,category:catProducts});
+    res.render('mainProducts', { data: products, category: catProducts });
 }
 
-async function logoutUser(req,res){
+async function viewCartPage(req, res) {
+    res.render('../views/userCart')
+}
+
+async function logoutUser(req, res) {
     req.session.destroy();
-    res.redirect('/login')
+    res.redirect('/user/login')
 }
 
 
-module.exports = { signInUser, viewSignInPage, viewLoginInPage, loginUser, productPage,otppage,otpVerification,logoutUser}
+module.exports = {
+    signInUser,
+    viewSignInPage,
+    viewLoginInPage,
+    loginUser,
+    productPage,
+    otppage,
+    otpVerification,
+    logoutUser,
+    viewCartPage,
+
+}

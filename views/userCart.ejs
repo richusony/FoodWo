@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodWo</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+         /* Hide the default scrollbar */
+         .overflow-x-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body class="bg-white">
+ <!-- navigation -->
+ <%- include('../views/userNavbar.ejs') %>
+
+<section class="px-5 py-2 md:h-screen">
+    <div class=" px-3 py-5">
+        <span class=" px-3 py-2 text-2xl text-center font-bold">Shopping Cart</span>
+    </div>
+
+
+    <div class="flex flex-col md:flex-row my-3">
+
+
+        <div class="h-96 overflow-y-auto overflow-x-hidden md:w-1/2 px-3 py-3 mx-2 my-2">
+
+
+            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
+                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
+                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
+                </div>
+
+                <div class=" mr-3">
+                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
+                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
+                </div>
+
+                <div class=" flex m-3">
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
+                    <span class="mx-3 text-sm my-auto">3</span>
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
+                </div>
+
+                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
+                
+                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
+            </div>
+            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
+                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
+                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
+                </div>
+
+                <div class=" mr-3">
+                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
+                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
+                </div>
+
+                <div class=" flex m-3">
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
+                    <span class="mx-3 text-sm my-auto">3</span>
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
+                </div>
+
+                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
+                
+                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
+            </div>
+            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
+                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
+                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
+                </div>
+
+                <div class=" mr-3">
+                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
+                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
+                </div>
+
+                <div class=" flex m-3">
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
+                    <span class="mx-3 text-sm my-auto">3</span>
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
+                </div>
+
+                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
+                
+                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
+            </div>
+            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
+                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
+                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
+                </div>
+
+                <div class=" mr-3">
+                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
+                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
+                </div>
+
+                <div class=" flex m-3">
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
+                    <span class="mx-3 text-sm my-auto">3</span>
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
+                </div>
+
+                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
+                
+                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
+            </div>
+            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
+                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
+                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
+                </div>
+
+                <div class=" mr-3">
+                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
+                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
+                </div>
+
+                <div class=" flex m-3">
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
+                    <span class="mx-3 text-sm my-auto">3</span>
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
+                </div>
+
+                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
+                
+                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
+            </div>
+            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
+                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
+                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
+                </div>
+
+                <div class=" mr-3">
+                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
+                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
+                </div>
+
+                <div class=" flex m-3">
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
+                    <span class="mx-3 text-sm my-auto">3</span>
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
+                </div>
+
+                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
+                
+                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
+            </div>
+            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
+                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
+                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
+                </div>
+
+                <div class=" mr-3">
+                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
+                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
+                </div>
+
+                <div class=" flex m-3">
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
+                    <span class="mx-3 text-sm my-auto">3</span>
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
+                </div>
+
+                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
+                
+                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
+            </div>
+            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
+                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
+                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
+                </div>
+
+                <div class=" mr-3">
+                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
+                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
+                </div>
+
+                <div class=" flex m-3">
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
+                    <span class="mx-3 text-sm my-auto">3</span>
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
+                </div>
+
+                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
+                
+                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
+            </div>
+            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
+                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
+                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
+                </div>
+
+                <div class=" mr-3">
+                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
+                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
+                </div>
+
+                <div class=" flex m-3">
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
+                    <span class="mx-3 text-sm my-auto">3</span>
+                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
+                </div>
+
+                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
+                
+                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
+            </div>
+
+            
+           
+
+        </div>
+
+        <div class="bg-orange-500 mx-2 md:w-1/2 px-4 py-5 shadow-2xl rounded-xl text-white">
+            <div class="py-2 px-3 text-start"><h2 class="py-2 px-3 text-xl md:text-2xl font-bold text-white">Summary</h2></div>
+            <div class="flex justify-between px-3 my-3"><span class="font-bold">Items : 3</span><span>₹426</span></div>
+            <div class="px-3 my-3">
+                <h3 class="font-bold">Shipping to :</h3>
+                <span>Karimthakara Kunnel (H), Chuzhali P.O , Chempanthotty, Kannur , Kerala - 670142</span>
+            </div>
+            <div class="my-3 px-3">
+                <div><input type="checkbox" name="" id="" class="mr-2"><span>Apply Code :</span></div>
+            
+                <input type="text" name="" id="" class="rounded my-2">
+            </div>
+
+            <hr class="py-[0.28px] bg-white rounded my-5">
+
+            <div class="flex justify-between px-3 font-bold"><span>Total : </span> <span>₹426</span></div>
+
+            <div class="text-center my-4"><button class="py-2 px-20 rounded bg-white shadow-md text-orange-500 font-bold">checkout</button></div>
+        </div>
+    </div>
+</section>
+
+ <!-- footer -->
+ <%- include('../views/userFooter.ejs') %>
+</body>
+</html>
+    

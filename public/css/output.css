@@ -604,6 +604,10 @@ video {
   margin: 0.5rem;
 }
 
+.m-3 {
+  margin: 0.75rem;
+}
+
 .mx-1 {
   margin-left: 0.25rem;
   margin-right: 0.25rem;
@@ -674,8 +678,17 @@ video {
   margin-bottom: 50%;
 }
 
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .mb-5 {
   margin-bottom: 1.25rem;
+}
+
+.mr-3 {
+  margin-right: 0.75rem;
 }
 
 .mt-10 {
@@ -684,6 +697,10 @@ video {
 
 .mt-20 {
   margin-top: 5rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
 }
 
 .block {
@@ -710,6 +727,10 @@ video {
   height: 2.5rem;
 }
 
+.h-16 {
+  height: 4rem;
+}
+
 .h-3\/4 {
   height: 75%;
 }
@@ -734,6 +755,10 @@ video {
   height: 18rem;
 }
 
+.h-96 {
+  height: 24rem;
+}
+
 .h-full {
   height: 100%;
 }
@@ -742,8 +767,20 @@ video {
   height: 100vh;
 }
 
+.h-1 {
+  height: 0.25rem;
+}
+
+.h-3 {
+  height: 0.75rem;
+}
+
 .w-10 {
   width: 2.5rem;
+}
+
+.w-20 {
+  width: 5rem;
 }
 
 .w-32 {
@@ -772,6 +809,10 @@ video {
 
 .w-screen {
   width: 100vw;
+}
+
+.w-3 {
+  width: 0.75rem;
 }
 
 .max-w-full {
@@ -816,6 +857,10 @@ video {
   overflow-x: auto;
 }
 
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
 .overflow-x-hidden {
   overflow-x: hidden;
 }
@@ -858,6 +903,11 @@ video {
 
 .rounded-xl {
   border-radius: 0.75rem;
+}
+
+.rounded-l-full {
+  border-top-left-radius: 9999px;
+  border-bottom-left-radius: 9999px;
 }
 
 .rounded-l-xl {
@@ -940,6 +990,11 @@ video {
 .bg-\[\#FFF9F9\] {
   --tw-bg-opacity: 1;
   background-color: rgb(255 249 249 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#f0efef\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(240 239 239 / var(--tw-bg-opacity));
 }
 
 .bg-\[rgba\(0\2c 0\2c 0\2c 0\.06\)\] {
@@ -1108,6 +1163,36 @@ video {
   padding-bottom: 1.25rem;
 }
 
+.py-\[1px\] {
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+.py-\[0\.\] {
+  padding-top: 0.;
+  padding-bottom: 0.;
+}
+
+.py-\[0\.8px\] {
+  padding-top: 0.8px;
+  padding-bottom: 0.8px;
+}
+
+.py-\[0\.28px\] {
+  padding-top: 0.28px;
+  padding-bottom: 0.28px;
+}
+
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.px-20 {
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
+
 .pb-4 {
   padding-bottom: 1rem;
 }
@@ -1162,6 +1247,10 @@ video {
   font-weight: 700;
 }
 
+.font-light {
+  font-weight: 300;
+}
+
 .font-semibold {
   font-weight: 600;
 }
@@ -1198,6 +1287,10 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-transparent {
+  color: transparent;
 }
 
 .shadow-2xl {

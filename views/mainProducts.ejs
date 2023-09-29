@@ -38,28 +38,7 @@
 
 <body>
     <!-- navigation -->
-    <nav class="py-4 px-5 md:px-10 flex justify-between items-center shadow-2xl">
-        <div class="text-center p-2 bg-MainSearchBg">
-            <span class="text-orange-500 font-bold text-2xl md:text-3xl ">FoodWo</span>
-        </div>
-        <div class="flex justify-between items-center">
-            <span id="open" class="md:hidden text-2xl"><i class="fa-solid fa-bars"></i></span>
-            <ul id="menubar"
-                class="transition ease-linear delay-1000 hidden md:flex absolute md:static top-3 md:top-0 right-3 md:right-0 rounded md:rounded-none bg-orange-500 md:bg-white text-white md:text-black p-5 md:p-0">
-                <div class="md:hidden text-2xl w-full text-end"><i id="close" class="fa-solid fa-xmark text-end"></i>
-                </div>
-                <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/search"><i
-                            class="fa-solid fa-magnifying-glass"></i> Search</a></li>
-                <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/offers"><i
-                            class="fa-solid fa-tag"></i> Offers</a></li>
-                <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/help"><i
-                            class="fa-solid fa-life-ring"></i> Help</a></li>
-                <li id="logged" class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"></li>
-                <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/cart"><i
-                            class="fa-solid fa-cart-shopping"></i> Cart</a></li>
-            </ul>
-        </div>
-    </nav>
+    <%- include('../views/userNavbar.ejs') %>
 
     <!-- main section -->
     <section class="px-10 my-5">
@@ -261,45 +240,43 @@
 
 
     <!-- footer -->
-    <footer class="py-10 bg-[#02060C]">
-        <p class="text-white text-center">Developed By Richu Sony</p>
-    </footer>
+   <%- include('../views/userFooter.ejs') %>
 
 
     <script>
-        const open = document.getElementById('open');
-        const closes = document.getElementById('close');
-        const menu = document.getElementById('menubar');
+        // const open = document.getElementById('open');
+        // const closes = document.getElementById('close');
+        // const menu = document.getElementById('menubar');
         const username = document.getElementById('username');
-        const logged = document.getElementById('logged');
+        // const logged = document.getElementById('logged');
 
         
         if(sessionStorage.getItem('username')){
             const Name=sessionStorage.getItem('username').split(' ')
-            logged.innerHTML= `<a href='' onclick="userLogout(event)" class=""><i class="fa-regular fa-user"></i> ${Name[0]}</a>`;
+            // logged.innerHTML= `<a href='' onclick="userLogout(event)" class=""><i class="fa-regular fa-user"></i> ${Name[0]}</a>`;
             username.innerText= `${Name[0]}, what's on your mind`;
         }else{
             username.innerText= `what's on your mind`;
-            logged.innerHTML=`<a href="/user/login"><i class="fa-solid fa-life-ring"></i> Login</a>`
+            // logged.innerHTML=`<a href="/user/login"><i class="fa-solid fa-life-ring"></i> Login</a>`
         } 
 
 
-        function userLogout(event){
-            sessionStorage.removeItem('username');
-            window.location.href="/user/logout"
-        }
+        // function userLogout(event){
+        //     sessionStorage.removeItem('username');
+        //     window.location.href="/user/logout"
+        // }
 
-        open.addEventListener('click', (event) => {
-            menu.classList.remove('hidden');
-            event.style.display = "none";
-            closes.style.display = "block";
-        })
+        // open.addEventListener('click', (event) => {
+        //     menu.classList.remove('hidden');
+        //     event.style.display = "none";
+        //     closes.style.display = "block";
+        // })
 
-        closes.addEventListener('click', (event) => {
-            menu.classList.add('hidden');
-            event.style.display = "none";
-            open.style.display = "block";
-        })
+        // closes.addEventListener('click', (event) => {
+        //     menu.classList.add('hidden');
+        //     event.style.display = "none";
+        //     open.style.display = "block";
+        // })
 
         // Get references to the scroll buttons and the container of food items
         const scrollLeftButtons = document.querySelectorAll('.scroll-left');
