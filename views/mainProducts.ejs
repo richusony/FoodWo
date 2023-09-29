@@ -27,11 +27,12 @@
             background: transparent;
             /* You can customize the thumb's appearance */
         }
+
         .text-ellipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 </head>
 
@@ -53,8 +54,7 @@
                             class="fa-solid fa-tag"></i> Offers</a></li>
                 <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/help"><i
                             class="fa-solid fa-life-ring"></i> Help</a></li>
-                <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/user/login"><i
-                            class="fa-solid fa-life-ring"></i> Login</a></li>
+                <li id="logged" class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"></li>
                 <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/cart"><i
                             class="fa-solid fa-cart-shopping"></i> Cart</a></li>
             </ul>
@@ -67,8 +67,10 @@
         <div class="md:px-10 my-4 md:mt-8 flex justify-between">
             <h2 class="font-bold text-xl md:text-2xl">Best offers for you</h2>
             <div class="flex justify-between">
-                <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i class="fa-solid fa-arrow-left"></i></span>
-                <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i class="fa-solid fa-arrow-right"></i></span>
+                <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                        class="fa-solid fa-arrow-left"></i></span>
+                <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                        class="fa-solid fa-arrow-right"></i></span>
             </div>
         </div>
         <div class="my-2 md:my-6 overflow-hidden flex justify-center items-center">
@@ -93,7 +95,7 @@
 
         <!-- category -->
         <div class="md:px-10 my-4 md:mt-8 flex justify-between">
-            <h2 class="font-bold text-sm md:text-2xl">Richu, what's on your mind?</h2>
+            <h2 class="font-bold text-md md:text-2xl" id="username"></h2>
             <div class="hidden md:flex md:justify-between">
                 <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
                         class="fa-solid fa-arrow-left"></i></span>
@@ -186,24 +188,75 @@
                 <div class="foodContainer overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
                     <!-- items -->
                     <% if(data){ data.forEach((food)=>{ %>
-                    <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
-                        <div class="w-full h-36 rounded-2xl"><img class="w-full h-full rounded-2xl object-cover"
-                                src="<%= food.productImage %>"
-                                alt=""></div>
-                        <h3 class="font-bold my-1 text-xl"><%= food.productName %></h3>
-                        <div><i class="fa-regular fa-star text-orange-500"></i> <span class="font-semibold">4.2</span></div>
-                        <div class="max-w-full bg-slate-500"><span class="text-red-500 text-sm w-full"><%= food.description %> </span></div>
-                        <div><span class="font-bold text-lg my-2">Price : <span class="text-orange-500">₹<%= food.productPrice %> </span>/ <%= food.productType %></span></div>
-                        <div class="my-2 w-full flex justify-between items-center "><span
-                                class="text-3xl cursor-pointer"><i
-                                    class="wishlist fa-regular fa-heart text-orange-500"></i></span> <button
-                                class="bg-orange-500 rounded-full px-6 py-1 text-xl text-white text-center"> <i
-                                    class="fa-solid fa-cart-shopping"></i></button></div>
-                    </div>
-                    <% }) } %>
+                        <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
+                            <div class="w-full h-36 rounded-2xl"><img class="w-full h-full rounded-2xl object-cover"
+                                    src="<%= food.productImage %>" alt=""></div>
+                            <h3 class="font-bold my-1 text-xl">
+                                <%= food.productName %>
+                            </h3>
+                            <div><i class="fa-regular fa-star text-orange-500"></i> <span
+                                    class="font-semibold">4.2</span></div>
+                            <div class="max-w-full break-words"><span class="text-gray-500 text-sm w-full ">
+                                    <%= food.description %>
+                                </span></div>
+                            <div><span class="font-bold text-lg my-2">Price : <span class="text-orange-500">₹<%=
+                                            food.productPrice %> </span>/ <%= food.productType %></span></div>
+                            <div class="my-2 w-full flex justify-between items-center "><span
+                                    class="text-3xl cursor-pointer"><i
+                                        class="wishlist fa-regular fa-heart text-orange-500"></i></span> <button
+                                    class="bg-orange-500 rounded-full px-6 py-1 text-xl text-white text-center"> <i
+                                        class="fa-solid fa-cart-shopping"></i></button></div>
+                        </div>
+                        <% }) } %>
                 </div>
             </div>
         </div>
+
+        <div class="md:px-10 my-4 md:mt-8 flex justify-between">
+            <% if(category){ %>
+            <h2 class="font-bold text-md md:text-2xl">Today's Special <%= category[0].category %> </h2>
+            <div class="flex justify-between">
+                <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                        class="fa-solid fa-arrow-left"></i></span>
+                <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                        class="fa-solid fa-arrow-right"></i></span>
+            </div>
+        </div>
+        <div class="md:px-10">
+            <div class="overflow-hidden flex justify-center items-center">
+                <div  class="foodContainer overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
+                    <!-- items -->
+                    <% category.forEach((food)=>{ %>
+                        <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
+                            <div class="w-full h-36 rounded-2xl"><img class="w-full h-full rounded-2xl object-cover"
+                                    src="<%= food.productImage %>" alt=""></div>
+                            <h3 class="font-bold my-1 text-xl">
+                                <%= food.productName %>
+                            </h3>
+                            <div><i class="fa-regular fa-star text-orange-500"></i> <span
+                                    class="font-semibold">4.2</span></div>
+                            <div class="max-w-full  break-words"><span class="text-gray-500 text-sm w-full ">
+                                    <%= food.description %>
+                                </span></div>
+                            <div><span class="font-bold text-lg my-2">Price : <span class="text-orange-500">₹<%=
+                                            food.productPrice %> </span>/ <%= food.productType %></span></div>
+                            <div class="my-2 w-full flex justify-between items-center "><span
+                                    class="text-3xl cursor-pointer"><i
+                                        class="wishlist fa-regular fa-heart text-orange-500"></i></span> <button
+                                    class="bg-orange-500 rounded-full px-6 py-1 text-xl text-white text-center"> <i
+                                        class="fa-solid fa-cart-shopping"></i></button></div>
+                        </div>
+                        <% }) }else{ %>
+                            <div class="md:px-10">
+                                <div class="flex justify-center items-center">
+                                    <p>No Special Items for Today</p>
+                                </div>
+                            </div>
+                       <% } %>
+                </div>
+            </div>
+        </div>
+
     </section>
 
 
@@ -217,6 +270,24 @@
         const open = document.getElementById('open');
         const closes = document.getElementById('close');
         const menu = document.getElementById('menubar');
+        const username = document.getElementById('username');
+        const logged = document.getElementById('logged');
+
+        
+        if(sessionStorage.getItem('username')){
+            const Name=sessionStorage.getItem('username').split(' ')
+            logged.innerHTML= `<a href='' onclick="userLogout(event)" class=""><i class="fa-regular fa-user"></i> ${Name[0]}</a>`;
+            username.innerText= `${Name[0]}, what's on your mind`;
+        }else{
+            username.innerText= `what's on your mind`;
+            logged.innerHTML=`<a href="/user/login"><i class="fa-solid fa-life-ring"></i> Login</a>`
+        } 
+
+
+        function userLogout(event){
+            sessionStorage.removeItem('username');
+            window.location.href="/user/logout"
+        }
 
         open.addEventListener('click', (event) => {
             menu.classList.remove('hidden');
@@ -230,66 +301,66 @@
             open.style.display = "block";
         })
 
-// Get references to the scroll buttons and the container of food items
-const scrollLeftButtons = document.querySelectorAll('.scroll-left');
-const scrollRightButtons = document.querySelectorAll('.scroll-right');
-const foodContainers = document.querySelectorAll('.foodContainer');
+        // Get references to the scroll buttons and the container of food items
+        const scrollLeftButtons = document.querySelectorAll('.scroll-left');
+        const scrollRightButtons = document.querySelectorAll('.scroll-right');
+        const foodContainers = document.querySelectorAll('.foodContainer');
 
-// Set the amount to scroll when the buttons are clicked (adjust as needed)
-const scrollAmount = 200;
+        // Set the amount to scroll when the buttons are clicked (adjust as needed)
+        const scrollAmount = 200;
 
-function updateScrollButtonsState(container, leftButton, rightButton) {
-    // Check if there's content to scroll to the left
-    if (container.scrollLeft > 0) {
-        leftButton.style.display = "block";
-    } else {
-        leftButton.style.display = "none";
-    }
+        function updateScrollButtonsState(container, leftButton, rightButton) {
+            // Check if there's content to scroll to the left
+            if (container.scrollLeft > 0) {
+                leftButton.style.display = "block";
+            } else {
+                leftButton.style.display = "none";
+            }
 
-    // Check if there's content to scroll to the right
-    if (container.scrollLeft < container.scrollWidth - container.clientWidth) {
-        rightButton.style.display = "block";
-    } else {
-        rightButton.style.display = "none";
-    }
-}
+            // Check if there's content to scroll to the right
+            if (container.scrollLeft < container.scrollWidth - container.clientWidth) {
+                rightButton.style.display = "block";
+            } else {
+                rightButton.style.display = "none";
+            }
+        }
 
-scrollLeftButtons.forEach((leftButton, index) => {
-    leftButton.addEventListener('click', () => {
-        // Scroll the container to the left
-        foodContainers[index].scrollLeft -= scrollAmount;
-        updateScrollButtonsState(foodContainers[index], leftButton, scrollRightButtons[index]);
-    });
-});
+        scrollLeftButtons.forEach((leftButton, index) => {
+            leftButton.addEventListener('click', () => {
+                // Scroll the container to the left
+                foodContainers[index].scrollLeft -= scrollAmount;
+                updateScrollButtonsState(foodContainers[index], leftButton, scrollRightButtons[index]);
+            });
+        });
 
-scrollRightButtons.forEach((rightButton, index) => {
-    rightButton.addEventListener('click', () => {
-        // Scroll the container to the right
-        foodContainers[index].scrollLeft += scrollAmount;
-        updateScrollButtonsState(foodContainers[index], scrollLeftButtons[index], rightButton);
-    });
-});
+        scrollRightButtons.forEach((rightButton, index) => {
+            rightButton.addEventListener('click', () => {
+                // Scroll the container to the right
+                foodContainers[index].scrollLeft += scrollAmount;
+                updateScrollButtonsState(foodContainers[index], scrollLeftButtons[index], rightButton);
+            });
+        });
 
-// Initial state of the buttons
-foodContainers.forEach((container, index) => {
-    updateScrollButtonsState(container, scrollLeftButtons[index], scrollRightButtons[index]);
-});
+        // Initial state of the buttons
+        foodContainers.forEach((container, index) => {
+            updateScrollButtonsState(container, scrollLeftButtons[index], scrollRightButtons[index]);
+        });
 
-const wishElements = document.querySelectorAll('.wishlist');
+        const wishElements = document.querySelectorAll('.wishlist');
 
-wishElements.forEach((like,index)=>{
-    like.addEventListener('click',()=>{
-    if(wishElements[index].classList.contains('fa-regular')){
-        wishElements[index].classList.remove('fa-regular');
-        wishElements[index].classList.add('fa-solid');
-    }else{
-        wishElements[index].classList.remove('fa-solid');
-        wishElements[index].classList.add('fa-regular');
+        wishElements.forEach((like, index) => {
+            like.addEventListener('click', () => {
+                if (wishElements[index].classList.contains('fa-regular')) {
+                    wishElements[index].classList.remove('fa-regular');
+                    wishElements[index].classList.add('fa-solid');
+                } else {
+                    wishElements[index].classList.remove('fa-solid');
+                    wishElements[index].classList.add('fa-regular');
 
-    }
-    })
-}
-)
+                }
+            })
+        }
+        )
 
     </script>
 </body>

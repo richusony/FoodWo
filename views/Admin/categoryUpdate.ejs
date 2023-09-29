@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodWo - Update Category</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-[#EAEFF8]">
+    <!-- Navigation -->
+    <%- include('adminNavbar') %>
+
+        <div id="alert" class="transition delay-150 ease-linear hidden py-4 px-3 bg-red-400 text-white text-center"><i
+                class="fa-solid fa-triangle-exclamation text-xl"></i> We are facing some issues.Please try later.</div>
+        <section class="px-5 py-3 h-screen">
+
+            <h1 class="font-bold py-4 my-4 text-orange-500 text-2xl text-center ">Update Category</h1>
+            <div class="my-5">
+                <div class="md:w-1/2 md:px-4 mx-auto">
+                    <!-- Input Fields -->
+                    <form action="">
+                        <div class="flex flex-col my-2">
+                            <label for="">Category Name</label>
+                            <% if(data){ %>
+                            <input type="text" name="" maxlength="20" id="category" placeholder="Category Name" value="<%= data.category %>"
+                                class="px-2 placeholder:px-2 py-2 my-1 rounded outline-orange-500 border border-orange-500">
+                                <input type="text" value="<%= data._id %>" id="catId" hidden>
+                                <% } %>
+                        </div>
+                        
+                        <div class="my-8 text-center">
+                            <button type="submit" onclick="handleCategoryUpload(event)"
+                                class="bg-orange-500 rounded-full py-2 px-6 md:px-6 text-white text-xl md:text-xl">Update</button>
+                        </div>
+                        <div class="md:w-1/2 relative flex justify-center items-center mx-auto mb-5">
+                            <div id="toast"
+                                class="transition duration-[0.5s] md:w-80 bg-orange-500 py-5 px-3 hidden ease-linear rounded-md text-center text-white">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <!-- Footer -->
+        <%- include('adminFooter') %>
+
+        <script>
+const toast = document.getElementById('toast');
+
+
+        async function handleCategoryUpload(event) {
+            event.preventDefault();
+            const category = document.getElementById('category').value;
+            const catId = document.getElementById('catId').value;
+
+          console.log("id : ",catId);
+
+            if (!category) {
+                toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Enter the Category Name</span>`;
+                toast.classList.remove("hidden");
+                toast.classList.remove("translate-y-96");
+                setTimeout(() => {
+                    toast.classList.add("hidden");
+                    toast.classList.add("translate-y-96");
+                }, 3000)
+            }
+            else {
+                const formData = {
+                   catId:catId,
+                    category:category,
+                    }
+                console.log('formdata :: ',formData)
+
+                const categoryData = await JSON.stringify(formData);
+                try {
+                    // Send a POST request to the server using async/await
+                    const response = await fetch(`/admin/update-category/${catId}`, {
+                        method: 'PATCH',
+                        headers: {
+                            "Content-Type": "application/json",
+                            // 'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: categoryData,
+                    });
+                    if (!response.ok) {
+                        // Handle the case where the server returns an error
+                        // throw new Error(`Server responded with status: ${response.status}`);
+                        const data = await response.json();
+                        console.log("DAta ::  ", data);
+                        if (data.err) {
+                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.err}</span>`;
+                            toast.classList.remove("hidden");
+                            toast.classList.remove("translate-y-96");
+                            setTimeout(() => {
+                                toast.classList.add("hidden");
+                                toast.classList.add("translate-y-96");
+                            }, 3000);
+                        }
+
+                    }
+                    if (response.ok) {
+                        window.location.href = `/admin/update-category/${catId}`
+                    }
+
+
+
+                    // Handle the server's response here (e.g., display a success message or handle errors)
+                    // console.log("data from back : ",data);
+                } catch (error) {
+                    // Handle any network, request, or other errors here
+                    console.error(error);
+                }
+            }
+        }
+        </script>
+</body>
+
+</html>

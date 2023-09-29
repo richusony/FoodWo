@@ -1,5 +1,6 @@
 const { userModel } = require('../models/userSchema');
 const productModel = require('../models/productSchema');
+const categoryModel = require('../models/categorySchema');
 const bcrypt = require('bcrypt');
 const { sessAuth } = require("../middleware/sessionAuth");
 
@@ -83,7 +84,7 @@ async function loginUser(req, res) {
             const isPasswordValid = await bcrypt.compare(password, users.password);
             if (isPasswordValid) {
                 req.session.user = users;
-                res.status(201).json({ success: 'logged in.', data: users });
+                res.status(201).json({ success: 'logged in.', user: users });
             } else {
                 res.status(401).json({ failed: 'wrong password' });
             }
@@ -149,8 +150,17 @@ function otpVerification(req, res) {
 
 async function productPage(req, res) {
     const products = await productModel.find({});
-    res.render('mainProducts',{data:products});
+    const categories = await categoryModel.aggregate([{$sample:{size:1}}]);
+    console.log(categories[0].category)
+    const catProducts = await productModel.find({category:categories[0].category})
+    // console.log("random :: ",categories);
+    res.render('mainProducts',{data:products,category:catProducts});
+}
+
+async function logoutUser(req,res){
+    req.session.destroy();
+    res.redirect('/login')
 }
 
 
-module.exports = { signInUser, viewSignInPage, viewLoginInPage, loginUser, productPage,otppage,otpVerification}
+module.exports = { signInUser, viewSignInPage, viewLoginInPage, loginUser, productPage,otppage,otpVerification,logoutUser}

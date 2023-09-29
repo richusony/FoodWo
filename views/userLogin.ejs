@@ -122,6 +122,7 @@
                        
                     }else{
                         const data = await response.json();
+                        sessionStorage.setItem('username',data.user.fullname);
                         toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-check text-xl"></i> ${data?.success}</span>`;
                         toast.classList.remove("hidden");
                         toast.classList.remove("translate-y-96");

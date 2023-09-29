@@ -19,6 +19,8 @@ const { viewLogInPage,
     viewAddCategoryPage,
     addCategory,
     deleteCategory,
+    viewUpdateCategory,
+    updateCategory,
 } = require('../controllers/admin');
 const router = express.Router();
 const { adminAuth } = require('../middleware/sessionAuth')
@@ -94,6 +96,11 @@ router.route('/category')
 router.route('/addCategory')
     .get(viewAddCategoryPage)
     .post(addCategory)
+
+// Admin updates the Category
+router.route('/update-category/:id')
+.get(viewUpdateCategory)
+.patch(updateCategory)
 
 // Admin delete Category
 router.route('/category-delete/:id')

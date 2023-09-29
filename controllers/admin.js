@@ -190,6 +190,36 @@ async function addCategory(req, res) {
     }
 }
 
+async function viewUpdateCategory(req,res){
+    const id= req.params.id;
+    const category = await categoryModel.findOne({_id:id});
+
+    if(category){
+        res.render('../views/Admin/categoryUpdate',{data:category})
+    }else{
+        res.status(500).json({err:"Database is having some issues"})
+    }
+}
+
+async function updateCategory(req,res){
+    const id = req.params.id;
+    const {category} = req.body;
+    console.log("got it :: ",id,category);
+    const updating = await categoryModel.updateOne({_id:id},{category:category});
+
+    if(updating){
+        const updatedDetails = await categoryModel.find({_id:id});
+        if(updatedDetails){
+            res.render('../views/Admin/categoryUpdate',{data:updatedDetails})
+        }
+        else{
+            res.status(500).json({err:"Database is having some issues"})
+        }
+    }else{
+        res.status(500).json({err:"Database is having some issues"})
+    }
+}
+
 
 async function deleteCategory(req,res){
 const id = req.params.id;
@@ -223,4 +253,7 @@ module.exports = {
     viewAddCategoryPage,
     addCategory,
     deleteCategory,
+    viewUpdateCategory,
+    updateCategory,
+
 } 
