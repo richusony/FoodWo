@@ -212,7 +212,7 @@ async function addToCart(req, res) {
 }
 
 async function removeFromCart(req, res) {
-    const {foodid,userid} = req.body;
+    const { foodid, userid } = req.body;
     const deleting = await cartModel.deleteOne({ userId: userid, foodId: foodid })
     if (deleting) {
         res.status(200).json({ deleted: true })
@@ -245,6 +245,58 @@ async function addToWishlist(req, res) {
     }
 }
 
+function viewForgotPasswordPage(req, res) {
+    const uid = req.params.id;
+    res.render('../views/forgotPassword.ejs', { userid: uid })
+}
+
+async function viewWishlistPage(req, res) {
+    res.render('../views/userWishlist.ejs')
+}
+
+function viewverifyPhonePage(req, res) {
+    res.render('../views/userNumberVerify.ejs');
+}
+
+async function updateNewPassword(req, res) {
+    const { newPassword, userid } = req.body;
+console.log(newPassword,userid)
+const hashedPassword = bcrypt.hashSync(newPassword, 10);
+    const updating = await userModel.updateOne({ _id: userid }, { password: hashedPassword })
+    if (updating) {
+        res.status(200).json({ updated: true })
+    } else {
+        res.status(400).json({ err: 'Database is having an issue.' })
+    }
+}
+
+async function sendResetUrl(req, res) {
+    const accountSid = process.env.TWILIO_SID;
+    const authToken = process.env.TWILIO_ACCESS_TOKEN;
+    const client = require('twilio')(accountSid, authToken);
+
+    const phone = req.body.phone;
+    const exist = await userModel.findOne({ phone: phone })
+
+    if (exist) {
+        const message = `your reset url  is http://localhost:8080/user/forgotPassword/${exist._id}`;
+        const sending = await client.messages.create({
+            body: message,
+            from: '+17854652553',
+            to: '+919947619644'
+        });
+        if (sending) {
+            res.status(200).json({ sended: true })
+        } else {
+            res.status(500).json({ sended: false })
+        }
+    } else {
+        res.status(401).json({ err: 'This phone is not registered.' })
+    }
+
+
+}
+
 
 
 module.exports = {
@@ -259,5 +311,11 @@ module.exports = {
     viewCartPage,
     addToWishlist,
     addToCart,
-    removeFromCart
+    removeFromCart,
+    viewWishlistPage,
+    viewForgotPasswordPage,
+    viewverifyPhonePage,
+    sendResetUrl,
+    updateNewPassword,
+
 }

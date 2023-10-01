@@ -43,9 +43,11 @@
         </form>
         <div id="errorMessage" class="text-red-500"></div>
     </div>
-
-     <!-- footer -->
-     <footer class="py-10 bg-[#02060C]">
+    <div id="toast"
+        class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+    </div>
+    <!-- footer -->
+    <footer class="py-10 bg-[#02060C]">
         <p class="text-white text-center">Developed By Richu Sony</p>
     </footer>
 
@@ -63,12 +65,12 @@
         // Start the timer
         function startTimer() {
             updateCountdown();
-             timerInterval = setInterval(() => {
+            timerInterval = setInterval(() => {
                 countdown--;
                 updateCountdown();
                 if (countdown <= 0) {
                     clearInterval(timerInterval); // Stop the timer when it reaches 0
-                    timer.innerHTML = '<span class="text-orange-500">OTP has been Expired</span><br><span><a class="hover:underline hover:text-orange-500" href="/user/signup">Go back to SignUp.</a></span>';
+                    timer.innerHTML = '<span class="text-orange-500">OTP has been Expired</span><br><span><span class="hover:underline hover:text-orange-500" onclick="redirectTo()">Resend OTP</span></span>';
                     // You can also take some action here when the timer expires
                 }
             }, 1000); // Update every 1 second (1000 milliseconds)
@@ -113,6 +115,49 @@
                 errorMessage.textContent = 'An error occurred while verifying OTP. Please try again later.';
             }
         });
+
+        async function redirectTo() {
+            const userData = sessionStorage.getItem('signUpUserDetails');
+            const toast = document.getElementById('toast');
+            try {
+                // Send a POST request to the server using async/await
+                const response = await fetch(`/user/signup`, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                        // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: userData,
+                });
+                if (!response.ok) {
+                    // Handle the case where the server returns an error
+                    // throw new Error(`Server responded with status: ${response.status}`);
+                    const data = await response.json();
+                    console.log("DAta ::  ", data);
+                    if (data.failed) {
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.failed}</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000);
+                    }
+
+                }
+                if (response.ok) {
+                    window.location.href = "/user/otpVerify"
+                }
+
+
+
+                // Handle the server's response here (e.g., display a success message or handle errors)
+                // console.log("data from back : ",data);
+            } catch (error) {
+                // Handle any network, request, or other errors here
+                console.error(error);
+            }
+        }
     </script>
 </body>
 

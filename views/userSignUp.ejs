@@ -199,7 +199,9 @@
                         baseImage: baseImage
                     }
 
+
                     const userData = await JSON.stringify(formData);
+                    sessionStorage.setItem('signUpUserDetails',userData);
                     try {
                         // Send a POST request to the server using async/await
                         const response = await fetch(`/user/signup`, {

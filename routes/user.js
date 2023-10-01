@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {userAuth} = require('../middleware/sessionAuth')
 const {isBlocked}= require('../middleware/userBlocked')
-const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart} = require('../controllers/user')
+const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewWishlistPage, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword} = require('../controllers/user')
 
 
 
@@ -29,6 +29,19 @@ router.route('/otpVerify')
 .get(otppage)
 .post(otpVerification)
 
+router.route('/verifyPhone')
+.get(viewverifyPhonePage)
+.post(sendResetUrl)
+
+router.route('/forgotPassword/:id')
+.get(viewForgotPasswordPage)
+
+router.route('/newpassword')
+.post(updateNewPassword)
+
+router.route('/wishlist/')
+.get(viewWishlistPage)
+
 // User Session Middleware
 router.use(userAuth)
 
@@ -49,5 +62,7 @@ router.route('/addWishlist/:fid/:uid')
 
 router.route('/removeFromCart/')
 .post(removeFromCart)
+
+
 
 module.exports = router;
