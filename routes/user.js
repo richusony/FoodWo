@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {userAuth} = require('../middleware/sessionAuth')
+const {isBlocked}= require('../middleware/userBlocked')
 const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart} = require('../controllers/user')
 
 
@@ -30,6 +31,7 @@ router.route('/otpVerify')
 
 // User Session Middleware
 router.use(userAuth)
+router.use(isBlocked)
 
 router.route('/cart/:id')
 .get(viewCartPage)
