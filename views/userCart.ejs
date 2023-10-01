@@ -11,8 +11,12 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
     <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
     <style>
-         /* Hide the default scrollbar */
-         .overflow-x-scroll::-webkit-scrollbar {
+        /* Hide the default scrollbar */
+        .overflow-x-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .overflow-y-auto::-webkit-scrollbar {
             display: none;
         }
 
@@ -22,8 +26,20 @@
             /* You can customize the track's appearance */
         }
 
+        /* Define the scrollbar track (optional) */
+        .overflow-y-scroll::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
         /* Define the scrollbar thumb (optional) */
         .overflow-x-scroll::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-y-scroll::-webkit-scrollbar-thumb {
             background: transparent;
             /* You can customize the thumb's appearance */
         }
@@ -37,231 +53,206 @@
 </head>
 
 <body class="bg-white">
- <!-- navigation -->
- <%- include('../views/userNavbar.ejs') %>
+    <!-- navigation -->
+    <%- include('../views/userNavbar.ejs') %>
 
-<section class="px-5 py-2 md:h-screen">
-    <div class=" px-3 py-5">
-        <span class=" px-3 py-2 text-2xl text-center font-bold">Shopping Cart</span>
-    </div>
-
-
-    <div class="flex flex-col md:flex-row my-3">
-
-
-        <div class="h-96 overflow-y-auto overflow-x-hidden md:w-1/2 px-3 py-3 mx-2 my-2">
-
-
-            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
-                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
-                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
-                </div>
-
-                <div class=" mr-3">
-                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
-                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
-                </div>
-
-                <div class=" flex m-3">
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
-                    <span class="mx-3 text-sm my-auto">3</span>
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
-                </div>
-
-                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
-                
-                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
+        <section class="px-5 py-2 lg:h-screen">
+            <div id="alert"
+                class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+                <span id="alertMsg"></span>
             </div>
-            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
-                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
-                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
-                </div>
-
-                <div class=" mr-3">
-                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
-                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
-                </div>
-
-                <div class=" flex m-3">
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
-                    <span class="mx-3 text-sm my-auto">3</span>
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
-                </div>
-
-                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
-                
-                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
-            </div>
-            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
-                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
-                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
-                </div>
-
-                <div class=" mr-3">
-                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
-                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
-                </div>
-
-                <div class=" flex m-3">
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
-                    <span class="mx-3 text-sm my-auto">3</span>
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
-                </div>
-
-                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
-                
-                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
-            </div>
-            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
-                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
-                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
-                </div>
-
-                <div class=" mr-3">
-                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
-                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
-                </div>
-
-                <div class=" flex m-3">
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
-                    <span class="mx-3 text-sm my-auto">3</span>
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
-                </div>
-
-                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
-                
-                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
-            </div>
-            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
-                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
-                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
-                </div>
-
-                <div class=" mr-3">
-                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
-                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
-                </div>
-
-                <div class=" flex m-3">
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
-                    <span class="mx-3 text-sm my-auto">3</span>
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
-                </div>
-
-                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
-                
-                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
-            </div>
-            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
-                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
-                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
-                </div>
-
-                <div class=" mr-3">
-                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
-                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
-                </div>
-
-                <div class=" flex m-3">
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
-                    <span class="mx-3 text-sm my-auto">3</span>
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
-                </div>
-
-                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
-                
-                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
-            </div>
-            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
-                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
-                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
-                </div>
-
-                <div class=" mr-3">
-                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
-                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
-                </div>
-
-                <div class=" flex m-3">
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
-                    <span class="mx-3 text-sm my-auto">3</span>
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
-                </div>
-
-                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
-                
-                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
-            </div>
-            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
-                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
-                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
-                </div>
-
-                <div class=" mr-3">
-                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
-                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
-                </div>
-
-                <div class=" flex m-3">
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
-                    <span class="mx-3 text-sm my-auto">3</span>
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
-                </div>
-
-                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
-                
-                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
-            </div>
-            <div class="bg-[#f0efef] px-5 py-3 my-2 flex justify-center items-center rounded shadow-md">
-                <div class="hidden md:block w-20 h-16 object-cover rounded mr-3">
-                    <img class="w-full h-full rounded object-cover" src="../public/images/Chicken Bbq Roll.webp" alt="">
-                </div>
-
-                <div class=" mr-3">
-                    <h2 class="text-sm md:text-lg font-semibold">Fresh Juicy Oranges</h2>
-                    <span class="hidden md:block text-sm font-light">aldjfa aflakdfja fa;dfa;dfjadfjaksdfja adfajkldfjadfj adfjad fadjfaldjfalkdf adf adflajdf</span>
-                </div>
-
-                <div class=" flex m-3">
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-l-full"><i class="fa-solid fa-minus"></i></div>
-                    <span class="mx-3 text-sm my-auto">3</span>
-                    <div class="bg-orange-500 text-white py-1 px-2 text-sm md:text-md md:px-4 rounded-r-full"><i class="fa-solid fa-plus"></i></div>
-                </div>
-
-                <div class=" mx-3"><span class="text-orange-500 font-semibold">₹400</span></div>
-                
-                <div class=" mx-2"><span class="text-orange-500 text-xl"><i class="fa-solid fa-close"></i></span></div>
+            <div class="flex items-center justify-between px-3 py-5">
+                <span class=" px-3 py-2 text-lg md:text-2xl text-center font-bold">Shopping Cart</span>
+                <a href="/user/products"
+                    class="flex items-center justify-between text-sm md:text-lg hover:text-orange-500 cursor-pointer"><i
+                        class="fa-solid fa-arrow-left mx-2"></i> <span>Continue Shopping</span></a>
             </div>
 
-            
-           
+            <div class="flex flex-col lg:flex-row my-3">
+                <% let totalItems=0; %>
+                    <% let totalPrice=0; %>
+                        <% let quantities=new Array(cartItems.length).fill(1); %>
+                            <div
+                                class="h-96 overflow-y-auto overflow-x-hidden w-full lg:w-1/2 px-3 py-3 my-2 shadow-sm">
+                                <% if(cartItems){ cartItems.forEach((cart, index)=> { %>
+                                    <div
+                                        class="bg-[#f0efef] md:px-5 py-3 my-2 flex justify-between items-center rounded shadow-md">
+                                        <div class=" w-20 h-16 object-cover rounded mx-2 md:mr-3 ">
+                                            <img class="w-full h-full rounded object-cover"
+                                                src="<%= cart.productImage%>" alt="">
+                                        </div>
 
-        </div>
+                                        <div class=" mr-2 md:mr-3 w-40 overflow-hidden shadow-inner ">
+                                            <h2 class="text-sm md:text-xl font-semibold">
+                                                <%= cart.productName %>
+                                            </h2>
+                                        </div>
 
-        <div class="bg-orange-500 mx-2 md:w-1/2 px-4 py-5 shadow-2xl rounded-xl text-white">
-            <div class="py-2 px-3 text-start"><h2 class="py-2 px-3 text-xl md:text-2xl font-bold text-white">Summary</h2></div>
-            <div class="flex justify-between px-3 my-3"><span class="font-bold">Items : 3</span><span>₹426</span></div>
-            <div class="px-3 my-3">
-                <h3 class="font-bold">Shipping to :</h3>
-                <span>Karimthakara Kunnel (H), Chuzhali P.O , Chempanthotty, Kannur , Kerala - 670142</span>
+                                        <div class=" flex mr-2 md:mr-3">
+                                            <div onclick="priceDown(event)" data-index="<%= index %>"
+                                                class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-l-full">
+                                                <i class="fa-solid fa-minus"></i>
+                                            </div>
+                                            <span id="<%= `qty${index}` %>" class="mx-3 text-sm my-auto">1</span>
+                                            <div onclick="priceUp(event)" data-index="<%= index %>"
+                                                class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-r-full">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class=" mr-2 md:mx-3">
+                                            <span class="text-orange-500 text-sm md:text-xl md:font-semibold">
+                                                <span data-actualPrice="<%= cart.productPrice %>" id="<%= `price${index}` %>"><%= '₹'+cart.productPrice %></span></span></div>
+                                        <% totalItems +=quantities[index]; %>
+                                            <% totalPrice +=quantities[index] * parseFloat(cart.productPrice); %>
+                                                <div class=" mr-2 md:mx-2"><span class="text-orange-500 md:text-2xl"><i
+                                                             onclick="deleteFromCart(event)" data-index="<%=index%>"
+                                                            data-foodid="<%=cart._id%>" data-userid="<%=userId%>"
+                                                            class="xmark cursor-pointer fa-solid fa-close"></i></span></div>
+                                    </div>
+                                    <% })} %>
+                            </div>
+
+                            <div class="bg-orange-500 mx-2 lg:w-1/2 px-4 py-5 shadow-2xl rounded-xl text-white">
+                                <div class="py-2 px-3 text-start">
+                                    <h2 class="py-2 text-xl md:text-2xl font-bold text-white">Summary</h2>
+                                </div>
+                                <div class="flex justify-between px-3 my-3">
+                                    <span class="font-bold">Items : <%= totalItems %></span>
+                                    <span class="finalPrice">₹<%= totalPrice.toFixed(2) %></span>
+                                </div>
+                                <div class="px-3 my-3">
+                                    <h3 class="font-bold">Shipping to :</h3>
+                                    <span>Karimthakara Kunnel (H), Chuzhali P.O , Chempanthotty, Kannur , Kerala -
+                                        670142</span>
+                                </div>
+                                <div class="my-3 px-3">
+                                    <div><input type="checkbox" name="" id="" class="mr-2"><span>Apply Code :</span>
+                                    </div>
+                                    <input type="text" name="" id="" class="rounded my-2">
+                                </div>
+                                <hr class="py-[0.28px] bg-white rounded my-5">
+                                <div class="flex justify-between px-3 font-bold"><span>Total : </span> <span
+                                        class="finalPrice">₹<%= totalPrice.toFixed(2) %></span>
+                                </div>
+                                <div class="text-center my-4"><button
+                                        class="py-2 px-20 rounded bg-white shadow-md text-orange-500 font-bold">checkout</button>
+                                </div>
+                            </div>
             </div>
-            <div class="my-3 px-3">
-                <div><input type="checkbox" name="" id="" class="mr-2"><span>Apply Code :</span></div>
-            
-                <input type="text" name="" id="" class="rounded my-2">
-            </div>
+        </section>
 
-            <hr class="py-[0.28px] bg-white rounded my-5">
+        <!-- footer -->
+        <% include('../views/userFooter.ejs') %>
 
-            <div class="flex justify-between px-3 font-bold"><span>Total : </span> <span>₹426</span></div>
+            <script>
+                // let quantity = 1;
+                let finalPrice = parseInt('<%-totalPrice %>');
 
-            <div class="text-center my-4"><button class="py-2 px-20 rounded bg-white shadow-md text-orange-500 font-bold">checkout</button></div>
-        </div>
-    </div>
-</section>
+                const final = document.querySelectorAll(`.finalPrice`);
+                function priceUp(event) {
+                    const index = event.currentTarget.getAttribute('data-index');
+                    const qty = document.getElementById(`qty${index}`);
+                    const currentPrice = document.getElementById(`price${index}`);
+                    const actualPrice = currentPrice.getAttribute('data-actualPrice');
 
- <!-- footer -->
- <%- include('../views/userFooter.ejs') %>
+                    // Increment quantity and calculate the new price
+                    let quantity = parseInt(qty.innerText)
+                    quantity++;
+                    const newPrice = quantity * parseFloat(actualPrice);
+                    finalPrice += parseFloat(actualPrice);
+                    // finalPrice-=parseInt(actualPrice);
+
+                    // Update the displayed quantity and price
+                    qty.innerText = quantity;
+                    currentPrice.innerText = "₹"+newPrice
+                    final.forEach((item) => {
+                        item.innerText = "₹" + finalPrice.toFixed(2)
+                    })
+                    // Update the final price
+                    // finalPrice = newPrice;
+
+                    // You can add additional logic here, like sending data to the server if needed.
+                }
+
+                function priceDown(event) {
+                    const index = event.currentTarget.getAttribute('data-index');
+                    const qty = document.getElementById(`qty${index}`);
+                    const currentPrice = document.getElementById(`price${index}`);
+                    const actualPrice = currentPrice.getAttribute('data-actualPrice');
+                    let quantity = parseInt(qty.innerText)
+
+                    if (quantity > 1) {
+                        // Decrement quantity and calculate the new price
+                        quantity--;
+
+                        const newPrice = quantity * parseFloat(actualPrice);
+                        finalPrice -= parseFloat(actualPrice);
+                        // Update the displayed quantity and price
+                        qty.innerText = quantity;
+                        currentPrice.innerText = "₹"+newPrice;
+                        final.forEach((item) => {
+                            item.innerText = "₹" + finalPrice.toFixed(2)
+                        })
+
+                        // Update the final price
+                        // finalPrice = newPrice;
+
+                        // You can add additional logic here, like sending data to the server if needed.
+                    }
+                }
+
+
+                async function deleteFromCart(event) {
+                    console.log(event)
+                    event.stopPropagation();
+                    event.preventDefault();
+                    const index = event.target.dataset.index;
+                    const xmark = document.getElementsByClassName('xmark')[parseInt(index)];
+                    console.log(index)
+                    const foodid = xmark.getAttribute('data-foodid');
+                    const userid = xmark.getAttribute('data-userid');
+
+                    const reqData = {
+                        foodid: foodid,
+                        userid: userid
+                    }
+                    const realData = await JSON.stringify(reqData);
+
+                    const response = await fetch('/user/removeFromCart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': "application/json",
+                        },
+                        body: realData
+                    })
+
+                    if (response.ok) {
+                        const alertBox = document.getElementById('alert')
+                        const alertMsg = document.getElementById('alertMsg')
+                        const data = await response.json()
+                        if (data.deleted) {
+                            window.scrollTo(0, 0)
+                            alertBox.classList.remove('opacity-0')
+                            alertBox.classList.remove('-translate-x-full')
+                            alertMsg.innerText = `item removed from cart`;
+                            setTimeout(()=>{
+                            window.location.reload();
+                            },2000)
+                        } else if (data.err) {
+                            window.scrollTo(0, 0)
+                            alertBox.classList.remove('opacity-0')
+                            alertBox.classList.remove('-translate-x-full')
+                            alertMsg.innerText = `${data.err}`;
+                        } else {
+                            window.scrollTo(0, 0)
+                            alertBox.classList.remove('opacity-0')
+                            alertBox.classList.remove('-translate-x-full')
+                            alertMsg.innerText = `something went wrong!`;
+                        }
+                    }
+                }
+            </script>
 </body>
+
 </html>
-    

@@ -15,13 +15,16 @@
             <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/user/help"><i
                         class="fa-solid fa-life-ring"></i> Help</a></li>
             <li id="logged" class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"></li>
-            <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/user/cart"><i
+            <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="#" onclick="toCart()"><i
                         class="fa-solid fa-cart-shopping"></i> Cart</a></li>
         </ul>
     </div>
 </nav>
 
 <script>
+    function toCart(){
+        window.location.href=`/user/cart/${sessionStorage.getItem('user_id')}`
+    }
     const open = document.getElementById('open');
     const closes = document.getElementById('close');
     const menu = document.getElementById('menubar');

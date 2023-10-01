@@ -1,8 +1,10 @@
 const { userModel } = require('../models/userSchema');
 const productModel = require('../models/productSchema');
+const wishListModel = require('../models/wishlistSchema');
 const categoryModel = require('../models/categorySchema');
 const bcrypt = require('bcrypt');
 const { sessAuth } = require("../middleware/sessionAuth");
+const cartModel = require('../models/cartSchema');
 
 function viewSignInPage(req, res) {
     res.render('userSignUp')
@@ -149,22 +151,100 @@ function otpVerification(req, res) {
 //User Proudcts Home Page 
 
 async function productPage(req, res) {
+    const userId = req.session.user?._id;
     const products = await productModel.find({});
+    const wishlist = await wishListModel.aggregate(
+        [
+            {
+                $match: { userId: userId }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    foodId: 1,
+                }
+            }
+        ]
+    )
     const categories = await categoryModel.aggregate([{ $sample: { size: 1 } }]);
     console.log(categories[0].category)
     const catProducts = await productModel.find({ category: categories[0].category })
     // console.log("random :: ",categories);
-    res.render('mainProducts', { data: products, category: catProducts });
+    res.render('mainProducts', { data: products, category: catProducts, userId: userId, wishData: wishlist });
 }
 
 async function viewCartPage(req, res) {
-    res.render('../views/userCart')
+    const uid = req.params.id;
+    const foodItems = await cartModel.aggregate(
+        [
+            {
+                $match: { userId: uid }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    foodId: 1,
+                    quantity: 1,
+                }
+            }
+        ]
+    );
+
+    const foodIds = foodItems.map(item => item.foodId);
+    const cartItems = await productModel.find({ _id: { $in: foodIds } });
+    res.render('../views/userCart', { cartItems: cartItems, userId: uid });
+}
+
+async function addToCart(req, res) {
+    const { userid, foodid } = req.body;
+
+    const exists = await cartModel.findOne({ foodId: foodid, userId: userid });
+    if (exists) {
+        res.status(200).json({ exist: 'item already exists in cart.' })
+    } else {
+        const adding = await cartModel.create({ userId: userid, foodId: foodid, quantity: 1 });
+        if (adding) {
+            res.status(200).json({ added: 'item added to cart.' })
+        } else {
+            res.status(500).json({ err: 'Database is having an issue.' })
+        }
+    }
+}
+
+async function removeFromCart(req, res) {
+    const {foodid,userid} = req.body;
+    const deleting = await cartModel.deleteOne({ userId: userid, foodId: foodid })
+    if (deleting) {
+        res.status(200).json({ deleted: true })
+    } else {
+        res.status(500).json({ err: "Database is having an issues.." })
+    }
 }
 
 async function logoutUser(req, res) {
     req.session.destroy();
     res.redirect('/user/login')
 }
+
+async function addToWishlist(req, res) {
+    const userid = req.params.uid;
+    const foodid = req.params.fid;
+
+    const exists = await wishListModel.findOne({ foodId: foodid, userId: userid })
+    if (exists) {
+        const deleting = await wishListModel.deleteOne({ foodId: foodid, userId: userid })
+        res.status(200).json({ added: false })
+    } else {
+
+        const adding = await wishListModel.create({ foodId: foodid, userId: userid })
+        if (adding) {
+            res.status(200).json({ added: true })
+        } else {
+            res.status(500).json({ err: "Database is having some issues.." })
+        }
+    }
+}
+
 
 
 module.exports = {
@@ -177,5 +257,7 @@ module.exports = {
     otpVerification,
     logoutUser,
     viewCartPage,
-
+    addToWishlist,
+    addToCart,
+    removeFromCart
 }

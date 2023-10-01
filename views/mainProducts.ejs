@@ -36,310 +36,427 @@
     </style>
 </head>
 
-<body>
+<body class="scroll-smooth">
     <!-- navigation -->
     <%- include('../views/userNavbar.ejs') %>
 
-    <!-- main section -->
-    <section class="px-10 my-5">
-        <!-- Banners -->
-        <div class="md:px-10 my-4 md:mt-8 flex justify-between">
-            <h2 class="font-bold text-xl md:text-2xl">Best offers for you</h2>
-            <div class="flex justify-between">
-                <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
-                        class="fa-solid fa-arrow-left"></i></span>
-                <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
-                        class="fa-solid fa-arrow-right"></i></span>
+        <!-- main section -->
+        <section class="px-10 my-5">
+            <div id="alert"
+                class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+                <span id="alertMsg"></span>
             </div>
-        </div>
-        <div class="my-2 md:my-6 overflow-hidden flex justify-center items-center">
-            <div class="foodContainer md:py-3 overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
-                <div class="md:w-96 h-full mx-3 inline-block">
-                    <img class="w-full h-full" src="/public/images/banner.svg" alt="banner">
-                </div>
-                <div class="md:w-96 h-full mx-3 inline-block">
-                    <img class="w-full h-full" src="/public/images/banner2.svg" alt="banner">
-                </div>
-                <div class="md:w-96 h-full mx-3 inline-block">
-                    <img class="w-full h-full" src="/public/images/banner3.svg" alt="banner">
-                </div>
-                <div class="md:w-96 h-full mx-3 inline-block">
-                    <img class="w-full h-full" src="/public/images/banner4.svg" alt="banner">
-                </div>
-                <div class="md:w-96 h-full mx-3 inline-block">
-                    <img class="w-full h-full" src="/public/images/banner5.svg" alt="banner">
+            <!-- Banners -->
+            <div class="md:px-10 my-4 md:mt-8 flex justify-between">
+                <h2 class="font-bold text-xl md:text-2xl">Best offers for you</h2>
+                <div class="flex justify-between">
+                    <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                            class="fa-solid fa-arrow-left"></i></span>
+                    <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                            class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </div>
-        </div>
+            <div class="my-2 md:my-6 overflow-hidden flex justify-center items-center">
+                <div class="foodContainer md:py-3 overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
+                    <div class="md:w-96 h-full mx-3 inline-block">
+                        <img class="w-full h-full" src="/public/images/banner.svg" alt="banner">
+                    </div>
+                    <div class="md:w-96 h-full mx-3 inline-block">
+                        <img class="w-full h-full" src="/public/images/banner2.svg" alt="banner">
+                    </div>
+                    <div class="md:w-96 h-full mx-3 inline-block">
+                        <img class="w-full h-full" src="/public/images/banner3.svg" alt="banner">
+                    </div>
+                    <div class="md:w-96 h-full mx-3 inline-block">
+                        <img class="w-full h-full" src="/public/images/banner4.svg" alt="banner">
+                    </div>
+                    <div class="md:w-96 h-full mx-3 inline-block">
+                        <img class="w-full h-full" src="/public/images/banner5.svg" alt="banner">
+                    </div>
+                </div>
+            </div>
 
-        <!-- category -->
-        <div class="md:px-10 my-4 md:mt-8 flex justify-between">
-            <h2 class="font-bold text-md md:text-2xl" id="username"></h2>
-            <div class="hidden md:flex md:justify-between">
-                <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
-                        class="fa-solid fa-arrow-left"></i></span>
-                <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
-                        class="fa-solid fa-arrow-right"></i></span>
-            </div>
-        </div>
-        <div class="my-3 overflow-hidden flex justify-center items-center">
-            <div class="foodContainer overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
-                <div class="w-36 h-40 inline-block">
-                    <div class="w-full h-full"><img class="w-full h-full"
-                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/rng/md/carousel/production/e20c602ba8ed5d8ec2204e7a7b19d9f6"
-                            alt=""></div>
-                </div>
-                <div class="w-36 h-40 inline-block">
-                    <div class="w-full h-full"><img class="w-full h-full"
-                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667625/PC_Creative%20refresh/Biryani_2.png"
-                            alt=""></div>
-                </div>
-                <div class="w-36 h-40 inline-block">
-                    <div class="w-full h-full"><img class="w-full h-full"
-                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029848/PC_Creative%20refresh/3D_bau/banners_new/Chinese.png"
-                            alt=""></div>
-                </div>
-                <div class="w-36 h-40 inline-block">
-                    <div class="w-full h-full"><img class="w-full h-full"
-                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029845/PC_Creative%20refresh/3D_bau/banners_new/Burger.png"
-                            alt=""></div>
-                </div>
-                <div class="w-36 h-40 inline-block">
-                    <div class="w-full h-full"><img class="w-full h-full"
-                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667626/PC_Creative%20refresh/South_Indian_4.png"
-                            alt=""></div>
-                </div>
-                <div class="w-36 h-40 inline-block">
-                    <div class="w-full h-full"><img class="w-full h-full"
-                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029858/PC_Creative%20refresh/3D_bau/banners_new/Rolls.png"
-                            alt=""></div>
-                </div>
-                <div class="w-36 h-40 inline-block">
-                    <div class="w-full h-full"><img class="w-full h-full"
-                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029851/PC_Creative%20refresh/3D_bau/banners_new/Ice_Creams.png"
-                            alt=""></div>
-                </div>
-                <div class="w-36 h-40 inline-block">
-                    <div class="w-full h-full"><img class="w-full h-full"
-                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667630/PC_Creative%20refresh/Desserts_2.png"
-                            alt=""></div>
-                </div>
-                <div class="w-36 h-40 inline-block">
-                    <div class="w-full h-full"><img class="w-full h-full"
-                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029853/PC_Creative%20refresh/3D_bau/banners_new/Parotta.png"
-                            alt=""></div>
-                </div>
-                <div class="w-36 h-40 inline-block">
-                    <div class="w-full h-full"><img class="w-full h-full"
-                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029859/PC_Creative%20refresh/3D_bau/banners_new/Shawarma.png"
-                            alt=""></div>
-                </div>
-                <div class="w-36 h-40 inline-block">
-                    <div class="w-full h-full"><img class="w-full h-full"
-                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667625/PC_Creative%20refresh/North_Indian_4.png"
-                            alt=""></div>
-                </div>
-                <div class="w-36 h-40 inline-block">
-                    <div class="w-full h-full"><img class="w-full h-full"
-                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029846/PC_Creative%20refresh/3D_bau/banners_new/Idli.png"
-                            alt=""></div>
-                </div>
-                <div class="w-36 h-40 inline-block">
-                    <div class="w-full h-full"><img class="w-full h-full"
-                            src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029850/PC_Creative%20refresh/3D_bau/banners_new/Dosa.png"
-                            alt=""></div>
+            <!-- category -->
+            <div class="md:px-10 my-4 md:mt-8 flex justify-between">
+                <h2 class="font-bold text-md md:text-2xl" id="username"></h2>
+                <div class="hidden md:flex md:justify-between">
+                    <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                            class="fa-solid fa-arrow-left"></i></span>
+                    <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                            class="fa-solid fa-arrow-right"></i></span>
                 </div>
             </div>
-        </div>
-
-        <!-- Food Items -->
-        <div class="md:px-10 my-4 md:mt-8 flex justify-between">
-            <h2 class="font-bold text-xl md:text-2xl">Popular Items</h2>
-            <div class="flex justify-between">
-                <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
-                        class="fa-solid fa-arrow-left"></i></span>
-                <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
-                        class="fa-solid fa-arrow-right"></i></span>
-            </div>
-        </div>
-        <div class="md:px-10">
-            <div class="overflow-hidden flex justify-center items-center">
+            <div class="my-3 overflow-hidden flex justify-center items-center">
                 <div class="foodContainer overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
-                    <!-- items -->
-                    <% if(data){ data.forEach((food)=>{ %>
-                        <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
-                            <div class="w-full h-36 rounded-2xl"><img class="w-full h-full rounded-2xl object-cover"
-                                    src="<%= food.productImage %>" alt=""></div>
-                            <h3 class="font-bold my-1 text-xl">
-                                <%= food.productName %>
-                            </h3>
-                            <div><i class="fa-regular fa-star text-orange-500"></i> <span
-                                    class="font-semibold">4.2</span></div>
-                            <div class="max-w-full break-words"><span class="text-gray-500 text-sm w-full ">
-                                    <%= food.description %>
-                                </span></div>
-                            <div><span class="font-bold text-lg my-2">Price : <span class="text-orange-500">₹<%=
-                                            food.productPrice %> </span>/ <%= food.productType %></span></div>
-                            <div class="my-2 w-full flex justify-between items-center "><span
-                                    class="text-3xl cursor-pointer"><i
-                                        class="wishlist fa-regular fa-heart text-orange-500"></i></span> <button
-                                    class="bg-orange-500 rounded-full px-6 py-1 text-xl text-white text-center"> <i
-                                        class="fa-solid fa-cart-shopping"></i></button></div>
-                        </div>
-                        <% }) } %>
+                    <div class="w-36 h-40 inline-block">
+                        <div class="w-full h-full"><img class="w-full h-full"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/rng/md/carousel/production/e20c602ba8ed5d8ec2204e7a7b19d9f6"
+                                alt=""></div>
+                    </div>
+                    <div class="w-36 h-40 inline-block">
+                        <div class="w-full h-full"><img class="w-full h-full"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667625/PC_Creative%20refresh/Biryani_2.png"
+                                alt=""></div>
+                    </div>
+                    <div class="w-36 h-40 inline-block">
+                        <div class="w-full h-full"><img class="w-full h-full"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029848/PC_Creative%20refresh/3D_bau/banners_new/Chinese.png"
+                                alt=""></div>
+                    </div>
+                    <div class="w-36 h-40 inline-block">
+                        <div class="w-full h-full"><img class="w-full h-full"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029845/PC_Creative%20refresh/3D_bau/banners_new/Burger.png"
+                                alt=""></div>
+                    </div>
+                    <div class="w-36 h-40 inline-block">
+                        <div class="w-full h-full"><img class="w-full h-full"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667626/PC_Creative%20refresh/South_Indian_4.png"
+                                alt=""></div>
+                    </div>
+                    <div class="w-36 h-40 inline-block">
+                        <div class="w-full h-full"><img class="w-full h-full"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029858/PC_Creative%20refresh/3D_bau/banners_new/Rolls.png"
+                                alt=""></div>
+                    </div>
+                    <div class="w-36 h-40 inline-block">
+                        <div class="w-full h-full"><img class="w-full h-full"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029851/PC_Creative%20refresh/3D_bau/banners_new/Ice_Creams.png"
+                                alt=""></div>
+                    </div>
+                    <div class="w-36 h-40 inline-block">
+                        <div class="w-full h-full"><img class="w-full h-full"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667630/PC_Creative%20refresh/Desserts_2.png"
+                                alt=""></div>
+                    </div>
+                    <div class="w-36 h-40 inline-block">
+                        <div class="w-full h-full"><img class="w-full h-full"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029853/PC_Creative%20refresh/3D_bau/banners_new/Parotta.png"
+                                alt=""></div>
+                    </div>
+                    <div class="w-36 h-40 inline-block">
+                        <div class="w-full h-full"><img class="w-full h-full"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029859/PC_Creative%20refresh/3D_bau/banners_new/Shawarma.png"
+                                alt=""></div>
+                    </div>
+                    <div class="w-36 h-40 inline-block">
+                        <div class="w-full h-full"><img class="w-full h-full"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667625/PC_Creative%20refresh/North_Indian_4.png"
+                                alt=""></div>
+                    </div>
+                    <div class="w-36 h-40 inline-block">
+                        <div class="w-full h-full"><img class="w-full h-full"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029846/PC_Creative%20refresh/3D_bau/banners_new/Idli.png"
+                                alt=""></div>
+                    </div>
+                    <div class="w-36 h-40 inline-block">
+                        <div class="w-full h-full"><img class="w-full h-full"
+                                src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029850/PC_Creative%20refresh/3D_bau/banners_new/Dosa.png"
+                                alt=""></div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="md:px-10 my-4 md:mt-8 flex justify-between">
-            <% if(category){ %>
-            <h2 class="font-bold text-md md:text-2xl">Today's Special <%= category[0].category %> </h2>
-            <div class="flex justify-between">
-                <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
-                        class="fa-solid fa-arrow-left"></i></span>
-                <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
-                        class="fa-solid fa-arrow-right"></i></span>
+            <!-- Food Items -->
+            <div class="md:px-10 my-4 md:mt-8 flex justify-between">
+                <h2 class="font-bold text-xl md:text-2xl">Popular Items</h2>
+                <div class="flex justify-between">
+                    <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                            class="fa-solid fa-arrow-left"></i></span>
+                    <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                            class="fa-solid fa-arrow-right"></i></span>
+                </div>
             </div>
-        </div>
-        <div class="md:px-10">
-            <div class="overflow-hidden flex justify-center items-center">
-                <div  class="foodContainer overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
-                    <!-- items -->
-                    <% category.forEach((food)=>{ %>
-                        <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
-                            <div class="w-full h-36 rounded-2xl"><img class="w-full h-full rounded-2xl object-cover"
-                                    src="<%= food.productImage %>" alt=""></div>
-                            <h3 class="font-bold my-1 text-xl">
-                                <%= food.productName %>
-                            </h3>
-                            <div><i class="fa-regular fa-star text-orange-500"></i> <span
-                                    class="font-semibold">4.2</span></div>
-                            <div class="max-w-full  break-words"><span class="text-gray-500 text-sm w-full ">
-                                    <%= food.description %>
-                                </span></div>
-                            <div><span class="font-bold text-lg my-2">Price : <span class="text-orange-500">₹<%=
-                                            food.productPrice %> </span>/ <%= food.productType %></span></div>
-                            <div class="my-2 w-full flex justify-between items-center "><span
-                                    class="text-3xl cursor-pointer"><i
-                                        class="wishlist fa-regular fa-heart text-orange-500"></i></span> <button
-                                    class="bg-orange-500 rounded-full px-6 py-1 text-xl text-white text-center"> <i
-                                        class="fa-solid fa-cart-shopping"></i></button></div>
-                        </div>
-                        <% }) }else{ %>
-                            <div class="md:px-10">
-                                <div class="flex justify-center items-center">
-                                    <p>No Special Items for Today</p>
+            <div class="md:px-10">
+                <div class="overflow-hidden flex justify-center items-center">
+                    <div class="foodContainer overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
+                        <!-- items -->
+                        <% if(data){ data.forEach((food)=>{ %>
+                            <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
+                                <div class="w-full h-36 rounded-2xl"><img class="w-full h-full rounded-2xl object-cover"
+                                        src="<%= food.productImage %>" alt=""></div>
+                                <h3 class="font-bold my-1 text-xl">
+                                    <%= food.productName %>
+                                </h3>
+                                <div><i class="fa-regular fa-star text-orange-500"></i> <span
+                                        class="font-semibold">4.2</span></div>
+                                <div class="max-w-full break-words"><span class="text-gray-500 text-sm w-full ">
+                                        <%= food.description %>
+                                    </span></div>
+                                <div><span class="font-bold text-lg my-2">Price : <span class="text-orange-500">₹<%=
+                                                food.productPrice %> </span>/ <%= food.productType %></span></div>
+                                <div class="my-2 w-full flex justify-between items-center ">
+                                    <span class="text-3xl cursor-pointer" id="wish">
+                                        <i data-userid="<%= userId %>" onclick="wishlistadder(event)"
+                                            data-foodid="<%= food._id%>"
+                                            class="wishlist <% wishData.forEach((item)=>{ if(item.foodId==food._id){ %>fa-solid <% }else{ %> fa-regular <% }}) %> fa-regular fa-heart text-orange-500"></i>
+                                    </span>
+
+                                    <!-- <button type="button" onclick="addToCart(event)" data-userid="<%= userId %>" data-foodid="<%= food._id%>" class=""> -->
+                                    <i data-foodid="<%= food._id%>" data-userid="<%= userId %>"
+                                        onclick="addToCart(event)"
+                                        class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
+                                    <!-- </button> -->
                                 </div>
                             </div>
-                       <% } %>
+                            <% }) } %>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </section>
+            <div class="md:px-10 my-4 md:mt-8 flex justify-between">
+                <% if(category){ %>
+                    <h2 class="font-bold text-md md:text-2xl">Today's Special <%= category[0].category %>
+                    </h2>
+                    <div class="flex justify-between">
+                        <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                                class="fa-solid fa-arrow-left"></i></span>
+                        <span
+                            class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                                class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+            </div>
+            <div class="md:px-10">
+                <div class="overflow-hidden flex justify-center items-center">
+                    <div class="foodContainer overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
+                        <!-- items -->
+                        <% category.forEach((food)=>{ %>
+                            <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
+                                <div class="w-full h-36 rounded-2xl"><img class="w-full h-full rounded-2xl object-cover"
+                                        src="<%= food.productImage %>" alt=""></div>
+                                <h3 class="font-bold my-1 text-xl">
+                                    <%= food.productName %>
+                                </h3>
+                                <div><i class="fa-regular fa-star text-orange-500"></i> <span
+                                        class="font-semibold">4.2</span></div>
+                                <div class="max-w-full  break-words"><span class="text-gray-500 text-sm w-full ">
+                                        <%= food.description %>
+                                    </span></div>
+                                <div><span class="font-bold text-lg my-2">Price : <span class="text-orange-500">₹<%=
+                                                food.productPrice %> </span>/ <%= food.productType %></span></div>
+                                <div class="my-2 w-full flex justify-between items-center ">
+                                    <span class="text-3xl cursor-pointer" id="wish">
+                                        <i data-userid="<%= userId %>" onclick="wishlistadder(event)"
+                                            data-foodid="<%= food._id%>"
+                                            class="wishlist <% wishData.forEach((item)=>{ if(item.foodId==food._id){ %>fa-solid <% }else{ %> fa-regular <% }}) %> fa-regular fa-heart text-orange-500"></i>
+                                    </span>
+
+                                    <!-- <button type="button" onclick="addToCart(event)" data-userid="<%= userId %>" data-foodid="<%= food._id%>" class=""> -->
+                                    <i data-foodid="<%= food._id%>" data-userid="<%= userId %>"
+                                        onclick="addToCart(event)"
+                                        class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
+                                    <!-- </button> -->
+                                </div>
+                            </div>
+                            <% }) }else{ %>
+                                <div class="md:px-10">
+                                    <div class="flex justify-center items-center">
+                                        <p>No Special Items for Today</p>
+                                    </div>
+                                </div>
+                                <% } %>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- footer -->
+        <%- include('../views/userFooter.ejs') %>
 
 
-    <!-- footer -->
-   <%- include('../views/userFooter.ejs') %>
+            <script>
+                const alertBox = document.getElementById('alert')
+                const alertMsg = document.getElementById('alertMsg')
+                async function addToCart(event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    const userid = '<%-userId%>' //event.target.getAttribute('data-userid')
+                    const foodid = event.target.getAttribute('data-foodid')
+                    console.log(event)
 
+                    const reqData = {
+                        userid: userid,
+                        foodid: foodid,
+                    }
+                    const realData = JSON.stringify(reqData);
+                    if (!userid) {
+                        window.location.href = '/user/login';
+                    } else {
+                        const response = await fetch('/user/addToCart/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': "application/json",
+                            },
+                            body: realData
+                        })
 
-    <script>
-        // const open = document.getElementById('open');
-        // const closes = document.getElementById('close');
-        // const menu = document.getElementById('menubar');
-        const username = document.getElementById('username');
-        // const logged = document.getElementById('logged');
-
-        
-        if(sessionStorage.getItem('username')){
-            const Name=sessionStorage.getItem('username').split(' ')
-            // logged.innerHTML= `<a href='' onclick="userLogout(event)" class=""><i class="fa-regular fa-user"></i> ${Name[0]}</a>`;
-            username.innerText= `${Name[0]}, what's on your mind`;
-        }else{
-            username.innerText= `what's on your mind`;
-            // logged.innerHTML=`<a href="/user/login"><i class="fa-solid fa-life-ring"></i> Login</a>`
-        } 
-
-
-        // function userLogout(event){
-        //     sessionStorage.removeItem('username');
-        //     window.location.href="/user/logout"
-        // }
-
-        // open.addEventListener('click', (event) => {
-        //     menu.classList.remove('hidden');
-        //     event.style.display = "none";
-        //     closes.style.display = "block";
-        // })
-
-        // closes.addEventListener('click', (event) => {
-        //     menu.classList.add('hidden');
-        //     event.style.display = "none";
-        //     open.style.display = "block";
-        // })
-
-        // Get references to the scroll buttons and the container of food items
-        const scrollLeftButtons = document.querySelectorAll('.scroll-left');
-        const scrollRightButtons = document.querySelectorAll('.scroll-right');
-        const foodContainers = document.querySelectorAll('.foodContainer');
-
-        // Set the amount to scroll when the buttons are clicked (adjust as needed)
-        const scrollAmount = 200;
-
-        function updateScrollButtonsState(container, leftButton, rightButton) {
-            // Check if there's content to scroll to the left
-            if (container.scrollLeft > 0) {
-                leftButton.style.display = "block";
-            } else {
-                leftButton.style.display = "none";
-            }
-
-            // Check if there's content to scroll to the right
-            if (container.scrollLeft < container.scrollWidth - container.clientWidth) {
-                rightButton.style.display = "block";
-            } else {
-                rightButton.style.display = "none";
-            }
-        }
-
-        scrollLeftButtons.forEach((leftButton, index) => {
-            leftButton.addEventListener('click', () => {
-                // Scroll the container to the left
-                foodContainers[index].scrollLeft -= scrollAmount;
-                updateScrollButtonsState(foodContainers[index], leftButton, scrollRightButtons[index]);
-            });
-        });
-
-        scrollRightButtons.forEach((rightButton, index) => {
-            rightButton.addEventListener('click', () => {
-                // Scroll the container to the right
-                foodContainers[index].scrollLeft += scrollAmount;
-                updateScrollButtonsState(foodContainers[index], scrollLeftButtons[index], rightButton);
-            });
-        });
-
-        // Initial state of the buttons
-        foodContainers.forEach((container, index) => {
-            updateScrollButtonsState(container, scrollLeftButtons[index], scrollRightButtons[index]);
-        });
-
-        const wishElements = document.querySelectorAll('.wishlist');
-
-        wishElements.forEach((like, index) => {
-            like.addEventListener('click', () => {
-                if (wishElements[index].classList.contains('fa-regular')) {
-                    wishElements[index].classList.remove('fa-regular');
-                    wishElements[index].classList.add('fa-solid');
-                } else {
-                    wishElements[index].classList.remove('fa-solid');
-                    wishElements[index].classList.add('fa-regular');
-
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.added) {
+                                window.scrollTo(0,0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `${data.added}`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                }, 3000)
+                            } else if (data.exist) {
+                                window.scrollTo(0,0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `${data.exist}`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                }, 3000)
+                            }
+                            else {
+                                alert('something went wrong.')
+                            }
+                        }
+                    }
                 }
-            })
-        }
-        )
 
-    </script>
+                async function wishlistadder(event) {
+                    event.preventDefault();
+                    const userid = event.target.getAttribute('data-userid')
+                    const foodid = event.target.getAttribute('data-foodid')
+
+                    const reqData = {
+                        userid: userid,
+                        foodid: foodid
+                    }
+                    const realData = await JSON.stringify(reqData);
+
+                    if (!userid) {
+                        window.location.href = '/user/login';
+                    } else {
+                        const response = await fetch(`/user/addWishlist/${foodid}/${userid}`, {
+                            method: 'POST',
+                            headers: {
+                                "Content-Type": "application/json",
+                                // 'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: realData
+                        })
+                        if (response.ok) {
+                            const wish = JSON.parse('<%-JSON.stringify(wishData)%>')
+                            console.log("wishes : ", wish)
+                            const data = await response.json();
+                            if (data.added) {
+                                event.target.classList.remove('fa-regular');
+                                event.target.classList.add('fa-solid');
+                            } else {
+                                event.target.classList.remove('fa-solid');
+                                event.target.classList.add('fa-regular');
+                            }
+                        }
+                    }
+                }
+
+
+
+                // const open = document.getElementById('open');
+                // const closes = document.getElementById('close');
+                // const menu = document.getElementById('menubar');
+                const username = document.getElementById('username');
+                // const logged = document.getElementById('logged');
+
+
+                if (sessionStorage.getItem('username')) {
+                    const Name = sessionStorage.getItem('username').split(' ')
+                    // logged.innerHTML= `<a href='' onclick="userLogout(event)" class=""><i class="fa-regular fa-user"></i> ${Name[0]}</a>`;
+                    username.innerText = `${Name[0]}, what's on your mind`;
+                } else {
+                    username.innerText = `what's on your mind`;
+                    // logged.innerHTML=`<a href="/user/login"><i class="fa-solid fa-life-ring"></i> Login</a>`
+                }
+
+
+                // function userLogout(event){
+                //     sessionStorage.removeItem('username');
+                //     window.location.href="/user/logout"
+                // }
+
+                // open.addEventListener('click', (event) => {
+                //     menu.classList.remove('hidden');
+                //     event.style.display = "none";
+                //     closes.style.display = "block";
+                // })
+
+                // closes.addEventListener('click', (event) => {
+                //     menu.classList.add('hidden');
+                //     event.style.display = "none";
+                //     open.style.display = "block";
+                // })
+
+                // Get references to the scroll buttons and the container of food items
+                const scrollLeftButtons = document.querySelectorAll('.scroll-left');
+                const scrollRightButtons = document.querySelectorAll('.scroll-right');
+                const foodContainers = document.querySelectorAll('.foodContainer');
+
+                // Set the amount to scroll when the buttons are clicked (adjust as needed)
+                const scrollAmount = 200;
+
+                function updateScrollButtonsState(container, leftButton, rightButton) {
+                    // Check if there's content to scroll to the left
+                    if (container.scrollLeft > 0) {
+                        leftButton.style.display = "block";
+                    } else {
+                        leftButton.style.display = "none";
+                    }
+
+                    // Check if there's content to scroll to the right
+                    if (container.scrollLeft < container.scrollWidth - container.clientWidth) {
+                        rightButton.style.display = "block";
+                    } else {
+                        rightButton.style.display = "none";
+                    }
+                }
+
+                scrollLeftButtons.forEach((leftButton, index) => {
+                    leftButton.addEventListener('click', () => {
+                        // Scroll the container to the left
+                        foodContainers[index].scrollLeft -= scrollAmount;
+                        updateScrollButtonsState(foodContainers[index], leftButton, scrollRightButtons[index]);
+                    });
+                });
+
+                scrollRightButtons.forEach((rightButton, index) => {
+                    rightButton.addEventListener('click', () => {
+                        // Scroll the container to the right
+                        foodContainers[index].scrollLeft += scrollAmount;
+                        updateScrollButtonsState(foodContainers[index], scrollLeftButtons[index], rightButton);
+                    });
+                });
+
+                // Initial state of the buttons
+                foodContainers.forEach((container, index) => {
+                    updateScrollButtonsState(container, scrollLeftButtons[index], scrollRightButtons[index]);
+                });
+
+                const wishElements = document.querySelectorAll('.wishlist');
+
+
+
+                // wishElements.forEach((like, index) => { 
+                //     like.addEventListener('click', () => {
+                //         const wishData =  JSON.parse('<%-JSON.stringify(wishData)%>');
+                //         console.log("wishData : ",wishData);
+                //         wishData.forEach((item)=>{
+                //         })
+                //         if (wishElements[index].classList.contains('fa-regular')) {
+                //             wishElements[index].classList.remove('fa-regular');
+                //             wishElements[index].classList.add('fa-solid');
+                //         } else {
+                //             wishElements[index].classList.remove('fa-solid');
+                //             wishElements[index].classList.add('fa-regular');
+                //         }
+                //     })
+                // })
+
+
+            </script>
 </body>
 
 </html>

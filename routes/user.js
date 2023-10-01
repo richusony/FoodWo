@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {userAuth} = require('../middleware/sessionAuth')
-const {signInUser,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage} = require('../controllers/user')
+const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart} = require('../controllers/user')
 
 
 
@@ -31,10 +31,19 @@ router.route('/otpVerify')
 // User Session Middleware
 router.use(userAuth)
 
-router.route('/cart')
+router.route('/cart/:id')
 .get(viewCartPage)
+
+router.route('/addToCart')
+.post(addToCart)
 
 router.route('/logout')
 .get(logoutUser)
+
+router.route('/addWishlist/:fid/:uid')
+.post(addToWishlist)
+
+router.route('/removeFromCart/')
+.post(removeFromCart)
 
 module.exports = router;
