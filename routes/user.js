@@ -31,6 +31,8 @@ router.route('/otpVerify')
 
 // User Session Middleware
 router.use(userAuth)
+
+// Checking wether User is Blocked or Not
 router.use(isBlocked)
 
 router.route('/cart/:id')
