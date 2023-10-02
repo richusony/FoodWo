@@ -123,9 +123,14 @@
                                 </div>
                                 <div class="px-3 my-3">
                                     <h3 class="font-bold">Shipping to :</h3>
-                                    <span>Karimthakara Kunnel (H), Chuzhali P.O , Chempanthotty, Kannur , Kerala -
+                                    <div id="addContainer">
+                                    <span id="currentAdd">Karimthakara Kunnel (H), Chuzhali P.O , Chempanthotty, Kannur , Kerala -
                                         670142</span>
+                                    </div>
+                                    <textarea class="text-black hidden w-full px-3" name="" id="newAdd" cols="" rows="4"></textarea>
                                 </div>
+                                <div class="text-end"><span class="cursor-pointer" id="editAdd" onclick="editAddress(event)">edit address</span></div>
+                                <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd" onclick="saveAddress(event)">save address</span></div>
                                 <div class="my-3 px-3">
                                     <div><input type="checkbox" name="" id="" class="mr-2"><span>Apply Code :</span>
                                     </div>
@@ -251,6 +256,33 @@
                             alertMsg.innerText = `something went wrong!`;
                         }
                     }
+                }
+
+                function editAddress(event){
+                event.preventDefault();
+                const currentAdd = document.getElementById('currentAdd');
+                const addContainer = document.getElementById('addContainer');
+                const newAdd = document.getElementById('newAdd');
+                const saveAdd = document.getElementById('saveAdd');
+
+                currentAdd.style.display='none';
+                newAdd.innerText=currentAdd.innerText;
+                newAdd.classList.remove('hidden');
+                event.target.classList.add('hidden')
+                saveAdd.classList.remove('hidden')
+
+                }
+                function saveAddress(event){
+                  const currentAdd = document.getElementById('currentAdd');
+                const addContainer = document.getElementById('addContainer');
+                const newAdd = document.getElementById('newAdd');
+                const editAdd = document.getElementById('editAdd');
+
+                currentAdd.innerText=newAdd.value;
+                newAdd.classList.add('hidden');
+                currentAdd.style.display='block';
+                event.target.classList.add('hidden')
+                editAdd.classList.remove('hidden')
                 }
             </script>
 </body>

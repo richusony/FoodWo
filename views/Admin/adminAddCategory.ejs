@@ -65,13 +65,20 @@ const toast = document.getElementById('toast');
                     toast.classList.add("hidden");
                     toast.classList.add("translate-y-96");
                 }, 3000)
+            }else if(category !== category.toUpperCase()){
+            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i>Category Name must be in UPPERCASE.</span>`;
+                toast.classList.remove("hidden");
+                toast.classList.remove("translate-y-96");
+                setTimeout(() => {
+                    toast.classList.add("hidden");
+                    toast.classList.add("translate-y-96");
+                }, 3000)
             }
             else {
                 const formData = {
                    
                     category:category,
                     }
-                console.log('formdata :: ',formData)
 
                 const categoryData = await JSON.stringify(formData);
                 try {

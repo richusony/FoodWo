@@ -102,7 +102,7 @@ async function viewProductsPage(req, res) {
                     description: 1,
                     productPrice: 1,
                     productType: 1,
-                    category:1,
+                    category: 1,
                     productSold: 1,
                     productInStock: 1,
                 }
@@ -113,8 +113,8 @@ async function viewProductsPage(req, res) {
 }
 
 async function viewAddProductsPage(req, res) {
-    const categories = await categoryModel.find({}).sort({category:1})
-    res.render('../views/Admin/adminAddProuduct',{data:categories})
+    const categories = await categoryModel.find({}).sort({ category: 1 })
+    res.render('../views/Admin/adminAddProuduct', { data: categories })
 }
 
 async function addProduct(req, res) {
@@ -125,7 +125,7 @@ async function addProduct(req, res) {
             description: description,
             productPrice: productPrice,
             productType: productType,
-            category:category,
+            category: category,
             productSold: 0,
             productInStock: inStock,
             productImage: baseImage,
@@ -137,15 +137,15 @@ async function addProduct(req, res) {
 
 async function viewProductUpdatePage(req, res) {
     const id = req.params.id;
-    const categories = await categoryModel.find({}).sort({category:1})
+    const categories = await categoryModel.find({}).sort({ category: 1 })
     const productDetails = await productModel.find({ _id: id })
-    res.render('../views/Admin/productUpdate', { data: productDetails ,category:categories});
+    res.render('../views/Admin/productUpdate', { data: productDetails, category: categories });
 }
 
 // Admin updates products
 async function updateProducts(req, res) {
     const { id, productName, description, productPrice, productType, category, sold, inStock, image } = req.body;
-    const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType,category:category, productInStock: inStock, productImage: image });
+    const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category, productInStock: inStock, productImage: image });
     if (updating) {
         const updatedDetails = await productModel.find({ _id: id });
         res.status(200).json({ data: updatedDetails })
@@ -166,8 +166,8 @@ async function deleteProduct(req, res) {
 
 // Admin views categories Page
 async function viewCategoryPage(req, res) {
-    const categories = await categoryModel.find({}).sort({category:1})
-    res.render('../views/Admin/adminCategory',{data:categories});
+    const categories = await categoryModel.find({}).sort({ category: 1 })
+    res.render('../views/Admin/adminCategory', { data: categories });
 }
 
 // Admin views add category Page
@@ -179,57 +179,62 @@ function viewAddCategoryPage(req, res) {
 async function addCategory(req, res) {
     const { category } = req.body;
     if (category) {
-        const adding = await categoryModel.create({ category: category });
-        if (adding) {
-            res.status(200).json({ success: "category added to database" })
+        const exist = await categoryModel.findOne({ category })
+        if (exist) {
+            res.status(401).json({ err: 'Category already existed.' })
         } else {
-            res.status(500).json({ err: "Database is having some issues." })
+            const adding = await categoryModel.create({ category: category });
+            if (adding) {
+                res.status(200).json({ success: "category added to database" })
+            } else {
+                res.status(500).json({ err: "Database is having some issues." })
+            }
         }
     } else {
         res.status(400).json({ err: "Enter Category Name." })
     }
 }
 
-async function viewUpdateCategory(req,res){
-    const id= req.params.id;
-    const category = await categoryModel.findOne({_id:id});
-
-    if(category){
-        res.render('../views/Admin/categoryUpdate',{data:category})
-    }else{
-        res.status(500).json({err:"Database is having some issues"})
-    }
-}
-
-async function updateCategory(req,res){
+async function viewUpdateCategory(req, res) {
     const id = req.params.id;
-    const {category} = req.body;
-    console.log("got it :: ",id,category);
-    const updating = await categoryModel.updateOne({_id:id},{category:category});
+    const category = await categoryModel.findOne({ _id: id });
 
-    if(updating){
-        const updatedDetails = await categoryModel.find({_id:id});
-        if(updatedDetails){
-            res.render('../views/Admin/categoryUpdate',{data:updatedDetails})
+    if (category) {
+        res.render('../views/Admin/categoryUpdate', { data: category })
+    } else {
+        res.status(500).json({ err: "Database is having some issues" })
+    }
+}
+
+async function updateCategory(req, res) {
+    const id = req.params.id;
+    const { category } = req.body;
+    console.log("got it :: ", id, category);
+    const updating = await categoryModel.updateOne({ _id: id }, { category: category });
+
+    if (updating) {
+        const updatedDetails = await categoryModel.find({ _id: id });
+        if (updatedDetails) {
+            res.render('../views/Admin/categoryUpdate', { data: updatedDetails })
         }
-        else{
-            res.status(500).json({err:"Database is having some issues"})
+        else {
+            res.status(500).json({ err: "Database is having some issues" })
         }
-    }else{
-        res.status(500).json({err:"Database is having some issues"})
+    } else {
+        res.status(500).json({ err: "Database is having some issues" })
     }
 }
 
 
-async function deleteCategory(req,res){
-const id = req.params.id;
-const deleting = await categoryModel.deleteOne({_id:id});
-if(deleting){
-    res.redirect('/admin/category')
-}
-else{
-    res.status(500).json({err:"Database is having some issues."})
-}
+async function deleteCategory(req, res) {
+    const id = req.params.id;
+    const deleting = await categoryModel.deleteOne({ _id: id });
+    if (deleting) {
+        res.redirect('/admin/category')
+    }
+    else {
+        res.status(500).json({ err: "Database is having some issues." })
+    }
 }
 
 module.exports = {
