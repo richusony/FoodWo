@@ -16,6 +16,7 @@ connectMongo(`${process.env.MONGODB_URI}`).then(() => { console.log('MongoDB Con
 
 app.set('view engine', 'ejs');
 app.use('/public/', express.static('./public'));
+app.use('/uploads/', express.static('./uploads'));
 
 // Session and Cookie
 app.use(session({

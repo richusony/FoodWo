@@ -30,10 +30,14 @@
     const menu = document.getElementById('menubar');
     // const username = document.getElementById('username');
     const logged = document.getElementById('logged');
+//     function dropdown(){
+
+// }
 
     if (sessionStorage.getItem('username')) {
         const Name = sessionStorage.getItem('username').split(' ')
-        logged.innerHTML = `<a href='/user/logout' onclick="userLogout(event)" class=""><i class="fa-regular fa-user"></i> ${Name[0]}</a>`;
+        const id = sessionStorage.getItem('user_id');
+        logged.innerHTML = `<a href='/user/userProfile/${id}' onclick="" class=""><i class="fa-regular fa-user"></i> ${Name[0]}</a>`;
     } else {
         logged.innerHTML = `<a href="/user/login"><i class="fa-solid fa-life-ring"></i> Login</a>`
     }

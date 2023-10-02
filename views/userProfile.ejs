@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodWo - Your Profile</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <%-include('../views/userNavbar.ejs') %>
+        <section class="px-5 py-2">
+            <% if(userData){ %>
+
+
+
+
+
+                <!-- <div class="transition delay-1000 text-center py-3 my-5">
+                    <div class="w-32 h-32 mx-auto"><img id="image"
+                            class="shadow-2xl object-cover w-full h-full rounded-full" src=""
+                            alt="userData"></div>
+                </div> -->
+
+                <div class="my-4 mx-auto">
+                    <form action="/user/userProfile/<%=userData._id%>" method="post" enctype="multipart/form-data">
+
+                        <label for="doc"
+                            class="w-40 h-40 rounded-full mx-auto my-5 bg-orange-100 text-center flex flex-col justify-center items-centerd cursor-pointer">
+                            <img src="/<%=userData.image%>"
+                                class="w-full h-full <% if(userData.image){%>block <% }else{%> hidden <%  }%>  rounded-full object-cover" alt=""
+                                id="imagetag">
+                            <div class="text-orange-500 text-5xl <% if(userData.image){%>hidden <% }else{%> block <%  }%> "
+                                id="userIcon"><i class="<%=userData.image%>?block:hidden fa-regular fa-user"></i></div>
+                            <input type="file" name="image" accept="image/*" placeholder="upload profile" id="doc"
+                                class="" hidden>
+                            <!-- <span id="uploadtext">Upload Profile</span> -->
+                        </label>
+                        <div class="bg-orange-500 md:w-1/2 mx-auto py-5 px-5 rounded-xl  font-semibold">
+
+                            <div class="flex flex-col my-2">
+                                <label class="text-white" for="fullname">Full Name</label>
+                                <input type="text" name="fullname" id="fullname" value="<%=userData.fullname%>"
+                                    class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2">
+                            </div>
+
+                            <div class="flex flex-col my-2">
+                                <label class="text-white" for="email">Email</label>
+                                <input type="email" name="email" id="email" value="<%=userData.email%>"
+                                    class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2">
+                            </div>
+
+                            <div class="flex flex-col my-2">
+                                <label class="text-white" for="fullname">Phone Number</label>
+                                <input type="tel" maxlength="10" name="phone" id="phone" value="<%=userData.phone%>"
+                                    class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2">
+                            </div>
+
+                            <div class="flex flex-col my-2">
+                                <label class="text-white" for="address">Address</label>
+                                <textarea name="address" id="address" cols="30" rows="5" value=""
+                                    class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><%=userData.address%></textarea>
+                            </div>
+                            <input type="text" name="userid" value="<%=userData._id%>" hidden>
+
+                            <div class="text-center my-4"><button type="submit" onclick="userProfileUpdate(event)"
+                                    class="bg-white text-orange-500 py-2 px-3 rounded mx-auto">Update</button></div>
+                        </div>
+                    </form>
+                </div>
+                <div id="toast"
+                    class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+                </div>
+                <% } %>
+        </section>
+        <%-include('../views/userFooter.ejs') %>
+
+            <script>
+
+                let baseImage = "";
+                // Image Details
+                const image = document.getElementById('doc');
+                const imagetag = document.getElementById('imagetag');
+                // const uploadtext = document.getElementById('uploadtext');
+                const userIcon = document.getElementById('userIcon');
+
+
+                image.addEventListener('change', async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            baseImage = reader.result; // This is the data URL
+            imagetag.style.display = "block";
+            userIcon.style.display = "none";
+            imagetag.setAttribute("src", baseImage);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+
+                const toast = document.getElementById('toast');
+                async function userProfileUpdate(event) {
+                    const fullname = document.getElementById('fullname').value;
+                    const email = document.getElementById('email').value;
+                    const phone = document.getElementById('phone').value;
+                    const address = document.getElementById('address').value;
+                    // const image = document.getElementById('imagetag').src;
+
+                    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+                    // Check if the email address matches the regular expression
+                    const isEmailValid = emailRegex.test(email);
+
+                    if (!fullname || !email || !phone || !address) {
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> All fields are required.</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000)
+                    }
+                    else if (!isEmailValid) {
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Please enter a valid email address.</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000);
+                    }
+                    else if (phone.length < 10) {
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Please enter a valid phone number</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000);
+                    } else {
+                        // const userdata = {
+                        //     userid: '',
+                        //     fullname: fullname,
+                        //     email: email,
+                        //     phone: phone,
+                        //     address: address,
+                        //     image: image
+                        // }
+                        console.log('all ok')
+                        setTimeout(() => {
+                            event.preventDefault();
+                           window.location.reload();
+                        }, 3000);
+
+                    }
+                    // console.log(userdata)
+                }
+                //         const reqData = await JSON.stringify(userdata);
+                //         toast.innerHTML = `<span id="toastMessage" class="text-sm">Loading...</span>`;
+                //         toast.classList.remove("opacity-0");
+                //         toast.classList.remove("-translate-x-full");
+
+                // //         const response = await fetch('/user/userProfile/', {
+                // //             method: 'PATCH',
+                //             headers: {
+                //                 'Content-Type': "application/json",
+                //             },
+                //             body: reqData
+                //         })
+
+                //         if (response.ok) {
+                //             toast.innerHTML = `<span id="toastMessage" class="text-sm">Details updated</span>`;
+                //             toast.classList.remove("opacity-0");
+                //             toast.classList.remove("-translate-x-full");
+                //             setTimeout(() => {
+                //                 toast.classList.add("opacity-0");
+                //                 toast.classList.add("-translate-x-full");
+                //             }, 3000);
+                //         } else {
+                //             toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i>Couldn't update</span>`;
+                //             toast.classList.remove("opacity-0");
+                //             toast.classList.remove("-translate-x-full");
+                //             setTimeout(() => {
+                //                 toast.classList.add("opacity-0");
+                //                 toast.classList.add("-translate-x-full");
+                //             }, 3000);
+                //         }
+
+                //     }
+                // }
+
+            </script>
+
+</body>
+
+</html>

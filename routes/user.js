@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const {userAuth} = require('../middleware/sessionAuth')
 const {isBlocked}= require('../middleware/userBlocked')
-const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewWishlistPage, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword} = require('../controllers/user')
+const upload = require('../middleware/multer')
+const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewWishlistPage, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile} = require('../controllers/user')
 
 
 
@@ -13,7 +14,7 @@ router.route('/signup')
 
 // User Login Get Request
 router.route('/login')
-.get(viewLoginInPage)
+.get(viewLoginInPage) 
 .post(loginUser)
 
 
@@ -40,7 +41,11 @@ router.route('/newpassword')
 .post(updateNewPassword)
 
 router.route('/wishlist/')
-.get(viewWishlistPage)
+.get(viewWishlistPage)  
+
+router.route('/userProfile/:id')
+.get(viewUserProfile)
+.post(upload.single('image'),updateUserProfile)
 
 // User Session Middleware
 router.use(userAuth)

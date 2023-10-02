@@ -95,6 +95,7 @@ async function loginUser(req, res) {
         res.status(401).json({ failed: 'user doesnot exists.' });
     }
 }
+
 function otppage(req, res) {
     res.render('otpVerify')
 }
@@ -260,8 +261,8 @@ function viewverifyPhonePage(req, res) {
 
 async function updateNewPassword(req, res) {
     const { newPassword, userid } = req.body;
-console.log(newPassword,userid)
-const hashedPassword = bcrypt.hashSync(newPassword, 10);
+    console.log(newPassword, userid)
+    const hashedPassword = bcrypt.hashSync(newPassword, 10);
     const updating = await userModel.updateOne({ _id: userid }, { password: hashedPassword })
     if (updating) {
         res.status(200).json({ updated: true })
@@ -293,7 +294,30 @@ async function sendResetUrl(req, res) {
     } else {
         res.status(401).json({ err: 'This phone is not registered.' })
     }
+}
 
+async function viewUserProfile(req, res) {
+    const id = req.params.id;
+
+    const userDetails = await userModel.findOne({ _id: id });
+
+    if (userDetails) {
+
+        res.render('../views/userProfile.ejs', { userData: userDetails })
+    } else {
+        res.status(500).json({ err: 'Database is having an issue.' })
+    }
+}
+
+async function updateUserProfile(req, res) {
+    const { userid, fullname, email, phone, address } = req.body;
+    const image = req.file?.path;
+    const updating = await userModel.updateOne({ _id: userid }, { fullname: fullname, email: email, phone: phone, address: address, image: image })
+    if (updating) {
+        res.status(200)
+    } else {
+        res.status(503).json({ err: "Couldn't update the new details." })
+    }
 
 }
 
@@ -317,5 +341,6 @@ module.exports = {
     viewverifyPhonePage,
     sendResetUrl,
     updateNewPassword,
-
+    viewUserProfile,
+    updateUserProfile
 }
