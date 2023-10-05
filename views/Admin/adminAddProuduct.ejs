@@ -65,10 +65,12 @@
                                 class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                                 <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500"
                                     value="none">None</option>
-                                <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500"
-                                    value="kg">Per Kilogram(/kg)</option>
-                                <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500"
-                                    value="plate">Per Plate</option>
+                                <% if(types){ types.forEach((type)=>{ %>
+                                    <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500"
+                                        value="<%=type.productType%>">
+                                        <%=type.productType%>
+                                    </option>
+                                    <% }) } %>
                             </select>
                         </div>
                         <div class="flex flex-col my-2">

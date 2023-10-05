@@ -21,6 +21,9 @@ const { viewLogInPage,
     deleteCategory,
     viewUpdateCategory,
     updateCategory,
+    listAllTypes,
+    viewAddTypePage,
+    addType,
 } = require('../controllers/admin');
 const router = express.Router();
 const { adminAuth } = require('../middleware/sessionAuth')
@@ -106,6 +109,14 @@ router.route('/update-category/:id')
 // Admin delete Category
 router.route('/category-delete/:id')
 .get(deleteCategory)
+
+router.route('/types')
+.get(listAllTypes)
+
+router.route('/addtype')
+.get(viewAddTypePage)
+.post(addType)
+
 
 
 module.exports = router;

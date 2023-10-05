@@ -2,6 +2,7 @@ const adminModel = require('../models/adminSchema');
 const categoryModel = require('../models/categorySchema');
 const productModel = require('../models/productSchema');
 const { userModel } = require('../models/userSchema')
+const typeModel = require('../models/productTypeSchema')
 
 
 
@@ -116,7 +117,8 @@ async function viewProductsPage(req, res) {
 
 async function viewAddProductsPage(req, res) {
     const categories = await categoryModel.find({}).sort({ category: 1 })
-    res.render('../views/Admin/adminAddProuduct', { data: categories })
+    const types = await typeModel.find({}).sort({ productType: 1 })
+    res.render('../views/Admin/adminAddProuduct', { data: categories ,types:types})
 }
 
 async function addProduct(req, res) {
@@ -124,7 +126,7 @@ async function addProduct(req, res) {
     console.log(req.body)
     const relatedImages = req.files.relatedimages.map(img => img.path);
     const mainImage = req.files.mainimage.map(img => img.path);
-    console.log('mainImage : ',mainImage)
+    console.log('mainImage : ', mainImage)
     console.log('files : ', relatedImages)
     res.status(200)
     const addingProduct = await productModel.create(
@@ -246,6 +248,34 @@ async function deleteCategory(req, res) {
     }
 }
 
+async function listAllTypes(req, res) {
+    const types = await typeModel.find({});
+    res.render('../views/Admin/adminType.ejs', { data: types })
+}
+
+async function viewAddTypePage(req, res) {
+    res.render('../views/Admin/adminAddType.ejs')
+}
+
+async function addType(req, res) {
+    const productType = req.body.type;
+    if (productType) {
+        const exist = await typeModel.findOne({ productType })
+        if (exist) {
+            res.status(401).json({ err: 'Type already existed.' })
+        } else {
+            const adding = await typeModel.create({ productType: productType });
+            if (adding) {
+                res.status(200).json({ success: "Type added to database" })
+            } else {
+                res.status(500).json({ err: "Database is having some issues." })
+            }
+        }
+    } else {
+        res.status(400).json({ err: "Enter product Type Name." })
+    }
+}
+
 module.exports = {
     viewLogInPage,
     viewOrdersPage,
@@ -269,5 +299,7 @@ module.exports = {
     deleteCategory,
     viewUpdateCategory,
     updateCategory,
-
+    listAllTypes,
+    addType,
+    viewAddTypePage,
 } 
