@@ -193,7 +193,8 @@ async function viewCartPage(req, res) {
 
     const foodIds = foodItems.map(item => item.foodId);
     const cartItems = await productModel.find({ _id: { $in: foodIds } });
-    res.render('../views/userCart', { cartItems: cartItems, userId: uid });
+    const userDetails = await userModel.find({_id:uid})
+    res.render('../views/userCart', { cartItems: cartItems, userId: uid, userData:userDetails});
 }
 
 async function addToCart(req, res) {
@@ -321,6 +322,54 @@ async function updateUserProfile(req, res) {
 
 }
 
+async function updateStock(req, res) {
+    const { user_id, productId, productQty } = req.body;
+    console.log(user_id, productId, productQty);
+
+    try {
+        // Assuming you have a 'productModel' and relevant fields in your MongoDB model
+        const product = await productModel.findById(productId);
+
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        // Calculate the updated stock quantity by subtracting 'productQty'
+        const updatedStock = product.productInStock - productQty;
+
+        // Increment 'productSold' by 'productQty' and 'purchaseCount' by 1
+        const result = await productModel.updateOne(
+            { _id: productId },
+            {
+                $set: { productInStock: updatedStock },
+                $inc: { productSold: productQty, purchaseCount: 1 }
+            }
+        );
+
+        const updating = await userModel.updateOne(
+            { _id: user_id },
+            {
+                $inc: { purchaseCount: 1 }
+            })
+
+        if (result.nModified === 1) {
+            return res.status(200).json({ message: 'Stock updated successfully' });
+        } else {
+            return res.status(500).json({ error: 'Failed to update stock' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+
+    const user = await userModel.findById(user_id);
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+
+}
+
 
 
 module.exports = {
@@ -342,5 +391,6 @@ module.exports = {
     sendResetUrl,
     updateNewPassword,
     viewUserProfile,
-    updateUserProfile
+    updateUserProfile,
+    updateStock
 }

@@ -32,59 +32,30 @@
     </section>
 
     <!-- Top Selling & Purchase -->
-    <section class="flex flex-col md:flex-row justify-center items-center px-4 py-2">
+    <section class="flex flex-col md:flex-row justify-evenly items-center px-5 py-2">
         <div class="bg-green-50 mx-2 my-3 py-3 px-4 shadow-md">
             <h1 class="font-semibold border-b-2 my-2 border-b-orange-500 py-2">Top Selling Food Items</h1>
+<% if(topCust) { topProd.forEach((item)=>{ %>
             <div class="flex justify-between items-center border-b-2 py-2">
-                <div class="hidden md:block md:w-20 md:h-20 mx-2"><img class="w-full h-full" src="https://images.pexels.com/photos/327098/pexels-photo-327098.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt=""></div>
+                <div class="hidden md:block md:w-20 md:h-20 mx-2"><img class="w-full h-full object-cover rounded" src="<%= item.productImage %>" alt="productImage"></div>
                 <div class="mx-2">
-                    <h3 class="font-semibold md:text-lg">Fresh, Juicy Oranges</h3>
-                    <h5 class="text-sm md:text-md text-gray-500">Indulge in the citrusy delight of our premium,hand-picked oranges</h5>
+                    <h3 class="font-semibold md:text-lg text-start"><%= item.productName %></h3>
                 </div>
                 <div class="mx-2 flex justify-center items-center"><i class="fa-regular fa-star text-orange-500"></i> <span class="mx-1 font-semibold">4.2</span></div>
-                <div class="mx-2 flex"><span class="text-orange-500">₹200</span><span class="hidden md:block">/kg</span></div>
+                <div class="mx-2 flex"><span class="text-orange-500">₹<%= item.productPrice%></span><span class="hidden md:block">/<%= item.productType %></span></div>
             </div>
-
-            <div class="flex justify-between items-center border-b-2 py-2">
-                <div class="hidden md:block md:w-20 md:h-20 mx-2"><img class="w-full h-full" src="https://images.pexels.com/photos/327098/pexels-photo-327098.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt=""></div>
-                <div class="mx-2">
-                    <h3 class="font-semibold md:text-lg">Fresh, Juicy Oranges</h3>
-                    <h5 class="text-sm md:text-md text-gray-500">Indulge in the citrusy delight of our premium,hand-picked oranges</h5>
-                </div>
-                <div class="mx-2 flex justify-center items-center"><i class="fa-regular fa-star text-orange-500"></i> <span class="mx-1 font-semibold">4.2</span></div>
-                <div class="mx-2 flex"><span class="text-orange-500">₹200</span><span class="hidden md:block">/kg</span></div>
-            </div>
-
-            <div class="flex justify-between items-center border-b-2 py-2">
-                <div class="hidden md:block md:w-20 md:h-20 mx-2"><img class="w-full h-full" src="https://images.pexels.com/photos/327098/pexels-photo-327098.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt=""></div>
-                <div class="mx-2">
-                    <h3 class="font-semibold md:text-lg">Fresh, Juicy Oranges</h3>
-                    <h5 class="text-sm md:text-md text-gray-500">Indulge in the citrusy delight of our premium,hand-picked oranges</h5>
-                </div>
-                <div class="mx-2 flex justify-center items-center"><i class="fa-regular fa-star text-orange-500"></i> <span class="mx-1 font-semibold">4.2</span></div>
-                <div class="mx-2 flex"><span class="text-orange-500">₹200</span><span class="hidden md:block">/kg</span></div>
-            </div>
+ <%  }) } %>
 
         </div>
         <div class="bg-green-50 mx-2 my-3 py-3 px-4 shadow-md">
             <h1 class="font-semibold border-b-2 my-2 border-b-orange-500 py-2">Top Users</h1>
+            <% if(topCust) { topCust.forEach((user)=>{ %>
             <div class="flex justify-between items-center border-b-2 py-2">
-                <div class="w-10 h-10 md:w-20 md:h-20 mx-2"><img class="w-full h-full" src="https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt=""></div>
-                <div class="mx-4"><span class="font-bold">Tom James</span></div>
-                <div class="mx-4"><span class="text-orange-500 font-semibold">32</span> <span>Times</span></div>
+                <div class="hidden md:block w-10 h-10 md:w-20 md:h-20 mx-2"><img class="w-full h-full object-cover rounded" src="<%= user.image%>" alt="userProfile"></div>
+                <div class="mx-2 text-start"><span class="font-bold text-start"><%= user.fullname %></span></div>
+                <div class="mx-4"><span class="text-orange-500 font-semibold"><%= user.purchaseCount %></span> <span>Times</span></div>
             </div>
-
-            <div class="flex justify-between items-center border-b-2 py-2">
-                <div class="w-10 h-10 md:w-20 md:h-20 mx-2"><img class="w-full h-full" src="https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt=""></div>
-                <div class="mx-4"><span class="font-bold">Tom James</span></div>
-                <div class="mx-4"><span class="text-orange-500 font-semibold">32</span> <span>Times</span></div>
-            </div>
-
-            <div class="flex justify-between items-center border-b-2 py-2">
-                <div class="w-10 h-10 md:w-20 md:h-20 mx-2"><img class="w-full h-full" src="https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt=""></div>
-                <div class="mx-4"><span class="font-bold">Tom James</span></div>
-                <div class="mx-4"><span class="text-orange-500 font-semibold">32</span> <span>Times</span></div>
-            </div>
+            <%  }) } %>
         </div>
     </section>
 

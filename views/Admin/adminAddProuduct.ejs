@@ -21,189 +21,276 @@
         <section class="px-5 py-3">
 
             <div class="">
-
-                <div class="md:w-1/2 md:px-4 mx-auto">
-                    <!-- image upload -->
-                    <label for="doc"
-                        class="md:w-2/3 md:mx-auto bg-orange-100 rounded h-72 w-full text-center flex flex-col justify-center items-centerd cursor-pointer">
-                        <img src="#" class="w-full h-full hidden rounded" alt="" id="imagetag">
-                        <div class="text-orange-500 text-6xl my-3" id="userIcon"><i class="fa-regular fa-user"></i></div>
-                        <input type="file" name="" placeholder="upload profile" id="doc" class="" hidden>
-                        <span id="uploadtext">Upload Product Image </span>
-                    </label>
-    
+                <div class="md:w-1/2 relative flex justify-center items-center mx-auto mb-5">
+                    <div id="toast"
+                        class="transition duration-[0.5s] md:w-80 bg-orange-500 py-5 px-3 hidden ease-linear rounded-md text-center text-white">
+                    </div>
                 </div>
-                <div class="md:w-1/2 md:px-4 mx-auto">
+
+                <div class="flex flex-col md:flex-row ">
                     <!-- Input Fields -->
-                    <form action="">
+                    <form class="md:w-1/2" action="/admin/addproduct" method="post" enctype="multipart/form-data">
+                        <div class="w-full flex flex-col my-2">
+                            <label for="mainImage">Main Image</label>
+                            <input type="file" name="mainimage" id="mainImage" accept="image/*"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">Related Images</label>
+                            <input type="file" name="relatedimages" id="relatedImages" accept="image/*" maxlength="4"
+                                multiple="multiple"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
                         <div class="flex flex-col my-2">
                             <label for="">Product Name</label>
-                            <input type="text" name="" maxlength="20" id="productName" placeholder="Product Name"
+                            <input type="text" name="productName" maxlength="20" id="productName"
+                                placeholder="Product Name"
                                 class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                         </div>
                         <div class="flex flex-col my-2">
                             <label for="">Description</label>
-                            <textarea type="text" name="" id="description" placeholder="Product Description" cols="3" rows="5"
+                            <textarea type="text" name="description" id="description" placeholder="Product Description"
+                                cols="3" rows="5"
                                 class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500"></textarea>
                         </div>
                         <div class="flex flex-col my-2">
                             <label for="">Price</label>
-                            <input type="tel" maxlength="4" name="" id="productPrice" placeholder="Product Price"
+                            <input type="tel" maxlength="4" name="productPrice" id="productPrice"
+                                placeholder="Product Price"
                                 class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                         </div>
                         <div class="flex flex-col my-2">
                             <label for="">Type</label>
-                            <select name="" id="productType"  class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
-                                <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500" value="none">None</option>
-                                <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500" value="kg">Per Kilogram(/kg)</option>
-                                <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500" value="plate">Per Plate</option>
+                            <select name="productType" id="productType"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                                <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500"
+                                    value="none">None</option>
+                                <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500"
+                                    value="kg">Per Kilogram(/kg)</option>
+                                <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500"
+                                    value="plate">Per Plate</option>
                             </select>
                         </div>
                         <div class="flex flex-col my-2">
                             <label for="">Category</label>
-                            <select name="" id="category"  class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
-                                <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500" value="none">None</option>
+                            <select name="category" id="category"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                                <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500"
+                                    value="none">None</option>
                                 <% if(data){ data.forEach((cat)=>{ %>
-                                <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500" value="<%=cat.category %>"><%=cat.category %></option>
-                                <% }) } %>
+                                    <option class="px-2  py-2 rounded outline-orange-500 border border-orange-500"
+                                        value="<%=cat.category %>">
+                                        <%=cat.category %>
+                                    </option>
+                                    <% }) } %>
                             </select>
                         </div>
                         <div class="flex flex-col my-2">
                             <label for="">Sold</label>
-                            <input type="text" disabled name="" id="sold" placeholder="" value="0"
+                            <input type="text" disabled name="sold" id="sold" placeholder="" value="0"
                                 class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                         </div>
                         <div class="flex flex-col my-2">
                             <label for="">In Stock</label>
-                            <input type="number" name="" id="inStock" autocomplete="new-password"
+                            <input type="number" name="inStock" id="inStock" autocomplete="new-password"
                                 placeholder="Number of stock"
                                 class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                         </div>
                         <div class="my-8 text-center">
                             <button type="submit" onclick="handleProductUpload(event)"
-                                class="bg-orange-500 rounded-full py-2 px-6 md:px-6 text-white text-xl md:text-xl">Add to stock</button>
+                                class="bg-orange-500 rounded-full py-2 px-6 md:px-6 text-white text-xl md:text-xl">Add
+                                to stock</button>
                         </div>
-                        <div class="md:w-1/2 relative flex justify-center items-center mx-auto mb-5">
-                            <div id="toast"
-                                class="transition duration-[0.5s] md:w-80 bg-orange-500 py-5 px-3 hidden ease-linear rounded-md text-center text-white">
+
+                    </form>
+
+                    <div class="md:w-1/2 bg-orange-500 py-4 px-5 my-5 md:my-0 md:mx-5 rounded-xl text-white">
+                        <h1 class="text-xl font-bold my-3">Image Preview</h1>
+                        <div>
+                            <h3 class="font-semibold my-3">Main Image</h3>
+                            <div class="w-48 h-48" id="mainImageContainer">
+
                             </div>
                         </div>
-                    </form>
+                        <div>
+                            <h3 class="font-semibold my-3">Related Images</h3>
+                            <div id="relatedImagesPreview" class="flex flex-wrap justify-between items-center">
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </section>
         <!-- Footer -->
         <%- include('adminFooter') %>
 
-        <script>
-             let baseImage = "";
-        // Image Details
-        const image = document.getElementById('doc');
-        const imagetag = document.getElementById('imagetag');
-        const uploadtext = document.getElementById('uploadtext');
-        const userIcon = document.getElementById('userIcon');
+            <script>
 
-        const toast = document.getElementById('toast');
 
-        image.addEventListener('change', async (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                baseImage = await ImagetoBase64(file);
-                imagetag.style.display = "block";
-                userIcon.style.display = "none";
-                uploadtext.style.display = "none";
-                imagetag.setAttribute("src", baseImage);
-            }
-        });
+                async function handleProductUpload(event) {
+                    //User Details
+                    const productName = document.getElementById('productName').value;
+                    const description = document.getElementById('description').value;
+                    const productPrice = document.getElementById('productPrice').value;
+                    const productType = document.getElementById('productType').value;
+                    const category = document.getElementById('category').value;
+                    // const sold = document.getElementById('sold').value;
+                    const inStock = document.getElementById('inStock').value;
+                    const toast = document.getElementById('toast');
 
-        async function ImagetoBase64(file) {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
 
-            return new Promise((resolve, reject) => {
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = err => reject(err);
-            });
-        }
 
-        async function handleProductUpload(event) {
-            event.preventDefault();
-            //User Details
-            const productName = document.getElementById('productName').value;
-            const description = document.getElementById('description').value;
-            const productPrice = document.getElementById('productPrice').value;
-            const productType = document.getElementById('productType').value;
-            const category = document.getElementById('category').value;
-            // const sold = document.getElementById('sold').value;
-            const inStock = document.getElementById('inStock').value;
 
-          
+                    if (!productName || !description || !productPrice || !productType || !category || !inStock) {
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> All fields are required.</span>`;
+                        toast.classList.remove("hidden");
+                        toast.classList.remove("translate-y-96");
+                        setTimeout(() => {
+                            toast.classList.add("hidden");
+                            toast.classList.add("translate-y-96");
+                        }, 3000)
+                    }
+                    else {
+                        const formData = {
+                            productName: productName,
+                            description: description,
+                            productPrice: productPrice,
+                            productType: productType,
+                            category: category,
+                            sold: 0,
+                            inStock: inStock,
+                        }
+                        console.log('formdata :: ', formData)
 
-            if (!productName || !description || !productPrice || !productType || !category || !inStock || !baseImage) {
-                toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> All fields are required.</span>`;
-                console.log('not here');
-                toast.classList.remove("hidden");
-                toast.classList.remove("translate-y-96");
-                setTimeout(() => {
-                    toast.classList.add("hidden");
-                    toast.classList.add("translate-y-96");
-                }, 3000)
-            }
-            else {
-                const formData = {
-                    productName: productName,
-                    description: description,
-                    productPrice: productPrice,
-                    productType: productType,
-                    category:category,
-                    sold: 0,
-                    inStock:inStock,
-                    baseImage:baseImage,
+                        // const productData = await JSON.stringify(formData);
+                        // try {
+                        //     // Send a POST request to the server using async/await
+                        //     const response = await fetch(`/admin/addproduct`, {
+                        //         method: 'POST',
+                        //         headers: {
+                        //             "Content-Type": "application/json",
+                        //             // 'Content-Type': 'application/x-www-form-urlencoded',
+                        //         },
+                        //         body: productData,
+                        //     });
+                        //     if (!response.ok) {
+                        //         // Handle the case where the server returns an error
+                        //         // throw new Error(`Server responded with status: ${response.status}`);
+                        //         const data = await response.json();
+                        //         console.log("DAta ::  ", data);
+                        //         if (data.failed) {
+                        //             toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.failed}</span>`;
+                        //             toast.classList.remove("hidden");
+                        //             toast.classList.remove("translate-y-96");
+                        //             setTimeout(() => {
+                        //                 toast.classList.add("hidden");
+                        //                 toast.classList.add("translate-y-96");
+                        //             }, 3000);
+                        //         }
+
+                        //     }
+                        //     if (response.ok) {
+                        //         window.location.href = "/admin/products"
+                        //     }
+
+
+
+                        //     // Handle the server's response here (e.g., display a success message or handle errors)
+                        //     // console.log("data from back : ",data);
+                        // } catch (error) {
+                        //     // Handle any network, request, or other errors here
+                        //     console.error(error);
+                        // }
+                    }
                 }
-                console.log('formdata :: ',formData)
 
-                const productData = await JSON.stringify(formData);
-                try {
-                    // Send a POST request to the server using async/await
-                    const response = await fetch(`/admin/addproduct`, {
-                        method: 'POST',
-                        headers: {
-                            "Content-Type": "application/json",
-                            // 'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: productData,
-                    });
-                    if (!response.ok) {
-                        // Handle the case where the server returns an error
-                        // throw new Error(`Server responded with status: ${response.status}`);
-                        const data = await response.json();
-                        console.log("DAta ::  ", data);
-                        if (data.failed) {
-                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.failed}</span>`;
-                            toast.classList.remove("hidden");
-                            toast.classList.remove("translate-y-96");
-                            setTimeout(() => {
-                                toast.classList.add("hidden");
-                                toast.classList.add("translate-y-96");
-                            }, 3000);
+                // Get references to HTML elements
+                const mainImageInput = document.querySelector('input[name="mainimage"]');
+                const relatedImagesInput = document.querySelector('input[name="relatedimages"]');
+                const mainImagePreview = document.getElementById('mainImagePreview');
+                const relatedImagesPreview = document.getElementById('relatedImagesPreview');
+
+
+                function removeImage(event) {
+                    const imageContainerId = event.target.id; // Get the ID of the clicked button
+
+                    // Find the corresponding image container by its ID
+                    const imageContainer = document.getElementById(imageContainerId);
+
+                    if (imageContainer) {
+                        // Remove the image container from the relatedImagesPreview
+                        relatedImagesPreview.removeChild(imageContainer);
+
+                        // Create a new FileList without the removed file
+                        const newFilesList = new DataTransfer();
+                        for (let i = 0; i < relatedImagesInput.files.length; i++) {
+                            if (i !== parseInt(imageContainerId) - 1) {
+                                newFilesList.items.add(relatedImagesInput.files[i]);
+                            }
                         }
 
+                        // Update the input element with the new FileList
+                        relatedImagesInput.files = newFilesList.files;
+                        console.log('new one : ', relatedImagesInput.files);
                     }
-                    if (response.ok) {
-                        window.location.href = "/admin/products"
-                    }
-
-
-
-                    // Handle the server's response here (e.g., display a success message or handle errors)
-                    // console.log("data from back : ",data);
-                } catch (error) {
-                    // Handle any network, request, or other errors here
-                    console.error(error);
                 }
-            }
-        }
-        </script>
+
+
+
+                // Add event listeners to the file input fields
+                mainImageInput.addEventListener('change', () => {
+                    if (mainImageInput.files) {
+                        const mainImageContainer = document.getElementById('mainImageContainer');
+                        mainImageContainer.innerHTML = `
+<img id="imgElement" class="w-full h-full object-cover rounded" src="${URL.createObjectURL(mainImageInput.files[0])}" alt="mainImage">`;
+                    }
+                });
+
+                relatedImagesInput.addEventListener('change', () => {
+                    // Clear previous previews
+                    // relatedImagesPreview.innerHTML = '';
+                    console.log(relatedImagesInput.files);
+                    // Display previews for related images
+                    if (relatedImagesInput.files.length > 4) {
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i>Only 4 images are allowed for related Images.</span>`;
+                        toast.classList.remove("hidden");
+                        toast.classList.remove("translate-y-96");
+                        setTimeout(() => {
+                            toast.classList.add("hidden");
+                            toast.classList.add("translate-y-96");
+                        }, 3000)
+                        return;
+                    }
+                    let index = 1;
+                    for (const file of relatedImagesInput.files) {
+                        const imageContainer = document.createElement('div');
+                        imageContainer.classList.add('w-32', 'h-32', 'mx-2', 'my-4')
+                        imageContainer.id = index;
+                        imageContainer.innerHTML = `
+                        <div class="text-end"><span class="text-white"><i id=${index} onclick="removeImage(event)" class="cursor-pointer fa-solid fa-close"></i></span></div>
+                        <img class="w-full h-full rounded object-cover" src=${URL.createObjectURL(file)} alt="relatedImages">`;
+                        relatedImagesPreview.appendChild(imageContainer);
+                        index++;
+                    }
+                });
+
+
+                //                 // Function to display an image preview
+                //                 mainImageInput.addEventListener('change',()=>{
+                //                 function displayImagePreview(file, imgElement,) {
+                //                     if (file) {
+                //                         imgElement.src = URL.createObjectURL(file);
+                //                         imgElement.style.display = 'block';
+                //                     } else {
+                //                         imgElement.src = '#';
+                //                         imgElement.style.display = 'none';
+                //                     }
+                //                 }
+                // displayImagePreview();
+                //                 })
+            </script>
 </body>
 
 </html>

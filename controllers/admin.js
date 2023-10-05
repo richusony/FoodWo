@@ -5,8 +5,10 @@ const { userModel } = require('../models/userSchema')
 
 
 
-function viewDashboard(req, res) {
-    res.render('../views/Admin/adminDashboard')
+async function viewDashboard(req, res) {
+    const topCustomers = await userModel.find({}).sort({ purchaseCount: -1 }).limit(3);
+    const topProducts = await productModel.find({}).sort({ purchaseCount: -1 }).limit(3);
+    res.render('../views/Admin/adminDashboard', { topCust: topCustomers, topProd: topProducts })
 }
 
 function viewLogInPage(req, res) {
@@ -119,6 +121,12 @@ async function viewAddProductsPage(req, res) {
 
 async function addProduct(req, res) {
     const { productName, description, productPrice, productType, category, sold, inStock, baseImage } = req.body;
+    console.log(req.body)
+    const relatedImages = req.files.relatedimages.map(img => img.path);
+    const mainImage = req.files.mainimage.map(img => img.path);
+    console.log('mainImage : ',mainImage)
+    console.log('files : ', relatedImages)
+    res.status(200)
     const addingProduct = await productModel.create(
         {
             productName: productName,
@@ -128,7 +136,8 @@ async function addProduct(req, res) {
             category: category,
             productSold: 0,
             productInStock: inStock,
-            productImage: baseImage,
+            productMainImage: mainImage[0],
+            productRelatedImages: [...relatedImages],
             purchaseCount: 0,
         });
     console.log('addingProduct :: ', addingProduct)
@@ -142,7 +151,7 @@ async function viewProductUpdatePage(req, res) {
     res.render('../views/Admin/productUpdate', { data: productDetails, category: categories });
 }
 
-// Admin updates products
+//  Admin updates products
 async function updateProducts(req, res) {
     const { id, productName, description, productPrice, productType, category, sold, inStock, image } = req.body;
     const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category, productInStock: inStock, productImage: image });

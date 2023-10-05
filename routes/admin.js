@@ -24,6 +24,7 @@ const { viewLogInPage,
 } = require('../controllers/admin');
 const router = express.Router();
 const { adminAuth } = require('../middleware/sessionAuth')
+const {productUpload} = require('../middleware/multer')
 
 // Admin Login Get Request
 router.route('/login')
@@ -74,7 +75,7 @@ router.route('/addProducts')
 
 // Admin adds Products
 router.route('/addproduct')
-    .post(addProduct)
+    .post(productUpload.fields([{name:'mainimage',maxCount:5},{name:'relatedimages',maxCount:10}]),addProduct)
 
 // Admin views updateProduct page
 router.route('/productUpdateDetails/:id')

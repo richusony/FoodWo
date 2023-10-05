@@ -1,4 +1,4 @@
-    // multer.js
+// multer.js
 
 const multer = require('multer');
 
@@ -15,4 +15,21 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-module.exports = upload;
+const productStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Define the destination directory for main images.
+    cb(null, 'products');
+  },
+  filename: function (req, file, cb) {
+    console.log('not main')
+    // Define the filename for main images.
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+
+
+// Corrected the multer configurations for mainImageUpload and relatedImageUpload.
+const productUpload = multer({ storage: productStorage });
+
+module.exports = { upload, productUpload };

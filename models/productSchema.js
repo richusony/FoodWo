@@ -29,9 +29,13 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    productImage: {
+    productMainImage: {
         type: String,
         required: true
+    },
+    productRelatedImages:{
+        type:Array,
+        required:true
     },
     purchaseCount: {
         type: Number,

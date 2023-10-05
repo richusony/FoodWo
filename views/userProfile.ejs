@@ -57,11 +57,11 @@
                         <label for="doc"
                             class="w-40 h-40 rounded-full mx-auto my-5 bg-orange-100 text-center flex flex-col justify-center items-centerd cursor-pointer">
                             <img src="/<%=userData.image%>"
-                                class="w-full h-full <% if(userData.image){%>block <% }else{%> hidden <%  }%>  rounded-full object-cover" alt=""
-                                id="imagetag">
+                                class="w-full h-full <% if(userData.image){%>block <% }else{%> hidden <%  }%>  rounded-full object-cover"
+                                alt="" id="imagetag">
                             <div class="text-orange-500 text-5xl <% if(userData.image){%>hidden <% }else{%> block <%  }%> "
                                 id="userIcon"><i class="<%=userData.image%>?block:hidden fa-regular fa-user"></i></div>
-                            <input type="file" name="image" accept="image/*" placeholder="upload profile" id="doc"
+                            <input type="file" name="image" accept="image/jpeg," placeholder="upload profile" id="doc"
                                 class="" hidden>
                             <!-- <span id="uploadtext">Upload Profile</span> -->
                         </label>
@@ -115,18 +115,19 @@
 
 
                 image.addEventListener('change', async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function () {
-            baseImage = reader.result; // This is the data URL
-            imagetag.style.display = "block";
-            userIcon.style.display = "none";
-            imagetag.setAttribute("src", baseImage);
-        };
-        reader.readAsDataURL(file);
-    }
-});
+                    const file = event.target.files[0];
+                    if (file) {
+                        console.log(event);
+                        const reader = new FileReader();
+                        reader.onload = function () {
+                            baseImage = reader.result; // This is the data URL
+                            imagetag.style.display = "block";
+                            userIcon.style.display = "none";
+                            imagetag.setAttribute("src", baseImage);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
 
 
                 const toast = document.getElementById('toast');
@@ -180,7 +181,7 @@
                         console.log('all ok')
                         setTimeout(() => {
                             event.preventDefault();
-                           window.location.reload();
+                            window.location.reload();
                         }, 3000);
 
                     }
