@@ -35,7 +35,6 @@ const productSchema = new mongoose.Schema({
     },
     productRelatedImages:{
         type:Array,
-        required:true
     },
     purchaseCount: {
         type: Number,

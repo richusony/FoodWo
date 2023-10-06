@@ -118,7 +118,7 @@ async function viewProductsPage(req, res) {
 async function viewAddProductsPage(req, res) {
     const categories = await categoryModel.find({}).sort({ category: 1 })
     const types = await typeModel.find({}).sort({ productType: 1 })
-    res.render('../views/Admin/adminAddProuduct', { data: categories ,types:types})
+    res.render('../views/Admin/adminAddProuduct', { data: categories, types: types })
 }
 
 async function addProduct(req, res) {
@@ -143,14 +143,15 @@ async function addProduct(req, res) {
             purchaseCount: 0,
         });
     console.log('addingProduct :: ', addingProduct)
-    res.status(200).json({ ok: "okkkkk" })
+    res.redirect('/admin/products')
 }
 
 async function viewProductUpdatePage(req, res) {
     const id = req.params.id;
     const categories = await categoryModel.find({}).sort({ category: 1 })
     const productDetails = await productModel.find({ _id: id })
-    res.render('../views/Admin/productUpdate', { data: productDetails, category: categories });
+    const typeDetails = await typeModel.find({}).sort({ productType: 1 })
+    res.render('../views/Admin/productUpdate', { data: productDetails, category: categories ,types:typeDetails});
 }
 
 //  Admin updates products
@@ -249,7 +250,7 @@ async function deleteCategory(req, res) {
 }
 
 async function listAllTypes(req, res) {
-    const types = await typeModel.find({});
+    const types = await typeModel.find({}).sort({ productType: 1 });
     res.render('../views/Admin/adminType.ejs', { data: types })
 }
 
@@ -273,6 +274,36 @@ async function addType(req, res) {
         }
     } else {
         res.status(400).json({ err: "Enter product Type Name." })
+    }
+}
+
+async function viewUpdateType(req, res) {
+    const id = req.params.id;
+    const typeData = await typeModel.findOne({ _id: id });
+    res.render('../views/Admin/updateType.ejs', { data: typeData })
+}
+
+async function updateType(req, res) {
+    const { productType, typeId } = req.body;
+
+    const exist = await typeModel.findOne({ _id: typeId });
+    if (!exist) {
+        res.status(404).json({ err: "Product type doesn't exists." })
+    } else {
+        const updating = await typeModel.updateOne({ _id: typeId }, { productType: productType })
+        res.status(200).json({ updated: true });
+    }
+}
+
+async function deleteType(req, res) {
+    const id = req.params.id;
+    const exist = await typeModel.findOne({ _id: id });
+    if (!exist) {
+        res.status(404).json({ err: "Product type doesn't exists." })
+    } else {
+        const deleting = await typeModel.deleteOne({ _id: id });
+        res.redirect('/admin/types')
+
     }
 }
 
@@ -302,4 +333,7 @@ module.exports = {
     listAllTypes,
     addType,
     viewAddTypePage,
+    updateType,
+    deleteType,
+    viewUpdateType
 } 

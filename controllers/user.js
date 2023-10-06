@@ -154,6 +154,9 @@ function otpVerification(req, res) {
 async function productPage(req, res) {
     const userId = req.session.user?._id;
     const products = await productModel.find({});
+     products.forEach(product => {
+        product.productMainImage = product.productMainImage.replace(/\\/g, '/');
+    });
     const wishlist = await wishListModel.aggregate(
         [
             {
@@ -370,6 +373,11 @@ async function updateStock(req, res) {
 
 }
 
+async function viewProductDetailsPage(req,res){
+    const id = req.params.id;
+    const foodDetails = await productModel.findOne({_id:id});
+    res.render('../views/productDetails.ejs',{food:foodDetails})
+}
 
 
 module.exports = {
@@ -392,5 +400,6 @@ module.exports = {
     updateNewPassword,
     viewUserProfile,
     updateUserProfile,
-    updateStock
+    updateStock,
+    viewProductDetailsPage
 }

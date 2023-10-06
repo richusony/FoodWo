@@ -24,6 +24,9 @@ const { viewLogInPage,
     listAllTypes,
     viewAddTypePage,
     addType,
+    updateType,
+    deleteType,
+    viewUpdateType,
 } = require('../controllers/admin');
 const router = express.Router();
 const { adminAuth } = require('../middleware/sessionAuth')
@@ -116,6 +119,13 @@ router.route('/types')
 router.route('/addtype')
 .get(viewAddTypePage)
 .post(addType)
+
+router.route('/update-type/:id')
+.get(viewUpdateType)
+.patch(updateType)
+
+router.route('/delete-type/:id')
+.get(deleteType);
 
 
 

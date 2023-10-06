@@ -37,7 +37,7 @@
             <h1 class="font-semibold border-b-2 my-2 border-b-orange-500 py-2">Top Selling Food Items</h1>
 <% if(topCust) { topProd.forEach((item)=>{ %>
             <div class="flex justify-between items-center border-b-2 py-2">
-                <div class="hidden md:block md:w-20 md:h-20 mx-2"><img class="w-full h-full object-cover rounded" src="<%= item.productImage %>" alt="productImage"></div>
+                <div class="hidden md:block md:w-20 md:h-20 mx-2"><img class="w-full h-full object-cover rounded" src="/<%= item.productMainImage %>" alt="productImage"></div>
                 <div class="mx-2">
                     <h3 class="font-semibold md:text-lg text-start"><%= item.productName %></h3>
                 </div>
@@ -51,7 +51,7 @@
             <h1 class="font-semibold border-b-2 my-2 border-b-orange-500 py-2">Top Users</h1>
             <% if(topCust) { topCust.forEach((user)=>{ %>
             <div class="flex justify-between items-center border-b-2 py-2">
-                <div class="hidden md:block w-10 h-10 md:w-20 md:h-20 mx-2"><img class="w-full h-full object-cover rounded" src="<%= user.image%>" alt="userProfile"></div>
+                <div class="hidden md:block w-10 h-10 md:w-20 md:h-20 mx-2"><img class="w-full h-full object-cover rounded" src="/<%= user.image%>" alt="userProfile"></div>
                 <div class="mx-2 text-start"><span class="font-bold text-start"><%= user.fullname %></span></div>
                 <div class="mx-4"><span class="text-orange-500 font-semibold"><%= user.purchaseCount %></span> <span>Times</span></div>
             </div>

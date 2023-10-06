@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .overflow-y-auto::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+        .overflow-y-auto::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+        .overflow-y-auto::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('../views/userNavbar.ejs')%>
+
+        <section class="px-5 py-5">
+           <% if(food){ %>
+            <!-- Images and Details container -->
+            <div class="flex flex-col md:flex-row justify-center">
+
+                <!-- Images Container  -->
+                <div class="my-4 md:my-0">
+
+                    <!-- Main Image -->
+                    <div class="w-full h-80 md:w-96 md:h-96 mx-auto">
+                        <img class="w-full h-full rounded-xl object-cover" id="mainImage" src="/<%=food.productMainImage%>"
+                            alt="">
+                    </div>
+
+                    <!-- Related Images -->
+                    <div class="flex md:w-96 mx-auto justify-between my-2">
+                        <% food.productRelatedImages.forEach((img)=>{ %>
+                        <div class="mx-1 rounded w-20 h-20"><img data-foodpath="/<%=img%>" onclick="changePhoto(event)" class="cursor-pointer w-full h-full rounded-xl object-cover"
+                                src="/<%= img%>" alt=""></div>
+                        <% }) %>
+                    </div>
+
+                </div>
+
+                <!-- Details Container -->
+                <div class="md:w-1/2 md:px-5">
+                    <h2 class="text-2xl font-bold my-2"><%=food.productName%></h2>
+                    <div><span><i class="fa-regular fa-star text-orange-500"></i> <i
+                                class="fa-regular fa-star text-orange-500"></i> <i
+                                class="fa-regular fa-star text-orange-500"></i></span></div>
+                    <div class="my-2"><span class="text-2xl font-semibold"><span
+                                class="text-orange-500">₹</span><%=food.productPrice%></span></div>
+                    <div><span class="text-gray-500"><%=food.description%></span></div>
+                    <div class="my-3 flex justify-between w-40 items-center">
+                        <i data-userid="" onclick="wishlistadder(event)" data-foodid=""
+                            class="wishlist fa-regular fa-heart text-2xl text-orange-500"></i>
+                        <button class="bg-orange-500 px-4 py-2 text-white rounded">add to cart</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Reviews -->
+            <div class="md:px-5 py-3 my-5 relative">
+                <h1 class="text-2xl font-semibold border-b-2 border-b-orange-500 my-3">Reviews</h1>
+
+                <div class="h-80 overflow-y-auto overflow-x-hidden shadow-inner">
+                    <div class=" border-b-2 border-b-gray-100 my-3">
+                        <div class="flex">
+                            <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
+                                    src="/public/images/user" alt=""></div>
+                            <div class="mx-3">
+                                <h3 class="font-semibold">Thomas Roy</h3>
+                                <span><i class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="my-2">
+                            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, ratione quia ab ea
+                                ullam, sequi vel magnam eligendi, veniam tempore facere cumque commodi ex laboriosam
+                                quasi atque est? Rem minus soluta voluptatibus?</span>
+                        </div>
+                    </div>
+                    <div class=" border-b-2 border-b-gray-100 my-3">
+                        <div class="flex">
+                            <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
+                                    src="/public/images/user" alt=""></div>
+                            <div class="mx-3">
+                                <h3 class="font-semibold">Thomas Roy</h3>
+                                <span><i class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="my-2">
+                            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, ratione quia ab ea
+                                ullam, sequi vel magnam eligendi, veniam tempore facere cumque commodi ex laboriosam
+                                quasi atque est? Rem minus soluta voluptatibus?</span>
+                        </div>
+                    </div>
+                    <div class=" border-b-2 border-b-gray-100 my-3">
+                        <div class="flex">
+                            <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
+                                    src="/public/images/user" alt=""></div>
+                            <div class="mx-3">
+                                <h3 class="font-semibold">Thomas Roy</h3>
+                                <span><i class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="my-2">
+                            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, ratione quia ab ea
+                                ullam, sequi vel magnam eligendi, veniam tempore facere cumque commodi ex laboriosam
+                                quasi atque est? Rem minus soluta voluptatibus?</span>
+                        </div>
+                    </div>
+                    <div class=" border-b-2 border-b-gray-100 my-3">
+                        <div class="flex">
+                            <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
+                                    src="/public/images/user" alt=""></div>
+                            <div class="mx-3">
+                                <h3 class="font-semibold">Thomas Roy</h3>
+                                <span><i class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="my-2">
+                            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, ratione quia ab ea
+                                ullam, sequi vel magnam eligendi, veniam tempore facere cumque commodi ex laboriosam
+                                quasi atque est? Rem minus soluta voluptatibus?</span>
+                        </div>
+                    </div>
+                    <div class=" border-b-2 border-b-gray-100 my-3">
+                        <div class="flex">
+                            <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
+                                    src="/public/images/user" alt=""></div>
+                            <div class="mx-3">
+                                <h3 class="font-semibold">Thomas Roy</h3>
+                                <span><i class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="my-2">
+                            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, ratione quia ab ea
+                                ullam, sequi vel magnam eligendi, veniam tempore facere cumque commodi ex laboriosam
+                                quasi atque est? Rem minus soluta voluptatibus?</span>
+                        </div>
+                    </div>
+                    <div class=" border-b-2 border-b-gray-100 my-3">
+                        <div class="flex">
+                            <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
+                                    src="/public/images/user" alt=""></div>
+                            <div class="mx-3">
+                                <h3 class="font-semibold">Thomas Roy</h3>
+                                <span><i class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i><i
+                                        class="fa-regular fa-star text-orange-500"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="my-2">
+                            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, ratione quia ab ea
+                                ullam, sequi vel magnam eligendi, veniam tempore facere cumque commodi ex laboriosam
+                                quasi atque est? Rem minus soluta voluptatibus?</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex static my-4">
+                    <div class="bg-slate-200 rounded-full px-4 flex items-center w-full">
+                        <div class="w-32 text-sm"><i class="fa-regular fa-star text-orange-500"></i><i
+                                class="fa-regular fa-star text-orange-500"></i><i
+                                class="fa-regular fa-star text-orange-500"></i><i
+                                class="fa-regular fa-star text-orange-500"></i><i
+                                class="fa-regular fa-star text-orange-500"></i></div>
+                        <input class="bg-transparent w-full py-3 outline-none" type="text" name=""
+                            placeholder="write review" id="">
+                    </div>
+                    <button class="mx-1 rounded-full bg-orange-500 py-2 px-4"><i
+                            class="text-white fa-solid fa-paper-plane"></i></button>
+                </div>
+
+            </div>
+<% } %>
+
+        </section>
+
+        <%- include('../views/userFooter.ejs')%>
+
+<script>
+    function changePhoto(event){
+        const mainImage = document.getElementById('mainImage');
+        const imgPath = event.target.dataset.foodpath;
+        mainImage.src=imgPath;
+
+    }
+</script>
+</body>
+
+</html>

@@ -172,14 +172,17 @@
                         <!-- items -->
                         <% if(data){ data.forEach((food)=>{ %>
                             <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
-                                <div class="w-full h-36 rounded-2xl"><img class="w-full h-full rounded-2xl object-cover"
-                                        src="<%= food.productImage %>" alt=""></div>
+                                <div class="w-full h-36 rounded-2xl"><img
+                                        onclick="redirectTo('/user/product-details/<%=food._id%>')"
+                                        class="w-full h-full cursor-pointer rounded-2xl object-cover"
+                                        src="/<%= food.productMainImage %>" alt=""></div>
                                 <h3 class="font-bold my-1 text-xl">
                                     <%= food.productName %>
                                 </h3>
                                 <div><i class="fa-regular fa-star text-orange-500"></i> <span
                                         class="font-semibold">4.2</span></div>
-                                <div class="max-w-full break-words"><span class="text-gray-500 text-sm w-full ">
+                                <div class="max-w-full break-words block"><span
+                                        class="text-gray-500 text-sm w-full block">
                                         <%= food.description %>
                                     </span></div>
                                 <div><span class="font-bold text-lg my-2">Price : <span class="text-orange-500">₹<%=
@@ -221,8 +224,8 @@
                         <!-- items -->
                         <% category.forEach((food)=>{ %>
                             <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
-                                <div class="w-full h-36 rounded-2xl"><img class="w-full h-full rounded-2xl object-cover"
-                                        src="<%= food.productImage %>" alt=""></div>
+                                <div class="w-full h-36 rounded-2xl"><img onclick="redirectTo('/user/product-details/<%=food._id%>')" class="cursor-pointer w-full h-full rounded-2xl object-cover"
+                                        src="/<%= food.productMainImage %>" alt=""></div>
                                 <h3 class="font-bold my-1 text-xl">
                                     <%= food.productName %>
                                 </h3>
@@ -292,7 +295,7 @@
                         if (response.ok) {
                             const data = await response.json();
                             if (data.added) {
-                                window.scrollTo(0,0)
+                                window.scrollTo(0, 0)
                                 alertBox.classList.remove('opacity-0')
                                 alertBox.classList.remove('-translate-x-full')
                                 alertMsg.innerText = `${data.added}`;
@@ -301,7 +304,7 @@
                                     alertBox.classList.add('-translate-x-full')
                                 }, 3000)
                             } else if (data.exist) {
-                                window.scrollTo(0,0)
+                                window.scrollTo(0, 0)
                                 alertBox.classList.remove('opacity-0')
                                 alertBox.classList.remove('-translate-x-full')
                                 alertMsg.innerText = `${data.exist}`;
@@ -454,7 +457,9 @@
                 //         }
                 //     })
                 // })
-
+                function redirectTo(url) {
+                    window.location.href = url;
+                }
 
             </script>
 </body>

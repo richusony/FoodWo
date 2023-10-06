@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FoodWo - typeegories</title>
+    <title>FoodWo - Product Types</title>
     <link href="/public/css/output.css" rel="stylesheet">
     <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
@@ -52,7 +52,7 @@
                             </td>
                             <td
                                 class=" px-5 rounded-r-xl flex flex-col md:flex-row justify-between items-center">
-                                <a href="/admin/update-type/>"
+                                <a href="/admin/update-type/<%= type._id %>"
                                     class="bg-blue-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
                                         class="fa-solid fa-pencil"></i></a>
                                 <a href="/admin/>"
@@ -60,7 +60,7 @@
                                   <i class="fa-solid fa-lock-open"></i>
                                         <!-- <i class="fa-solid fa-lock"></i> -->       
                                 </a>
-                                <a href="/admin/type-delete/"
+                                <a href="/admin/delete-type/<%= type._id %>"
                                     class="bg-red-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
                                         class="fa-solid fa-trash-can"></i></a>
                             </td>
