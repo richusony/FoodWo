@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodWo - My Orders</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <%-include('../views/userNavbar.ejs') %>
+
+        <section class="px-5 py-3 h-screen mt-10">
+            <div class="flex">
+                <!-- Filters -->
+                <div class="hidden md:block h-fit bg-slate-200 w-72 px-3 py-4 rounded mr-3 shadow-md">
+                    <h2 class="font-bold text-lg">Filters</h2>
+                    <div class="">
+                        <h3 class="font-semibold my-4">Order Status</h3>
+                            <div><input type="checkbox" name="" id=""> On the way </div>
+                            <div><input type="checkbox" name="" id=""> Delivered </div>
+                            <div><input type="checkbox" name="" id=""> Cancelled </div>
+                            <div><input type="checkbox" name="" id=""> Returned </div>
+                    </div>
+                </div>
+
+                <!-- Orders -->
+                <div class="w-full">
+                    <!-- Order Search -->
+                    <div class="flex rounded"><input class="w-full py-2 rounded-l-md bg-gray-100 px-2 outline-orange-500" placeholder="Search Orders" type="text" name="" id=""><button class="w-52 bg-orange-500 text-white rounded-r-md"><i class="fa-solid fa-search"></i> Search</button></div>
+
+                    <!-- Order Items -->
+                    <div class="px-2 my-2">
+                        <div class="bg-gray-100 flex justify-between items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md px-2">
+                            <div class="mx-1 w-20 h-20 rounded-md"><img class="object-cover rounded-md w-full h-full" src="/products/1696516368143-ChickenBR4" alt=""></div>
+                            <div><span>Chicken Biriyani</span></div>
+                            <div><span>₹160</span></div>
+                            <div>
+                                <span class="block"><i class="fa-solid text-orange-500 fa-thumbs-up"></i> Delivered on Jul 27</span>
+                                <span class="block text-gray-500 text-sm">Your item has been delivered</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 flex justify-between items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md px-2">
+                            <div class="mx-1 w-20 h-20 rounded-md"><img class="object-cover rounded-md w-full h-full" src="/products/1696516826121-Shawarma Roll.webp" alt=""></div>
+                            <div><span>Shawarma Roll</span></div>
+                            <div><span>₹100</span></div>
+                            <div>
+                                <span class="block"><i class="fa-solid text-orange-500 fa-thumbs-up"></i> Delivered on Jul 27</span>
+                                <span class="block text-gray-500 text-sm">Your item has been delivered</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 flex justify-between items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md px-2">
+                            <div class="mx-1 w-20 h-20 rounded-md"><img class="object-cover rounded-md w-full h-full" src="/products/1696518678396-Classsic Margherita Pizza.webp" alt=""></div>
+                            <div><span>Margherita Pizza</span></div>
+                            <div><span>₹169</span></div>
+                            <div>
+                                <span class="block"><i class="fa-solid text-orange-500 fa-thumbs-up"></i> Delivered on Jul 27</span>
+                                <span class="block text-gray-500 text-sm">Your item has been delivered</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 flex justify-between items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md px-2">
+                            <div class="mx-1 w-20 h-20 rounded-md"><img class="object-cover rounded-md w-full h-full" src="/products/1696518913107-M Crunchy Burger.webp" alt=""></div>
+                            <div><span>M Crunchy Burger</span></div>
+                            <div><span>₹159</span></div>
+                            <div>
+                                <span class="block"><i class="fa-solid text-orange-500 fa-thumbs-up"></i> Delivered on Jul 27</span>
+                                <span class="block text-gray-500 text-sm">Your item has been delivered</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <%-include('../views/userFooter.ejs') %>
+
+</body>
+
+</html>

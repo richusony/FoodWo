@@ -109,13 +109,26 @@
                                         </div>
                                         <% totalItems +=quantities[index]; %>
                                             <% totalPrice +=quantities[index] * parseFloat(cart.productPrice); %>
-                                                <div class=" mr-2 md:mx-2"><span class="text-orange-500 md:text-2xl"><i
-                                                            onclick="deleteFromCart(event)" data-index="<%=index%>"
+                                                <div class=" mr-2 md:mx-2">
+                                                    <span class="text-orange-500 md:text-2xl">
+                                                        <i onclick="deleteFromCart(event)" data-index="<%=index%>"
                                                             data-foodid="<%=cart._id%>" data-userid="<%=userId%>"
-                                                            class="xmark cursor-pointer fa-solid fa-close"></i></span>
+                                                            class="xmark cursor-pointer fa-solid fa-close">
+                                                        </i>
+                                                    </span>
                                                 </div>
                                     </div>
-                                    <% })} %>
+                                    <% }) }else{ %>
+                                        <div class="flex flex-col justify-center items-center">
+                                            <h1 class="text-4xl text-orange-500 text-center font-bold my-3">No items in
+                                                the Cart!!</h1>
+                                            <div class="w-full h-72">
+                                                <img class="w-full h-full object-cover"
+                                                    src="http://media.istockphoto.com/vectors/female-hands-with-steel-fork-and-empty-ceramic-plate-vector-id642208480?k=6&m=642208480&s=612x612&w=0&h=u5WmG_7RuLq1M43PpGtMAuZBlytf-dA6wbkwljWpzdk="
+                                                    alt="">
+                                            </div>
+                                        </div>
+                                        <% } %>
                             </div>
 
                             <div class="bg-orange-500 mx-2 lg:w-1/2 px-4 py-5 shadow-2xl rounded-xl text-white">
@@ -129,7 +142,9 @@
                                 <div class="px-3 my-3">
                                     <h3 class="font-bold">Shipping to :</h3>
                                     <div id="addContainer">
-                                        <span id="currentAdd"><%=userData[0].address%></span>
+                                        <span id="currentAdd">
+                                            <%=userData[0].address%>
+                                        </span>
                                     </div>
                                     <textarea class="text-black hidden w-full px-3" name="" id="newAdd" cols=""
                                         rows="4"></textarea>
@@ -155,6 +170,7 @@
                                 </div>
                             </div>
             </div>
+
         </section>
 
         <!-- footer -->
@@ -162,6 +178,10 @@
 
             <script>
                 // let quantity = 1;
+                const alertBox = document.getElementById('alert')
+                const alertMsg = document.getElementById('alertMsg')
+
+
                 let finalPrice = parseInt('<%-totalPrice %>');
 
                 const currentAdd = document.getElementById('currentAdd');
@@ -250,8 +270,6 @@
                     })
 
                     if (response.ok) {
-                        const alertBox = document.getElementById('alert')
-                        const alertMsg = document.getElementById('alertMsg')
                         const data = await response.json()
                         if (data.deleted) {
                             window.scrollTo(0, 0)
@@ -293,40 +311,68 @@
                     editAdd.classList.remove('hidden')
                 }
 
-               async function handleCheckout(event) {
+                async function handleCheckout(event) {
                     const user_id = sessionStorage.getItem('user_id');
                     const cod = document.getElementById('cod');
                     const qty = document.querySelectorAll('.qty');
                     const cartItems = '<%- JSON.stringify(cartItems)%>';
                     const check = JSON.parse(cartItems);
+
+                    if (!cod.checked) {
+                        alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Please select the payment method`;
+                        alertBox.classList.remove('-translate-x-full')
+                        alertBox.classList.remove('opacity-0')
+                        window.scrollTo(0, 0)
+                        setTimeout(() => {
+                            alertBox.classList.add('-translate-x-full')
+                            alertBox.classList.add('opacity-0')
+                        }, 3000)
+                        return;
+                    }
                     check.forEach(async (item, index) => {
                         // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                         const productId = item._id;
                         const productName = item.productName;
-                        const productPrice= item.productPrice;
-                        const productQty= parseInt(qty[index].innerText);
-                        console.log('productName : ',productName)
-                        console.log('productPrice : ',productPrice)
-                        console.log('productQty : ',productQty)
+                        const productPrice = item.productPrice;
+                        const productQty = parseInt(qty[index].innerText);
+                        console.log('productName : ', productName)
+                        console.log('productPrice : ', productPrice)
+                        console.log('productQty : ', productQty)
                         console.log('\n......................................')
 
                         const productData = {
-                        user_id:user_id,
-                        productId:productId,
-                        productQty:productQty
-                        } 
+                            user_id: user_id,
+                            productId: productId,
+                            productQty: productQty
+                        }
 
                         const reqData = await JSON.stringify(productData);
-                         const response = await fetch('/user/cart-checkout',{
-                            method:'PATCH',
-                            headers:{
-                            'Content-Type':"application/json",
+                        const response = await fetch('/user/cart-checkout', {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': "application/json",
                             },
-                            body:reqData
+                            body: reqData
                         })
 
-                        if(response.ok){
-                        console.log(`${productName} Ok.`)
+                        if (response.ok) {
+                            const reqData = {
+                                foodid: productId,
+                                userid: user_id
+                            }
+                            const realData = await JSON.stringify(reqData);
+
+                            const response = await fetch('/user/removeFromCart', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': "application/json",
+                                },
+                                body: realData
+                            })
+                            if (response.ok) {
+                                window.location.reload()
+                            }
+                            console.log(`${productName} Ok.`)
                         }
                     });
                 }

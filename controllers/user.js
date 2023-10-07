@@ -154,7 +154,7 @@ function otpVerification(req, res) {
 async function productPage(req, res) {
     const userId = req.session.user?._id;
     const products = await productModel.find({});
-     products.forEach(product => {
+    products.forEach(product => {
         product.productMainImage = product.productMainImage.replace(/\\/g, '/');
     });
     const wishlist = await wishListModel.aggregate(
@@ -195,9 +195,19 @@ async function viewCartPage(req, res) {
     );
 
     const foodIds = foodItems.map(item => item.foodId);
-    const cartItems = await productModel.find({ _id: { $in: foodIds } });
-    const userDetails = await userModel.find({_id:uid})
-    res.render('../views/userCart', { cartItems: cartItems, userId: uid, userData:userDetails});
+    let cartItems = await productModel.find({ _id: { $in: foodIds } });
+    cartItems.forEach(item => {
+        item.productMainImage = item.productMainImage.replace(/\\/g, '/');
+        item.productRelatedImages = item.productRelatedImages.forEach((img) => {
+            img.replace(/\\/g, '/');
+        })
+    });
+    const userDetails = await userModel.find({ _id: uid })
+    if(cartItems.length<1){
+        cartItems=false
+        console.log(cartItems)
+    }
+    res.render('../views/userCart', { cartItems: cartItems, userId: uid, userData: userDetails });
 }
 
 async function addToCart(req, res) {
@@ -332,7 +342,6 @@ async function updateStock(req, res) {
     try {
         // Assuming you have a 'productModel' and relevant fields in your MongoDB model
         const product = await productModel.findById(productId);
-
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
         }
@@ -355,9 +364,10 @@ async function updateStock(req, res) {
                 $inc: { purchaseCount: 1 }
             })
 
-        if (result.nModified === 1) {
+        if (result) {
             return res.status(200).json({ message: 'Stock updated successfully' });
         } else {
+        console.log('not here')
             return res.status(500).json({ error: 'Failed to update stock' });
         }
     } catch (error) {
@@ -373,10 +383,29 @@ async function updateStock(req, res) {
 
 }
 
-async function viewProductDetailsPage(req,res){
+async function viewProductDetailsPage(req, res) {
     const id = req.params.id;
-    const foodDetails = await productModel.findOne({_id:id});
-    res.render('../views/productDetails.ejs',{food:foodDetails})
+    const userId = req.session.user?._id;
+    const wishlist = await wishListModel.aggregate(
+        [
+            {
+                $match: { userId: userId }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    foodId: 1,
+                }
+            }
+        ]
+    )
+    const foodDetails = await productModel.findOne({ _id: id });
+    res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist })
+}
+
+
+async function viewMyOrderPage(req,res){
+    res.render('../views/userOrders.ejs')
 }
 
 
@@ -401,5 +430,6 @@ module.exports = {
     viewUserProfile,
     updateUserProfile,
     updateStock,
-    viewProductDetailsPage
+    viewProductDetailsPage,
+    viewMyOrderPage
 }

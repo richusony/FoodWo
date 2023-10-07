@@ -101,6 +101,13 @@
                     class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
                 </div>
                 <% } %>
+
+                <div class="w-full py-3 px-4 bg-slate-200 rounded my-2">
+                    <a class="font-bold text-lg cursor-pointer text-orange-400 hover:text-orange-500" href="/user/my-orders">Your Orders</a>
+                </div>
+                <div class="w-full py-3 px-4 bg-slate-200 rounded my-2">
+                    <a class="font-bold text-xl cursor-pointer text-orange-400 hover:text-orange-500" onclick="logoutUser(event)">Logout <i class="fa-solid fa-power-off"></i></a>
+                </div>
         </section>
         <%-include('../views/userFooter.ejs') %>
 
@@ -220,6 +227,11 @@
 
                 //     }
                 // }
+
+                function logoutUser(event){
+                    window.location.href='/user/logout';
+                    sessionStorage.clear()
+                }
 
             </script>
 

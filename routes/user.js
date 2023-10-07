@@ -3,7 +3,7 @@ const router = express.Router();
 const {userAuth} = require('../middleware/sessionAuth')
 const {isBlocked}= require('../middleware/userBlocked')
 const {upload} = require('../middleware/multer')
-const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewWishlistPage, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage} = require('../controllers/user')
+const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewWishlistPage, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage} = require('../controllers/user')
 
 
 
@@ -62,7 +62,7 @@ router.route('/cart/:id')
 router.route('/addToCart')
 .post(addToCart)
 
-router.route('/logout')
+router.route('/logout') 
 .get(logoutUser)
 
 router.route('/addWishlist/:fid/:uid')
@@ -73,6 +73,9 @@ router.route('/removeFromCart/')
 
 router.route('/cart-checkout')
 .patch(updateStock)
+
+router.route('/my-orders')
+.get(viewMyOrderPage)
 
 
 module.exports = router;
