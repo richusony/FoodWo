@@ -33,3 +33,4 @@ const productStorage = multer.diskStorage({
 const productUpload = multer({ storage: productStorage });
 
 module.exports = { upload, productUpload };
+ 

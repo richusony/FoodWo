@@ -154,9 +154,6 @@ function otpVerification(req, res) {
 async function productPage(req, res) {
     const userId = req.session.user?._id;
     const products = await productModel.find({});
-    products.forEach(product => {
-        product.productMainImage = product.productMainImage.replace(/\\/g, '/');
-    });
     const wishlist = await wishListModel.aggregate(
         [
             {

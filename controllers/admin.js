@@ -151,19 +151,50 @@ async function viewProductUpdatePage(req, res) {
     const categories = await categoryModel.find({}).sort({ category: 1 })
     const productDetails = await productModel.find({ _id: id })
     const typeDetails = await typeModel.find({}).sort({ productType: 1 })
-    res.render('../views/Admin/productUpdate', { data: productDetails, category: categories ,types:typeDetails});
+    res.render('../views/Admin/productUpdate', { data: productDetails, category: categories, types: typeDetails });
 }
 
 //  Admin updates products
 async function updateProducts(req, res) {
     const { id, productName, description, productPrice, productType, category, sold, inStock, image } = req.body;
-    const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category, productInStock: inStock, productImage: image });
-    if (updating) {
-        const updatedDetails = await productModel.find({ _id: id });
-        res.status(200).json({ data: updatedDetails })
+    const mainImage = req.files.mainimage ? req.files.mainimage.map(img => img.path) : [];
+    const relatedImages = req.files.relatedimages ? req.files.relatedimages.map(img => img.path) : [];
+    console.log('checkkinng  .. ', relatedImages, mainImage)
+
+    if (mainImage.length == 0 && relatedImages.length== 0) {
+        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category, productInStock: inStock });
+        if (updating) {
+            const updatedDetails = await productModel.find({ _id: id });
+            res.redirect(`/admin/productUpdateDetails/${id}`)
+        } else {
+            res.status(500).json({ err: "Database is having some issues." })
+        }
+    } else if (mainImage && relatedImages.length== 0) {
+        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category, productInStock: inStock, productMainImage: mainImage[0] });
+        if (updating) {
+            const updatedDetails = await productModel.find({ _id: id });
+            res.redirect(`/admin/productUpdateDetails/${id}`)
+        } else {
+            res.status(500).json({ err: "Database is having some issues." })
+        }
+    } else if (mainImage.length == 0 && relatedImages) {
+        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category, productInStock: inStock, $push: { productRelatedImages: relatedImages } });
+        if (updating) {
+            const updatedDetails = await productModel.find({ _id: id });
+            res.redirect(`/admin/productUpdateDetails/${id}`)
+        } else {
+            res.status(500).json({ err: "Database is having some issues." })
+        }
     } else {
-        res.status(500).json({ err: "Database is having some issues." })
+        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category, productInStock: inStock, productMainImage: mainImage[0], $push: { productRelatedImages: relatedImages } });
+        if (updating) {
+            const updatedDetails = await productModel.find({ _id: id });
+            res.redirect(`/admin/productUpdateDetails/${id}`)
+        } else {
+            res.status(500).json({ err: "Database is having some issues." })
+        }
     }
+
 }
 
 async function deleteProduct(req, res) {
@@ -307,6 +338,18 @@ async function deleteType(req, res) {
     }
 }
 
+async function removeImage(req, res) {
+    const { foodid, foodimg } = req.body;
+    const removeImage = await productModel.updateOne({ _id: foodid }, { $pull: { productRelatedImages: foodimg } })
+    if (removeImage) {
+        res.status(200).json({ success: 'image removed.' })
+    } else {
+        res.status(500).json({ err: "couldn't remove image." })
+    }
+}
+
+
+
 module.exports = {
     viewLogInPage,
     viewOrdersPage,
@@ -335,5 +378,6 @@ module.exports = {
     viewAddTypePage,
     updateType,
     deleteType,
-    viewUpdateType
+    viewUpdateType,
+    removeImage
 } 

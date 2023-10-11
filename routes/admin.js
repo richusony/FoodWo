@@ -27,6 +27,7 @@ const { viewLogInPage,
     updateType,
     deleteType,
     viewUpdateType,
+    removeImage,
 } = require('../controllers/admin');
 const router = express.Router();
 const { adminAuth } = require('../middleware/sessionAuth')
@@ -89,7 +90,7 @@ router.route('/productUpdateDetails/:id')
 
 // Admin update products
 router.route('/update-product')
-    .patch(updateProducts)
+    .post(productUpload.fields([{name:'mainimage',maxCount:5},{name:'relatedimages',maxCount:10}]),updateProducts)
 
 // Admin deletes products
 router.route('/product-delete/:id')
@@ -126,6 +127,9 @@ router.route('/update-type/:id')
 
 router.route('/delete-type/:id')
 .get(deleteType);
+
+router.route('/remove-image')
+.patch(removeImage)
 
 
 
