@@ -142,7 +142,7 @@ async function addProduct(req, res) {
             productRelatedImages: [...relatedImages],
             purchaseCount: 0,
         });
-    console.log('addingProduct :: ', addingProduct)
+    console.log('addingProduct :: ', addingProduct) 
     res.redirect('/admin/products')
 }
 
@@ -161,15 +161,15 @@ async function updateProducts(req, res) {
     const relatedImages = req.files.relatedimages ? req.files.relatedimages.map(img => img.path) : [];
     console.log('checkkinng  .. ', relatedImages, mainImage)
 
-    if (mainImage.length == 0 && relatedImages.length== 0) {
+    if (mainImage.length == 0 && relatedImages.length == 0) {
         const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category, productInStock: inStock });
         if (updating) {
-            const updatedDetails = await productModel.find({ _id: id });
+            const updatedDetails = await productModel.find({ _id: id }); 
             res.redirect(`/admin/productUpdateDetails/${id}`)
         } else {
             res.status(500).json({ err: "Database is having some issues." })
         }
-    } else if (mainImage && relatedImages.length== 0) {
+    } else if (mainImage && relatedImages.length == 0) {
         const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category, productInStock: inStock, productMainImage: mainImage[0] });
         if (updating) {
             const updatedDetails = await productModel.find({ _id: id });
@@ -221,12 +221,13 @@ function viewAddCategoryPage(req, res) {
 // Admin Adding categories Page
 async function addCategory(req, res) {
     const { category } = req.body;
-    if (category) {
-        const exist = await categoryModel.findOne({ category })
+    const upperCategory = category.toUpperCase();
+    if (upperCategory) {
+        const exist = await categoryModel.findOne({ category: upperCategory })
         if (exist) {
             res.status(401).json({ err: 'Category already existed.' })
         } else {
-            const adding = await categoryModel.create({ category: category });
+            const adding = await categoryModel.create({ category: upperCategory });
             if (adding) {
                 res.status(200).json({ success: "category added to database" })
             } else {
@@ -241,7 +242,6 @@ async function addCategory(req, res) {
 async function viewUpdateCategory(req, res) {
     const id = req.params.id;
     const category = await categoryModel.findOne({ _id: id });
-
     if (category) {
         res.render('../views/Admin/categoryUpdate', { data: category })
     } else {
@@ -252,8 +252,9 @@ async function viewUpdateCategory(req, res) {
 async function updateCategory(req, res) {
     const id = req.params.id;
     const { category } = req.body;
+    const upperCategory = category.toUpperCase();
     console.log("got it :: ", id, category);
-    const updating = await categoryModel.updateOne({ _id: id }, { category: category });
+    const updating = await categoryModel.updateOne({ _id: id }, { category: upperCategory });
 
     if (updating) {
         const updatedDetails = await categoryModel.find({ _id: id });

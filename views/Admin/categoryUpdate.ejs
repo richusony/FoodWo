@@ -69,6 +69,14 @@ const toast = document.getElementById('toast');
                     toast.classList.add("hidden");
                     toast.classList.add("translate-y-96");
                 }, 3000)
+            }else if(category.length < 3){
+            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i>Category Name should be more than 3 letters.</span>`;
+                toast.classList.remove("hidden");
+                toast.classList.remove("translate-y-96");
+                setTimeout(() => {
+                    toast.classList.add("hidden");
+                    toast.classList.add("translate-y-96");
+                }, 3000)
             }
             else {
                 const formData = {

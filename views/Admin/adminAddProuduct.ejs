@@ -142,10 +142,15 @@
                     const inStock = document.getElementById('inStock').value;
                     const toast = document.getElementById('toast');
 
+                    const mainImage = document.getElementById('mainImage')
+                    const relatedImages = document.getElementById('relatedImages')
+
 
 
 
                     if (!productName || !description || !productPrice || !productType || !category || !inStock) {
+                        event.preventDefault();
+                        window.scrollTo(0,0)
                         toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> All fields are required.</span>`;
                         toast.classList.remove("hidden");
                         toast.classList.remove("translate-y-96");
@@ -153,7 +158,9 @@
                             toast.classList.add("hidden");
                             toast.classList.add("translate-y-96");
                         }, 3000)
-                    } else if (mainImageInput.files.length < 1) {
+                    } else if (mainImage.files.length < 1) {
+                        event.preventDefault();
+                        window.scrollTo(0,0)
                         toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Product Main Image is required.</span>`;
                         toast.classList.remove("hidden");
                         toast.classList.remove("translate-y-96");
@@ -162,7 +169,9 @@
                             toast.classList.add("translate-y-96");
                         }, 3000)
                     }
-                    else if (relatedImagesInput.files.length <1) {
+                    else if (relatedImages.files.length < 1) {
+                        event.preventDefault();
+                        window.scrollTo(0,0)
                         toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Product Related Images are required.</span>`;
                         toast.classList.remove("hidden");
                         toast.classList.remove("translate-y-96");

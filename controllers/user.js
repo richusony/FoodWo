@@ -193,12 +193,6 @@ async function viewCartPage(req, res) {
 
     const foodIds = foodItems.map(item => item.foodId);
     let cartItems = await productModel.find({ _id: { $in: foodIds } });
-    cartItems.forEach(item => {
-        item.productMainImage = item.productMainImage.replace(/\\/g, '/');
-        item.productRelatedImages = item.productRelatedImages.forEach((img) => {
-            img.replace(/\\/g, '/');
-        })
-    });
     const userDetails = await userModel.find({ _id: uid })
     if(cartItems.length<1){
         cartItems=false
