@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,17 +52,31 @@
     </style>
 </head>
 
-<body class="bg-white">
+<body class="bg-[#F2F2F2]">
     <!-- navigation -->
     <%- include('../views/userNavbar.ejs') %>
 
         <section class="px-5 py-2">
-            <h1 class="font-bold text-3xl text-center text-orange-500 my-5">Confirmation</h1>
-            <h1 class="text-5xl text-center text-orange-500"><i class="font-extrabold fa-solid fa-check"></i></h1>
-            <h3 class="text-xl text-center text-orange-500 font-semibold">Successfull!!</h3>
+            <h1 class="font-bold text-4xl text-center text-orange-500 my-5">Successfull</h1>
+            <div class="flex flex-col md:flex-row justify-evenly items-center mt-10 bg-orange-500 rounded">
+                <div class="w-full md:w-96">
+                    <img class="w-full h-full" src="/public//images/delivery-truck" alt="">
+                </div>
+    
+                <div class="w-80 mx-5 py-3 px-2 md:px-0 md:py-0">
+                    <h1 class="font-bold text-slate-100 text-xl my-2 text-center">Your has been placed</h1>
+                    <h3 class="text-slate-200 font-semibold text-center">Order ID : <span class="font-bold">ORD2342316242</span></h3>
+                    <h3 class="text-slate-200 font-semibold text-center">Shipping to : Karimthakara Kunnel House, Chuzhali
+                        P.O, Chempanthotty, Kannur, Kerala - 670142</h3>
+                </div>
+            </div>
+            <div class="w-full text-center mt-10 mb-5">
+                <button class="py-2 px-4 bg-orange-500 text-center text-white mx-auto rounded">Continue Shopping</button>
+            </div>
         </section>
 
-    <%- include('../views/userFooter.ejs') %>
-    
+        <%- include('../views/userFooter.ejs') %>
+
 </body>
+
 </html>
