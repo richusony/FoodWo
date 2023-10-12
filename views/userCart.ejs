@@ -75,8 +75,7 @@
                             <div
                                 class="h-96 overflow-y-auto overflow-x-hidden w-full lg:w-1/2 px-3 py-3 my-2 shadow-sm">
                                 <% if(cartItems){ cartItems.forEach((cart, index)=> { %>
-                                    <div
-                                        class="bg-[#f0efef] md:px-5 py-3 my-2 flex justify-between items-center rounded shadow-md">
+                                    <div class="bg-[#f0efef] md:px-5 py-3 my-2 flex justify-between items-center rounded shadow-md">
                                         <div class=" w-20 h-16 object-cover rounded mx-2 md:mr-3 ">
                                             <img class="w-full h-full rounded object-cover"
                                                 src="/<%= cart.productMainImage%>" alt="">
@@ -88,16 +87,18 @@
                                             </h2>
                                         </div>
 
-                                        <div class=" flex mr-2 md:mr-3">
-                                            <div onclick="priceDown(event)" data-index="<%= index %>"
+                                        <div class=" flex mr-2 md:mr-3 relative text-center justify-center">
+                                            <div onclick="priceDown(event)" data-index="<%= index %>" data-stock="<%=cart.productInStock%>"
                                                 class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-l-full">
                                                 <i class="fa-solid fa-minus"></i>
                                             </div>
                                             <span id="<%= `qty${index}` %>" class="qty mx-3 text-sm my-auto">1</span>
                                             <div onclick="priceUp(event)" data-index="<%= index %>"
+                                                data-stock="<%=cart.productInStock%>"
                                                 class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-r-full">
                                                 <i class="fa-solid fa-plus"></i>
                                             </div>
+                                            <p class="hidden absolute mt-7 text-sm text-center text-orange-500" id="<%= `stockAlert${index}`%>"></p>
                                         </div>
 
                                         <div class=" mr-2 md:mx-3">
@@ -117,6 +118,7 @@
                                                         </i>
                                                     </span>
                                                 </div>
+                                                
                                     </div>
                                     <% }) }else{ %>
                                         <div class="flex flex-col justify-center items-center">
@@ -197,24 +199,35 @@
                     const qty = document.getElementById(`qty${index}`);
                     const currentPrice = document.getElementById(`price${index}`);
                     const actualPrice = currentPrice.getAttribute('data-actualPrice');
+                    const remainingStock = parseInt(event.currentTarget.getAttribute('data-stock'));
+                    const stockAlert = document.getElementById(`stockAlert${index}`);
+
+
 
                     // Increment quantity and calculate the new price
                     let quantity = parseInt(qty.innerText)
                     quantity++;
-                    const newPrice = quantity * parseFloat(actualPrice);
-                    finalPrice += parseFloat(actualPrice);
-                    // finalPrice-=parseInt(actualPrice);
+                    if (quantity > remainingStock) {
+                        console.log('qty: ', quantity, ' stock: ', remainingStock)
+                        stockAlert.innerText = `only ${remainingStock} left`;
+                        stockAlert.classList.remove('hidden');
+                        return;
+                    } else {
+                        const newPrice = quantity * parseFloat(actualPrice);
+                        finalPrice += parseFloat(actualPrice);
+                        // finalPrice-=parseInt(actualPrice);
 
-                    // Update the displayed quantity and price
-                    qty.innerText = quantity;
-                    currentPrice.innerText = "₹" + newPrice
-                    final.forEach((item) => {
-                        item.innerText = "₹" + finalPrice.toFixed(2)
-                    })
-                    // Update the final price
-                    // finalPrice = newPrice;
+                        // Update the displayed quantity and price
+                        qty.innerText = quantity;
+                        currentPrice.innerText = "₹" + newPrice
+                        final.forEach((item) => {
+                            item.innerText = "₹" + finalPrice.toFixed(2)
+                        })
+                        // Update the final price
+                        // finalPrice = newPrice;
 
-                    // You can add additional logic here, like sending data to the server if needed.
+                        // You can add additional logic here, like sending data to the server if needed.
+                    }
                 }
 
                 function priceDown(event) {
@@ -222,11 +235,17 @@
                     const qty = document.getElementById(`qty${index}`);
                     const currentPrice = document.getElementById(`price${index}`);
                     const actualPrice = currentPrice.getAttribute('data-actualPrice');
+                    const remainingStock = parseInt(event.currentTarget.getAttribute('data-stock'));
+                    const stockAlert = document.getElementById(`stockAlert${index}`);
                     let quantity = parseInt(qty.innerText)
 
                     if (quantity > 1) {
                         // Decrement quantity and calculate the new price
                         quantity--;
+
+                        if(quantity <= remainingStock){
+                            stockAlert.classList.add('hidden');
+                        }
 
                         const newPrice = quantity * parseFloat(actualPrice);
                         finalPrice -= parseFloat(actualPrice);

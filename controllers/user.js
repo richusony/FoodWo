@@ -399,6 +399,10 @@ async function viewMyOrderPage(req,res){
     res.render('../views/userOrders.ejs')
 }
 
+async function viewOrderSuccessPage(req,res){
+    res.render('../views/orderSuccess.ejs')
+}
+
 
 module.exports = {
     signInUser,
@@ -422,5 +426,6 @@ module.exports = {
     updateUserProfile,
     updateStock,
     viewProductDetailsPage,
-    viewMyOrderPage
+    viewMyOrderPage,
+    viewOrderSuccessPage
 }
