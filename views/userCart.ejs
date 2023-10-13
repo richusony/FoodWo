@@ -334,7 +334,8 @@
                     const user_id = sessionStorage.getItem('user_id');
                     const cod = document.getElementById('cod');
                     const qty = document.querySelectorAll('.qty');
-                    const cartItems = '<%- JSON.stringify(cartItems)%>';
+                    const cartItems = '<%-JSON.stringify(cartItems)%>';
+                    console.log(cartItems);
                     const check = JSON.parse(cartItems);
 
                     if (!cod.checked) {

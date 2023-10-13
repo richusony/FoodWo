@@ -194,9 +194,15 @@ async function viewCartPage(req, res) {
     const foodIds = foodItems.map(item => item.foodId);
     let cartItems = await productModel.find({ _id: { $in: foodIds } });
     const userDetails = await userModel.find({ _id: uid })
-    if(cartItems.length<1){
-        cartItems=false
-        console.log(cartItems)
+
+    if (cartItems.length < 1) {
+        cartItems = false
+    } else {
+        cartItems = cartItems.map((item) => {
+            item.productMainImage[0] = item.productMainImage[0].replace(/\\/g, '//');
+            item.productRelatedImages = item.productRelatedImages.map((img) => img.replace(/\\/g, '//'));
+            return item;
+        });
     }
     res.render('../views/userCart', { cartItems: cartItems, userId: uid, userData: userDetails });
 }
@@ -358,7 +364,7 @@ async function updateStock(req, res) {
         if (result) {
             return res.status(200).json({ message: 'Stock updated successfully' });
         } else {
-        console.log('not here')
+            console.log('not here')
             return res.status(500).json({ error: 'Failed to update stock' });
         }
     } catch (error) {
@@ -395,11 +401,11 @@ async function viewProductDetailsPage(req, res) {
 }
 
 
-async function viewMyOrderPage(req,res){
+async function viewMyOrderPage(req, res) {
     res.render('../views/userOrders.ejs')
 }
 
-async function viewOrderSuccessPage(req,res){
+async function viewOrderSuccessPage(req, res) {
     res.render('../views/orderSuccess.ejs')
 }
 
