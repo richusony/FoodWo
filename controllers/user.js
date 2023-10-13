@@ -372,7 +372,7 @@ async function updateStock(req, res) {
             }
         );
 
-        const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, productId: productId, productName: productName,productImage:image, productPrice: productPrice })
+        const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, productId: productId, productName: productName,productImage:image, productPrice: productPrice,address:address,orderStatus:'pending' })
 
         const updating = await userModel.updateOne(
             { _id: user_id },
@@ -431,6 +431,13 @@ async function viewOrderSuccessPage(req, res) {
     res.render('../views/orderSuccess.ejs')
 }
 
+async function viewOrderItemPage(req,res){
+    const orderId = req.params.oid;
+    const orderedItem = await orderModel.findOne({orderId:orderId})
+    const userid = orderedItem.userId;
+    const userDetails = await userModel.findOne({_id:userid})
+    res.render('../views/orderedItem.ejs',{order:orderedItem,user:userDetails})
+}
 
 module.exports = {
     signInUser,
@@ -455,5 +462,6 @@ module.exports = {
     updateStock,
     viewProductDetailsPage,
     viewMyOrderPage,
-    viewOrderSuccessPage
+    viewOrderSuccessPage,
+    viewOrderItemPage
 }

@@ -26,6 +26,15 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    address:{
+        type:String,
+        required:true
+    },
+    orderStatus:{
+        type:String,
+        required:true
+    },
+    
     created_at: { type: String, default: () => { return moment(new Date()).format('DD/MM/YYYY') } }
 }, {
     timestamps: true // Add timestamps option

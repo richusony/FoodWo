@@ -61,7 +61,7 @@
                     <!-- Order Items -->
                     <div class="lg:px-20 my-2">
                         <% if(orders){ orders.forEach((item)=>{%>
-                        <div class="bg-gray-100 flex justify-evenly items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md">
+                        <div class="bg-gray-100 flex justify-evenly cursor-pointer items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md" onclick="redirectTo('/user/order-details/<%=item.orderId%>')">
                             <div class="mx-1 w-20 h-20 rounded-md"><img class="object-cover rounded-md w-full h-full" src="/<%=item.productImage%>" alt=""></div>
                             <div class="w-fit"><span class="text-sm md:text-xl"><%=item.productName%></span></div>
                             <div class="w-fit"><span class="hidden md:block md:font-semibold md:text-lg"><%=item.productPrice%></span></div>
@@ -71,35 +71,6 @@
                             </div>
                         </div>
                         <%})}%>
-
-<!-- 
-                        <div class="bg-gray-100 flex justify-evenly items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md">
-                            <div class="mx-1 w-20 h-20 rounded-md"><img class="object-cover rounded-md w-full h-full" src="/products/1696516368143-ChickenBR4" alt=""></div>
-                            <div class="w-fit"><span class="text-sm md:text-xl">Chicken Biriyani</span></div>
-                            <div class="w-fit"><span class="hidden md:block md:font-semibold md:text-lg">₹160</span></div>
-                            <div class="w-fit">
-                                <span class="block text-sm"><i class="fa-solid text-orange-500 fa-thumbs-up"></i> Delivered on Jul 27</span>
-                                <span class="block text-gray-500 text-sm">Your item has been delivered</span>
-                            </div>
-                        </div>
-                        <div class="bg-gray-100 flex justify-evenly items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md">
-                            <div class="mx-1 w-20 h-20 rounded-md"><img class="object-cover rounded-md w-full h-full" src="/products/1696516368143-ChickenBR4" alt=""></div>
-                            <div class="w-fit"><span class="text-sm md:text-xl">Chicken Biriyani</span></div>
-                            <div class="w-fit"><span class="hidden md:block md:font-semibold md:text-lg">₹160</span></div>
-                            <div class="w-fit">
-                                <span class="block text-sm"><i class="fa-solid text-orange-500 fa-thumbs-up"></i> Delivered on Jul 27</span>
-                                <span class="block text-gray-500 text-sm">Your item has been delivered</span>
-                            </div>
-                        </div>
-                        <div class="bg-gray-100 flex justify-evenly items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md">
-                            <div class="mx-1 w-20 h-20 rounded-md"><img class="object-cover rounded-md w-full h-full" src="/products/1696516368143-ChickenBR4" alt=""></div>
-                            <div class="w-fit"><span class="text-sm md:text-xl">Chicken Biriyani</span></div>
-                            <div class="w-fit"><span class="hidden md:block md:font-semibold md:text-lg">₹160</span></div>
-                            <div class="w-fit">
-                                <span class="block text-sm"><i class="fa-solid text-orange-500 fa-thumbs-up"></i> Delivered on Jul 27</span>
-                                <span class="block text-gray-500 text-sm">Your item has been delivered</span>
-                            </div>
-                        </div> -->
                        
                     </div>
                 </div>
@@ -109,6 +80,11 @@
 
         <%-include('../views/userFooter.ejs') %>
 
+        <script>
+            function redirectTo(url){
+                window.location.href=url;
+            }
+        </script>
 </body>
 
 </html>

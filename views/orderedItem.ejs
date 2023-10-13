@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Item</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <%-include('../views/userNavbar.ejs') %>
+
+        <section class="px-5 md:px-10 py-10 h-screen">
+            <div class="bg-orange-500 px-5 py-5 rounded">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div>
+                        <h3 class="text-white font-semibold text-xl cursor-pointer w-fit mb-5"><i
+                            class="fa-solid fa-arrow-left"></i> Orders</h3>
+                    <h2 class="text-white">Order ID : <%=order.orderId%> <span class="bg-white py-2 px-4 text-orange-500 text-center rounded">
+                                <%=order.orderStatus%>
+                            </span></h2>
+                    <h3 class="text-white mb-10">Date : <%=order.created_at%>
+                    </h3>
+
+                    <div class="text-white">
+                    <h3 class="font-semibold text-lg">Delivery Address :</h3>
+                    <h3><%=user.fullname%></h3>
+                    <p class="my-2"><%=order.address%></p>
+                    <h4>Phone Number : <%=user.phone%></h4>
+                    </div>
+                    
+                    </div>
+
+                <div>
+                    <div class="w-28 h-28 lg:w-52 lg:h-52">
+                        <img class="w-full h-full rounded object-cover" src="/<%=order.productImage%>" alt="productImage">
+                    </div>
+                </div>
+                </div>
+
+            </div>
+        </section>
+
+        <%-include('../views/userFooter.ejs') %>
+</body>
+
+</html>

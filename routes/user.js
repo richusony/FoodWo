@@ -3,7 +3,7 @@ const router = express.Router();
 const {userAuth} = require('../middleware/sessionAuth')
 const {isBlocked}= require('../middleware/userBlocked')
 const {upload} = require('../middleware/multer')
-const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewWishlistPage, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage} = require('../controllers/user')
+const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewWishlistPage, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage, viewOrderItemPage} = require('../controllers/user')
 
 
 
@@ -79,6 +79,9 @@ router.route('/my-orders/:id')
 
 router.route('/order-success')
 .get(viewOrderSuccessPage)
+
+router.route('/order-details/:oid')
+.get(viewOrderItemPage)
 
 
 module.exports = router;
