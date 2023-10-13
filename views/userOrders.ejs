@@ -66,8 +66,17 @@
                             <div class="w-fit"><span class="text-sm md:text-xl"><%=item.productName%></span></div>
                             <div class="w-fit"><span class="hidden md:block md:font-semibold md:text-lg"><%=item.productPrice%></span></div>
                             <div class="w-fit">
-                                <span class="block text-sm"><i class="fa-solid text-orange-500 fa-thumbs-up"></i> Delivered on <%=item.created_at%></span>
-                                <span class="block text-gray-500 text-sm">Your item has been delivered</span>
+                                <span class="block text-sm"><i class="fa-solid text-orange-500 fa-thumbs-up"></i> <%=item.orderStatus%> <%=item.created_at%></span>
+                                <%if(item.orderStatus=="Cancelled" || item.orderStatus=="Delivered"){%>
+                                <span class="block text-gray-500 text-sm">Your item has been <%=item.orderStatus%></span>
+                                <%}else if(item.orderStatus=="Pending"){%>
+                                    <span class="block text-gray-500 text-sm">Your order is Processing</span>
+                                    <%}else if(item.orderStatus=="Confirmed"){%>
+                                        <span class="block text-gray-500 text-sm">Your order is Confirmed</span>
+                                        <%}else{%>
+                                            <span class="block text-gray-500 text-sm">Your order is On the Way</span>
+                                            <%}%>
+
                             </div>
                         </div>
                         <%})}%>

@@ -103,11 +103,12 @@
                     const response = await fetch(`/user/cancel-order/${orderId}`,{
                         method:'PATCH'
                     })
-                }
-
-                if(response.ok){
+                    if(response.ok){
                     window.location.reload();
                 }
+                }
+
+                
             }
 
             
