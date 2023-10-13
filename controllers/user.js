@@ -199,8 +199,9 @@ async function viewCartPage(req, res) {
         cartItems = false
     } else {
         cartItems = cartItems.map((item) => {
-            item.productMainImage[0] = item.productMainImage[0].replace(/\\/g, '//');
-            item.productRelatedImages = item.productRelatedImages.map((img) => img.replace(/\\/g, '//'));
+            item.productMainImage[0] = item.productMainImage[0].replace(/\\/g, '//').trim();
+            item.productRelatedImages = item.productRelatedImages.map((img) => img.replace(/\\/g, '//').trim());
+            item.category.trim()
             return item;
         });
     }
@@ -333,9 +334,24 @@ async function updateUserProfile(req, res) {
 }
 
 async function updateStock(req, res) {
-    const { user_id, productId, productQty } = req.body;
+    const { user_id, productId, productQty, address } = req.body;
     console.log(user_id, productId, productQty);
 
+    function generateOrderID() {
+        // Generate a random number between 1000 and 9999
+        const randomPart = Math.floor(Math.random() * 9000) + 1000;
+
+        // Create a timestamp part using the current time
+        const now = new Date();
+        const timestampPart = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`;
+
+        // Combine the random part and timestamp part
+        const orderID = `ORD${timestampPart}${randomPart}`;
+
+        return orderID;
+    }
+    const orderId = generateOrderID();
+    console.log(orderId)
     try {
         // Assuming you have a 'productModel' and relevant fields in your MongoDB model
         const product = await productModel.findById(productId);
@@ -362,7 +378,8 @@ async function updateStock(req, res) {
             })
 
         if (result) {
-            return res.status(200).json({ message: 'Stock updated successfully' });
+             res.status(200).json({ orderid: orderId, address: address });
+
         } else {
             console.log('not here')
             return res.status(500).json({ error: 'Failed to update stock' });

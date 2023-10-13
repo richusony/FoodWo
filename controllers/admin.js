@@ -135,7 +135,7 @@ async function addProduct(req, res) {
             description: description,
             productPrice: productPrice,
             productType: productType,
-            category: category,
+            category: category.trim(),
             productSold: 0,
             productInStock: inStock,
             productMainImage: mainImage[0],
@@ -162,7 +162,7 @@ async function updateProducts(req, res) {
     console.log('checkkinng  .. ', relatedImages, mainImage)
 
     if (mainImage.length == 0 && relatedImages.length == 0) {
-        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category, productInStock: inStock });
+        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock });
         if (updating) {
             const updatedDetails = await productModel.find({ _id: id }); 
             res.redirect(`/admin/productUpdateDetails/${id}`)
@@ -170,7 +170,7 @@ async function updateProducts(req, res) {
             res.status(500).json({ err: "Database is having some issues." })
         }
     } else if (mainImage && relatedImages.length == 0) {
-        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category, productInStock: inStock, productMainImage: mainImage[0] });
+        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock, productMainImage: mainImage[0] });
         if (updating) {
             const updatedDetails = await productModel.find({ _id: id });
             res.redirect(`/admin/productUpdateDetails/${id}`)
@@ -178,7 +178,7 @@ async function updateProducts(req, res) {
             res.status(500).json({ err: "Database is having some issues." })
         }
     } else if (mainImage.length == 0 && relatedImages) {
-        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category, productInStock: inStock, $push: { productRelatedImages: relatedImages } });
+        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock, $push: { productRelatedImages: relatedImages } });
         if (updating) {
             const updatedDetails = await productModel.find({ _id: id });
             res.redirect(`/admin/productUpdateDetails/${id}`)
@@ -186,7 +186,7 @@ async function updateProducts(req, res) {
             res.status(500).json({ err: "Database is having some issues." })
         }
     } else {
-        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category, productInStock: inStock, productMainImage: mainImage[0], $push: { productRelatedImages: relatedImages } });
+        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock, productMainImage: mainImage[0], $push: { productRelatedImages: relatedImages } });
         if (updating) {
             const updatedDetails = await productModel.find({ _id: id });
             res.redirect(`/admin/productUpdateDetails/${id}`)
@@ -227,7 +227,7 @@ async function addCategory(req, res) {
         if (exist) {
             res.status(401).json({ err: 'Category already existed.' })
         } else {
-            const adding = await categoryModel.create({ category: upperCategory });
+            const adding = await categoryModel.create({ category: upperCategory.trim() });
             if (adding) {
                 res.status(200).json({ success: "category added to database" })
             } else {
@@ -254,7 +254,7 @@ async function updateCategory(req, res) {
     const { category } = req.body;
     const upperCategory = category.toUpperCase();
     console.log("got it :: ", id, category);
-    const updating = await categoryModel.updateOne({ _id: id }, { category: upperCategory });
+    const updating = await categoryModel.updateOne({ _id: id }, { category: upperCategory.trim() });
 
     if (updating) {
         const updatedDetails = await categoryModel.find({ _id: id });

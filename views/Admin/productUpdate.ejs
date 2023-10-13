@@ -128,10 +128,9 @@
 
                             <div>
                                 <h3 class="font-semibold my-3">Main Image</h3>
-                                <div class="w-48 h-48" id="mainImageContainer">
-                                    <% if(data){ %>
-                                        <div><img src="/<%=data[0].productMainImage%>" alt="MainImage"></div>
-
+                                <% if(data){ %>
+                                <div class="w-48 h-48 rounded" id="mainImageContainer">
+                                        <div class="w-full h-full rounded"><img class="w-full h-full rounded object-cover" src="/<%=data[0].productMainImage%>" alt="MainImage"></div>
                                 </div>
                             </div>
                             <div>

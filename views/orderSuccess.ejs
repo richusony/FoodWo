@@ -62,20 +62,31 @@
                 <div class="w-full md:w-96">
                     <img class="w-full h-full" src="/public//images/delivery-truck" alt="">
                 </div>
-    
+
                 <div class="w-80 mx-5 py-3 px-2 md:px-0 md:py-0">
                     <h1 class="font-bold text-slate-100 text-xl my-2 text-center">Your has been placed</h1>
-                    <h3 class="text-slate-200 font-semibold text-center">Order ID : <span class="font-bold">ORD2342316242</span></h3>
-                    <h3 class="text-slate-200 font-semibold text-center">Shipping to : Karimthakara Kunnel House, Chuzhali
-                        P.O, Chempanthotty, Kannur, Kerala - 670142</h3>
+                    <h3 class="text-slate-200 font-semibold text-center">Order ID : <span class="font-bold" id="orderId"></span></h3>
+                    <h3 class="text-slate-200 font-semibold text-center">Shipping to : <span id="orderAddress"></span></h3>
                 </div>
             </div>
             <div class="w-full text-center mt-10 mb-5">
-                <button class="py-2 px-4 bg-orange-500 text-center text-white mx-auto rounded">Continue Shopping</button>
+                <button class="py-2 px-4 bg-orange-500 text-center text-white mx-auto rounded" onclick="redirectTo('/user/products')">Continue Shopping</button>
             </div>
         </section>
 
         <%- include('../views/userFooter.ejs') %>
+
+        <script>
+            
+        const orderId = document.getElementById('orderId')
+            const orderAddress = document.getElementById('orderAddress')
+            orderId.innerText=sessionStorage.getItem('orderid')
+            orderAddress.innerText=sessionStorage.getItem('orderaddress')
+            console.log(sessionStorage.getItem('orderid'),sessionStorage.getItem('orderaddress'))
+            function redirectTo(url){
+                window.location.href=url;
+            }
+        </script>
 
 </body>
 

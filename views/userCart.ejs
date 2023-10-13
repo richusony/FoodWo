@@ -334,7 +334,7 @@
                     const user_id = sessionStorage.getItem('user_id');
                     const cod = document.getElementById('cod');
                     const qty = document.querySelectorAll('.qty');
-                    const cartItems = '<%-JSON.stringify(cartItems)%>';
+                    const cartItems = '<%-JSON.stringify(cartItems).trim()%>';
                     console.log(cartItems);
                     const check = JSON.parse(cartItems);
 
@@ -364,11 +364,12 @@
                             user_id: user_id,
                             productId: productId,
                             productQty: productQty,
-                            productPrice:productPrice
+                            productPrice:productPrice,
+                            address:currentAdd.innerText
                         }
 
                         const reqData = await JSON.stringify(productData);
-                        const response = await fetch('/user/cart-checkout', {
+                        const checkResponse = await fetch('/user/cart-checkout', {
                             method: 'PATCH',
                             headers: {
                                 'Content-Type': "application/json",
@@ -376,7 +377,7 @@
                             body: reqData
                         })
 
-                        if (response.ok) {
+                        if (checkResponse.ok) {
                             const reqData = {
                                 foodid: productId,
                                 userid: user_id
@@ -391,7 +392,11 @@
                                 body: realData
                             })
                             if (response.ok) {
-                                window.location.reload()
+                                const data = await checkResponse.json();
+                                console.log(data)
+                                sessionStorage.setItem('orderid',data.orderid)
+                                sessionStorage.setItem('orderaddress',data.address)
+                                window.location.href='/user/order-success'
                             }
                             console.log(`${productName} Ok.`)
                         }
