@@ -5,6 +5,7 @@ const categoryModel = require('../models/categorySchema');
 const bcrypt = require('bcrypt');
 const { sessAuth } = require("../middleware/sessionAuth");
 const cartModel = require('../models/cartSchema');
+const orderModel = require('../models/orderSchema');
 
 function viewSignInPage(req, res) {
     res.render('userSignUp')
@@ -334,7 +335,7 @@ async function updateUserProfile(req, res) {
 }
 
 async function updateStock(req, res) {
-    const { user_id, productId, productQty, address } = req.body;
+    const { user_id, productId,productPrice, productQty, address } = req.body;
     console.log(user_id, productId, productQty);
 
     function generateOrderID() {
@@ -370,6 +371,8 @@ async function updateStock(req, res) {
                 $inc: { productSold: productQty, purchaseCount: 1 }
             }
         );
+
+        const addToOrder = await orderModel.create({orderId:orderId,userId:user_id,productId:productId,productPrice:productPrice})
 
         const updating = await userModel.updateOne(
             { _id: user_id },
