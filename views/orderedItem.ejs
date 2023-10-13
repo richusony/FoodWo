@@ -81,7 +81,11 @@
                 </div>
 
                 <div class="my-3">
-                    <button class="bg-white hover:bg-slate-100 py-2 px-4 text-orange-500 text-center rounded" >Cancel</button>
+                    <% if(order.orderStatus !=="Pending"){%>
+                    <button class="bg-white opacity-50 cursor-not-allowed py-2 px-4 text-orange-500 text-center rounded" >Cancel</button>
+                    <%}else{%>
+                    <button class="bg-white hover:bg-slate-100 py-2 px-4 text-orange-500 text-center rounded" data-oid="<%=order.orderId%>" onclick="cancelOrder(event)" >Cancel</button>
+                    <%}%>
                 </div>
             </div>
         </section>
@@ -92,6 +96,20 @@
             function redirectTo(url){
                 window.location.href=url;
             }
+
+            async function cancelOrder(event){
+                const orderId = event.target.dataset.oid;
+                if(orderId){
+                    const response = await fetch(`/user/cancel-order/${orderId}`,{
+                        method:'PATCH'
+                    })
+                }
+
+                if(response.ok){
+                    window.location.reload();
+                }
+            }
+
             
             </script>
 </body>

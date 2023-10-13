@@ -16,8 +16,8 @@
     <!-- Navigation -->
     <%- include('adminNavbar') %>
 
-    <section class="px-5 py-2">
-        <div class="flex flex-col w-full">
+    <section class="px-5 py-2 flex justify-center items-center overflow-x-hidden">
+        <div class="flex flex-col mx-auto w-full">
             <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                 <div class="overflow-hidden">
@@ -34,36 +34,29 @@
                       </tr>
                     </thead>
                     <tbody>
+                      <% if(orders){ orders.forEach((order,index)=>{%>
                       <tr
-                        class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
-                        <td class="whitespace-nowrap px-6 py-4 font-medium">ORD202310131116169780</td>
-                        <td class="whitespace-nowrap px-6 py-4">13/02/2002</td>
-                        <td class="whitespace-nowrap px-6 py-4">Richu Sony</td>
-                        <td class="whitespace-nowrap px-6 py-4">Margherita Pizza</td>
-                        <td class="whitespace-nowrap px-6 py-4"><span class="bg-red-400 py-1 rounded text-white px-2">Pending</span></td>
-                        <td class="whitespace-nowrap px-6 py-4">COD</td>
-                        <td class="whitespace-nowrap px-6 py-4">169.00</td>
+                        class="border-b transition duration-300 ease-in-out hover:bg-slate-100 dark:border-neutral-500 dark:hover:bg-slate-300">
+                        <td class="whitespace-nowrap px-6 py-4 font-medium"><%=order.orderId%></td>
+                        <td class="whitespace-nowrap px-6 py-4"><%=order.created_at%></td>
+                        <td class="whitespace-nowrap px-6 py-4"><%=order.customerName%></td>
+                        <td class="whitespace-nowrap px-6 py-4"><%=order.productName%></td>
+                        <td class="whitespace-nowrap px-6 py-4">
+                          <select name="" id="<%=`orderStatus${index}`%>" data-index="<%=`${index}`%>" data-oid="<%=order.orderId%>" onchange="handleStatus(event)">
+                            <option selected value="<%=order.orderStatus%>"><span class="bg-red-400 cursor-pointer py-1 rounded text-white px-2"><%=order.orderStatus%></span></option>
+                            <option value="Pending"><span class="bg-red-400 cursor-pointer py-1 rounded text-white px-2">Pending</span></option>
+                            <option value="Confirmed"><span class="bg-red-400 cursor-pointer py-1 rounded text-white px-2">Confirmed</span></option>
+                            <option value="On the Way"><span class="bg-red-400 cursor-pointer py-1 rounded text-white px-2">On the Way</span></option>
+                            <option value="Delivered"><span class="bg-red-400 cursor-pointer py-1 rounded text-white px-2">Delivered</span></option>
+                            <option value="Cancelled"><span class="bg-red-400 cursor-pointer py-1 rounded text-white px-2">Cancelled</span></option>
+                          </select>
+
+                        </td>
+                        <td class="whitespace-nowrap px-6 py-4"><%=order.paymentMethod%></td>
+                        <td class="whitespace-nowrap px-6 py-4"><%=order.productPrice%>.00</td>
                       </tr>
-                      <tr
-                        class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
-                        <td class="whitespace-nowrap px-6 py-4 font-medium">ORD202310131116169780</td>
-                        <td class="whitespace-nowrap px-6 py-4">13/02/2002</td>
-                        <td class="whitespace-nowrap px-6 py-4">Delbin George</td>
-                        <td class="whitespace-nowrap px-6 py-4">Saffron Almond Milk</td>
-                        <td class="whitespace-nowrap px-6 py-4">Saffron Almond Milk</td>
-                        <td class="whitespace-nowrap px-6 py-4">Saffron Almond Milk</td>
-                        <td class="whitespace-nowrap px-6 py-4">Saffron Almond Milk</td>
-                      </tr>
-                      <tr
-                        class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
-                        <td class="whitespace-nowrap px-6 py-4 font-medium">ORD202310131116169780</td>
-                        <td class="whitespace-nowrap px-6 py-4">13/02/2002</td>
-                        <td class="whitespace-nowrap px-6 py-4">Alfin Saji</td>
-                        <td class="whitespace-nowrap px-6 py-4">M Crunchy Burger</td>
-                        <td class="whitespace-nowrap px-6 py-4">M Crunchy Burger</td>
-                        <td class="whitespace-nowrap px-6 py-4">M Crunchy Burger</td>
-                        <td class="whitespace-nowrap px-6 py-4">M Crunchy Burger</td>
-                      </tr>
+                      <% })}%>
+                     
                     </tbody>
                   </table>
                 </div>
@@ -73,6 +66,29 @@
     </section>
         <!-- Footer -->
         <%- include('adminFooter') %>
+
+        <script>
+          async function handleStatus(event){
+            event.preventDefault();
+            const orderId = event.target.dataset.oid;
+            const index = event.target.dataset.index;
+            const orderStatus = document.getElementById(`orderStatus${index}`);
+            console.log(orderId,orderStatus.value)
+            if(orderStatus){
+              const data={
+                status:orderStatus.value
+              }
+              const reqData = await JSON.stringify(data)
+              const response = await fetch(`/admin/update-order-status/${orderId}`,{
+                method:'PATCH',
+                headers:{
+                  'Content-Type':"application/json"
+                },
+                body:reqData
+              })
+            }
+          }
+        </script>
 </body>
 
 </html>

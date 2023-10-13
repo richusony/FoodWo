@@ -334,8 +334,10 @@ async function updateUserProfile(req, res) {
 
 }
 
+
+
 async function updateStock(req, res) {
-    const { user_id, productId, productName, image, productPrice, paymentMethod, productQty, address } = req.body;
+    const { user_id, productId, productName, image,customerName,  productPrice, paymentMethod, productQty, address } = req.body;
     console.log(user_id, productId, productQty);
 
     function generateOrderID() {
@@ -376,7 +378,7 @@ async function updateStock(req, res) {
                 }
             );
 
-            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, productId: productId, productName: productName, productImage: image, productPrice: productPrice, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
+            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id,customerName:customerName, productId: productId, productName: productName, productImage: image, productPrice: productPrice, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
 
             const updating = await userModel.updateOne(
                 { _id: user_id },
@@ -445,6 +447,18 @@ async function viewOrderItemPage(req, res) {
     res.render('../views/orderedItem.ejs', { order: orderedItem, user: userDetails })
 }
 
+
+async function cancelOrder(req,res){
+    const orderId = req.params.oid;
+
+    if(orderId){
+        const updating = await orderModel.updateOne({orderId:orderId},{orderStatus:"Cancelled"})
+        if(updating){
+            res.status(200).json({updated:true})
+        }
+    }
+}
+
 module.exports = {
     signInUser,
     viewSignInPage,
@@ -469,5 +483,6 @@ module.exports = {
     viewProductDetailsPage,
     viewMyOrderPage,
     viewOrderSuccessPage,
-    viewOrderItemPage
+    viewOrderItemPage,
+    cancelOrder
 }

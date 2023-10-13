@@ -18,7 +18,7 @@ function viewLogInPage(req, res) {
 }
 
 async function viewOrdersPage(req, res) {
-    const allOrders = await orderModel.find({}).sort({ updatedAt: 1 })
+    const allOrders = await orderModel.find({}).sort({ createdAt: 1 })
     res.render('../views/Admin/ordersMain', { orders: allOrders });
 }
 
@@ -352,6 +352,18 @@ async function removeImage(req, res) {
 }
 
 
+async function updateOrderStatus(req,res){
+    const orderId = req.params.oid;
+    const orderStatus = req.body.status;
+
+    if(orderId&&orderStatus){
+        const updating = await orderModel.updateOne({orderId:orderId},{orderStatus:orderStatus})
+        if(updating){
+            res.status(200).json({updated:true})
+        }
+    }
+}
+
 
 module.exports = {
     viewLogInPage,
@@ -382,5 +394,6 @@ module.exports = {
     updateType,
     deleteType,
     viewUpdateType,
-    removeImage
+    removeImage,
+    updateOrderStatus
 } 

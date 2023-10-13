@@ -28,6 +28,7 @@ const { viewLogInPage,
     deleteType,
     viewUpdateType,
     removeImage,
+    updateOrderStatus,
 } = require('../controllers/admin');
 const router = express.Router();
 const { adminAuth } = require('../middleware/sessionAuth')
@@ -131,6 +132,8 @@ router.route('/delete-type/:id')
 router.route('/remove-image')
 .patch(removeImage)
 
+router.route('/update-order-status/:oid')
+.patch(updateOrderStatus)
 
 
 module.exports = router;

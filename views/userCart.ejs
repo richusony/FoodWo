@@ -332,6 +332,7 @@
 
                 async function handleCheckout(event) {
                     const user_id = sessionStorage.getItem('user_id');
+                    const customerName = sessionStorage.getItem('username')
                     const cod = document.getElementById('cod');
                     const qty = document.querySelectorAll('.qty');
                     const cartItems = '<%-JSON.stringify(cartItems).trim()%>';
@@ -363,6 +364,7 @@
 
                         const productData = {
                             user_id: user_id,
+                            customerName:customerName,
                             productId: productId,
                             productName:productName,
                             image:image,
