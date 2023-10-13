@@ -46,10 +46,10 @@
                     <h2 class="font-bold text-lg">Filters</h2>
                     <div class="">
                         <h3 class="font-semibold my-4">Order Status</h3>
+                            <div><input type="checkbox" name="" id=""> Confirmed </div>
                             <div><input type="checkbox" name="" id=""> On the way </div>
                             <div><input type="checkbox" name="" id=""> Delivered </div>
                             <div><input type="checkbox" name="" id=""> Cancelled </div>
-                            <div><input type="checkbox" name="" id=""> Returned </div>
                     </div>
                 </div>
 
@@ -60,6 +60,19 @@
 
                     <!-- Order Items -->
                     <div class="lg:px-20 my-2">
+                        <% if(orders){ orders.forEach((item)=>{%>
+                        <div class="bg-gray-100 flex justify-evenly items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md">
+                            <div class="mx-1 w-20 h-20 rounded-md"><img class="object-cover rounded-md w-full h-full" src="/<%=item.productImage%>" alt=""></div>
+                            <div class="w-fit"><span class="text-sm md:text-xl"><%=item.productName%></span></div>
+                            <div class="w-fit"><span class="hidden md:block md:font-semibold md:text-lg"><%=item.productPrice%></span></div>
+                            <div class="w-fit">
+                                <span class="block text-sm"><i class="fa-solid text-orange-500 fa-thumbs-up"></i> Delivered on <%=item.created_at%></span>
+                                <span class="block text-gray-500 text-sm">Your item has been delivered</span>
+                            </div>
+                        </div>
+                        <%})}%>
+
+<!-- 
                         <div class="bg-gray-100 flex justify-evenly items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md">
                             <div class="mx-1 w-20 h-20 rounded-md"><img class="object-cover rounded-md w-full h-full" src="/products/1696516368143-ChickenBR4" alt=""></div>
                             <div class="w-fit"><span class="text-sm md:text-xl">Chicken Biriyani</span></div>
@@ -86,16 +99,7 @@
                                 <span class="block text-sm"><i class="fa-solid text-orange-500 fa-thumbs-up"></i> Delivered on Jul 27</span>
                                 <span class="block text-gray-500 text-sm">Your item has been delivered</span>
                             </div>
-                        </div>
-                        <div class="bg-gray-100 flex justify-evenly items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md">
-                            <div class="mx-1 w-20 h-20 rounded-md"><img class="object-cover rounded-md w-full h-full" src="/products/1696516368143-ChickenBR4" alt=""></div>
-                            <div class="w-fit"><span class="text-sm md:text-xl">Chicken Biriyani</span></div>
-                            <div class="w-fit"><span class="hidden md:block md:font-semibold md:text-lg">₹160</span></div>
-                            <div class="w-fit">
-                                <span class="block text-sm"><i class="fa-solid text-orange-500 fa-thumbs-up"></i> Delivered on Jul 27</span>
-                                <span class="block text-gray-500 text-sm">Your item has been delivered</span>
-                            </div>
-                        </div>
+                        </div> -->
                        
                     </div>
                 </div>

@@ -74,7 +74,7 @@ router.route('/removeFromCart/')
 router.route('/cart-checkout')
 .patch(updateStock)
 
-router.route('/my-orders')
+router.route('/my-orders/:id')
 .get(viewMyOrderPage)
 
 router.route('/order-success')

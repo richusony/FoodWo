@@ -353,6 +353,7 @@
                         // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                         const productId = item._id;
                         const productName = item.productName;
+                        const image = item.productMainImage[0];
                         const productPrice = item.productPrice;
                         const productQty = parseInt(qty[index].innerText);
                         console.log('productName : ', productName)
@@ -363,6 +364,8 @@
                         const productData = {
                             user_id: user_id,
                             productId: productId,
+                            productName:productName,
+                            image:image,
                             productQty: productQty,
                             productPrice:productPrice,
                             address:currentAdd.innerText
