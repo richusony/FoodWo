@@ -372,7 +372,7 @@ async function updateStock(req, res) {
             }
         );
 
-        const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, productId: productId, productName: productName,productImage:image, productPrice: productPrice,address:address,orderStatus:'pending' })
+        const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, productId: productId, productName: productName,productImage:image, productPrice: productPrice,address:address,orderStatus:'Pending' })
 
         const updating = await userModel.updateOne(
             { _id: user_id },

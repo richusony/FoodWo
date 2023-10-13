@@ -39,34 +39,50 @@
 <body>
     <%-include('../views/userNavbar.ejs') %>
 
-        <section class="px-5 md:px-10 py-10 h-screen">
-            <div class="bg-orange-500 px-5 py-5 rounded">
+        <section class="px-5 md:px-10 py-10">
+            <div class="bg-orange-500 px-5 py-5 rounded shadow-md">
                 <div class="flex flex-col md:flex-row justify-between items-center">
-                    <div>
+                    <div class="w-full">
                         <h3 class="text-white font-semibold text-xl cursor-pointer w-fit mb-5"><i
-                            class="fa-solid fa-arrow-left"></i> Orders</h3>
-                    <h2 class="text-white">Order ID : <%=order.orderId%> <span class="bg-white py-2 px-4 text-orange-500 text-center rounded">
+                                class="fa-solid fa-arrow-left"></i> Orders</h3>
+                        <h2 class="text-white flex items-center"><span class="text-sm mr-2">Order ID :
+                                <%=order.orderId%></span> <span
+                                class="bg-white py-1 px-4 text-orange-500 text-center rounded">
                                 <%=order.orderStatus%>
                             </span></h2>
-                    <h3 class="text-white mb-10">Date : <%=order.created_at%>
-                    </h3>
+                        <h3 class="text-white mb-5 md:mb-10">Date : <%=order.created_at%>
+                        </h3>
+                        <div class="md:hidden mb-5">
+                            <div class="w-40 h-40 right-0 lg:w-52 lg:h-52">
+                                <img class="w-full h-full rounded object-cover" src="/<%=order.productImage%>"
+                                    alt="productImage">
+                            </div>
+                        </div>
+                        <div class="text-white">
+                            <h3 class="font-semibold text-lg">Delivery Address :</h3>
+                            <h3>
+                                <%=user.fullname%>
+                            </h3>
+                            <p class="my-2">
+                                <%=order.address%>
+                            </p>
+                            <h4>Phone Number : <%=user.phone%>
+                            </h4>
+                        </div>
 
-                    <div class="text-white">
-                    <h3 class="font-semibold text-lg">Delivery Address :</h3>
-                    <h3><%=user.fullname%></h3>
-                    <p class="my-2"><%=order.address%></p>
-                    <h4>Phone Number : <%=user.phone%></h4>
-                    </div>
-                    
                     </div>
 
-                <div>
-                    <div class="w-28 h-28 lg:w-52 lg:h-52">
-                        <img class="w-full h-full rounded object-cover" src="/<%=order.productImage%>" alt="productImage">
+                    <div class="hidden md:block">
+                        <div class="md:w-40 md:h-40 lg:w-52 lg:h-52">
+                            <img class="w-full h-full rounded object-cover" src="/<%=order.productImage%>"
+                                alt="productImage">
+                        </div>
                     </div>
                 </div>
-                </div>
 
+                <div class="my-3">
+                    <button class="bg-white hover:bg-slate-100 py-2 px-4 text-orange-500 text-center rounded" >Cancel</button>
+                </div>
             </div>
         </section>
 
