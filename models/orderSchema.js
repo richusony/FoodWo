@@ -30,6 +30,10 @@ const orderSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    paymentMethod:{
+        type:String,
+        required:true
+    },
     orderStatus:{
         type:String,
         required:true

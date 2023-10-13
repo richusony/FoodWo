@@ -335,7 +335,7 @@ async function updateUserProfile(req, res) {
 }
 
 async function updateStock(req, res) {
-    const { user_id, productId, productName, image, productPrice, productQty, address } = req.body;
+    const { user_id, productId, productName, image, productPrice, paymentMethod, productQty, address } = req.body;
     console.log(user_id, productId, productQty);
 
     function generateOrderID() {
@@ -360,33 +360,39 @@ async function updateStock(req, res) {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        // Calculate the updated stock quantity by subtracting 'productQty'
-        const updatedStock = product.productInStock - productQty;
-
-        // Increment 'productSold' by 'productQty' and 'purchaseCount' by 1
-        const result = await productModel.updateOne(
-            { _id: productId },
-            {
-                $set: { productInStock: updatedStock },
-                $inc: { productSold: productQty, purchaseCount: 1 }
-            }
-        );
-
-        const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, productId: productId, productName: productName,productImage:image, productPrice: productPrice,address:address,orderStatus:'Pending' })
-
-        const updating = await userModel.updateOne(
-            { _id: user_id },
-            {
-                $inc: { purchaseCount: 1 }
-            })
-
-        if (result) {
-            res.status(200).json({ orderid: orderId, address: address });
-
+        if (product.productInStock <= 0) {
+            res.status(404).json({ err: 'Stock out' })
         } else {
-            console.log('not here')
-            return res.status(500).json({ error: 'Failed to update stock' });
+
+            // Calculate the updated stock quantity by subtracting 'productQty'
+            const updatedStock = product.productInStock - productQty;
+
+            // Increment 'productSold' by 'productQty' and 'purchaseCount' by 1
+            const result = await productModel.updateOne(
+                { _id: productId },
+                {
+                    $set: { productInStock: updatedStock },
+                    $inc: { productSold: productQty, purchaseCount: 1 }
+                }
+            );
+
+            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, productId: productId, productName: productName, productImage: image, productPrice: productPrice, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
+
+            const updating = await userModel.updateOne(
+                { _id: user_id },
+                {
+                    $inc: { purchaseCount: 1 }
+                })
+
+            if (result) {
+                res.status(200).json({ orderid: orderId, address: address });
+
+            } else {
+                console.log('not here')
+                return res.status(500).json({ error: 'Failed to update stock' });
+            }
         }
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
@@ -431,12 +437,12 @@ async function viewOrderSuccessPage(req, res) {
     res.render('../views/orderSuccess.ejs')
 }
 
-async function viewOrderItemPage(req,res){
+async function viewOrderItemPage(req, res) {
     const orderId = req.params.oid;
-    const orderedItem = await orderModel.findOne({orderId:orderId})
+    const orderedItem = await orderModel.findOne({ orderId: orderId })
     const userid = orderedItem.userId;
-    const userDetails = await userModel.findOne({_id:userid})
-    res.render('../views/orderedItem.ejs',{order:orderedItem,user:userDetails})
+    const userDetails = await userModel.findOne({ _id: userid })
+    res.render('../views/orderedItem.ejs', { order: orderedItem, user: userDetails })
 }
 
 module.exports = {

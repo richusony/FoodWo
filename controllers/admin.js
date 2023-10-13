@@ -3,6 +3,7 @@ const categoryModel = require('../models/categorySchema');
 const productModel = require('../models/productSchema');
 const { userModel } = require('../models/userSchema')
 const typeModel = require('../models/productTypeSchema')
+const orderModel = require('../models/orderSchema')
 
 
 
@@ -16,8 +17,9 @@ function viewLogInPage(req, res) {
     res.render('../views/Admin/adminLogin')
 }
 
-function viewOrdersPage(req, res) {
-    res.render('../views/Admin/ordersMain');
+async function viewOrdersPage(req, res) {
+    const allOrders = await orderModel.find({}).sort({ updatedAt: 1 })
+    res.render('../views/Admin/ordersMain', { orders: allOrders });
 }
 
 async function adminLogin(req, res) {
@@ -142,7 +144,7 @@ async function addProduct(req, res) {
             productRelatedImages: [...relatedImages],
             purchaseCount: 0,
         });
-    console.log('addingProduct :: ', addingProduct) 
+    console.log('addingProduct :: ', addingProduct)
     res.redirect('/admin/products')
 }
 
@@ -164,7 +166,7 @@ async function updateProducts(req, res) {
     if (mainImage.length == 0 && relatedImages.length == 0) {
         const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock });
         if (updating) {
-            const updatedDetails = await productModel.find({ _id: id }); 
+            const updatedDetails = await productModel.find({ _id: id });
             res.redirect(`/admin/productUpdateDetails/${id}`)
         } else {
             res.status(500).json({ err: "Database is having some issues." })
