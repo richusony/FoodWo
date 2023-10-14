@@ -237,8 +237,13 @@
                         <!-- items -->
                         <% category.forEach((food)=>{ %>
                             <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
-                                <div class="w-full h-36 rounded-2xl"><img onclick="redirectTo('/user/product-details/<%=food._id%>')" class="cursor-pointer w-full h-full rounded-2xl object-cover"
-                                        src="/<%= food.productMainImage %>" alt=""></div>
+                                <div class="w-full h-36 rounded-2xl">
+                                 <% if(food.productInStock <=0){%>
+                            <img onclick="redirectTo('/user/product-details/<%=food._id%>')" class="cursor-pointer grayscale w-full h-full rounded-2xl object-cover" src="/<%= food.productMainImage %>" alt="">
+                                <%}else{%>
+                            <img onclick="redirectTo('/user/product-details/<%=food._id%>')" class="cursor-pointer w-full h-full rounded-2xl object-cover" src="/<%= food.productMainImage %>" alt="">
+                                <%}%>
+                            </div>
                                 <h3 class="font-bold my-1 text-xl">
                                     <%= food.productName %>
                                 </h3>
@@ -257,9 +262,13 @@
                                     </span>
 
                                     <!-- <button type="button" onclick="addToCart(event)" data-userid="<%= userId %>" data-foodid="<%= food._id%>" class=""> -->
+                                    <% if(food.productInStock<=0){%>
+                                            <span class="text-orange-500 font-semibold">Stock Out</span>
+                                            <%}else{%>
                                     <i data-foodid="<%= food._id%>" data-userid="<%= userId %>"
                                         onclick="addToCart(event)"
                                         class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
+                                    <%}%>
                                     <!-- </button> -->
                                 </div>
                             </div>

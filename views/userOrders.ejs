@@ -39,7 +39,7 @@
 <body>
     <%-include('../views/userNavbar.ejs') %>
 
-        <section class="px-5 py-3 h-screen mt-10">
+        <section class="px-5 py-3 min-h-screen mt-10">
             <div class="flex">
                 <!-- Filters -->
                 <div class="hidden md:block h-fit bg-slate-200 w-72 px-3 py-4 rounded mr-3 shadow-md">
@@ -74,7 +74,7 @@
                                         <%=item.productName%>
                                     </span></div>
                                 <div class="w-fit"><span class="hidden md:block md:font-semibold md:text-lg">
-                                        <%=item.productPrice%>
+                                        ₹<%=item.productPrice%>
                                     </span></div>
                                 <div class="w-fit">
                                     <span class="block text-sm">

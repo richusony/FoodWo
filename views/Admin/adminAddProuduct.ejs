@@ -150,7 +150,7 @@
 
                     if (!productName || !description || !productPrice || !productType || !category || !inStock) {
                         event.preventDefault();
-                        window.scrollTo(0,0)
+                        window.scrollTo(0, 0)
                         toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> All fields are required.</span>`;
                         toast.classList.remove("hidden");
                         toast.classList.remove("translate-y-96");
@@ -160,7 +160,7 @@
                         }, 3000)
                     } else if (mainImage.files.length < 1) {
                         event.preventDefault();
-                        window.scrollTo(0,0)
+                        window.scrollTo(0, 0)
                         toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Product Main Image is required.</span>`;
                         toast.classList.remove("hidden");
                         toast.classList.remove("translate-y-96");
@@ -171,7 +171,7 @@
                     }
                     else if (relatedImages.files.length < 1) {
                         event.preventDefault();
-                        window.scrollTo(0,0)
+                        window.scrollTo(0, 0)
                         toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Product Related Images are required.</span>`;
                         toast.classList.remove("hidden");
                         toast.classList.remove("translate-y-96");
@@ -191,46 +191,6 @@
                             inStock: inStock,
                         }
                         console.log('formdata :: ', formData)
-
-                        // const productData = await JSON.stringify(formData);
-                        // try {
-                        //     // Send a POST request to the server using async/await
-                        //     const response = await fetch(`/admin/addproduct`, {
-                        //         method: 'POST',
-                        //         headers: {
-                        //             "Content-Type": "application/json",
-                        //             // 'Content-Type': 'application/x-www-form-urlencoded',
-                        //         },
-                        //         body: productData,
-                        //     });
-                        //     if (!response.ok) {
-                        //         // Handle the case where the server returns an error
-                        //         // throw new Error(`Server responded with status: ${response.status}`);
-                        //         const data = await response.json();
-                        //         console.log("DAta ::  ", data);
-                        //         if (data.failed) {
-                        //             toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.failed}</span>`;
-                        //             toast.classList.remove("hidden");
-                        //             toast.classList.remove("translate-y-96");
-                        //             setTimeout(() => {
-                        //                 toast.classList.add("hidden");
-                        //                 toast.classList.add("translate-y-96");
-                        //             }, 3000);
-                        //         }
-
-                        //     }
-                        //     if (response.ok) {
-                        //         window.location.href = "/admin/products"
-                        //     }
-
-
-
-                        //     // Handle the server's response here (e.g., display a success message or handle errors)
-                        //     // console.log("data from back : ",data);
-                        // } catch (error) {
-                        //     // Handle any network, request, or other errors here
-                        //     console.error(error);
-                        // }
                     }
                 }
 
@@ -304,20 +264,6 @@
                     }
                 });
 
-
-                //                 // Function to display an image preview
-                //                 mainImageInput.addEventListener('change',()=>{
-                //                 function displayImagePreview(file, imgElement,) {
-                //                     if (file) {
-                //                         imgElement.src = URL.createObjectURL(file);
-                //                         imgElement.style.display = 'block';
-                //                     } else {
-                //                         imgElement.src = '#';
-                //                         imgElement.style.display = 'none';
-                //                     }
-                //                 }
-                // displayImagePreview();
-                //                 })
             </script>
 </body>
 
