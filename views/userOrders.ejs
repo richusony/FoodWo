@@ -46,41 +46,68 @@
                     <h2 class="font-bold text-lg">Filters</h2>
                     <div class="">
                         <h3 class="font-semibold my-4">Order Status</h3>
-                            <div><input type="checkbox" name="" id=""> Confirmed </div>
-                            <div><input type="checkbox" name="" id=""> On the way </div>
-                            <div><input type="checkbox" name="" id=""> Delivered </div>
-                            <div><input type="checkbox" name="" id=""> Cancelled </div>
+                        <div><input type="checkbox" name="" id=""> Confirmed </div>
+                        <div><input type="checkbox" name="" id=""> On the way </div>
+                        <div><input type="checkbox" name="" id=""> Delivered </div>
+                        <div><input type="checkbox" name="" id=""> Cancelled </div>
                     </div>
                 </div>
 
                 <!-- Orders -->
                 <div class="w-full px-3">
                     <!-- Order Search -->
-                    <div class="flex rounded"><input class="w-full py-2 rounded-l-md bg-gray-100 px-2 outline-orange-500" placeholder="Search Orders" type="text" name="" id=""><button class="w-52 bg-orange-500 text-white rounded-r-md"><i class="fa-solid fa-search"></i> Search</button></div>
+                    <div class="flex rounded"><input
+                            class="w-full py-2 rounded-l-md bg-gray-100 px-2 outline-orange-500"
+                            placeholder="Search Orders" type="text" name="" id=""><button
+                            class="w-52 bg-orange-500 text-white rounded-r-md"><i class="fa-solid fa-search"></i>
+                            Search</button></div>
 
                     <!-- Order Items -->
                     <div class="lg:px-20 my-2">
                         <% if(orders){ orders.forEach((item)=>{%>
-                        <div class="bg-gray-100 flex justify-evenly cursor-pointer items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md" onclick="redirectTo('/user/order-details/<%=item.orderId%>')">
-                            <div class="mx-1 w-20 h-20 rounded-md"><img class="object-cover rounded-md w-full h-full" src="/<%=item.productImage%>" alt=""></div>
-                            <div class="w-fit"><span class="text-sm md:text-xl"><%=item.productName%></span></div>
-                            <div class="w-fit"><span class="hidden md:block md:font-semibold md:text-lg"><%=item.productPrice%></span></div>
-                            <div class="w-fit">
-                                <span class="block text-sm"><i class="fa-solid text-orange-500 fa-thumbs-up"></i> <%=item.orderStatus%> <%=item.created_at%></span>
-                                <%if(item.orderStatus=="Cancelled" || item.orderStatus=="Delivered"){%>
-                                <span class="block text-gray-500 text-sm">Your item has been <%=item.orderStatus%></span>
-                                <%}else if(item.orderStatus=="Pending"){%>
-                                    <span class="block text-gray-500 text-sm">Your order is Processing</span>
-                                    <%}else if(item.orderStatus=="Confirmed"){%>
-                                        <span class="block text-gray-500 text-sm">Your order is Confirmed</span>
-                                        <%}else{%>
-                                            <span class="block text-gray-500 text-sm">Your order is On the Way</span>
-                                            <%}%>
+                            <div class="bg-gray-100 flex justify-evenly cursor-pointer items-center border-b-2 border-b-gray-100 py-2 my-2 rounded-md"
+                                onclick="redirectTo('/user/order-details/<%=item.orderId%>')">
+                                <div class="mx-1 w-20 h-20 rounded-md"><img
+                                        class="object-cover rounded-md w-full h-full" src="/<%=item.productImage%>"
+                                        alt=""></div>
+                                <div class="w-fit"><span class="text-sm md:text-xl">
+                                        <%=item.productName%>
+                                    </span></div>
+                                <div class="w-fit"><span class="hidden md:block md:font-semibold md:text-lg">
+                                        <%=item.productPrice%>
+                                    </span></div>
+                                <div class="w-fit">
+                                    <span class="block text-sm">
+                                        <% if(item.orderStatus=="Delivered" ){%>
+                                            <i class="fa-solid text-orange-500 fa-thumbs-up"></i>
+                                            <%}else if(item.orderStatus=="Pending" ){%>
+                                                <i class="fa-regular text-orange-500 fa-clock"></i>
+                                                <% }else if(item.orderStatus=="Confirmed" ){%>
+                                                    <i class="fa-regular text-orange-500 fa-square-check"></i>
+                                                    <% }else if(item.orderStatus=="Cancelled" ){%>
+                                                        <i class="fa-solid text-orange-500 fa-xmark"></i>
+                                                        <%}else{%>
+                                                            <i class="fa-solid text-orange-500 fa-truck"></i>
+                                                            <%}%>
+                                                                <%=item.orderStatus%>
+                                                                    <%=item.created_at%>
+                                    </span>
+                                    <%if(item.orderStatus=="Cancelled" || item.orderStatus=="Delivered" ){%>
+                                        <span class="block text-gray-500 text-sm">Your item has been
+                                            <%=item.orderStatus%></span>
+                                        <%}else if(item.orderStatus=="Pending" ){%>
+                                            <span class="block text-gray-500 text-sm">Your order is Processing</span>
+                                            <%}else if(item.orderStatus=="Confirmed" ){%>
+                                                <span class="block text-gray-500 text-sm">Your order is Confirmed</span>
+                                                <%}else{%>
+                                                    <span class="block text-gray-500 text-sm">Your order is On the
+                                                        Way</span>
+                                                    <%}%>
 
+                                </div>
                             </div>
-                        </div>
-                        <%})}%>
-                       
+                            <%})}%>
+
                     </div>
                 </div>
             </div>
@@ -89,11 +116,11 @@
 
         <%-include('../views/userFooter.ejs') %>
 
-        <script>
-            function redirectTo(url){
-                window.location.href=url;
-            }
-        </script>
+            <script>
+                function redirectTo(url) {
+                    window.location.href = url;
+                }
+            </script>
 </body>
 
 </html>
