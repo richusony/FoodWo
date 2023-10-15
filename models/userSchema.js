@@ -16,17 +16,15 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    address: {
-        type: Array,
-        validate: {
-            validator: function (addresses) {
-                // Define the maximum number of addresses allowed (e.g., 3)
-                const maxAddresses = 3;
-                return addresses.length <= maxAddresses;
-            },
-            message: 'You can only add up to 3 addresses.'
-        },
+    address1: {
+        type:String,
         required: true
+    },
+    address2: {
+        type:String,
+    },
+    address3: {
+        type:String,
     },
     password: {
         type: String,

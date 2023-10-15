@@ -39,94 +39,95 @@
 <body>
     <%-include('../views/userNavbar.ejs') %>
         <section class="px-5 py-2">
-            <% if(userData){ %>
+            <%  let address2; %>
+            <%  let address3; %>
+            <% if(userData.address2 !==""){ address2=true}else{ address2=false;}%>
+            <% if(userData.address3 !==""){ address3=true}else{ address3=false;}%>
+                <% if(userData){ %>
+                    <div class="my-4 mx-auto">
+                        <form action="/user/userProfile/<%=userData._id%>" method="post" enctype="multipart/form-data">
 
+                            <label for="doc"
+                                class="w-40 h-40 rounded-full mx-auto my-5 bg-orange-100 text-center flex flex-col justify-center items-centerd cursor-pointer">
+                                <img src="/<%=userData.image%>"
+                                    class="w-full h-full <% if(userData.image){%>block <% }else{%> hidden <%  }%>  rounded-full object-cover"
+                                    alt="" id="imagetag">
+                                <div class="text-orange-500 text-5xl <% if(userData.image){%>hidden <% }else{%> block <%  }%> "
+                                    id="userIcon"><i class="<%=userData.image%>?block:hidden fa-regular fa-user"></i>
+                                </div>
+                                <input type="file" name="image" accept="image/jpeg," placeholder="upload profile"
+                                    id="doc" class="" hidden>
+                                <!-- <span id="uploadtext">Upload Profile</span> -->
+                            </label>
+                            <div class="bg-orange-500 md:w-1/2 mx-auto py-5 px-5 rounded-xl  font-semibold">
 
-
-
-
-                <!-- <div class="transition delay-1000 text-center py-3 my-5">
-                    <div class="w-32 h-32 mx-auto"><img id="image"
-                            class="shadow-2xl object-cover w-full h-full rounded-full" src=""
-                            alt="userData"></div>
-                </div> -->
-
-                <div class="my-4 mx-auto">
-                    <form action="/user/userProfile/<%=userData._id%>" method="post" enctype="multipart/form-data">
-
-                        <label for="doc"
-                            class="w-40 h-40 rounded-full mx-auto my-5 bg-orange-100 text-center flex flex-col justify-center items-centerd cursor-pointer">
-                            <img src="/<%=userData.image%>"
-                                class="w-full h-full <% if(userData.image){%>block <% }else{%> hidden <%  }%>  rounded-full object-cover"
-                                alt="" id="imagetag">
-                            <div class="text-orange-500 text-5xl <% if(userData.image){%>hidden <% }else{%> block <%  }%> "
-                                id="userIcon"><i class="<%=userData.image%>?block:hidden fa-regular fa-user"></i></div>
-                            <input type="file" name="image" accept="image/jpeg," placeholder="upload profile" id="doc"
-                                class="" hidden>
-                            <!-- <span id="uploadtext">Upload Profile</span> -->
-                        </label>
-                        <div class="bg-orange-500 md:w-1/2 mx-auto py-5 px-5 rounded-xl  font-semibold">
-
-                            <div class="flex flex-col my-2">
-                                <label class="text-white" for="fullname">Full Name</label>
-                                <input type="text" name="fullname" id="fullname" value="<%=userData.fullname%>"
-                                    class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2">
-                            </div>
-
-                            <div class="flex flex-col my-2">
-                                <label class="text-white" for="email">Email</label>
-                                <input type="email" name="email" id="email" value="<%=userData.email%>"
-                                    class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2">
-                            </div>
-
-                            <div class="flex flex-col my-2">
-                                <label class="text-white" for="fullname">Phone Number</label>
-                                <input type="tel" maxlength="10" name="phone" id="phone" value="<%=userData.phone%>"
-                                    class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2">
-                            </div>
-
-                            <div class="flex flex-col" id="addContainer">
-                                <% let oldIndex = userData.address.length %>
-                                <% let newIndex = userData.address.length %>
-                                <%userData.address.forEach((address,index)=>{%>
                                 <div class="flex flex-col my-2">
-                                    <label class="text-white" for="address">Address <%=index+1%></label>
-                                    <textarea name="<%=`address${index}`%>" id="<%=`address${index}`%>" cols="30" rows="5" value=""
-                                        class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><%=userData.address%></textarea>
+                                    <label class="text-white" for="fullname">Full Name</label>
+                                    <input type="text" name="fullname" id="fullname" value="<%=userData.fullname%>"
+                                        class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2">
                                 </div>
-                                <% })%>
-                                <div class="hidden flex flex-col my-2" id="<%=`newAddContainer${++newIndex}`%>">
-                                    <label class="text-white" for="address">Address <%= newIndex%></label>
-                                    <textarea name="<%=`address${newIndex}`%>" id="<%=`address${newIndex}`%>" cols="30" rows="5" value=""
-                                        class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"></textarea>
+
+                                <div class="flex flex-col my-2">
+                                    <label class="text-white" for="email">Email</label>
+                                    <input type="email" name="email" id="email" value="<%=userData.email%>"
+                                        class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2">
                                 </div>
-                                <div class="hidden flex flex-col my-2" id="<%=`newAddContainer${++newIndex}`%>">
-                                    <label class="text-white" for="address">Address <%= newIndex%></label>
-                                    <textarea name="<%=`address${newIndex}`%>" id="<%=`address${newIndex}`%>" cols="30" rows="5" value=""
-                                        class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"></textarea>
+
+                                <div class="flex flex-col my-2">
+                                    <label class="text-white" for="fullname">Phone Number</label>
+                                    <input type="tel" maxlength="10" name="phone" id="phone" value="<%=userData.phone%>"
+                                        class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2">
                                 </div>
-                                <div id="addressBtn" class="w-full text-right <% if(userData.address.length>=3){'hidden'}else{'block'} %>"><button class="text-white hover:text-slate-200" onclick="newAddress(event)">new address</button></div>
+
+                                <div class="flex flex-col" id="addContainer">
+                                                <div class="flex flex-col my-2">
+                                                    <label class="text-white" for="address">Address 1</label>
+                                                    <textarea name=""
+                                                        id="" cols="30" rows="5" value=""
+                                                        class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><%=userData.address1%></textarea>
+                                                </div>
+                                              
+                                                    <div class='<% if(userData.address2 !=""){%> block <%}else{%>hidden <%} %> flex flex-col my-2'
+                                                        id="newAddContainer2">
+                                                        <label class="text-white" for="address">Address 2
+                                                                </label>
+                                                        <textarea name="address2"
+                                                            id="address2" cols="30" rows="5" value=""
+                                                            class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><%=userData.address2%></textarea>
+                                                    </div>
+                                                    <div class='<% if(userData.address3 !=""){%> block <%}else{%>hidden <%} %> flex flex-col my-2'
+                                                        id="newAddContainer3">
+                                                        <label class="text-white" for="address">Address 3
+                                                                </label>
+                                                        <textarea name="address3"
+                                                            id="address3" cols="30" rows="5" value=""
+                                                            class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><%=userData.address3%></textarea>
+                                                    </div>
+                                                    <div id="addressBtn"
+                                                        class="w-full text-right">
+                                                        <button class="text-white hover:text-slate-200"
+                                                            onclick="newAddress(event)">new address</button></div>
+                                </div>
+                                <input type="text" name="userid" value="<%=userData._id%>" hidden>
+
+                                <div class="text-center my-4"><button type="submit" onclick="userProfileUpdate(event)"
+                                        class="bg-white text-orange-500 py-2 px-3 rounded mx-auto">Update</button></div>
                             </div>
-                            <input type="text" name="userid" value="<%=userData._id%>" hidden>
+                        </form>
+                    </div>
+                    <div id="toast"
+                        class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+                    </div>
+                    <% } %>
 
-                            <div class="text-center my-4"><button type="submit" onclick="userProfileUpdate(event)"
-                                    class="bg-white text-orange-500 py-2 px-3 rounded mx-auto">Update</button></div>
+                        <div class="w-full py-3 px-4 bg-slate-200 rounded my-2">
+                            <a class="font-bold text-lg cursor-pointer text-orange-400 hover:text-orange-500"
+                                onclick="redirectToOrders()">Your Orders</a>
                         </div>
-                    </form>
-                </div>
-                <div id="toast"
-                    class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
-                </div>
-                <% } %>
-
-                    <div class="w-full py-3 px-4 bg-slate-200 rounded my-2">
-                        <a class="font-bold text-lg cursor-pointer text-orange-400 hover:text-orange-500"
-                            onclick="redirectToOrders()">Your Orders</a>
-                    </div>
-                    <div class="w-full py-3 px-4 bg-slate-200 rounded my-2">
-                        <a class="font-bold text-xl cursor-pointer text-orange-400 hover:text-orange-500"
-                            onclick="logoutUser(event)">Logout <i class="fa-solid fa-power-off"></i></a>
-                    </div>
+                        <div class="w-full py-3 px-4 bg-slate-200 rounded my-2">
+                            <a class="font-bold text-xl cursor-pointer text-orange-400 hover:text-orange-500"
+                                onclick="logoutUser(event)">Logout <i class="fa-solid fa-power-off"></i></a>
+                        </div>
         </section>
         <%-include('../views/userFooter.ejs') %>
 
@@ -213,7 +214,7 @@
                     }
                     // console.log(userdata)
                 }
-          
+
 
                 function logoutUser(event) {
                     window.location.href = '/user/logout';
@@ -224,24 +225,32 @@
                     window.location.href = `/user/my-orders/${sessionStorage.getItem('user_id')}`;
                 }
 
-                function newAddress(event){
-                    event.preventDefault();
-                    const addContainer=document.getElementById('addContainer');
-                    const newAddContainer2=document.getElementById('newAddContainer2');
-                    const newAddContainer3=document.getElementById('newAddContainer3');
-                    const addressBtn=document.getElementById('addressBtn');
+                let address3 = '<%=address3%>';
+                let address2 = '<%=address2%>';
+                console.log(address2,address3)
+                address2 = address2=='true'?true:false;
+                address3 = address3=='true'?true:false;
+                const addressBtn = document.getElementById('addressBtn');
 
-                    if(!newAddContainer3.classList.contains('hidden')){
+                if (address3) {
+                    addressBtn.classList.add('hidden');
+                }
+                function newAddress(event) {
+                    event.preventDefault();
+                    const addContainer = document.getElementById('addContainer');
+                    const newAddContainer2 = document.getElementById(`newAddContainer2`);
+                    const newAddContainer3 = document.getElementById(`newAddContainer3`);
+
+                    if (address2 || !newAddContainer2.classList.contains('hidden') && newAddContainer3.classList.contains('hidden')) {
+                        console.log('got it')
+                        newAddContainer3.classList.remove('hidden')
                         addressBtn.classList.add('hidden');
-                        return;
                     }
-                    
-                    if(!newAddContainer2.classList.contains('hidden')){
-                        newAddContainer3.classList.remove('hidden');
-                        addressBtn.classList.add('hidden');
-                    }else{
-                        newAddContainer2.classList.remove('hidden');
+
+                    if(!address2 && !address3 && newAddContainer2.classList.contains('hidden') && newAddContainer3.classList.contains('hidden')){
+                        newAddContainer2.classList.remove('hidden')
                     }
+
                 }
             </script>
 
