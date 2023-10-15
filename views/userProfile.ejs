@@ -85,10 +85,27 @@
                                     class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2">
                             </div>
 
-                            <div class="flex flex-col my-2">
-                                <label class="text-white" for="address">Address</label>
-                                <textarea name="address" id="address" cols="30" rows="5" value=""
-                                    class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><%=userData.address%></textarea>
+                            <div class="flex flex-col" id="addContainer">
+                                <% let oldIndex = userData.address.length %>
+                                <% let newIndex = userData.address.length %>
+                                <%userData.address.forEach((address,index)=>{%>
+                                <div class="flex flex-col my-2">
+                                    <label class="text-white" for="address">Address <%=index+1%></label>
+                                    <textarea name="<%=`address${index}`%>" id="<%=`address${index}`%>" cols="30" rows="5" value=""
+                                        class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><%=userData.address%></textarea>
+                                </div>
+                                <% })%>
+                                <div class="hidden flex flex-col my-2" id="<%=`newAddContainer${++newIndex}`%>">
+                                    <label class="text-white" for="address">Address <%= newIndex%></label>
+                                    <textarea name="<%=`address${newIndex}`%>" id="<%=`address${newIndex}`%>" cols="30" rows="5" value=""
+                                        class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"></textarea>
+                                </div>
+                                <div class="hidden flex flex-col my-2" id="<%=`newAddContainer${++newIndex}`%>">
+                                    <label class="text-white" for="address">Address <%= newIndex%></label>
+                                    <textarea name="<%=`address${newIndex}`%>" id="<%=`address${newIndex}`%>" cols="30" rows="5" value=""
+                                        class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"></textarea>
+                                </div>
+                                <div id="addressBtn" class="w-full text-right <% if(userData.address.length>=3){'hidden'}else{'block'} %>"><button class="text-white hover:text-slate-200" onclick="newAddress(event)">new address</button></div>
                             </div>
                             <input type="text" name="userid" value="<%=userData._id%>" hidden>
 
@@ -102,12 +119,14 @@
                 </div>
                 <% } %>
 
-                <div class="w-full py-3 px-4 bg-slate-200 rounded my-2">
-                    <a class="font-bold text-lg cursor-pointer text-orange-400 hover:text-orange-500" onclick="redirectToOrders()">Your Orders</a>
-                </div>
-                <div class="w-full py-3 px-4 bg-slate-200 rounded my-2">
-                    <a class="font-bold text-xl cursor-pointer text-orange-400 hover:text-orange-500" onclick="logoutUser(event)">Logout <i class="fa-solid fa-power-off"></i></a>
-                </div>
+                    <div class="w-full py-3 px-4 bg-slate-200 rounded my-2">
+                        <a class="font-bold text-lg cursor-pointer text-orange-400 hover:text-orange-500"
+                            onclick="redirectToOrders()">Your Orders</a>
+                    </div>
+                    <div class="w-full py-3 px-4 bg-slate-200 rounded my-2">
+                        <a class="font-bold text-xl cursor-pointer text-orange-400 hover:text-orange-500"
+                            onclick="logoutUser(event)">Logout <i class="fa-solid fa-power-off"></i></a>
+                    </div>
         </section>
         <%-include('../views/userFooter.ejs') %>
 
@@ -194,49 +213,36 @@
                     }
                     // console.log(userdata)
                 }
-                //         const reqData = await JSON.stringify(userdata);
-                //         toast.innerHTML = `<span id="toastMessage" class="text-sm">Loading...</span>`;
-                //         toast.classList.remove("opacity-0");
-                //         toast.classList.remove("-translate-x-full");
+          
 
-                // //         const response = await fetch('/user/userProfile/', {
-                // //             method: 'PATCH',
-                //             headers: {
-                //                 'Content-Type': "application/json",
-                //             },
-                //             body: reqData
-                //         })
-
-                //         if (response.ok) {
-                //             toast.innerHTML = `<span id="toastMessage" class="text-sm">Details updated</span>`;
-                //             toast.classList.remove("opacity-0");
-                //             toast.classList.remove("-translate-x-full");
-                //             setTimeout(() => {
-                //                 toast.classList.add("opacity-0");
-                //                 toast.classList.add("-translate-x-full");
-                //             }, 3000);
-                //         } else {
-                //             toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i>Couldn't update</span>`;
-                //             toast.classList.remove("opacity-0");
-                //             toast.classList.remove("-translate-x-full");
-                //             setTimeout(() => {
-                //                 toast.classList.add("opacity-0");
-                //                 toast.classList.add("-translate-x-full");
-                //             }, 3000);
-                //         }
-
-                //     }
-                // }
-
-                function logoutUser(event){
-                    window.location.href='/user/logout';
+                function logoutUser(event) {
+                    window.location.href = '/user/logout';
                     sessionStorage.clear()
                 }
 
-                function redirectToOrders(){
-                    window.location.href=`/user/my-orders/${sessionStorage.getItem('user_id')}`;
+                function redirectToOrders() {
+                    window.location.href = `/user/my-orders/${sessionStorage.getItem('user_id')}`;
                 }
 
+                function newAddress(event){
+                    event.preventDefault();
+                    const addContainer=document.getElementById('addContainer');
+                    const newAddContainer2=document.getElementById('newAddContainer2');
+                    const newAddContainer3=document.getElementById('newAddContainer3');
+                    const addressBtn=document.getElementById('addressBtn');
+
+                    if(!newAddContainer3.classList.contains('hidden')){
+                        addressBtn.classList.add('hidden');
+                        return;
+                    }
+                    
+                    if(!newAddContainer2.classList.contains('hidden')){
+                        newAddContainer3.classList.remove('hidden');
+                        addressBtn.classList.add('hidden');
+                    }else{
+                        newAddContainer2.classList.remove('hidden');
+                    }
+                }
             </script>
 
 </body>

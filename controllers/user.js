@@ -323,16 +323,28 @@ async function viewUserProfile(req, res) {
 }
 
 async function updateUserProfile(req, res) {
-    const { userid, fullname, email, phone, address } = req.body;
+    const { userid, fullname, email, phone, address1, address2, address3 } = req.body;
     const image = req.file?.path;
-    const updating = await userModel.updateOne({ _id: userid }, { fullname: fullname, email: email, phone: phone, address: address, image: image })
-    if (updating) {
-        res.status(200)
-    } else {
-        res.status(503).json({ err: "Couldn't update the new details." })
-    }
 
+    // Create an array to store the address components, filtering out any falsy values
+    console.log('before : ',address1,address2,address3)
+    const addressComponents = [address1, address2, address3].filter(Boolean);
+    console.log('after : ',address1,address2,address3)
+    const updating = await userModel.updateOne({ _id: userid }, {
+        fullname,
+        email,
+        phone,
+        $push: { address: { $each: addressComponents } },
+        image
+    });
+
+    if (updating) {
+        res.status(200).json({ message: "Profile updated successfully" });
+    } else {
+        res.status(503).json({ error: "Couldn't update the user profile" });
+    }
 }
+
 
 
 

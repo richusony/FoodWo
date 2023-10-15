@@ -43,9 +43,6 @@ router.route('/newpassword')
 router.route('/wishlist/')
 .get(viewWishlistPage)  
 
-router.route('/userProfile/:id')
-.get(viewUserProfile)
-.post(upload.single('image'),updateUserProfile)
 
 router.route('/product-details/:id')
 .get(viewProductDetailsPage)
@@ -55,6 +52,10 @@ router.use(userAuth)
 
 // Checking wether User is Blocked or Not
 router.use(isBlocked)
+
+router.route('/userProfile/:id')
+.get(viewUserProfile)
+.post(upload.single('image'),updateUserProfile)
 
 router.route('/cart/:id')
 .get(viewCartPage)
