@@ -470,6 +470,34 @@ async function updateUserProfile(req, res) {
 
 }
 
+async function addNewAddress(req,res){
+    const {uid,aid} = req.params;
+    const newaddress= req.body.address;
+
+    if(aid==1){
+        const updating = await userModel.updateOne({_id:uid},{address1:newaddress})
+        if(updating){
+            res.status(200).json({updated:true})
+        }else{
+            res.status(500).json({updated:false})
+        }
+    }else if(aid==2){
+        const updating = await userModel.updateOne({_id:uid},{address2:newaddress})
+         if(updating){
+                res.status(200).json({updated:true})
+            }else{
+                res.status(500).json({updated:false})
+            }
+    }else{
+        const updating = await userModel.updateOne({_id:uid},{address3:newaddress})
+         if(updating){
+                res.status(200).json({updated:true})
+            }else{
+                res.status(500).json({updated:false})
+            }
+    }
+}
+
 
 async function updateUserAddress(req,res){
     const {uid,aid} = req.params;
@@ -481,7 +509,7 @@ async function updateUserAddress(req,res){
     console.log(newaddress)
     if(aid==1){
         if(newaddress ===""){
-            const updating = await userModel.updateOne({_id:uid},{address1:false,address2:oldAddress3,address3:false})
+            const updating = await userModel.updateOne({_id:uid},{address1:oldAddress2,address2:oldAddress3,address3:false})
             if(updating){
                 res.status(200).json({updated:true})
             }else{
@@ -682,5 +710,6 @@ module.exports = {
     viewOrderSuccessPage,
     viewOrderItemPage,
     cancelOrder,
-    updateUserAddress
+    updateUserAddress,
+    addNewAddress
 }
