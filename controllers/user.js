@@ -127,9 +127,9 @@ function otpVerification(req, res) {
             fullname,
             email,
             phone,
-            address1:address,
-            address2:null,
-            address3:null,
+            address1: address,
+            address2: null,
+            address3: null,
             password: hashedPassword,
             image: baseImage,
             blocked: false,
@@ -327,23 +327,148 @@ async function viewUserProfile(req, res) {
 async function updateUserProfile(req, res) {
     const { userid, fullname, email, phone, address1, address2, address3 } = req.body;
     const image = req.file?.path;
-    
-    const updating = await userModel.updateOne({ _id: userid }, {
-        fullname,
-        email,
-        phone,
-        address1,
-        address2,
-        address3,
-        image
-    }
-    );
+    console.log("\n" + address1==="" + "\n" + address2==="" + "\n" + address3==="")
 
-    if (updating) {
-        res.status(200).json({ message: "Profile updated successfully" });
-    } else {
-        return res.status(400).json({ error: "Address limit reached" });
+    if (!address1 && !address3) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address2,
+            address2: null,
+            address3: null,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    } else if (!address2 && !address3) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address1,
+            address2: null,
+            address3: null,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    } else if (!address1 && !address2) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address3,
+            address2: null,
+            address3: null,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
     }
+    else if (!address1) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address2,
+            address2: address3,
+            address3: null,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    } else if (!address2) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address1,
+            address2: address3,
+            address3: null,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    } else if (!address3) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address1,
+            address2: address2,
+            address3: null,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    } else if (!address3) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address2,
+            address2: address2,
+            address3: null,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    }
+    else {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1,
+            address2,
+            address3,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    }
+
 }
 
 

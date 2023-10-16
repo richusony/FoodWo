@@ -82,8 +82,8 @@
                                 <div class="flex flex-col" id="addContainer">
                                                 <div class="flex flex-col my-2">
                                                     <label class="text-white" for="address">Address 1</label>
-                                                    <textarea name=""
-                                                        id="" cols="30" rows="5" value=""
+                                                    <textarea name="address1"
+                                                        id="address" cols="30" rows="5" value=""
                                                         class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><%=userData.address1%></textarea>
                                                 </div>
                                               
@@ -159,10 +159,13 @@
 
                 const toast = document.getElementById('toast');
                 async function userProfileUpdate(event) {
+                    
                     const fullname = document.getElementById('fullname').value;
                     const email = document.getElementById('email').value;
                     const phone = document.getElementById('phone').value;
                     const address = document.getElementById('address').value;
+                    const addressTwo = document.getElementById('address2').value;
+                    const addressThree = document.getElementById('address3').value;
                     // const image = document.getElementById('imagetag').src;
 
                     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -170,7 +173,8 @@
                     // Check if the email address matches the regular expression
                     const isEmailValid = emailRegex.test(email);
 
-                    if (!fullname || !email || !phone || !address) {
+                    if (!fullname || !email || !phone) {
+                        event.preventDefault();
                         toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> All fields are required.</span>`;
                         toast.classList.remove("opacity-0");
                         toast.classList.remove("-translate-x-full");
@@ -180,6 +184,7 @@
                         }, 3000)
                     }
                     else if (!isEmailValid) {
+                        event.preventDefault();
                         toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Please enter a valid email address.</span>`;
                         toast.classList.remove("opacity-0");
                         toast.classList.remove("-translate-x-full");
@@ -189,7 +194,17 @@
                         }, 3000);
                     }
                     else if (phone.length < 10) {
+                        event.preventDefault();
                         toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Please enter a valid phone number</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000);
+                    }else if(!address&&!addressTwo&&!addressThree){
+                        event.preventDefault();
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Please add atleast one address.</span>`;
                         toast.classList.remove("opacity-0");
                         toast.classList.remove("-translate-x-full");
                         setTimeout(() => {
@@ -207,7 +222,6 @@
                         // }
                         console.log('all ok')
                         setTimeout(() => {
-                            event.preventDefault();
                             window.location.reload();
                         }, 3000);
 
