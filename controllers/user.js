@@ -127,7 +127,9 @@ function otpVerification(req, res) {
             fullname,
             email,
             phone,
-            address,
+            address1:address,
+            address2:null,
+            address3:null,
             password: hashedPassword,
             image: baseImage,
             blocked: false,
@@ -323,21 +325,33 @@ async function viewUserProfile(req, res) {
 }
 
 async function updateUserProfile(req, res) {
-    const { userid, fullname, email, phone, address } = req.body;
+    const { userid, fullname, email, phone, address1, address2, address3 } = req.body;
     const image = req.file?.path;
-    const updating = await userModel.updateOne({ _id: userid }, { fullname: fullname, email: email, phone: phone, address: address, image: image })
-    if (updating) {
-        res.status(200)
-    } else {
-        res.status(503).json({ err: "Couldn't update the new details." })
+    
+    const updating = await userModel.updateOne({ _id: userid }, {
+        fullname,
+        email,
+        phone,
+        address1,
+        address2,
+        address3,
+        image
     }
+    );
 
+    if (updating) {
+        res.status(200).json({ message: "Profile updated successfully" });
+    } else {
+        return res.status(400).json({ error: "Address limit reached" });
+    }
 }
 
 
 
+
+
 async function updateStock(req, res) {
-    const { user_id, productId, productName, image,customerName,  productPrice, paymentMethod, productQty, address } = req.body;
+    const { user_id, productId, productName, image, customerName, productPrice, paymentMethod, productQty, address } = req.body;
     console.log(user_id, productId, productQty);
 
     function generateOrderID() {
@@ -378,7 +392,7 @@ async function updateStock(req, res) {
                 }
             );
 
-            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id,customerName:customerName, productId: productId, productName: productName, productImage: image, productPrice: productPrice, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
+            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, customerName: customerName, productId: productId, productName: productName, productImage: image, productPrice: productPrice, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
 
             const updating = await userModel.updateOne(
                 { _id: user_id },
@@ -448,13 +462,13 @@ async function viewOrderItemPage(req, res) {
 }
 
 
-async function cancelOrder(req,res){
+async function cancelOrder(req, res) {
     const orderId = req.params.oid;
 
-    if(orderId){
-        const updating = await orderModel.updateOne({orderId:orderId},{orderStatus:"Cancelled"})
-        if(updating){
-            res.status(200).json({updated:true})
+    if (orderId) {
+        const updating = await orderModel.updateOne({ orderId: orderId }, { orderStatus: "Cancelled" })
+        if (updating) {
+            res.status(200).json({ updated: true })
         }
     }
 }

@@ -1,44 +1,56 @@
 const mongoose = require('mongoose');
 const moment = require('moment');
+
 const userSchema = new mongoose.Schema({
-    fullname:{
+    fullname: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    phone: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    address1: {
         type:String,
-        required:true
+        required: true
     },
-    email:{
+    address2: {
         type:String,
-        required:true,
-        unique:true
     },
-    phone:{
-        type:Number,
-        required:true,
-        unique:true
-    },
-    address:{
+    address3: {
         type:String,
-        required:true
     },
-    password:{
-        type:String,
-        required:true,
+    password: {
+        type: String,
+        required: true,
     },
-    image:{
-        type:String
+    image: {
+        type: String
     },
-    blocked:{
-        type:Boolean,
-        required:true
+    blocked: {
+        type: Boolean,
+        required: true
     },
-    purchaseCount:{
-        type:Number,
-        required:true
+    purchaseCount: {
+        type: Number,
+        required: true
     },
-    created_at: { type: String, default: () => { return moment(new Date()).format('DD/MM/YYYY') }}
-})
+    created_at: {
+        type: String,
+        default: () => {
+            return moment(new Date()).format('DD/MM/YYYY')
+        }
+    }
+});
 
-const userModel = mongoose.model('User',userSchema);
+const userModel = mongoose.model('User', userSchema);
 
-module.exports={
+module.exports = {
     userModel,
 }
