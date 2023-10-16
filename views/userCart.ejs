@@ -147,49 +147,58 @@
                                 <div class="px-3 my-3">
                                     <h3 class="font-bold">Shipping to :</h3>
                                     <div id="addContainer">
-                                        <span>
-                                            <div class="flex my-2">
-                                                <input type="checkbox" name="" id="" class="mx-2">
-                                                <span id="currentAdd1">
-                                                    <%=userData[0].address1%>
-                                                </span>
-                                            </div>
-                                        </span>
-                                        <div class="text-end"><span class="cursor-pointer" id="editAdd1" data-id="1"
-                                                onclick="editAddress(event)">edit address</span></div>
-                                        <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd1" data-id="1"
-                                                onclick="saveAddress(event)">save address</span></div>
-                                            <%if(userData[0].address2 !=="false"){%>
-                                                <span>
-                                                    <div class="flex my-2">
-                                                        <input type="checkbox" name="" id="" class="mx-2">
-                                                        <span id="currentAdd2">
-                                                            <%=userData[0].address2%>
-                                                        </span>
+                                        <%if(userData[0].address1 !=="false" ){%>
+                                            <span>
+                                                <div class="flex my-2 text-sm w-80">
+                                                    <input type="checkbox" name="" id="" class="mx-2">
+                                                    <span id="currentAdd1">
+                                                        <%=userData[0].address1%>
+                                                    </span>
+                                                </div>
+                                            </span>
+
+                                            <div class="text-end"><span class="cursor-pointer" id="editAdd1" data-id="1"
+                                                    onclick="editAddress(event)">edit address</span></div>
+                                            <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd1"
+                                                    data-id="1" onclick="saveAddress(event)">save address</span></div>
+                                            <%}%>
+                                                <%if(userData[0].address2 !=="false" ){%>
+                                                    <span>
+                                                        <div class="flex my-2 text-sm w-80">
+                                                            <input type="checkbox" name="" id="" class="mx-2">
+                                                            <span id="currentAdd2">
+                                                                <%=userData[0].address2%>
+                                                            </span>
+                                                        </div>
+                                                    </span>
+                                                    <div class="text-end"><span class="cursor-pointer" id="editAdd2"
+                                                            data-id="2" onclick="editAddress(event)">edit address</span>
                                                     </div>
-                                                </span>
-                                                <div class="text-end"><span class="cursor-pointer" id="editAdd2" data-id="2"
-                                                        onclick="editAddress(event)">edit address</span></div>
-                                                <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd2" data-id="2"
-                                                        onclick="saveAddress(event)">save address</span></div>
+                                                    <div class="text-end"><span class="cursor-pointer hidden"
+                                                            id="saveAdd2" data-id="2" onclick="saveAddress(event)">save
+                                                            address</span></div>
 
-                                                        <%}%>
+                                                    <%}%>
 
-                                                        <%if(userData[0].address3 !=="false"){%>
+                                                        <%if(userData[0].address3 !=="false" ){%>
                                                             <span>
-                                                                <div class="flex my-2">
+                                                                <div class="flex my-2 text-sm w-80">
                                                                     <input type="checkbox" name="" id="" class="mx-2">
                                                                     <span id="currentAdd3">
                                                                         <%=userData[0].address3%>
                                                                     </span>
                                                                 </div>
                                                             </span>
-                                                            <div class="text-end"><span class="cursor-pointer" data-id="3" id="editAdd3"
-                                                                    onclick="editAddress(event)">edit address</span></div>
-                                                            <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd3" data-id="3"
-                                                                    onclick="saveAddress(event)">save address</span></div>
-            
-                                                                    <%}%>
+                                                            <div class="text-end"><span class="cursor-pointer"
+                                                                    data-id="3" id="editAdd3"
+                                                                    onclick="editAddress(event)">edit address</span>
+                                                            </div>
+                                                            <div class="text-end"><span class="cursor-pointer hidden"
+                                                                    id="saveAdd3" data-id="3"
+                                                                    onclick="saveAddress(event)">save address</span>
+                                                            </div>
+
+                                                            <%}%>
                                     </div>
                                     <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd1" cols=""
                                         rows="4"></textarea>
@@ -357,7 +366,7 @@
 
                 function editAddress(event) {
                     event.preventDefault();
-                    const id=event.target.dataset.id;
+                    const id = event.target.dataset.id;
                     const currentAdd = document.getElementById(`currentAdd${id}`)
                     const newAdd = document.getElementById(`newAdd${id}`)
                     const saveAdd = document.getElementById(`saveAdd${id}`)
@@ -368,46 +377,48 @@
                     saveAdd.classList.remove('hidden')
 
                 }
-               async function saveAddress(event) {
-                event.preventDefault();
-                    const id=event.target.dataset.id;
+                async function saveAddress(event) {
+                    event.preventDefault();
+                    const id = event.target.dataset.id;
                     const currentAdd = document.getElementById(`currentAdd${id}`)
                     const newAdd = document.getElementById(`newAdd${id}`)
                     const editAdd = document.getElementById(`editAdd${id}`)
                     currentAdd.innerText = newAdd.value;
                     currentAdd.innerText = currentAdd.innerText.trim();
-                    const userid=sessionStorage.getItem('user_id');
-                    const newaddress={
-                    "address":currentAdd,
+                    const userid = sessionStorage.getItem('user_id');
+                    const newaddress = {
+                        address: currentAdd.innerText,
                     }
-                    
-                    const saveAddressToDB = await fetch(`/user/save-address/${userid}/${id}`,{
-                        method:'PATCH',
-                        headers:{
-                            'Content-Type':"application/json"
+                    const address = JSON.stringify(newaddress)
+                    const saveAddressToDB = await fetch(`/user/save-address/${userid}/${id}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': "application/json"
                         },
-                        body:newaddress
+                        body: address
                     })
-                    if(saveAddressToDB.ok){
+
+                    if (saveAddressToDB.ok) {
                         const res = await saveAddressToDB.json();
-                        if(res.updated){
+                        if (res.updated) {
                             alertMsg.innerHTML = `<i class="fa-solid fa-check text-xl"></i> Address updated`;
-                        alertBox.classList.remove('-translate-x-full')
-                        alertBox.classList.remove('opacity-0')
-                        window.scrollTo(0, 0)
-                        setTimeout(() => {
-                            alertBox.classList.add('-translate-x-full')
-                            alertBox.classList.add('opacity-0')
-                        }, 3000)
-                        }else{
+                            alertBox.classList.remove('-translate-x-full')
+                            alertBox.classList.remove('opacity-0')
+                            window.scrollTo(0, 0)
+                            setTimeout(() => {
+                                alertBox.classList.add('-translate-x-full')
+                                alertBox.classList.add('opacity-0')
+                                window.location.reload();
+                            }, 3000)
+                        } else {
                             alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Something went wrong.Please try again.`;
-                        alertBox.classList.remove('-translate-x-full')
-                        alertBox.classList.remove('opacity-0')
-                        window.scrollTo(0, 0)
-                        setTimeout(() => {
-                            alertBox.classList.add('-translate-x-full')
-                            alertBox.classList.add('opacity-0')
-                        }, 3000)
+                            alertBox.classList.remove('-translate-x-full')
+                            alertBox.classList.remove('opacity-0')
+                            window.scrollTo(0, 0)
+                            setTimeout(() => {
+                                alertBox.classList.add('-translate-x-full')
+                                alertBox.classList.add('opacity-0')
+                            }, 3000)
                         }
                     }
                     newAdd.classList.add('hidden');
