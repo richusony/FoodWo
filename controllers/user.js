@@ -327,7 +327,6 @@ async function viewUserProfile(req, res) {
 async function updateUserProfile(req, res) {
     const { userid, fullname, email, phone, address1, address2, address3 } = req.body;
     const image = req.file?.path;
-    console.log("\n" + address1==="" + "\n" + address2==="" + "\n" + address3==="")
 
     if (!address1 && !address3) {
         const updating = await userModel.updateOne({ _id: userid }, {
@@ -472,7 +471,33 @@ async function updateUserProfile(req, res) {
 }
 
 
+async function updateUserAddress(req,res){
+    const {uid,aid} = req.params;
+    const newaddress= req.body.newaddress;
+    if(aid==1){
+        const updating = await userModel.updateOne({_id:uid},{address1:newaddress})
+        if(updating){
+            res.status(200).json({updated:true})
+        }else{
+            res.status(500).json({updated:false})
+        }
+    }else if(aid==2){
+        const updating = await userModel.updateOne({_id:uid},{address2:newaddress})
+         if(updating){
+            res.status(200).json({updated:true})
+        }else{
+            res.status(500).json({updated:false})
+        }
+    }else{
+        const updating = await userModel.updateOne({_id:uid},{address3:newaddress})
+         if(updating){
+            res.status(200).json({updated:true})
+        }else{
+            res.status(500).json({updated:false})
+        }
 
+    }
+}
 
 
 async function updateStock(req, res) {
@@ -623,5 +648,6 @@ module.exports = {
     viewMyOrderPage,
     viewOrderSuccessPage,
     viewOrderItemPage,
-    cancelOrder
+    cancelOrder,
+    updateUserAddress
 }

@@ -75,7 +75,8 @@
                             <div
                                 class="h-96 overflow-y-auto overflow-x-hidden w-full lg:w-1/2 px-3 py-3 my-2 shadow-sm">
                                 <% if(cartItems){ cartItems.forEach((cart, index)=> { %>
-                                    <div class="bg-[#f0efef] md:px-5 py-3 my-2 flex justify-between items-center rounded shadow-md">
+                                    <div
+                                        class="bg-[#f0efef] md:px-5 py-3 my-2 flex justify-between items-center rounded shadow-md">
                                         <div class=" w-20 h-16 object-cover rounded mx-2 md:mr-3 ">
                                             <img class="w-full h-full rounded object-cover"
                                                 src="/<%= cart.productMainImage%>" alt="">
@@ -88,7 +89,8 @@
                                         </div>
 
                                         <div class=" flex mr-2 md:mr-3 relative text-center justify-center">
-                                            <div onclick="priceDown(event)" data-index="<%= index %>" data-stock="<%=cart.productInStock%>"
+                                            <div onclick="priceDown(event)" data-index="<%= index %>"
+                                                data-stock="<%=cart.productInStock%>"
                                                 class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-l-full">
                                                 <i class="fa-solid fa-minus"></i>
                                             </div>
@@ -98,7 +100,8 @@
                                                 class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-r-full">
                                                 <i class="fa-solid fa-plus"></i>
                                             </div>
-                                            <p class="hidden absolute mt-7 text-sm text-center text-orange-500" id="<%= `stockAlert${index}`%>"></p>
+                                            <p class="hidden absolute mt-7 text-sm text-center text-orange-500"
+                                                id="<%= `stockAlert${index}`%>"></p>
                                         </div>
 
                                         <div class=" mr-2 md:mx-3">
@@ -118,7 +121,7 @@
                                                         </i>
                                                     </span>
                                                 </div>
-                                                
+
                                     </div>
                                     <% }) }else{ %>
                                         <div class="flex flex-col justify-center items-center">
@@ -144,17 +147,58 @@
                                 <div class="px-3 my-3">
                                     <h3 class="font-bold">Shipping to :</h3>
                                     <div id="addContainer">
-                                        <span id="currentAdd">
-                                            <%=userData[0].address%>
+                                        <span>
+                                            <div class="flex my-2">
+                                                <input type="checkbox" name="" id="" class="mx-2">
+                                                <span id="currentAdd1">
+                                                    <%=userData[0].address1%>
+                                                </span>
+                                            </div>
                                         </span>
+                                        <div class="text-end"><span class="cursor-pointer" id="editAdd1" data-id="1"
+                                                onclick="editAddress(event)">edit address</span></div>
+                                        <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd1" data-id="1"
+                                                onclick="saveAddress(event)">save address</span></div>
+                                            <%if(userData[0].address2 !=="false"){%>
+                                                <span>
+                                                    <div class="flex my-2">
+                                                        <input type="checkbox" name="" id="" class="mx-2">
+                                                        <span id="currentAdd2">
+                                                            <%=userData[0].address2%>
+                                                        </span>
+                                                    </div>
+                                                </span>
+                                                <div class="text-end"><span class="cursor-pointer" id="editAdd2" data-id="2"
+                                                        onclick="editAddress(event)">edit address</span></div>
+                                                <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd2" data-id="2"
+                                                        onclick="saveAddress(event)">save address</span></div>
+
+                                                        <%}%>
+
+                                                        <%if(userData[0].address3 !=="false"){%>
+                                                            <span>
+                                                                <div class="flex my-2">
+                                                                    <input type="checkbox" name="" id="" class="mx-2">
+                                                                    <span id="currentAdd3">
+                                                                        <%=userData[0].address3%>
+                                                                    </span>
+                                                                </div>
+                                                            </span>
+                                                            <div class="text-end"><span class="cursor-pointer" data-id="3" id="editAdd3"
+                                                                    onclick="editAddress(event)">edit address</span></div>
+                                                            <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd3" data-id="3"
+                                                                    onclick="saveAddress(event)">save address</span></div>
+            
+                                                                    <%}%>
                                     </div>
-                                    <textarea class="text-black hidden w-full px-3" name="" id="newAdd" cols=""
+                                    <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd1" cols=""
+                                        rows="4"></textarea>
+                                    <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd2" cols=""
+                                        rows="4"></textarea>
+                                    <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd3" cols=""
                                         rows="4"></textarea>
                                 </div>
-                                <div class="text-end"><span class="cursor-pointer" id="editAdd"
-                                        onclick="editAddress(event)">edit address</span></div>
-                                <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd"
-                                        onclick="saveAddress(event)">save address</span></div>
+
                                 <div class="my-3 px-3">
                                     <div><input type="checkbox" name="" id="" class="mr-2"><span>Apply Code :</span>
                                     </div>
@@ -186,11 +230,10 @@
 
                 let finalPrice = parseInt('<%-totalPrice %>');
 
-                const currentAdd = document.getElementById('currentAdd');
+                const currentAdd1 = document.getElementById('currentAdd1');
+                const currentAdd2 = document.getElementById('currentAdd2');
+                const currentAdd3 = document.getElementById('currentAdd3');
                 const addContainer = document.getElementById('addContainer');
-                const newAdd = document.getElementById('newAdd');
-                const editAdd = document.getElementById('editAdd');
-                const saveAdd = document.getElementById('saveAdd');
 
                 const final = document.querySelectorAll(`.finalPrice`);
 
@@ -243,7 +286,7 @@
                         // Decrement quantity and calculate the new price
                         quantity--;
 
-                        if(quantity <= remainingStock){
+                        if (quantity <= remainingStock) {
                             stockAlert.classList.add('hidden');
                         }
 
@@ -314,16 +357,59 @@
 
                 function editAddress(event) {
                     event.preventDefault();
-
+                    const id=event.target.dataset.id;
+                    const currentAdd = document.getElementById(`currentAdd${id}`)
+                    const newAdd = document.getElementById(`newAdd${id}`)
+                    const saveAdd = document.getElementById(`saveAdd${id}`)
                     currentAdd.style.display = 'none';
-                    newAdd.innerText = currentAdd.innerText;
+                    newAdd.innerText = currentAdd.innerText.trim();
                     newAdd.classList.remove('hidden');
                     event.target.classList.add('hidden')
                     saveAdd.classList.remove('hidden')
 
                 }
-                function saveAddress(event) {
+               async function saveAddress(event) {
+                event.preventDefault();
+                    const id=event.target.dataset.id;
+                    const currentAdd = document.getElementById(`currentAdd${id}`)
+                    const newAdd = document.getElementById(`newAdd${id}`)
+                    const editAdd = document.getElementById(`editAdd${id}`)
                     currentAdd.innerText = newAdd.value;
+                    currentAdd.innerText = currentAdd.innerText.trim();
+                    const userid=sessionStorage.getItem('user_id');
+                    const newaddress={
+                    "address":currentAdd,
+                    }
+                    
+                    const saveAddressToDB = await fetch(`/user/save-address/${userid}/${id}`,{
+                        method:'PATCH',
+                        headers:{
+                            'Content-Type':"application/json"
+                        },
+                        body:newaddress
+                    })
+                    if(saveAddressToDB.ok){
+                        const res = await saveAddressToDB.json();
+                        if(res.updated){
+                            alertMsg.innerHTML = `<i class="fa-solid fa-check text-xl"></i> Address updated`;
+                        alertBox.classList.remove('-translate-x-full')
+                        alertBox.classList.remove('opacity-0')
+                        window.scrollTo(0, 0)
+                        setTimeout(() => {
+                            alertBox.classList.add('-translate-x-full')
+                            alertBox.classList.add('opacity-0')
+                        }, 3000)
+                        }else{
+                            alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Something went wrong.Please try again.`;
+                        alertBox.classList.remove('-translate-x-full')
+                        alertBox.classList.remove('opacity-0')
+                        window.scrollTo(0, 0)
+                        setTimeout(() => {
+                            alertBox.classList.add('-translate-x-full')
+                            alertBox.classList.add('opacity-0')
+                        }, 3000)
+                        }
+                    }
                     newAdd.classList.add('hidden');
                     currentAdd.style.display = 'block';
                     event.target.classList.add('hidden')
@@ -364,14 +450,14 @@
 
                         const productData = {
                             user_id: user_id,
-                            customerName:customerName,
+                            customerName: customerName,
                             productId: productId,
-                            productName:productName,
-                            image:image,
+                            productName: productName,
+                            image: image,
                             productQty: productQty,
-                            productPrice:productPrice,
-                            paymentMethod:cod.checked?'COD':'CREDIT CARD',
-                            address:currentAdd.innerText
+                            productPrice: productPrice,
+                            paymentMethod: cod.checked ? 'COD' : 'CREDIT CARD',
+                            address: currentAdd.innerText
                         }
 
                         const reqData = await JSON.stringify(productData);
@@ -400,9 +486,9 @@
                             if (response.ok) {
                                 const data = await checkResponse.json();
                                 console.log(data)
-                                sessionStorage.setItem('orderid',data.orderid)
-                                sessionStorage.setItem('orderaddress',data.address)
-                                window.location.href='/user/order-success'
+                                sessionStorage.setItem('orderid', data.orderid)
+                                sessionStorage.setItem('orderaddress', data.address)
+                                window.location.href = '/user/order-success'
                             }
                             console.log(`${productName} Ok.`)
                         }
