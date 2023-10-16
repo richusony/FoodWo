@@ -335,8 +335,8 @@ async function updateUserProfile(req, res) {
             email,
             phone,
             address1: address2,
-            address2: null,
-            address3: null,
+            address2: false,
+            address3: false,
             image
         }
         );
@@ -352,8 +352,8 @@ async function updateUserProfile(req, res) {
             email,
             phone,
             address1: address1,
-            address2: null,
-            address3: null,
+            address2: false,
+            address3: false,
             image
         }
         );
@@ -369,8 +369,8 @@ async function updateUserProfile(req, res) {
             email,
             phone,
             address1: address3,
-            address2: null,
-            address3: null,
+            address2: false,
+            address3: false,
             image
         }
         );
@@ -388,7 +388,7 @@ async function updateUserProfile(req, res) {
             phone,
             address1: address2,
             address2: address3,
-            address3: null,
+            address3: false,
             image
         }
         );
@@ -405,7 +405,7 @@ async function updateUserProfile(req, res) {
             phone,
             address1: address1,
             address2: address3,
-            address3: null,
+            address3: false,
             image
         }
         );
@@ -422,7 +422,7 @@ async function updateUserProfile(req, res) {
             phone,
             address1: address1,
             address2: address2,
-            address3: null,
+            address3: false,
             image
         }
         );
@@ -439,7 +439,7 @@ async function updateUserProfile(req, res) {
             phone,
             address1: address2,
             address2: address2,
-            address3: null,
+            address3: false,
             image
         }
         );
