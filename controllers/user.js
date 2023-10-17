@@ -213,7 +213,7 @@ async function viewCartPage(req, res) {
 
 async function addToCart(req, res) {
     const { userid, foodid } = req.body;
-
+    console.log("got id", userid, foodid )
     const exists = await cartModel.findOne({ foodId: foodid, userId: userid });
     if (exists) {
         res.status(200).json({ exist: 'item already exists in cart.' })
