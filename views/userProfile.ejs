@@ -126,6 +126,10 @@
                                 onclick="redirectToOrders()">Your Orders</a>
                         </div>
                         <div class="w-full py-3 px-4 bg-slate-200 rounded my-2">
+                            <a class="font-bold text-lg cursor-pointer text-orange-400 hover:text-orange-500"
+                                onclick="redirectToWish()">Your Wishlist</a>
+                        </div>
+                        <div class="w-full py-3 px-4 bg-slate-200 rounded my-2">
                             <a class="font-bold text-xl cursor-pointer text-orange-400 hover:text-orange-500"
                                 onclick="logoutUser(event)">Logout <i class="fa-solid fa-power-off"></i></a>
                         </div>
@@ -238,6 +242,10 @@
 
                 function redirectToOrders() {
                     window.location.href = `/user/my-orders/${sessionStorage.getItem('user_id')}`;
+                }
+
+                function redirectToWish(){
+                    window.location.href = `/user/wishlist/${sessionStorage.getItem('user_id')}`;
                 }
 
                 let address3 = '<%=address3%>';

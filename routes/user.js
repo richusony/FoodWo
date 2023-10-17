@@ -4,7 +4,8 @@ const {userAuth} = require('../middleware/sessionAuth')
 const {isBlocked}= require('../middleware/userBlocked')
 const {upload} = require('../middleware/multer')
 const {viewProductSearchPage, searchFoodItems} = require('../controllers/searchController')
-const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewWishlistPage, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage, viewOrderItemPage, cancelOrder, updateUserAddress, addNewAddress} = require('../controllers/user')
+const {viewWishlistPage, removeWishlist} = require('../controllers/wishlistController')
+const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage, viewOrderItemPage, cancelOrder, updateUserAddress, addNewAddress} = require('../controllers/user')
 
 
 
@@ -45,7 +46,7 @@ router.route('/forgotPassword/:id')
 router.route('/newpassword')
 .post(updateNewPassword)
 
-router.route('/wishlist/')
+router.route('/wishlist/:uid')
 .get(viewWishlistPage)  
 
 
@@ -73,6 +74,9 @@ router.route('/logout')
 
 router.route('/addWishlist/:fid/:uid')
 .post(addToWishlist)
+
+router.route('/remove-wishlist')
+.delete(removeWishlist)
 
 router.route('/removeFromCart/')
 .post(removeFromCart)
