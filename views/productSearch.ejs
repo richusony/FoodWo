@@ -43,19 +43,30 @@
         <section class="px-5 py-2 min-h-screen">
             <div class="px-20 mt-10">
                 <div class="border border-gray-400 w-full mx-auto py-3 px-5 rounded flex">
-                    <input type="text" name="" id="" placeholder="Search for your favourite food"
-                        class="w-full text-gray-500 placeholder:text-gray-500">
-                    <span class="text-gray-500"><i class="fa-solid text-lg fa-search"></i></span>
+                    <input type="text" name="" id="searchInput" value="" placeholder="Search for your favourite food"
+                        class="w-full text-gray-500 placeholder:text-gray-500 outline-none"
+                        onchange="searchFood(event)">
+                    <span class="text-gray-500" id="searchIcon"><i class="fa-solid text-lg fa-search"></i></span>
+                    <span class="text-gray-500 hidden cursor-pointer" id="clearIcon" onclick="clearInput(event)"><i
+                            class="fa-solid text-lg fa-close"></i></span>
                 </div>
 
-                <div class="px-2 my-5">
+                <div class="px-2 my-5" id="recentSearchCon">
                     <h2 class="font-semibold my-2">Recent Searches</h2>
                     <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
                     <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
                     <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
                 </div>
 
-                <div class="px-2 my-5">
+                <div class="px-2 my-5" id="searchedItemsCon">
+                    <div>
+                        <div><img src="" alt=""></div>
+                        <h1>Chicken Biryani</h1>
+                    </div>
+
+                </div>
+
+                <div class="px-2 my-5" id="popularCuisinesCon">
                     <h1 class="font-extrabold text-lg">Popular Cuisines</h1>
                     <div class="my-3 overflow-hidden flex justify-center items-center">
                         <div class="foodContainer overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
@@ -132,6 +143,53 @@
 
         <!-- Footer -->
         <%- include('../views/userFooter.ejs') %>
+
+            <script>
+                async function searchFood(event) {
+                    const popularCuisinesCon = document.getElementById('popularCuisinesCon')
+                    const recentSearchCon = document.getElementById('recentSearchCon')
+                    const searchIcon = document.getElementById('searchIcon')
+                    const clearIcon = document.getElementById('clearIcon')
+
+                    searchIcon.classList.add('hidden')
+                    clearIcon.classList.remove('hidden')
+
+                    popularCuisinesCon.classList.add('hidden')
+                    recentSearchCon.classList.add('hidden')
+
+                    if (event.target.value === "") {
+                        popularCuisinesCon.classList.remove('hidden')
+                        recentSearchCon.classList.remove('hidden')
+                    }
+                    const searching = await fetch(`/user/search-food?query=${event.target.value}`);
+
+                    if (searching.ok) {
+                        // Handle a successful response (e.g., display search results)
+                        const data = await searching.json(); // Assuming the server returns JSON
+                        console.log(data); // Replace this with your logic to handle the response data
+
+
+                    } else {
+                        // Handle errors if the request is not successful
+                        console.error('Error:', searching.status, searching.statusText);
+                    }
+                }
+
+                function clearInput(event) {
+                    event.preventDefault();
+                    const searchInput = document.getElementById('searchInput');
+                    const popularCuisinesCon = document.getElementById('popularCuisinesCon')
+                    const recentSearchCon = document.getElementById('recentSearchCon')
+                    const searchIcon = document.getElementById('searchIcon')
+                    const clearIcon = document.getElementById('clearIcon')
+
+                    searchInput.value = '';
+                    clearIcon.classList.add('hidden')
+                    searchIcon.classList.remove('hidden')
+                    popularCuisinesCon.classList.remove('hidden')
+                    recentSearchCon.classList.remove('hidden')
+                }
+            </script>
 </body>
 
 </html>
