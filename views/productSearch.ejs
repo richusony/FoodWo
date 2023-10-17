@@ -40,8 +40,8 @@
     <!-- navigation -->
     <%- include('../views/userNavbar.ejs') %>
 
-        <section class="px-5 py-2 min-h-screen">
-            <div class="px-20 mt-10">
+        <section class="px-2 md:px-5 py-2 min-h-screen">
+            <div class="px-2 md:px-20 mt-10">
                 <div class="border border-gray-400 w-full mx-auto py-3 px-5 rounded flex">
                     <input type="text" name="" id="searchInput" value="" placeholder="Search for your favourite food"
                         class="w-full text-gray-500 placeholder:text-gray-500 outline-none"
@@ -58,13 +58,6 @@
                     <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
                 </div>
 
-                <div class="px-2 my-5" id="searchedItemsCon">
-                    <div>
-                        <div><img src="" alt=""></div>
-                        <h1>Chicken Biryani</h1>
-                    </div>
-
-                </div>
 
                 <div class="px-2 my-5" id="popularCuisinesCon">
                     <h1 class="font-extrabold text-lg">Popular Cuisines</h1>
@@ -138,6 +131,36 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="px-2 my-5">
+                    <div>
+                        <div class="px-3 py-2 bg-slate-100 w-fit rounded my-2"><span>Sort by </span>
+                            <select class="bg-transparent outline-none" name="" id="">
+                                <option class="" selected value="none">none</option>
+                                <option class="" value="">new</option>
+                                <option class="" value="">price</option>
+                                <option class="" value="">delivery</option>
+                            </select>
+                        </div>
+                        <div class="bg-[#F3F4F6] p-5 flex flex-wrap gap-5 justify-center" id="searchedItemsCon">
+                            <div class="flex bg-[#FFFFFF] rounded-xl px-4 py-6 items-center w-fit shadow-md">
+                                <div class="w-56">
+                                    <h2 class="font-semibold text-lg my-1">Chicken Biryani</h2>
+                                    <span><span class="text-orange-500">₹</span>100</span>
+                                    <p class="text-sm text-gray-500">fadljfad adf lakdfadfja dfljadf adfla df</p>
+                                </div>
+
+                                <div class="relative flex justify-center mx-2">
+                                    <div class="w-28 h-28"><img class="w-full h-full object-cover rounded"
+                                            src="/products/1696516368114-Chicken Biriyani.webp" alt=""></div>
+                                    <button class="absolute -bottom-2 px-5 py-2 bg-orange-500 rounded text-white"><i
+                                            class="fa-solid text-xl fa-cart-shopping"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </section>
 
@@ -146,10 +169,12 @@
 
             <script>
                 async function searchFood(event) {
+                    event.preventDefault();
                     const popularCuisinesCon = document.getElementById('popularCuisinesCon')
                     const recentSearchCon = document.getElementById('recentSearchCon')
                     const searchIcon = document.getElementById('searchIcon')
                     const clearIcon = document.getElementById('clearIcon')
+                    const searchedItemsCon = document.getElementById('searchedItemsCon')
 
                     searchIcon.classList.add('hidden')
                     clearIcon.classList.remove('hidden')
@@ -167,6 +192,34 @@
                         // Handle a successful response (e.g., display search results)
                         const data = await searching.json(); // Assuming the server returns JSON
                         console.log(data); // Replace this with your logic to handle the response data
+                        if (data.searchedItems.length > 0) {
+
+                            // Clear any existing content
+                            searchedItemsCon.innerHTML = '';
+
+                            // Iterate through the items and append their HTML
+                            data.searchedItems.forEach((item) => {
+                                const itemHTML = `
+            <div class="flex bg-[#FFFFFF] rounded-xl px-4 py-6 items-center justify-between w-full md:w-fit shadow-md">
+                <div class="w-56">
+                    <h2 class="font-semibold lg:text-lg my-1">${item.productName}</h2>
+                    <span><span class="text-orange-500">₹</span>${item.productPrice}</span>
+                    <p class="text-sm text-gray-500">${item.description}</p>
+                </div>
+
+                <div class="relative flex justify-center ml-4 md:mx-2">
+                    <div class="w-28 h-28"><img class="w-full h-full object-cover rounded" src="/${item.productMainImage}" alt=""></div>
+                    <button class="absolute -bottom-2 px-5 py-2 bg-orange-500 rounded text-white"><i class="fa-solid text-xl fa-cart-shopping"></i></button>
+                </div>
+            </div>`;
+
+                                // Append the item's HTML to the container
+                                searchedItemsCon.innerHTML += itemHTML;
+                            });
+                        } else {
+                            searchedItemsCon.innerText = 'NO ITEMS';
+                        }
+
 
 
                     } else {
