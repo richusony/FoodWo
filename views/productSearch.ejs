@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodWo - Search Products</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- navigation -->
+    <%- include('../views/userNavbar.ejs') %>
+
+        <section class="px-5 py-2 min-h-screen">
+            <div class="px-20 mt-10">
+                <div class="border border-gray-400 w-full mx-auto py-3 px-5 rounded flex">
+                    <input type="text" name="" id="" placeholder="Search for your favourite food"
+                        class="w-full text-gray-500 placeholder:text-gray-500">
+                    <span class="text-gray-500"><i class="fa-solid text-lg fa-search"></i></span>
+                </div>
+
+                <div class="px-2 my-5">
+                    <h2 class="font-semibold my-2">Recent Searches</h2>
+                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                </div>
+
+                <div class="px-2 my-5">
+                    <h1 class="font-extrabold text-lg">Popular Cuisines</h1>
+                    <div class="my-3 overflow-hidden flex justify-center items-center">
+                        <div class="foodContainer overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/rng/md/carousel/production/e20c602ba8ed5d8ec2204e7a7b19d9f6"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667625/PC_Creative%20refresh/Biryani_2.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029848/PC_Creative%20refresh/3D_bau/banners_new/Chinese.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029845/PC_Creative%20refresh/3D_bau/banners_new/Burger.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667626/PC_Creative%20refresh/South_Indian_4.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029858/PC_Creative%20refresh/3D_bau/banners_new/Rolls.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029851/PC_Creative%20refresh/3D_bau/banners_new/Ice_Creams.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667630/PC_Creative%20refresh/Desserts_2.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029853/PC_Creative%20refresh/3D_bau/banners_new/Parotta.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029859/PC_Creative%20refresh/3D_bau/banners_new/Shawarma.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667625/PC_Creative%20refresh/North_Indian_4.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029846/PC_Creative%20refresh/3D_bau/banners_new/Idli.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029850/PC_Creative%20refresh/3D_bau/banners_new/Dosa.png"
+                                        alt=""></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <%- include('../views/userFooter.ejs') %>
+</body>
+
+</html>
