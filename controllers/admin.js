@@ -255,19 +255,41 @@ async function updateCategory(req, res) {
     const id = req.params.id;
     const { category } = req.body;
     const upperCategory = category.toUpperCase();
-    console.log("got it :: ", id, category);
-    const updating = await categoryModel.updateOne({ _id: id }, { category: upperCategory.trim() });
-
-    if (updating) {
-        const updatedDetails = await categoryModel.find({ _id: id });
-        if (updatedDetails) {
-            res.render('../views/Admin/categoryUpdate', { data: updatedDetails })
+    const exist = await categoryModel.findOne({category:upperCategory});
+    if(exist){
+        if(exist._id === id){
+            console.log("got it :: ", id, category);
+            const updating = await categoryModel.updateOne({ _id: id }, { category: upperCategory.trim() });
+        
+            if (updating) {
+                const updatedDetails = await categoryModel.find({ _id: id });
+                if (updatedDetails) {
+                    res.render('../views/Admin/categoryUpdate', { data: updatedDetails })
+                }
+                else {
+                    res.status(500).json({ err: "Database is having some issues" })
+                }
+            } else {
+                res.status(500).json({ err: "Database is having some issues" })
+            }
+        }else{
+            res.status(401).json({ err: 'Category already existed.' })
         }
-        else {
+    }else{
+        console.log("got it :: ", id, category);
+        const updating = await categoryModel.updateOne({ _id: id }, { category: upperCategory.trim() });
+    
+        if (updating) {
+            const updatedDetails = await categoryModel.find({ _id: id });
+            if (updatedDetails) {
+                res.render('../views/Admin/categoryUpdate', { data: updatedDetails })
+            }
+            else {
+                res.status(500).json({ err: "Database is having some issues" })
+            }
+        } else {
             res.status(500).json({ err: "Database is having some issues" })
         }
-    } else {
-        res.status(500).json({ err: "Database is having some issues" })
     }
 }
 
