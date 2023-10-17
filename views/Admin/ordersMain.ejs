@@ -28,6 +28,7 @@
                         <th scope="col" class="px-6 py-4">Created At</th>
                         <th scope="col" class="px-6 py-4">Customer</th>
                         <th scope="col" class="px-6 py-4">Order Items</th>
+                        <th scope="col" class="px-6 py-4">Quantity</th>
                         <th scope="col" class="px-6 py-4">Status</th>
                         <th scope="col" class="px-6 py-4">Payment Method</th>
                         <th scope="col" class="px-6 py-4">Amount</th>
@@ -41,6 +42,7 @@
                         <td class="whitespace-nowrap px-6 py-4"><%=order.created_at%></td>
                         <td class="whitespace-nowrap px-6 py-4"><%=order.customerName%></td>
                         <td class="whitespace-nowrap px-6 py-4"><%=order.productName%></td>
+                        <td class="whitespace-nowrap px-6 py-4 text-center"><%=order.productQty%></td>
                         <td class="whitespace-nowrap px-6 py-4">
                           <select name="" id="<%=`orderStatus${index}`%>" data-index="<%=`${index}`%>" data-oid="<%=order.orderId%>" onchange="handleStatus(event)">
                             <option selected value="<%=order.orderStatus%>"><span class="bg-red-400 cursor-pointer py-1 rounded text-white px-2"><%=order.orderStatus%></span></option>

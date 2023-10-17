@@ -127,9 +127,9 @@ function otpVerification(req, res) {
             fullname,
             email,
             phone,
-            address1:address,
-            address2:null,
-            address3:null,
+            address1: address,
+            address2: null,
+            address3: null,
             password: hashedPassword,
             image: baseImage,
             blocked: false,
@@ -327,27 +327,238 @@ async function viewUserProfile(req, res) {
 async function updateUserProfile(req, res) {
     const { userid, fullname, email, phone, address1, address2, address3 } = req.body;
     const image = req.file?.path;
-    
-    const updating = await userModel.updateOne({ _id: userid }, {
-        fullname,
-        email,
-        phone,
-        address1,
-        address2,
-        address3,
-        image
-    }
-    );
 
-    if (updating) {
-        res.status(200).json({ message: "Profile updated successfully" });
-    } else {
-        return res.status(400).json({ error: "Address limit reached" });
+    if (!address1 && !address3) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address2,
+            address2: false,
+            address3: false,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    } else if (!address2 && !address3) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address1,
+            address2: false,
+            address3: false,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    } else if (!address1 && !address2) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address3,
+            address2: false,
+            address3: false,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    }
+    else if (!address1) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address2,
+            address2: address3,
+            address3: false,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    } else if (!address2) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address1,
+            address2: address3,
+            address3: false,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    } else if (!address3) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address1,
+            address2: address2,
+            address3: false,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    } else if (!address3) {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1: address2,
+            address2: address2,
+            address3: false,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    }
+    else {
+        const updating = await userModel.updateOne({ _id: userid }, {
+            fullname,
+            email,
+            phone,
+            address1,
+            address2,
+            address3,
+            image
+        }
+        );
+
+        if (updating) {
+            res.status(200);
+        } else {
+            return res.status(400).json({ error: "Address limit reached" });
+        }
+    }
+
+}
+
+async function addNewAddress(req,res){
+    const {uid,aid} = req.params;
+    const newaddress= req.body.address;
+
+    if(aid==1){
+        const updating = await userModel.updateOne({_id:uid},{address1:newaddress})
+        if(updating){
+            res.status(200).json({updated:true})
+        }else{
+            res.status(500).json({updated:false})
+        }
+    }else if(aid==2){
+        const updating = await userModel.updateOne({_id:uid},{address2:newaddress})
+         if(updating){
+                res.status(200).json({updated:true})
+            }else{
+                res.status(500).json({updated:false})
+            }
+    }else{
+        const updating = await userModel.updateOne({_id:uid},{address3:newaddress})
+         if(updating){
+                res.status(200).json({updated:true})
+            }else{
+                res.status(500).json({updated:false})
+            }
     }
 }
 
 
+async function updateUserAddress(req,res){
+    const {uid,aid} = req.params;
+    const newaddress= req.body.address;
+    const userDetails = userModel.findOne({_id:uid})
+    const oldAddress1=userDetails.address1;
+    const oldAddress2=userDetails.address2;
+    const oldAddress3=userDetails.address3;
+    console.log(newaddress)
+    if(aid==1){
+        if(newaddress ===""){
+            const updating = await userModel.updateOne({_id:uid},{address1:oldAddress2,address2:oldAddress3,address3:false})
+            if(updating){
+                res.status(200).json({updated:true})
+            }else{
+                res.status(500).json({updated:false})
+            }
+        }else{
+            const updating = await userModel.updateOne({_id:uid},{address1:newaddress})
+            if(updating){
+                res.status(200).json({updated:true})
+            }else{
+                res.status(500).json({updated:false})
+            }
+        }
+        
+    }else if(aid==2){
+        if(newaddress ===""){
+            const updating = await userModel.updateOne({_id:uid},{address2:oldAddress3,address3:false})
+            if(updating){
+                res.status(200).json({updated:true})
+            }else{
+                res.status(500).json({updated:false})
+            }
+        }else{
+            const updating = await userModel.updateOne({_id:uid},{address2:newaddress})
+            if(updating){
+                res.status(200).json({updated:true})
+            }else{
+                res.status(500).json({updated:false})
+            }
+        }
+    }else{
+        if(newaddress ===""){
+            const updating = await userModel.updateOne({_id:uid},{address3:false})
+            if(updating){
+                res.status(200).json({updated:true})
+            }else{
+                res.status(500).json({updated:false})
+            }
+        }else{
+            const updating = await userModel.updateOne({_id:uid},{address3:newaddress})
+            if(updating){
+                res.status(200).json({updated:true})
+            }else{
+                res.status(500).json({updated:false})
+            }
+        }
 
+    }
+}
 
 
 async function updateStock(req, res) {
@@ -392,7 +603,7 @@ async function updateStock(req, res) {
                 }
             );
 
-            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, customerName: customerName, productId: productId, productName: productName, productImage: image, productPrice: productPrice, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
+            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, customerName: customerName, productId: productId, productName: productName,productQty:productQty, productImage: image, productPrice: productPrice, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
 
             const updating = await userModel.updateOne(
                 { _id: user_id },
@@ -498,5 +709,7 @@ module.exports = {
     viewMyOrderPage,
     viewOrderSuccessPage,
     viewOrderItemPage,
-    cancelOrder
+    cancelOrder,
+    updateUserAddress,
+    addNewAddress
 }
