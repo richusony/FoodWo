@@ -9,19 +9,65 @@ async function viewProductSearchPage(req,res){
 
 async function searchFoodItems(req,res){ 
     const searchQuery = req.query.query;
-    const products = await productModel.find({
-        $or: [
-            { productName: { $regex: searchQuery, $options: 'i' } },
-            { description: { $regex: searchQuery, $options: 'i' } },
-            { category: { $regex: searchQuery, $options: 'i' } }
-        ]
-    });
+    const sortfood = req.query.sortfood;
+    if(sortfood=="fresh"){
+        const products = await productModel.find({
+            $or: [
+                { productName: { $regex: searchQuery, $options: 'i' } },
+                { description: { $regex: searchQuery, $options: 'i' } },
+                { category: { $regex: searchQuery, $options: 'i' } }
+            ]
+        }).sort({createdAt:-1});
     
-    if(products){
-        res.status(200).json({searchedItems:products})
+        if(products){
+            res.status(200).json({searchedItems:products})
+        }else{
+            res.status(404).json({err:'food doesnot exists'})
+        }
+    }else if(sortfood=="priceAsc"){
+        const products = await productModel.find({
+            $or: [
+                { productName: { $regex: searchQuery, $options: 'i' } },
+                { description: { $regex: searchQuery, $options: 'i' } },
+                { category: { $regex: searchQuery, $options: 'i' } }
+            ]
+        }).sort({productPrice:1});
+    
+        if(products){
+            res.status(200).json({searchedItems:products})
+        }else{
+            res.status(404).json({err:'food doesnot exists'})
+        }
+    }else if(sortfood=="priceDes"){
+        const products = await productModel.find({
+            $or: [
+                { productName: { $regex: searchQuery, $options: 'i' } },
+                { description: { $regex: searchQuery, $options: 'i' } },
+                { category: { $regex: searchQuery, $options: 'i' } }
+            ]
+        }).sort({productPrice:-1});
+    
+        if(products){
+            res.status(200).json({searchedItems:products})
+        }else{
+            res.status(404).json({err:'food doesnot exists'})
+        }
     }else{
-        res.status(404).json({err:'food doesnot exists'})
+        const products = await productModel.find({
+            $or: [
+                { productName: { $regex: searchQuery, $options: 'i' } },
+                { description: { $regex: searchQuery, $options: 'i' } },
+                { category: { $regex: searchQuery, $options: 'i' } }
+            ]
+        });
+    
+        if(products){
+            res.status(200).json({searchedItems:products})
+        }else{
+            res.status(404).json({err:'food doesnot exists'})
+        }
     }
+    
 }
 
 module.exports={

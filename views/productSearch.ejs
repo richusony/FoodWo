@@ -139,11 +139,12 @@
                 <div class="px-2 my-5 hidden" id="searchedItemsMainCon">
                     <div>
                         <div class="px-3 py-2 bg-slate-100 w-fit rounded my-2"><span>Sort by </span>
-                            <select class="bg-transparent outline-none" name="" id="">
+                            <select class="bg-transparent outline-none" onchange="sortFood(event)" name="" id="sortInput">
                                 <option class="" selected value="none">none</option>
-                                <option class="" value="">new</option>
-                                <option class="" value="">price</option>
-                                <option class="" value="">delivery</option>
+                                <option class="" value="fresh">new</option>
+                                <option class="" value="priceAsc">price (low to high)</option>
+                                <option class="" value="priceDes">price (high to low)</option>
+                                <option class="" value="rate">rating</option>
                             </select>
                         </div>
                         <div class="bg-[#F3F4F6] p-5 flex flex-wrap gap-5 justify-center" id="searchedItemsCon">
@@ -175,6 +176,7 @@
                  const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
+                let searches;
                 async function searchFood(event) {
                     event.preventDefault();
                     const popularCuisinesCon = document.getElementById('popularCuisinesCon')
@@ -199,7 +201,7 @@
                         return;
                     }
                     const searching = await fetch(`/user/search-food?query=${event.target.value}`);
-
+                    searches=event.target.value;
                     if (searching.ok) {
                         searchedItemsMainCon.classList.remove('hidden')
                         // Handle a successful response (e.g., display search results)
@@ -307,6 +309,53 @@
                             }
                         }
                     }
+                }
+
+                async function sortFood(event){
+                    const sortText=event.target.value;
+                    console.log(sortText,searches)
+                    const sorting = await fetch(`/user/search-food?query=${searches}&sortfood=${sortText}`)
+                    if (sorting.ok) {
+                        searchedItemsMainCon.classList.remove('hidden')
+                        // Handle a successful response (e.g., display search results)
+                        const data = await sorting.json(); // Assuming the server returns JSON
+                        console.log(data); // Replace this with your logic to handle the response data
+                        if (data.searchedItems.length > 0) {
+
+                            // Clear any existing content
+                            searchedItemsCon.innerHTML = '';
+
+                            // Iterate through the items and append their HTML
+                            data.searchedItems.forEach((item) => {
+                                const itemHTML = `
+            <div class="flex bg-[#FFFFFF] rounded-xl px-4 py-6 items-center justify-between w-full md:w-fit shadow-md">
+                <div class="w-56">
+                    <h2 class="font-semibold lg:text-lg my-1">${item.productName}</h2>
+                    <span><span class="text-orange-500">₹</span>${item.productPrice}</span>
+                    <p class="text-sm text-gray-500">${item.description}</p>
+                </div>
+
+                <div class="relative flex justify-center ml-4 md:mx-2">
+                    <div class="w-28 h-28"><img class="w-full h-full ${item.productInStock<=0?'grayscale':''} object-cover rounded" src="/${item.productMainImage}" alt=""></div>
+                    <button onclick="addToCart(event)" data-foodid="${item._id}" class="absolute -bottom-2 px-5 py-2 bg-orange-500 rounded text-white"><i data-foodid="${item._id}" class="fa-solid text-xl fa-cart-shopping"></i></button>
+                </div>
+            </div>`;
+
+                                // Append the item's HTML to the container
+                                searchedItemsCon.innerHTML += itemHTML;
+                            });
+                        } else {
+                            searchedItemsCon.innerText = 'NO ITEMS';
+                        }
+
+
+
+                    } else {
+                        // Handle errors if the request is not successful
+                        console.error('Error:', sorting.status, sorting.statusText);
+                    }
+
+
                 }
             </script>
 </body>
