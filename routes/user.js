@@ -3,6 +3,7 @@ const router = express.Router();
 const {userAuth} = require('../middleware/sessionAuth')
 const {isBlocked}= require('../middleware/userBlocked')
 const {upload} = require('../middleware/multer')
+const {viewProductSearchPage, searchFoodItems} = require('../controllers/searchController')
 const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewWishlistPage, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage, viewOrderItemPage, cancelOrder, updateUserAddress, addNewAddress} = require('../controllers/user')
 
 
@@ -17,7 +18,11 @@ router.route('/login')
 .get(viewLoginInPage) 
 .post(loginUser)
 
+router.route('/search-products')
+.get(viewProductSearchPage)
 
+router.route('/search-food')
+.get(searchFoodItems)
 
 // User Products Page Get Request
 router.route('/products').get(productPage)

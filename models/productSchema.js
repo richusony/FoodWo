@@ -33,15 +33,15 @@ const productSchema = new mongoose.Schema({
         type: Array,
         required: true
     },
-    productRelatedImages:{
-        type:Array,
+    productRelatedImages: {
+        type: Array,
     },
     purchaseCount: {
         type: Number,
         required: true
     },
     created_at: { type: String, default: () => { return moment(new Date()).format('DD/MM/YYYY') } }
-})
+}, { timestamps: true })
 
 const productModel = mongoose.model('products', productSchema);
 

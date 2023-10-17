@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodWo - Search Products</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- navigation -->
+    <%- include('../views/userNavbar.ejs') %>
+
+        <section class="px-2 md:px-5 py-2 min-h-screen">
+            <div id="alert"
+                class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+                <span id="alertMsg"></span>
+            </div>
+            <div class="px-2 md:px-20 mt-10">
+                <div class="border border-gray-400 w-full mx-auto py-3 px-5 rounded flex">
+                    <input type="text" name="" id="searchInput" value="" placeholder="Search for your favourite food"
+                        class="w-full text-gray-500 placeholder:text-gray-500 outline-none"
+                        onchange="searchFood(event)">
+                    <span class="text-gray-500" id="searchIcon"><i class="fa-solid text-lg fa-search"></i></span>
+                    <span class="text-gray-500 hidden cursor-pointer" id="clearIcon" onclick="clearInput(event)"><i
+                            class="fa-solid text-lg fa-close"></i></span>
+                </div>
+
+                <div class="px-2 my-5" id="recentSearchCon">
+                    <h2 class="font-semibold my-2">Recent Searches</h2>
+                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                </div>
+
+
+                <div class="px-2 my-5" id="popularCuisinesCon">
+                    <h1 class="font-extrabold text-lg">Popular Cuisines</h1>
+                    <div class="my-3 overflow-hidden flex justify-center items-center">
+                        <div class="foodContainer overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/rng/md/carousel/production/e20c602ba8ed5d8ec2204e7a7b19d9f6"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667625/PC_Creative%20refresh/Biryani_2.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029848/PC_Creative%20refresh/3D_bau/banners_new/Chinese.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029845/PC_Creative%20refresh/3D_bau/banners_new/Burger.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667626/PC_Creative%20refresh/South_Indian_4.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029858/PC_Creative%20refresh/3D_bau/banners_new/Rolls.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029851/PC_Creative%20refresh/3D_bau/banners_new/Ice_Creams.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667630/PC_Creative%20refresh/Desserts_2.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029853/PC_Creative%20refresh/3D_bau/banners_new/Parotta.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029859/PC_Creative%20refresh/3D_bau/banners_new/Shawarma.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1675667625/PC_Creative%20refresh/North_Indian_4.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029846/PC_Creative%20refresh/3D_bau/banners_new/Idli.png"
+                                        alt=""></div>
+                            </div>
+                            <div class="w-36 h-40 inline-block">
+                                <div class="w-full h-full"><img class="w-full h-full"
+                                        src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_288,h_360/v1674029850/PC_Creative%20refresh/3D_bau/banners_new/Dosa.png"
+                                        alt=""></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="px-2 my-5 hidden" id="searchedItemsMainCon">
+                    <div>
+                        <div class="px-3 py-2 bg-slate-100 w-fit rounded my-2"><span>Sort by </span>
+                            <select class="bg-transparent outline-none" onchange="sortFood(event)" name="" id="sortInput">
+                                <option class="" selected value="none">none</option>
+                                <option class="" value="fresh">new</option>
+                                <option class="" value="priceAsc">price (low to high)</option>
+                                <option class="" value="priceDes">price (high to low)</option>
+                                <option class="" value="rate">rating</option>
+                            </select>
+                        </div>
+                        <div class="bg-[#F3F4F6] p-5 flex flex-wrap gap-5 justify-center" id="searchedItemsCon">
+                            <div class="flex bg-[#FFFFFF] rounded-xl px-4 py-6 items-center w-fit shadow-md">
+                                <div class="w-56">
+                                    <h2 class="font-semibold text-lg my-1">Chicken Biryani</h2>
+                                    <span><span class="text-orange-500">₹</span>100</span>
+                                    <p class="text-sm text-gray-500">fadljfad adf lakdfadfja dfljadf adfla df</p>
+                                </div>
+
+                                <div class="relative flex justify-center mx-2">
+                                    <div class="w-28 h-28"><img class="w-full h-full object-cover rounded"
+                                            src="/products/1696516368114-Chicken Biriyani.webp" alt=""></div>
+                                    <button class="absolute -bottom-2 px-5 py-2 bg-orange-500 rounded text-white"><i
+                                            class="fa-solid text-xl fa-cart-shopping"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <%- include('../views/userFooter.ejs') %>
+
+            <script>
+                 const alertBox = document.getElementById('alert')
+                const alertMsg = document.getElementById('alertMsg')
+                const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
+                let searches;
+                async function searchFood(event) {
+                    event.preventDefault();
+                    const popularCuisinesCon = document.getElementById('popularCuisinesCon')
+                    const recentSearchCon = document.getElementById('recentSearchCon')
+                    const searchIcon = document.getElementById('searchIcon')
+                    const clearIcon = document.getElementById('clearIcon')
+                    const searchedItemsCon = document.getElementById('searchedItemsCon')
+                    const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
+
+                   
+
+                    searchIcon.classList.add('hidden')
+                    clearIcon.classList.remove('hidden')
+
+                    popularCuisinesCon.classList.add('hidden')
+                    recentSearchCon.classList.add('hidden')
+
+                    if (event.target.value === "") {
+                        popularCuisinesCon.classList.remove('hidden')
+                        recentSearchCon.classList.remove('hidden')
+                        searchedItemsMainCon.classList.add('hidden')
+                        return;
+                    }
+                    const searching = await fetch(`/user/search-food?query=${event.target.value}`);
+                    searches=event.target.value;
+                    if (searching.ok) {
+                        searchedItemsMainCon.classList.remove('hidden')
+                        // Handle a successful response (e.g., display search results)
+                        const data = await searching.json(); // Assuming the server returns JSON
+                        console.log(data); // Replace this with your logic to handle the response data
+                        if (data.searchedItems.length > 0) {
+
+                            // Clear any existing content
+                            searchedItemsCon.innerHTML = '';
+
+                            // Iterate through the items and append their HTML
+                            data.searchedItems.forEach((item) => {
+                                const itemHTML = `
+            <div class="flex bg-[#FFFFFF] rounded-xl px-4 py-6 items-center justify-between w-full md:w-fit shadow-md">
+                <div class="w-56">
+                    <h2 class="font-semibold lg:text-lg my-1">${item.productName}</h2>
+                    <span><span class="text-orange-500">₹</span>${item.productPrice}</span>
+                    <p class="text-sm text-gray-500">${item.description}</p>
+                </div>
+
+                <div class="relative flex justify-center ml-4 md:mx-2">
+                    <div class="w-28 h-28"><img class="w-full h-full ${item.productInStock<=0?'grayscale':''} object-cover rounded" src="/${item.productMainImage}" alt=""></div>
+                    <button onclick="addToCart(event)" data-foodid="${item._id}" class="absolute -bottom-2 px-5 py-2 bg-orange-500 rounded text-white"><i data-foodid="${item._id}" class="fa-solid text-xl fa-cart-shopping"></i></button>
+                </div>
+            </div>`;
+
+                                // Append the item's HTML to the container
+                                searchedItemsCon.innerHTML += itemHTML;
+                            });
+                        } else {
+                            searchedItemsCon.innerText = 'NO ITEMS';
+                        }
+
+
+
+                    } else {
+                        // Handle errors if the request is not successful
+                        console.error('Error:', searching.status, searching.statusText);
+                    }
+                }
+
+                function clearInput(event) {
+                    event.preventDefault();
+                    const searchInput = document.getElementById('searchInput');
+                    const popularCuisinesCon = document.getElementById('popularCuisinesCon')
+                    const recentSearchCon = document.getElementById('recentSearchCon')
+                    const searchIcon = document.getElementById('searchIcon')
+                    const clearIcon = document.getElementById('clearIcon')
+
+                    searchInput.value = '';
+                    clearIcon.classList.add('hidden')
+                    searchIcon.classList.remove('hidden')
+                    popularCuisinesCon.classList.remove('hidden')
+                    recentSearchCon.classList.remove('hidden')
+                    searchedItemsMainCon.classList.add('hidden')
+                }
+
+                async function addToCart(event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    const userid = sessionStorage.getItem('user_id')
+                    const foodid = event.target.dataset.foodid;
+                    
+                    console.log(event)
+                    const reqData = {
+                        userid: userid,
+                        foodid: foodid,
+                    }
+                    console.log(reqData)
+                    const realData = JSON.stringify(reqData);
+                    if (!userid) {
+                        window.location.href = '/user/login';
+                    } else {
+                        const response = await fetch('/user/addToCart/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': "application/json",
+                            },
+                            body: realData
+                        })
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.added) {
+                                window.scrollTo(0, 0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `${data.added}`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                }, 3000)
+                            } else if (data.exist) {
+                                window.scrollTo(0, 0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `${data.exist}`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                }, 3000)
+                            }
+                            else {
+                                alert('something went wrong.')
+                            }
+                        }
+                    }
+                }
+
+                async function sortFood(event){
+                    const sortText=event.target.value;
+                    console.log(sortText,searches)
+                    const sorting = await fetch(`/user/search-food?query=${searches}&sortfood=${sortText}`)
+                    if (sorting.ok) {
+                        searchedItemsMainCon.classList.remove('hidden')
+                        // Handle a successful response (e.g., display search results)
+                        const data = await sorting.json(); // Assuming the server returns JSON
+                        console.log(data); // Replace this with your logic to handle the response data
+                        if (data.searchedItems.length > 0) {
+
+                            // Clear any existing content
+                            searchedItemsCon.innerHTML = '';
+
+                            // Iterate through the items and append their HTML
+                            data.searchedItems.forEach((item) => {
+                                const itemHTML = `
+            <div class="flex bg-[#FFFFFF] rounded-xl px-4 py-6 items-center justify-between w-full md:w-fit shadow-md">
+                <div class="w-56">
+                    <h2 class="font-semibold lg:text-lg my-1">${item.productName}</h2>
+                    <span><span class="text-orange-500">₹</span>${item.productPrice}</span>
+                    <p class="text-sm text-gray-500">${item.description}</p>
+                </div>
+
+                <div class="relative flex justify-center ml-4 md:mx-2">
+                    <div class="w-28 h-28"><img class="w-full h-full ${item.productInStock<=0?'grayscale':''} object-cover rounded" src="/${item.productMainImage}" alt=""></div>
+                    <button onclick="addToCart(event)" data-foodid="${item._id}" class="absolute -bottom-2 px-5 py-2 bg-orange-500 rounded text-white"><i data-foodid="${item._id}" class="fa-solid text-xl fa-cart-shopping"></i></button>
+                </div>
+            </div>`;
+
+                                // Append the item's HTML to the container
+                                searchedItemsCon.innerHTML += itemHTML;
+                            });
+                        } else {
+                            searchedItemsCon.innerText = 'NO ITEMS';
+                        }
+
+
+
+                    } else {
+                        // Handle errors if the request is not successful
+                        console.error('Error:', sorting.status, sorting.statusText);
+                    }
+
+
+                }
+            </script>
+</body>
+
+</html>
