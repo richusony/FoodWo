@@ -147,10 +147,11 @@
                                 <div class="px-3 my-3">
                                     <h3 class="font-bold">Shipping to :</h3>
                                     <div id="addContainer">
-                                            <div class='<%if(userData[0].address1 !=="false" ){%> block <%}else{%>hidden<%}%>'>
+                                        <div
+                                            class='<%if(userData[0].address1 !=="false" ){%> block <%}else{%>hidden<%}%>'>
                                             <span>
                                                 <div class="flex my-2 text-sm w-80">
-                                                    <input type="checkbox" name="" id="" class="mx-2">
+                                                    <input type="checkbox" name="" id="addressCheck1" class="mx-2">
                                                     <span id="currentAdd1">
                                                         <%=userData[0].address1%>
                                                     </span>
@@ -161,45 +162,45 @@
                                                     onclick="editAddress(event)">edit address</span></div>
                                             <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd1"
                                                     data-id="1" onclick="saveAddress(event)">save address</span></div>
-                                                    </div>
-                                           
-                                                
-                                                    <div class='<%if(userData[0].address2 !=="false" ){%> block <%}else{%>hidden <% } %>'>
-                                                    <span>
-                                                        <div class="flex my-2 text-sm w-80">
-                                                            <input type="checkbox" name="" id="" class="mx-2">
-                                                            <span id="currentAdd2">
-                                                                <%=userData[0].address2%>
-                                                            </span>
-                                                        </div>
+                                        </div>
+
+
+                                        <div
+                                            class='<%if(userData[0].address2 !=="false" ){%> block <%}else{%>hidden <% } %>'>
+                                            <span>
+                                                <div class="flex my-2 text-sm w-80">
+                                                    <input type="checkbox" name="" id="addressCheck2" class="mx-2">
+                                                    <span id="currentAdd2">
+                                                        <%=userData[0].address2%>
                                                     </span>
-                                                    <div class="text-end"><span class="cursor-pointer" id="editAdd2"
-                                                            data-id="2" onclick="editAddress(event)">edit address</span>
-                                                    </div>
-                                                    <div class="text-end"><span class="cursor-pointer hidden"
-                                                            id="saveAdd2" data-id="2" onclick="saveAddress(event)">save
-                                                            address</span></div>
+                                                </div>
+                                            </span>
+                                            <div class="text-end"><span class="cursor-pointer" id="editAdd2" data-id="2"
+                                                    onclick="editAddress(event)">edit address</span>
+                                            </div>
+                                            <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd2"
+                                                    data-id="2" onclick="saveAddress(event)">save
+                                                    address</span></div>
 
-                                                    </div>
+                                        </div>
 
-                                                        <div class='<%if(userData[0].address3 !=="false" ){%> block <%}else{%>hidden<%}%>'>
-                                                            <span>
-                                                                <div class="flex my-2 text-sm w-80">
-                                                                    <input type="checkbox" name="" id="" class="mx-2">
-                                                                    <span id="currentAdd3">
-                                                                        <%=userData[0].address3%>
-                                                                    </span>
-                                                                </div>
-                                                            </span>
-                                                            <div class="text-end"><span class="cursor-pointer"
-                                                                data-id="3" id="editAdd3"
-                                                                onclick="editAddress(event)">edit address</span>
-                                                            </div>
-                                                            <div class="text-end"><span class="cursor-pointer hidden"
-                                                                id="saveAdd3" data-id="3"
-                                                                onclick="saveAddress(event)">save address</span>
-                                                            </div>
-                                                        </div>
+                                        <div
+                                            class='<%if(userData[0].address3 !=="false" ){%> block <%}else{%>hidden<%}%>'>
+                                            <span>
+                                                <div class="flex my-2 text-sm w-80">
+                                                    <input type="checkbox" name="" id="addressCheck3" class="mx-2">
+                                                    <span id="currentAdd3">
+                                                        <%=userData[0].address3%>
+                                                    </span>
+                                                </div>
+                                            </span>
+                                            <div class="text-end"><span class="cursor-pointer" data-id="3" id="editAdd3"
+                                                    onclick="editAddress(event)">edit address</span>
+                                            </div>
+                                            <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd3"
+                                                    data-id="3" onclick="saveAddress(event)">save address</span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd1" cols=""
                                         rows="4"></textarea>
@@ -209,30 +210,34 @@
                                         rows="4"></textarea>
                                 </div>
 
-                                <%if(userData[0].address3 ==="false" ){%>
-                                <div class="px-3 my-4 text-end">
-                                    <textarea class="text-black hidden w-full px-3 rounded" name="" id="addingAddressCon" cols=""
-                                        rows="4"></textarea>
-                                    <span class="cursor-pointer" id="addingAddress" onclick="addingAddress(event)" >new address</span>
-                                    <span class="cursor-pointer hidden" id="savingAddress" onclick="savingAddress(event)" >save address</span>
-                                </div>
-                                <%}%>
-
-                                <div class="my-3 px-3">
-                                    <div><input type="checkbox" name="" id="" class="mr-2"><span>Apply Code :</span>
+                                <%if(userData[0].address3==="false" ){%>
+                                    <div class="px-3 my-4 text-end">
+                                        <textarea class="text-black hidden w-full px-3 rounded" name=""
+                                            id="addingAddressCon" cols="" rows="4"></textarea>
+                                        <span class="cursor-pointer" id="addingAddress"
+                                            onclick="addingAddress(event)">new address</span>
+                                        <span class="cursor-pointer hidden" id="savingAddress"
+                                            onclick="savingAddress(event)">save address</span>
                                     </div>
-                                    <input type="text" name="" id="" class="rounded my-2">
-                                </div>
-                                <div class="my-3 px-3 flex justify-center items-center">
-                                    <input type="checkbox" name="" id="cod" class="mr-2"><span>Cash on Delivery</span>
-                                </div>
-                                <hr class="py-[0.28px] bg-white rounded my-5">
-                                <div class="flex justify-between px-3 font-bold"><span>Total : </span> <span
-                                        class="finalPrice">₹<%= totalPrice.toFixed(2) %></span>
-                                </div>
-                                <div class="text-center my-4"><button onclick="handleCheckout(event)"
-                                        class="py-2 px-20 rounded bg-white shadow-md text-orange-500 font-bold">checkout</button>
-                                </div>
+                                    <%}%>
+
+                                        <div class="my-3 px-3">
+                                            <div><input type="checkbox" name="" id="" class="mr-2"><span>Apply Code
+                                                    :</span>
+                                            </div>
+                                            <input type="text" name="" id="" class="rounded my-2">
+                                        </div>
+                                        <div class="my-3 px-3 flex justify-center items-center">
+                                            <input type="checkbox" name="" id="cod" class="mr-2"><span>Cash on
+                                                Delivery</span>
+                                        </div>
+                                        <hr class="py-[0.28px] bg-white rounded my-5">
+                                        <div class="flex justify-between px-3 font-bold"><span>Total : </span> <span
+                                                class="finalPrice">₹<%= totalPrice.toFixed(2) %></span>
+                                        </div>
+                                        <div class="text-center my-4"><button onclick="handleCheckout(event)"
+                                                class="py-2 px-20 rounded bg-white shadow-md text-orange-500 font-bold">checkout</button>
+                                        </div>
                             </div>
             </div>
 
@@ -374,49 +379,49 @@
                     }
                 }
 
-                function addingAddress(event){
+                function addingAddress(event) {
                     event.preventDefault();
                     const textContainer = document.getElementById('addingAddressCon');
-                    const savingBtn=document.getElementById('savingAddress')
+                    const savingBtn = document.getElementById('savingAddress')
                     textContainer.classList.remove('hidden');
                     event.target.classList.add('hidden')
                     savingBtn.classList.remove('hidden');
                 }
 
-              async function savingAddress(event){
+                async function savingAddress(event) {
                     event.preventDefault();
                     const textContainer = document.getElementById('addingAddressCon');
-                    const addingBtn=document.getElementById('addingAddress');
-                    const container1=document.getElementById('currentAdd1');
-                    const container2=document.getElementById('currentAdd2');
-                    const container3=document.getElementById('currentAdd3');
-                    const address1='<%=userData[0].address1%>';
-                    const address2='<%=userData[0].address2%>';
-                    const address3='<%=userData[0].address3%>';
-                    let flag=0;
+                    const addingBtn = document.getElementById('addingAddress');
+                    const container1 = document.getElementById('currentAdd1');
+                    const container2 = document.getElementById('currentAdd2');
+                    const container3 = document.getElementById('currentAdd3');
+                    const address1 = '<%=userData[0].address1%>';
+                    const address2 = '<%=userData[0].address2%>';
+                    const address3 = '<%=userData[0].address3%>';
+                    let flag = 0;
 
-                    if(address1 ==="false"){
+                    if (address1 === "false") {
                         container1.innerText = textContainer.innerText.trim();
-                        flag=1;
-                    }else if(address2 ==="false"){
+                        flag = 1;
+                    } else if (address2 === "false") {
                         container2.innerText = textContainer.value.trim();
-                        flag=2;
-                    }else{
+                        flag = 2;
+                    } else {
                         container3.innerText = textContainer.value;
-                        flag=3;
+                        flag = 3;
                     }
                     console.log(textContainer.value);
-                    const newaddress= {
-                        address:textContainer.value.trim()
+                    const newaddress = {
+                        address: textContainer.value.trim()
                     }
                     const userid = sessionStorage.getItem('user_id');
                     const reqData = await JSON.stringify(newaddress)
-                    const adding = await fetch(`/user/add-newaddres/${userid}/${flag}`,{
-                        method:'PATCH',
-                        headers:{
-                            'Content-Type':"application/json"
+                    const adding = await fetch(`/user/add-newaddres/${userid}/${flag}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': "application/json"
                         },
-                        body:reqData
+                        body: reqData
                     })
 
                     if (adding.ok) {
@@ -509,12 +514,41 @@
 
                 async function handleCheckout(event) {
                     const user_id = sessionStorage.getItem('user_id');
-                    const customerName = sessionStorage.getItem('username')
+                    const customerName = sessionStorage.getItem('username');
+                    const checkAddress1 = document.getElementById('addressCheck1');
+                    const checkAddress2 = document.getElementById('addressCheck2');
+                    const checkAddress3 = document.getElementById('addressCheck3');
                     const cod = document.getElementById('cod');
                     const qty = document.querySelectorAll('.qty');
                     const cartItems = '<%-JSON.stringify(cartItems).trim()%>';
                     console.log(cartItems);
                     const check = JSON.parse(cartItems);
+
+                    if (!checkAddress1.checked && !checkAddress2.checked && !checkAddress3.checked) {
+                        alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Please select one address to deliver`;
+                        alertBox.classList.remove('-translate-x-full')
+                        alertBox.classList.remove('opacity-0')
+                        window.scrollTo(0, 0)
+                        setTimeout(() => {
+                            alertBox.classList.add('-translate-x-full')
+                            alertBox.classList.add('opacity-0')
+                        }, 3000)
+                        return;
+                    }
+
+
+                    let selectedAddress = '';
+
+                    if (checkAddress1.checked) {
+                        selectedAddress = currentAdd1.innerText; 
+                    } else if (checkAddress2.checked) {
+                        selectedAddress = currentAdd2.innerText; 
+                    } else if (checkAddress3.checked) {
+                        selectedAddress = currentAdd3.innerText; 
+                    } else {
+                        selectedAddress = 'No address selected'; 
+                    }
+                    console.log(selectedAddress)
 
                     if (!cod.checked) {
                         alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Please select the payment method`;
@@ -527,6 +561,19 @@
                         }, 3000)
                         return;
                     }
+                    console.log(check)
+                    if(!check){
+                        alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> No Food items on the cart`;
+                        alertBox.classList.remove('-translate-x-full')
+                        alertBox.classList.remove('opacity-0')
+                        window.scrollTo(0, 0)
+                        setTimeout(() => {
+                            alertBox.classList.add('-translate-x-full')
+                            alertBox.classList.add('opacity-0')
+                        }, 3000)
+                        return;
+                    }
+
                     check.forEach(async (item, index) => {
                         // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                         const productId = item._id;
@@ -548,7 +595,7 @@
                             productQty: productQty,
                             productPrice: productPrice,
                             paymentMethod: cod.checked ? 'COD' : 'CREDIT CARD',
-                            address: currentAdd.innerText
+                            address: selectedAddress
                         }
 
                         const reqData = await JSON.stringify(productData);

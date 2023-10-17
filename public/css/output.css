@@ -874,18 +874,6 @@ video {
   width: 100vw;
 }
 
-.w-9 {
-  width: 2.25rem;
-}
-
-.w-96 {
-  width: 24rem;
-}
-
-.w-8 {
-  width: 2rem;
-}
-
 .min-w-full {
   min-width: 100%;
 }
