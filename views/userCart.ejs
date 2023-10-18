@@ -517,7 +517,7 @@
                 function initPayment(data) {
                     console.log("amount :", data)
                     const options = {
-                        key: "rzp_test_oGzL8HIxtLGLlJ",
+                        key: "<%=process.env.RAZOR_PAY_KEY_ID%>",
                         amount: parseInt(data.data.amount),
                         currency: data.data.currency,
                         name: "FoodWo",
