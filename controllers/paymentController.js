@@ -35,7 +35,7 @@ async function verifyOrders(req, res) {
         const {
             razorpay_order_id,
             razorpay_payment_id,
-            razorpay_signature
+            razorpay_signature,
         } = req.body;
 
         console.log('body : ', req.body)

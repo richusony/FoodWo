@@ -18,7 +18,7 @@ function viewLogInPage(req, res) {
 }
 
 async function viewOrdersPage(req, res) {
-    const allOrders = await orderModel.find({}).sort({ createdAt: 1 })
+    const allOrders = await orderModel.find({}).sort({ createdAt: -1 }).limit(8)
     res.render('../views/Admin/ordersMain', { orders: allOrders });
 }
 

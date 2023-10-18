@@ -520,7 +520,7 @@
                         key: "rzp_test_oGzL8HIxtLGLlJ",
                         amount: parseInt(data.data.amount),
                         currency: data.data.currency,
-                        name: "richu Sony",
+                        name: "FoodWo",
                         description: "Test Transaction",
                         image: "/public/images/android-chrome-512x512.png",
                         order_id: data.data.id,
@@ -587,7 +587,7 @@
                                             image: image,
                                             productQty: productQty,
                                             productPrice: productPrice,
-                                            paymentMethod: 'Online',
+                                            paymentMethod: 'Online Payment',
                                             address: selectedAddress
                                         }
 
@@ -619,7 +619,7 @@
                                                 console.log(data)
                                                 sessionStorage.setItem('orderid', data.orderid)
                                                 sessionStorage.setItem('orderaddress', data.address)
-                                                // window.location.href = '/user/order-success'
+                                                window.location.href = '/user/order-success'
                                             }
                                             console.log(`${productName} Ok.`)
                                         }
@@ -630,7 +630,7 @@
                             }
                         },
                         theme: {
-                            color: "#3399cc"
+                            color: "#F97316"
                         }
                     }
                     const rzpl = new window.Razorpay(options)
@@ -690,8 +690,9 @@
 
                     if (!cod.checked) {
                         try {
+                            const totalAmount=parseInt('<%=totalPrice%>')
                             const orderUrl = '/user/orders'
-                            const paying = await axios.post(orderUrl, { amount: 250 })
+                            const paying = await axios.post(orderUrl, { amount: totalAmount })
                             console.log(paying)
                             initPayment(paying.data)
                         } catch (error) {
