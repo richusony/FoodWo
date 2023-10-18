@@ -15,7 +15,57 @@
     <%- include('adminNavbar') %>
 
         <section class="px-5 min-h-screen">
-            
+
+            <!-- Coupon Search -->
+            <div class="w-full my-5">
+                <div class="flex w-1/2 mx-auto border border-gray-500 hover:border-orange-500 px-3 py-2 rounded items-center">
+                    <input type="text" placeholder="Search Coupons" class="outline-none w-full"> 
+                    <i class="fa-solid text-gray-500 fa-search"></i>
+                </div>
+            </div>
+
+            <!-- Add New Coupon -->
+            <div class="my-5 border-2 border-orange-500 py-2 px-3 rounded">
+                <div class="w-full text-end">
+                    <button class="transition delay-50 px-3 py-2 text-white bg-orange-500 rounded font-semibold ease-linear hover:bg-orange-600 active:bg-orange-500">Create Coupon</button>
+                </div>
+                <div class="flex justify-between bg-gray-100 px-3 py-2 mt-2 rounded">
+
+                    <div class="w-28">
+                        <h3 class="text-gray-500 mb-1">User limit</h3>
+                        <input class="w-full px-2 py-1 outline-orange-500 rounded" placeholder="0" value="" type="text">
+                    </div>
+
+                    <div class="">
+                        <h3 class="text-gray-500 mb-1">Start time</h3>
+                        <input class="outline-orange-500 px-2 py-1 rounded" type="date">
+                    </div>
+
+                    <div class="">
+                        <h3 class="text-gray-500 mb-1">End time</h3>
+                        <input class="outline-orange-500 px-2 py-1 rounded" type="date">
+                    </div>
+
+                    <div class="">
+                        <h3 class="text-gray-500 mb-1">Coupon Code</h3>
+                        <input type="text" placeholder="Enter Coupon code" class="px-2 py-1 rounded outline-orange-500">
+                    </div>
+
+                    <div class="">
+                        <h3 class="text-gray-500 mb-1">Discount Type</h3>
+                        <select name="" id="" class="px-2 py-1 outline-orange-500 rounded">
+                            <option value="per">By Percentage</option>
+                            <option value="amt">By Amount</option>
+                        </select>
+                    </div>
+
+                    <div class="">
+                        <h3 class="text-gray-500 mb-1">Discount Value</h3>
+                        <input type="text" placeholder="Enter the discount" class="px-2 py-1 outline-orange-500">
+                    </div>
+
+                </div>
+            </div>
         </section>
 
     <!-- Footer -->
