@@ -10,6 +10,8 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
     <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
         /* Hide the default scrollbar */
         .overflow-x-scroll::-webkit-scrollbar {
@@ -512,6 +514,33 @@
                     editAdd.classList.remove('hidden')
                 }
 
+                function initPayment(data){
+                    console.log("amount :",data)
+                    const options = {
+                        key:"rzp_test_oGzL8HIxtLGLlJ",
+                        amount:parseInt(data.data.amount),
+                        currency:data.data.currency,
+                        name:"richu Sony",
+                        description:"Test Transaction",
+                        image:"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.1YM53mG10H_U25iPjop83QHaEo%26pid%3DApi&f=1&ipt=605ec6e42ec14e75eec4328ce9b3b681a1c38071c54911013cc6d1841b383740&ipo=images",
+                        order_id:data.data.id,
+                        handler: async (response)=>{
+                            try{
+                                const verifyUrl = '/user/verify'
+                                const data = await axios.post(verifyUrl,response)
+                                console.log(data)
+                            }catch(error){
+                                console.log(error);
+                            }
+                        },
+                        theme:{
+                            color:"#3399cc"
+                        }
+                    }
+                    const rzpl = new window.Razorpay(options)
+                    rzpl.open()
+                }
+
                 async function handleCheckout(event) {
                     const user_id = sessionStorage.getItem('user_id');
                     const customerName = sessionStorage.getItem('username');
@@ -551,86 +580,85 @@
                     console.log(selectedAddress)
 
                     if (!cod.checked) {
-                        alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Please select the payment method`;
-                        alertBox.classList.remove('-translate-x-full')
-                        alertBox.classList.remove('opacity-0')
-                        window.scrollTo(0, 0)
-                        setTimeout(() => {
-                            alertBox.classList.add('-translate-x-full')
-                            alertBox.classList.add('opacity-0')
-                        }, 3000)
-                        return;
-                    }
-                    console.log(check)
-                    if(!check){
-                        alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> No Food items on the cart`;
-                        alertBox.classList.remove('-translate-x-full')
-                        alertBox.classList.remove('opacity-0')
-                        window.scrollTo(0, 0)
-                        setTimeout(() => {
-                            alertBox.classList.add('-translate-x-full')
-                            alertBox.classList.add('opacity-0')
-                        }, 3000)
-                        return;
-                    }
-
-                    check.forEach(async (item, index) => {
-                        // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
-                        const productId = item._id;
-                        const productName = item.productName;
-                        const image = item.productMainImage[0];
-                        const productPrice = item.productPrice;
-                        const productQty = parseInt(qty[index].innerText);
-                        console.log('productName : ', productName)
-                        console.log('productPrice : ', productPrice)
-                        console.log('productQty : ', productQty)
-                        console.log('\n......................................')
-
-                        const productData = {
-                            user_id: user_id,
-                            customerName: customerName,
-                            productId: productId,
-                            productName: productName,
-                            image: image,
-                            productQty: productQty,
-                            productPrice: productPrice,
-                            paymentMethod: cod.checked ? 'COD' : 'CREDIT CARD',
-                            address: selectedAddress
+                        try{
+                            const orderUrl = '/user/orders'
+                            const paying = await axios.post(orderUrl,{amount:250})
+                            console.log(paying)
+                            initPayment(paying.data)
+                        }catch(error){
+                            console.log(error)
                         }
+                    }
+                    // console.log(check)
+                    // if(!check){
+                    //     alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> No Food items on the cart`;
+                    //     alertBox.classList.remove('-translate-x-full')
+                    //     alertBox.classList.remove('opacity-0')
+                    //     window.scrollTo(0, 0)
+                    //     setTimeout(() => {
+                    //         alertBox.classList.add('-translate-x-full')
+                    //         alertBox.classList.add('opacity-0')
+                    //     }, 3000)
+                    //     return;
+                    // }
 
-                        const reqData = await JSON.stringify(productData);
-                        const checkResponse = await fetch('/user/cart-checkout', {
-                            method: 'PATCH',
-                            headers: {
-                                'Content-Type': "application/json",
-                            },
-                            body: reqData
-                        })
+                    // check.forEach(async (item, index) => {
+                    //     // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
+                    //     const productId = item._id;
+                    //     const productName = item.productName;
+                    //     const image = item.productMainImage[0];
+                    //     const productPrice = item.productPrice;
+                    //     const productQty = parseInt(qty[index].innerText);
+                    //     console.log('productName : ', productName)
+                    //     console.log('productPrice : ', productPrice)
+                    //     console.log('productQty : ', productQty)
+                    //     console.log('\n......................................')
 
-                        if (checkResponse.ok) {
-                            const reqData = {
-                                foodid: productId,
-                                userid: user_id
-                            }
-                            const realData = await JSON.stringify(reqData);
+                    //     const productData = {
+                    //         user_id: user_id,
+                    //         customerName: customerName,
+                    //         productId: productId,
+                    //         productName: productName,
+                    //         image: image,
+                    //         productQty: productQty,
+                    //         productPrice: productPrice,
+                    //         paymentMethod: cod.checked ? 'COD' : 'CREDIT CARD',
+                    //         address: selectedAddress
+                    //     }
 
-                            const response = await fetch('/user/removeFromCart', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': "application/json",
-                                },
-                                body: realData
-                            })
-                            if (response.ok) {
-                                const data = await checkResponse.json();
-                                console.log(data)
-                                sessionStorage.setItem('orderid', data.orderid)
-                                sessionStorage.setItem('orderaddress', data.address)
-                                window.location.href = '/user/order-success'
-                            }
-                            console.log(`${productName} Ok.`)
-                        }
-                    });
+                    //     const reqData = await JSON.stringify(productData);
+                    //     const checkResponse = await fetch('/user/cart-checkout', {
+                    //         method: 'PATCH',
+                    //         headers: {
+                    //             'Content-Type': "application/json",
+                    //         },
+                    //         body: reqData
+                    //     })
+
+                    //     if (checkResponse.ok) {
+                    //         const reqData = {
+                    //             foodid: productId,
+                    //             userid: user_id
+                    //         }
+                    //         const realData = await JSON.stringify(reqData);
+
+                    //         const response = await fetch('/user/removeFromCart', {
+                    //             method: 'POST',
+                    //             headers: {
+                    //                 'Content-Type': "application/json",
+                    //             },
+                    //             body: realData
+                    //         })
+                    //         if (response.ok) {
+                    //             const data = await checkResponse.json();
+                    //             console.log(data)
+                    //             sessionStorage.setItem('orderid', data.orderid)
+                    //             sessionStorage.setItem('orderaddress', data.address)
+                    //             window.location.href = '/user/order-success'
+                    //         }
+                    //         console.log(`${productName} Ok.`)
+                    //     }
+                    // });
                 }
             </script>
 </body>

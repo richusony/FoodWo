@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const { escapeRegExpChars } = require('ejs/lib/utils');
+const Razorpay = require('razorpay')
 
 
 
@@ -11,7 +11,7 @@ async function createOrders(req, res) {
         });
 
         const options = {
-            amount: req.body.amount * 100,
+            amount: parseInt(req.body.amount) * 100,
             currency: "INR",
             receipt: crypto.randomBytes(10).toString("hex"),
         };
