@@ -266,9 +266,6 @@ function viewForgotPasswordPage(req, res) {
     res.render('../views/forgotPassword.ejs', { userid: uid })
 }
 
-async function viewWishlistPage(req, res) {
-    res.render('../views/userWishlist.ejs')
-}
 
 function viewverifyPhonePage(req, res) {
     res.render('../views/userNumberVerify.ejs');
@@ -697,7 +694,6 @@ module.exports = {
     addToWishlist,
     addToCart,
     removeFromCart,
-    viewWishlistPage,
     viewForgotPasswordPage,
     viewverifyPhonePage,
     sendResetUrl,

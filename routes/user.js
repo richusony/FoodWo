@@ -4,7 +4,9 @@ const {userAuth} = require('../middleware/sessionAuth')
 const {isBlocked}= require('../middleware/userBlocked')
 const {upload} = require('../middleware/multer')
 const {viewProductSearchPage, searchFoodItems} = require('../controllers/searchController')
-const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewWishlistPage, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage, viewOrderItemPage, cancelOrder, updateUserAddress, addNewAddress} = require('../controllers/user')
+const {viewWishlistPage, removeWishlist} = require('../controllers/wishlistController')
+const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage, viewOrderItemPage, cancelOrder, updateUserAddress, addNewAddress} = require('../controllers/user');
+const { createOrders, verifyOrders } = require('../controllers/paymentController');
 
 
 
@@ -45,9 +47,6 @@ router.route('/forgotPassword/:id')
 router.route('/newpassword')
 .post(updateNewPassword)
 
-router.route('/wishlist/')
-.get(viewWishlistPage)  
-
 
 router.route('/product-details/:id')
 .get(viewProductDetailsPage)
@@ -57,6 +56,9 @@ router.use(userAuth)
 
 // Checking wether User is Blocked or Not
 router.use(isBlocked)
+
+router.route('/wishlist/:uid')
+.get(viewWishlistPage)  
 
 router.route('/userProfile/:id')
 .get(viewUserProfile)
@@ -73,6 +75,9 @@ router.route('/logout')
 
 router.route('/addWishlist/:fid/:uid')
 .post(addToWishlist)
+
+router.route('/remove-wishlist')
+.delete(removeWishlist)
 
 router.route('/removeFromCart/')
 .post(removeFromCart)
@@ -97,6 +102,12 @@ router.route('/save-address/:uid/:aid')
 
 router.route('/add-newaddres/:uid/:aid')
 .patch(addNewAddress)
+
+router.route('/orders')
+.post(createOrders)
+
+router.route('/verify')
+.post(verifyOrders)
 
 
 module.exports = router;

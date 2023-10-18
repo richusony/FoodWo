@@ -11,6 +11,8 @@ const wishListSchema = new mongoose.Schema({
         required:true
     },
     created_at: { type: String, default: () => { return moment(new Date()).format('DD/MM/YYYY') }}
+},{
+    timestamps:true
 })
 
 const wishListModel = mongoose.model('wishlist',wishListSchema);

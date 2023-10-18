@@ -39,7 +39,92 @@
 <body>
     <%-include('../views/userNavbar.ejs') %>
 
+        <section class="px-5 py-2 min-h-screen">
+            <div id="alert"
+                class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+                <span id="alertMsg"></span>
+            </div>
+            <h1 class="px-3 md:px-6 font-bold text-xl md:text-2xl my-5 ">My Wishlist</h1>
+            <div class="bg-[#F3F4F6] p-5 flex flex-wrap gap-5 justify-center" id="searchedItemsCon">
+                <% if(wishes){wishes.forEach((wish)=>{%>
+                    <div class="bg-[#FFFFFF] rounded-xl px-4 py-6 w-72 md:w-fit shadow-md">
+                        <div class="flex items-center">
+                            <div class="w-56">
+                                <h2 class="font-semibold text-lg my-1">
+                                    <%=wish.productName%>
+                                </h2>
+                                <span><span class="text-orange-500">₹</span>
+                                    <%=wish.productPrice%>
+                                </span>
+                                <p class="text-sm text-gray-500">
+                                    <%=wish.description%>
+                                </p>
+                            </div>
+
+                            <div class="flex justify-center ml-4 md:mx-2">
+                                <div class="w-28 h-28"><img class="w-full h-full object-cover rounded"
+                                        src="/<%=wish.productMainImage%>" alt=""></div>
+                            </div>
+                        </div>
+
+                        <div class="my-3">
+                            <button onclick="removeFromWishlist(event)" data-foodid="<%=wish._id%>"
+                                class="px-5 mx-1 py-2 border border-orange-500 rounded text-orange-500">remove </button>
+                            <button class="px-5 mx-1 py-2 bg-orange-500 rounded text-white">Cart<i
+                                    class="fa-solid text-xl fa-cart-shopping"></i></button>
+                        </div>
+
+                    </div>
+                    <%})}%>
+            </div>
+        </section>
+
         <%-include('../views/userFooter.ejs') %>
+
+            <script>
+                const alertBox = document.getElementById('alert')
+                const alertMsg = document.getElementById('alertMsg')
+                async function removeFromWishlist(event) {
+                    const foodid = event.target.dataset.foodid;
+                    const userId = sessionStorage.getItem('user_id');
+                    const removeDetails ={
+                        foodid,
+                        userId
+                    }
+                    const reqData = await JSON.stringify(removeDetails);
+                    const removing = await fetch(`/user/remove-wishlist`,{
+                        method:'Delete',
+                        headers:{
+                            'Content-Type':"application/json"
+                        },
+                        body:reqData
+                    })
+
+                    if (removing.ok) {
+                        const data= await removing.json()
+                       if(data.deleted){
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Removed from wishlist`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                            window.location.reload();
+                        }, 3000)
+                       }else{
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Something went wrong.Please try again`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                       }
+                    }
+                }
+            </script>
 </body>
 
 </html>

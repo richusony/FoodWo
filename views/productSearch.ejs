@@ -139,7 +139,8 @@
                 <div class="px-2 my-5 hidden" id="searchedItemsMainCon">
                     <div>
                         <div class="px-3 py-2 bg-slate-100 w-fit rounded my-2"><span>Sort by </span>
-                            <select class="bg-transparent outline-none" onchange="sortFood(event)" name="" id="sortInput">
+                            <select class="bg-transparent outline-none" onchange="sortFood(event)" name=""
+                                id="sortInput">
                                 <option class="" selected value="none">none</option>
                                 <option class="" value="fresh">new</option>
                                 <option class="" value="priceAsc">price (low to high)</option>
@@ -173,7 +174,7 @@
         <%- include('../views/userFooter.ejs') %>
 
             <script>
-                 const alertBox = document.getElementById('alert')
+                const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
                 let searches;
@@ -186,7 +187,7 @@
                     const searchedItemsCon = document.getElementById('searchedItemsCon')
                     const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
 
-                   
+
 
                     searchIcon.classList.add('hidden')
                     clearIcon.classList.remove('hidden')
@@ -201,7 +202,7 @@
                         return;
                     }
                     const searching = await fetch(`/user/search-food?query=${event.target.value}`);
-                    searches=event.target.value;
+                    searches = event.target.value;
                     if (searching.ok) {
                         searchedItemsMainCon.classList.remove('hidden')
                         // Handle a successful response (e.g., display search results)
@@ -223,7 +224,7 @@
                 </div>
 
                 <div class="relative flex justify-center ml-4 md:mx-2">
-                    <div class="w-28 h-28"><img class="w-full h-full ${item.productInStock<=0?'grayscale':''} object-cover rounded" src="/${item.productMainImage}" alt=""></div>
+                    <div class="w-28 h-28"><img onclick="redirectTo('/user/product-details/${item._id}')" class="w-full h-full ${item.productInStock <= 0 ? 'grayscale' : ''} object-cover cursor-pointer rounded" src="/${item.productMainImage}" alt=""></div>
                     <button onclick="addToCart(event)" data-foodid="${item._id}" class="absolute -bottom-2 px-5 py-2 bg-orange-500 rounded text-white"><i data-foodid="${item._id}" class="fa-solid text-xl fa-cart-shopping"></i></button>
                 </div>
             </div>`;
@@ -264,7 +265,7 @@
                     event.preventDefault();
                     const userid = sessionStorage.getItem('user_id')
                     const foodid = event.target.dataset.foodid;
-                    
+
                     console.log(event)
                     const reqData = {
                         userid: userid,
@@ -311,9 +312,9 @@
                     }
                 }
 
-                async function sortFood(event){
-                    const sortText=event.target.value;
-                    console.log(sortText,searches)
+                async function sortFood(event) {
+                    const sortText = event.target.value;
+                    console.log(sortText, searches)
                     const sorting = await fetch(`/user/search-food?query=${searches}&sortfood=${sortText}`)
                     if (sorting.ok) {
                         searchedItemsMainCon.classList.remove('hidden')
@@ -336,27 +337,30 @@
                 </div>
 
                 <div class="relative flex justify-center ml-4 md:mx-2">
-                    <div class="w-28 h-28"><img class="w-full h-full ${item.productInStock<=0?'grayscale':''} object-cover rounded" src="/${item.productMainImage}" alt=""></div>
+                    <div class="w-28 h-28"><img onclick="redirectTo('/user/product-details/${item._id}')" class="w-full h-full ${item.productInStock <= 0 ? 'grayscale' : ''} object-cover rounded cursor-pointer" src="/${item.productMainImage}" alt=""></div>
                     <button onclick="addToCart(event)" data-foodid="${item._id}" class="absolute -bottom-2 px-5 py-2 bg-orange-500 rounded text-white"><i data-foodid="${item._id}" class="fa-solid text-xl fa-cart-shopping"></i></button>
                 </div>
-            </div>`;
+            </div>
+           `;
 
-                                // Append the item's HTML to the container
-                                searchedItemsCon.innerHTML += itemHTML;
-                            });
-                        } else {
-                            searchedItemsCon.innerText = 'NO ITEMS';
-                        }
-
-
-
-                    } else {
-                        // Handle errors if the request is not successful
-                        console.error('Error:', sorting.status, sorting.statusText);
-                    }
+            // Append the item's HTML to the container
+            searchedItemsCon.innerHTML += itemHTML;
+            });
+            } else {
+            searchedItemsCon.innerText = 'NO ITEMS';
+            }
 
 
-                }
+
+            } else {
+            // Handle errors if the request is not successful
+            console.error('Error:', sorting.status, sorting.statusText);
+            }
+
+            }
+            function redirectTo(url){
+            window.location.href=url;
+            }
             </script>
 </body>
 
