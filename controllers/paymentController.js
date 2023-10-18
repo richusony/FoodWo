@@ -36,14 +36,18 @@ async function verifyOrders(req, res) {
             razorpay_order_id,
             razorpay_payment_id,
             razorpay_signature
-        }=req.body;
-        const sign = razorpay_order_id+"|"+razorpay_payment_id;
-        const expectedSign=crypto.createHmac("sha256",process.env.RAZOR_PAY_SECRET_KEY).update(sign.toString).digest("hex");
+        } = req.body;
 
-        if(razorpay_signature === expectedSign){
-            res.status(200).json({message:"payment verified successfully"})
-        }else{
-            res.status(400).json({message:"Invalid Signature sent"})
+        console.log('body : ', req.body)
+        const sign = razorpay_order_id + "|" + razorpay_payment_id;
+        console.log('sign : ', sign)
+        const expectedSign = crypto.createHmac("sha256", process.env.RAZOR_PAY_SECRET_KEY).update(sign.toString()).digest("hex");
+        console.log('exsign : ', expectedSign)
+
+        if (razorpay_signature == expectedSign) {
+            res.status(200).json({ message: "payment verified successfully" })
+        } else {
+            res.status(400).json({ message: "Invalid Signature sent" })
         }
     } catch (error) {
         console.log(error);

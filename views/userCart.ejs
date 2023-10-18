@@ -514,27 +514,123 @@
                     editAdd.classList.remove('hidden')
                 }
 
-                function initPayment(data){
-                    console.log("amount :",data)
+                function initPayment(data) {
+                    console.log("amount :", data)
                     const options = {
-                        key:"rzp_test_oGzL8HIxtLGLlJ",
-                        amount:parseInt(data.data.amount),
-                        currency:data.data.currency,
-                        name:"richu Sony",
-                        description:"Test Transaction",
-                        image:"https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.1YM53mG10H_U25iPjop83QHaEo%26pid%3DApi&f=1&ipt=605ec6e42ec14e75eec4328ce9b3b681a1c38071c54911013cc6d1841b383740&ipo=images",
-                        order_id:data.data.id,
-                        handler: async (response)=>{
-                            try{
+                        key: "rzp_test_oGzL8HIxtLGLlJ",
+                        amount: parseInt(data.data.amount),
+                        currency: data.data.currency,
+                        name: "richu Sony",
+                        description: "Test Transaction",
+                        image: "/public/images/android-chrome-512x512.png",
+                        order_id: data.data.id,
+                        handler: async (response) => {
+                            try {
+                                console.log('response :', response)
                                 const verifyUrl = '/user/verify'
-                                const data = await axios.post(verifyUrl,response)
-                                console.log(data)
-                            }catch(error){
+                                const data = await axios.post(verifyUrl, response)
+                                console.log('verifyData : ', data)
+                                if (data.status === 200) {
+
+                                    const checkAddress1 = document.getElementById('addressCheck1');
+                                    const checkAddress2 = document.getElementById('addressCheck2');
+                                    const checkAddress3 = document.getElementById('addressCheck3');
+                                    let selectedAddress = '';
+
+                                    if (checkAddress1.checked) {
+                                        selectedAddress = currentAdd1.innerText;
+                                    } else if (checkAddress2.checked) {
+                                        selectedAddress = currentAdd2.innerText;
+                                    } else if (checkAddress3.checked) {
+                                        selectedAddress = currentAdd3.innerText;
+                                    } else {
+                                        selectedAddress = 'No address selected';
+                                    }
+                                    console.log(selectedAddress)
+
+                                    const user_id = sessionStorage.getItem('user_id');
+                                    const customerName = sessionStorage.getItem('username');
+                                    const qty = document.querySelectorAll('.qty');
+                                    const cartItems = '<%-JSON.stringify(cartItems).trim()%>';
+                                    console.log(cartItems);
+                                    const check = JSON.parse(cartItems);
+                                    console.log(check)
+                                    if (!check) {
+                                        alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> No Food items on the cart`;
+                                        alertBox.classList.remove('-translate-x-full')
+                                        alertBox.classList.remove('opacity-0')
+                                        window.scrollTo(0, 0)
+                                        setTimeout(() => {
+                                            alertBox.classList.add('-translate-x-full')
+                                            alertBox.classList.add('opacity-0')
+                                        }, 3000)
+                                        return;
+                                    }
+
+                                    check.forEach(async (item, index) => {
+                                        // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
+                                        const productId = item._id;
+                                        const productName = item.productName;
+                                        const image = item.productMainImage[0];
+                                        const productPrice = item.productPrice;
+                                        const productQty = parseInt(qty[index].innerText);
+                                        console.log('productName : ', productName)
+                                        console.log('productPrice : ', productPrice)
+                                        console.log('productQty : ', productQty)
+                                        console.log('\n......................................')
+
+                                        const productData = {
+                                            user_id: user_id,
+                                            customerName: customerName,
+                                            productId: productId,
+                                            productName: productName,
+                                            image: image,
+                                            productQty: productQty,
+                                            productPrice: productPrice,
+                                            paymentMethod: 'Online',
+                                            address: selectedAddress
+                                        }
+
+                                        const reqData = await JSON.stringify(productData);
+                                        const checkResponse = await fetch('/user/cart-checkout', {
+                                            method: 'PATCH',
+                                            headers: {
+                                                'Content-Type': "application/json",
+                                            },
+                                            body: reqData
+                                        })
+
+                                        if (checkResponse.ok) {
+                                            const reqData = {
+                                                foodid: productId,
+                                                userid: user_id
+                                            }
+                                            const realData = await JSON.stringify(reqData);
+
+                                            const response = await fetch('/user/removeFromCart', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': "application/json",
+                                                },
+                                                body: realData
+                                            })
+                                            if (response.ok) {
+                                                const data = await checkResponse.json();
+                                                console.log(data)
+                                                sessionStorage.setItem('orderid', data.orderid)
+                                                sessionStorage.setItem('orderaddress', data.address)
+                                                // window.location.href = '/user/order-success'
+                                            }
+                                            console.log(`${productName} Ok.`)
+                                        }
+                                    });
+                                }
+                            } catch (error) {
                                 console.log(error);
                             }
                         },
-                        theme:{
-                            color:"#3399cc"
+                        theme: {
+                            color: "#3399cc"
                         }
                     }
                     const rzpl = new window.Razorpay(options)
@@ -569,96 +665,97 @@
                     let selectedAddress = '';
 
                     if (checkAddress1.checked) {
-                        selectedAddress = currentAdd1.innerText; 
+                        selectedAddress = currentAdd1.innerText;
                     } else if (checkAddress2.checked) {
-                        selectedAddress = currentAdd2.innerText; 
+                        selectedAddress = currentAdd2.innerText;
                     } else if (checkAddress3.checked) {
-                        selectedAddress = currentAdd3.innerText; 
+                        selectedAddress = currentAdd3.innerText;
                     } else {
-                        selectedAddress = 'No address selected'; 
+                        selectedAddress = 'No address selected';
                     }
                     console.log(selectedAddress)
 
+                    console.log(check)
+                    if (!check) {
+                        alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> No Food items on the cart`;
+                        alertBox.classList.remove('-translate-x-full')
+                        alertBox.classList.remove('opacity-0')
+                        window.scrollTo(0, 0)
+                        setTimeout(() => {
+                            alertBox.classList.add('-translate-x-full')
+                            alertBox.classList.add('opacity-0')
+                        }, 3000)
+                        return;
+                    }
+
                     if (!cod.checked) {
-                        try{
+                        try {
                             const orderUrl = '/user/orders'
-                            const paying = await axios.post(orderUrl,{amount:250})
+                            const paying = await axios.post(orderUrl, { amount: 250 })
                             console.log(paying)
                             initPayment(paying.data)
-                        }catch(error){
+                        } catch (error) {
                             console.log(error)
                         }
+                    } else {
+                        check.forEach(async (item, index) => {
+                            // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
+                            const productId = item._id;
+                            const productName = item.productName;
+                            const image = item.productMainImage[0];
+                            const productPrice = item.productPrice;
+                            const productQty = parseInt(qty[index].innerText);
+                            console.log('productName : ', productName)
+                            console.log('productPrice : ', productPrice)
+                            console.log('productQty : ', productQty)
+                            console.log('\n......................................')
+
+                            const productData = {
+                                user_id: user_id,
+                                customerName: customerName,
+                                productId: productId,
+                                productName: productName,
+                                image: image,
+                                productQty: productQty,
+                                productPrice: productPrice,
+                                paymentMethod: cod.checked ? 'COD' : 'CREDIT CARD',
+                                address: selectedAddress
+                            }
+
+                            const reqData = await JSON.stringify(productData);
+                            const checkResponse = await fetch('/user/cart-checkout', {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': "application/json",
+                                },
+                                body: reqData
+                            })
+
+                            if (checkResponse.ok) {
+                                const reqData = {
+                                    foodid: productId,
+                                    userid: user_id
+                                }
+                                const realData = await JSON.stringify(reqData);
+
+                                const response = await fetch('/user/removeFromCart', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': "application/json",
+                                    },
+                                    body: realData
+                                })
+                                if (response.ok) {
+                                    const data = await checkResponse.json();
+                                    console.log(data)
+                                    sessionStorage.setItem('orderid', data.orderid)
+                                    sessionStorage.setItem('orderaddress', data.address)
+                                    window.location.href = '/user/order-success'
+                                }
+                                console.log(`${productName} Ok.`)
+                            }
+                        });
                     }
-                    // console.log(check)
-                    // if(!check){
-                    //     alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> No Food items on the cart`;
-                    //     alertBox.classList.remove('-translate-x-full')
-                    //     alertBox.classList.remove('opacity-0')
-                    //     window.scrollTo(0, 0)
-                    //     setTimeout(() => {
-                    //         alertBox.classList.add('-translate-x-full')
-                    //         alertBox.classList.add('opacity-0')
-                    //     }, 3000)
-                    //     return;
-                    // }
-
-                    // check.forEach(async (item, index) => {
-                    //     // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
-                    //     const productId = item._id;
-                    //     const productName = item.productName;
-                    //     const image = item.productMainImage[0];
-                    //     const productPrice = item.productPrice;
-                    //     const productQty = parseInt(qty[index].innerText);
-                    //     console.log('productName : ', productName)
-                    //     console.log('productPrice : ', productPrice)
-                    //     console.log('productQty : ', productQty)
-                    //     console.log('\n......................................')
-
-                    //     const productData = {
-                    //         user_id: user_id,
-                    //         customerName: customerName,
-                    //         productId: productId,
-                    //         productName: productName,
-                    //         image: image,
-                    //         productQty: productQty,
-                    //         productPrice: productPrice,
-                    //         paymentMethod: cod.checked ? 'COD' : 'CREDIT CARD',
-                    //         address: selectedAddress
-                    //     }
-
-                    //     const reqData = await JSON.stringify(productData);
-                    //     const checkResponse = await fetch('/user/cart-checkout', {
-                    //         method: 'PATCH',
-                    //         headers: {
-                    //             'Content-Type': "application/json",
-                    //         },
-                    //         body: reqData
-                    //     })
-
-                    //     if (checkResponse.ok) {
-                    //         const reqData = {
-                    //             foodid: productId,
-                    //             userid: user_id
-                    //         }
-                    //         const realData = await JSON.stringify(reqData);
-
-                    //         const response = await fetch('/user/removeFromCart', {
-                    //             method: 'POST',
-                    //             headers: {
-                    //                 'Content-Type': "application/json",
-                    //             },
-                    //             body: realData
-                    //         })
-                    //         if (response.ok) {
-                    //             const data = await checkResponse.json();
-                    //             console.log(data)
-                    //             sessionStorage.setItem('orderid', data.orderid)
-                    //             sessionStorage.setItem('orderaddress', data.address)
-                    //             window.location.href = '/user/order-success'
-                    //         }
-                    //         console.log(`${productName} Ok.`)
-                    //     }
-                    // });
                 }
             </script>
 </body>
