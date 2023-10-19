@@ -40,8 +40,11 @@
     <!-- Navigation -->
     <%- include('adminNavbar') %>
 
-        <section class="px-5 min-h-screen overflow-x-hidden">
-
+        <section class="px-5 min-h-screen overflow-x-hidden py-2">
+            <div id="alert"
+            class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+            <span id="alertMsg"></span>
+        </div>
             <!-- Coupon Search -->
             <div class="w-full my-5 px-5">
                 <div
@@ -55,7 +58,7 @@
                 <!-- Add New Coupon -->
                 <div class="my-5 border-2 border-orange-500 py-2 px-3 rounded w-fit mx-auto">
                     <div class="w-full text-end">
-                        <button
+                        <button onclick="createCoupon(event)"
                             class="transition delay-50 px-3 py-2 text-white bg-orange-500 rounded font-semibold ease-linear hover:bg-orange-600 active:bg-orange-500">Create
                             Coupon</button>
                     </div>
@@ -64,35 +67,36 @@
 
                         <div class="w-28 mx-2">
                             <h3 class="text-gray-500 mb-1">User limit</h3>
-                            <input class="w-full px-2 py-1 outline-orange-500 rounded" placeholder="0" value=""
-                                type="text">
+                            <input class="w-full px-2 py-1 outline-orange-500 rounded" id="userLimit" placeholder="0"
+                                value="" type="text">
                         </div>
 
                         <div class="w-28 mx-2">
                             <h3 class="text-gray-500 mb-1">Usage limit</h3>
-                            <input class="w-full px-2 py-1 outline-orange-500 rounded" placeholder="0" value=""
-                                type="text">
+                            <input class="w-full px-2 py-1 outline-orange-500 rounded" id="usageLimit"
+                                placeholder="per user" value="" type="text">
                         </div>
 
                         <div class=" mx-2">
                             <h3 class="text-gray-500 mb-1">Start time</h3>
-                            <input class="outline-orange-500 px-2 py-1 rounded" type="date">
+                            <input class="outline-orange-500 px-2 py-1 rounded" id="startTime" value="2012-12-08"
+                                type="date">
                         </div>
 
                         <div class=" mx-2">
                             <h3 class="text-gray-500 mb-1">End time</h3>
-                            <input class="outline-orange-500 px-2 py-1 rounded" type="date">
+                            <input class="outline-orange-500 px-2 py-1 rounded" id="endTime" type="date">
                         </div>
 
                         <div class=" mx-2">
                             <h3 class="text-gray-500 mb-1">Coupon Code</h3>
-                            <input type="text" placeholder="Enter Coupon code"
+                            <input type="text" placeholder="Enter Coupon code" id="couponCode"
                                 class="px-2 py-1 rounded outline-orange-500">
                         </div>
 
                         <div class=" mx-2">
                             <h3 class="text-gray-500 mb-1">Discount Type</h3>
-                            <select name="" id="" class="px-2 py-1 outline-orange-500 rounded">
+                            <select name="" class="px-2 py-1 outline-orange-500 rounded" id="discountType">
                                 <option value="per">By Percentage</option>
                                 <option value="amt">By Amount</option>
                             </select>
@@ -100,7 +104,8 @@
 
                         <div class=" mx-2">
                             <h3 class="text-gray-500 mb-1">Discount Value</h3>
-                            <input type="text" placeholder="Enter the discount" class="px-2 py-1 outline-orange-500">
+                            <input type="text" placeholder="Enter the discount" id="discountValue"
+                                class="px-2 py-1 outline-orange-500">
                         </div>
 
                     </div>
@@ -155,6 +160,48 @@
 
         <!-- Footer -->
         <%- include('adminFooter') %>
+
+            <script>
+                  const alertBox = document.getElementById('alert')
+                const alertMsg = document.getElementById('alertMsg')
+                async function createCoupon(event) {
+                    const userLimit = document.getElementById('userLimit')
+                    const usageLimit = document.getElementById('usageLimit')
+                    const startTime = document.getElementById('startTime')
+                    const endTime = document.getElementById('endTime')
+                    const couponCode = document.getElementById('couponCode')
+                    const discountType = document.getElementById('discountType')
+                    const discountValue = document.getElementById('discountValue')
+
+                    if (!userLimit.value ||
+                        !usageLimit.value ||
+                        !startTime.value ||
+                        !endTime.value ||
+                        !couponCode.value ||
+                        !discountType.value ||
+                        !discountValue.value){
+                            window.scrollTo(0, 0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `All fields are required`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                }, 3000)
+                        }
+
+                        const couponData = {
+                            userLimit,
+                            usageLimit,
+                            startTime,
+                            endTime,
+                            couponCode,
+                            discountType,
+                            discountValue
+                        }
+                    console.log(couponData)
+                }
+            </script>
 </body>
 
 </html>
