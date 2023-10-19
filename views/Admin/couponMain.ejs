@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,66 +10,151 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
     <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-auto::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
 </head>
+
 <body>
     <!-- Navigation -->
     <%- include('adminNavbar') %>
 
-        <section class="px-5 min-h-screen">
+        <section class="px-5 min-h-screen overflow-x-hidden">
 
             <!-- Coupon Search -->
-            <div class="w-full my-5">
-                <div class="flex w-1/2 mx-auto border border-gray-500 hover:border-orange-500 px-3 py-2 rounded items-center">
-                    <input type="text" placeholder="Search Coupons" class="outline-none w-full"> 
+            <div class="w-full my-5 px-5">
+                <div
+                    class="flex w-full md:w-1/2 mx-auto border border-gray-500 hover:border-orange-500 px-3 py-2 rounded items-center">
+                    <input type="text" placeholder="Search Coupons" class="outline-none w-full">
                     <i class="fa-solid text-gray-500 fa-search"></i>
                 </div>
             </div>
 
-            <!-- Add New Coupon -->
-            <div class="my-5 border-2 border-orange-500 py-2 px-3 rounded">
-                <div class="w-full text-end">
-                    <button class="transition delay-50 px-3 py-2 text-white bg-orange-500 rounded font-semibold ease-linear hover:bg-orange-600 active:bg-orange-500">Create Coupon</button>
+            <div class="overflow-x-auto overflow-y-hidden w-3/3 px-5">
+                <!-- Add New Coupon -->
+                <div class="my-5 border-2 border-orange-500 py-2 px-3 rounded w-fit mx-auto">
+                    <div class="w-full text-end">
+                        <button
+                            class="transition delay-50 px-3 py-2 text-white bg-orange-500 rounded font-semibold ease-linear hover:bg-orange-600 active:bg-orange-500">Create
+                            Coupon</button>
+                    </div>
+
+                    <div class="flex justify-between bg-gray-100 px-3 py-2 mt-2 rounded w-fit">
+
+                        <div class="w-28 mx-2">
+                            <h3 class="text-gray-500 mb-1">User limit</h3>
+                            <input class="w-full px-2 py-1 outline-orange-500 rounded" placeholder="0" value=""
+                                type="text">
+                        </div>
+
+                        <div class="w-28 mx-2">
+                            <h3 class="text-gray-500 mb-1">Usage limit</h3>
+                            <input class="w-full px-2 py-1 outline-orange-500 rounded" placeholder="0" value=""
+                                type="text">
+                        </div>
+
+                        <div class=" mx-2">
+                            <h3 class="text-gray-500 mb-1">Start time</h3>
+                            <input class="outline-orange-500 px-2 py-1 rounded" type="date">
+                        </div>
+
+                        <div class=" mx-2">
+                            <h3 class="text-gray-500 mb-1">End time</h3>
+                            <input class="outline-orange-500 px-2 py-1 rounded" type="date">
+                        </div>
+
+                        <div class=" mx-2">
+                            <h3 class="text-gray-500 mb-1">Coupon Code</h3>
+                            <input type="text" placeholder="Enter Coupon code"
+                                class="px-2 py-1 rounded outline-orange-500">
+                        </div>
+
+                        <div class=" mx-2">
+                            <h3 class="text-gray-500 mb-1">Discount Type</h3>
+                            <select name="" id="" class="px-2 py-1 outline-orange-500 rounded">
+                                <option value="per">By Percentage</option>
+                                <option value="amt">By Amount</option>
+                            </select>
+                        </div>
+
+                        <div class=" mx-2">
+                            <h3 class="text-gray-500 mb-1">Discount Value</h3>
+                            <input type="text" placeholder="Enter the discount" class="px-2 py-1 outline-orange-500">
+                        </div>
+
+                    </div>
                 </div>
-                <div class="flex justify-between bg-gray-100 px-3 py-2 mt-2 rounded">
+            </div>
 
-                    <div class="w-28">
-                        <h3 class="text-gray-500 mb-1">User limit</h3>
-                        <input class="w-full px-2 py-1 outline-orange-500 rounded" placeholder="0" value="" type="text">
+            <!-- List all Coupons -->
+            <div class="flex flex-col mx-auto w-full mt-10">
+                <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                        <div class="overflow-hidden">
+                            <table class="min-w-full text-left text-sm font-light">
+                                <thead class="border-b font-medium dark:border-neutral-500">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-4">#</th>
+                                        <th scope="col" class="px-6 py-4">Coupon Code</th>
+                                        <th scope="col" class="px-6 py-4">Start time</th>
+                                        <th scope="col" class="px-6 py-4">End time</th>
+                                        <th scope="col" class="px-6 py-4">Discount Type</th>
+                                        <th scope="col" class="px-6 py-4">Discount Value</th>
+                                        <th scope="col" class="px-6 py-4">Status</th>
+                                        <th scope="col" class="px-6 py-4 text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        class="border-b transition duration-300 ease-in-out hover:bg-slate-100 dark:border-neutral-500 dark:hover:bg-slate-300">
+                                        <td class="whitespace-nowrap px-6 py-4 font-medium">1</td>
+                                        <td class="whitespace-nowrap px-6 py-4 font-bold">FESTIVE123</td>
+                                        <td class="whitespace-nowrap px-6 py-4">10/02/2002</td>
+                                        <td class="whitespace-nowrap px-6 py-4">10/02/2002</td>
+                                        <td class="whitespace-nowrap px-6 py-4 text-center">By Percentage</td>
+                                        <td class="whitespace-nowrap px-6 py-4">20%</td>
+                                        <td class="whitespace-nowrap px-6 py-4">active</td>
+                                        <td class="whitespace-nowrap px-6 py-4 text-center"> <a
+                                                href="/admin/userUpdateDetails/"
+                                                class="bg-blue-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
+                                                    class="fa-solid fa-pencil"></i></a>
+                                            <a href="/admin/user-delete/"
+                                                class="bg-red-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
+                                                    class="fa-solid fa-trash-can"></i></a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-
-                    <div class="">
-                        <h3 class="text-gray-500 mb-1">Start time</h3>
-                        <input class="outline-orange-500 px-2 py-1 rounded" type="date">
-                    </div>
-
-                    <div class="">
-                        <h3 class="text-gray-500 mb-1">End time</h3>
-                        <input class="outline-orange-500 px-2 py-1 rounded" type="date">
-                    </div>
-
-                    <div class="">
-                        <h3 class="text-gray-500 mb-1">Coupon Code</h3>
-                        <input type="text" placeholder="Enter Coupon code" class="px-2 py-1 rounded outline-orange-500">
-                    </div>
-
-                    <div class="">
-                        <h3 class="text-gray-500 mb-1">Discount Type</h3>
-                        <select name="" id="" class="px-2 py-1 outline-orange-500 rounded">
-                            <option value="per">By Percentage</option>
-                            <option value="amt">By Amount</option>
-                        </select>
-                    </div>
-
-                    <div class="">
-                        <h3 class="text-gray-500 mb-1">Discount Value</h3>
-                        <input type="text" placeholder="Enter the discount" class="px-2 py-1 outline-orange-500">
-                    </div>
-
                 </div>
             </div>
         </section>
 
-    <!-- Footer -->
-    <%- include('adminFooter') %>
+        <!-- Footer -->
+        <%- include('adminFooter') %>
 </body>
+
 </html>
