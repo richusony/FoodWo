@@ -145,16 +145,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <% if(coupons){ coupons.forEach((coup,index)=>{%>
                                     <tr
                                         class="border-b transition duration-300 ease-in-out hover:bg-slate-100 dark:border-neutral-500 dark:hover:bg-slate-300">
-                                        <td class="whitespace-nowrap px-6 py-4 font-medium">1</td>
-                                        <td class="whitespace-nowrap px-6 py-4 font-bold">FESTIVE123</td>
-                                        <td class="whitespace-nowrap px-6 py-4">10/02/2002</td>
-                                        <td class="whitespace-nowrap px-6 py-4">10/02/2002</td>
-                                        <td class="whitespace-nowrap px-6 py-4 text-center">By Percentage</td>
-                                        <td class="whitespace-nowrap px-6 py-4">20%</td>
+                                        <td class="whitespace-nowrap px-6 py-4 font-medium"><%= index+1%></td>
+                                        <td class="whitespace-nowrap px-6 py-4 font-bold"><%=coup.couponCode%></td>
+                                        <td class="whitespace-nowrap px-6 py-4"><%=coup.startDate%></td>
+                                        <td class="whitespace-nowrap px-6 py-4"><%=coup.endDate%></td>
+                                        <td class="whitespace-nowrap px-6 py-4 text-center"><%=coup.discountType%></td>
+                                        <td class="whitespace-nowrap px-6 py-4"><%=coup.discountValue%></td>
                                         <td class="whitespace-nowrap px-6 py-4">active</td>
-                                        <td class="whitespace-nowrap px-6 py-4 text-center"> <a
+                                        <td class="whitespace-nowrap px-6 py-4 text-center"><a
                                                 href="/admin/userUpdateDetails/"
                                                 class="bg-blue-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
                                                     class="fa-solid fa-pencil"></i></a>
@@ -163,6 +164,7 @@
                                                     class="fa-solid fa-trash-can"></i></a>
                                         </td>
                                     </tr>
+                                    <%})}%>
                                 </tbody>
                             </table>
                         </div>

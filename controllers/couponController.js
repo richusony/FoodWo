@@ -3,7 +3,8 @@ const productModel = require('../models/productSchema')
 
 async function viewCouponMangemenPage(req, res) {
     const foodItem = await productModel.find({}).sort({ productName: 1 })
-    res.render('../views/Admin/couponMain.ejs', { food: foodItem });
+    const coupons = await couponModel.find({})
+    res.render('../views/Admin/couponMain.ejs', { food: foodItem , coupons:coupons});
 }
 
 async function createCoupon(req, res) {
