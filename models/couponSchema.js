@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const moment = require('moment')
+const moment = require('moment');
+const { TrunkPage } = require('twilio/lib/rest/trunking/v1/trunk');
 
 const couponSchema = new mongoose.Schema({
     couponCode: {
@@ -20,6 +21,18 @@ const couponSchema = new mongoose.Schema({
         required:true
     },
     usageLimit:{
+        type:Number,
+        required:true
+    },
+    foodId:{
+        type:String,
+        required:true
+    },
+    discountType:{
+        type:String,
+        required:true
+    },
+    discountValue:{
         type:Number,
         required:true
     }

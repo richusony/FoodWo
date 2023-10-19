@@ -364,16 +364,56 @@
                         return;
                     } else {
                         const couponData = {
-                            userLimit:parseInt(userLimit.value),
-                            usageLimit:parseInt(usageLimit.value),
-                            startTime:startTime.value,
-                            endTime:endTime.value,
-                            couponCode:couponCode.value,
-                            foodItem:foodItem.value,
-                            discountType:discountType.value,
-                            discountValue:parseInt(discountValue.value)
+                            userLimit: parseInt(userLimit.value),
+                            usageLimit: parseInt(usageLimit.value),
+                            startTime: startTime.value,
+                            endTime: endTime.value,
+                            couponCode: couponCode.value,
+                            foodItem: foodItem.value,
+                            discountType: discountType.value,
+                            discountValue: parseInt(discountValue.value)
                         }
                         console.log(couponData)
+                        const reqData = await JSON.stringify(couponData);
+                        const res = await fetch('/admin/create-coupon', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': "application/json"
+                            },
+                            body: reqData
+                        });
+                        console.log(res)
+                        if (res.ok) {
+                            const data = await res.json();
+                            if (data.added) {
+                                window.scrollTo(0, 0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `Coupon created successfully`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                }, 3000)
+                            } else {
+                                window.scrollTo(0, 0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `Coupon creation failed`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                }, 3000)
+                            }
+                        }else{
+                            window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Something went wrong.Please try again.`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        }
                     }
                 }
             </script>
