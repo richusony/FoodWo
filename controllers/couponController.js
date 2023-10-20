@@ -17,7 +17,18 @@ async function createCoupon(req, res) {
     }
 }
 
+async function deleteCoupon(req,res){
+    const coupId = req.params.id;
+    const deleteCoup = await couponModel.deleteOne({_id:coupId})
+    if(deleteCoup){
+        res.status(200).json({deleted:true});
+    }else{
+        res.status(500).json({deleted:false})
+    }
+}
+
 module.exports = {
     viewCouponMangemenPage,
-    createCoupon
+    createCoupon,
+    deleteCoupon
 }
