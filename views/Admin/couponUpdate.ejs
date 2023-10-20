@@ -24,28 +24,41 @@
                     <% if(coupon){ %>
                     <div class="w-full flex flex-col my-2">
                         <label for="mainImage">Coupon Code</label>
-                        <input type="text" id="couponCode" value="<%=coupon[0].couponCode%>"
+                        <input type="text" id="couponCode" value="<%=coupon[0].couponCode%>" onchange="couponCodeValidate(event)"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                     </div>
                     <div class="w-full flex flex-col my-2">
                         <label for="relatedImages">User Limit</label>
-                        <input type="text" id="userLimit" value="<%=coupon[0].usersLimit%>"
+                        <input type="text" id="userLimit" value="<%=coupon[0].usersLimit%>" onchange="userLimitRange(event)"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                     </div>
                     <div class="w-full flex flex-col my-2">
                         <label for="relatedImages">Usage Limit</label>
-                        <input type="text" id="usageLimit" value="<%=coupon[0].usageLimit%>"
+                        <input type="text" id="usageLimit" value="<%=coupon[0].usageLimit%>" onchange="usageLimitRange(event)"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                     </div>
                     <div class="w-full flex flex-col my-2">
                         <label for="relatedImages">Start Date</label>
-                        <input type="date" id="startTime" value="<%=coupon[0].startDate%>"
+                        <input type="date" id="startTime" value="<%=coupon[0].startDate%>" onchange="dateValidatorStart(event)"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                     </div>
                     <div class="w-full flex flex-col my-2">
                         <label for="relatedImages">End Date</label>
-                        <input type="date" id="endTime" value="<%=coupon[0].endDate%>"
+                        <input type="date" id="endTime" value="<%=coupon[0].endDate%>" onchange="dateValidatorEnd(event)"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                    </div>
+                    <div class="w-full flex flex-col my-2">
+                        <label for="relatedImages">Food Item</label>
+                        <select name="" id="foodItem" class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                            <% food.forEach((fd)=>{%>
+                                <%if(fd._id==coupon[0].foodId){%>
+                                <option selected value="<%=fd._id%>"><%=fd.productName%></option>
+                                <%}%>
+                               <%})%>
+                           <% food.forEach((fd)=>{%>
+                            <option value="<%=fd._id%>"><%=fd.productName%></option>
+                           <%})%>
+                        </select>
                     </div>
                     <div class="w-full flex flex-col my-2">
                         <label for="relatedImages">Discount Type</label>
@@ -57,18 +70,19 @@
                     </div>
                     <div class="w-full flex flex-col my-2">
                         <label for="relatedImages">Discount Value</label>
-                        <input type="text" id="discountValue" value="<%=coupon[0].discountValue%>"
+                        <input type="text" id="discountValue" value="<%=coupon[0].discountValue%>" onchange="discountValidator(event)"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                     </div>
                     <div class="w-full flex flex-col my-2">
                         <label for="relatedImages">Status</label>
                         <select name="" id="status" class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
-                            <option value="active">Active</option>
+                            <option value="<%=coupon[0].status%>"><%=coupon[0].status%></option>
+                            <option value="active">active</option>
                             <option value="deactive">deactive</option>
                         </select>
                     </div>
                     <div class="text-center mt-5">
-                        <button class="px-4 py-2 bg-orange-500 text-white rounded-full">Update</button>
+                        <button class="px-4 py-2 bg-orange-500 text-white rounded-full" id="<%=coupon[0]._id%>" onclick="updateCoupon(event)">Update</button>
                     </div>
                     <%}%>
                 </form>
@@ -79,31 +93,91 @@
 
 
             <script>
-                let baseImage = "";
-                // Image Details
-                const image = document.getElementById('doc');
-                const imagetag = document.getElementById('imagetag');
-                const alert = document.getElementById('alert');
+                     const alertBox = document.getElementById('alert')
+                const alertMsg = document.getElementById('alertMsg')
 
-                image.addEventListener('change', async (event) => {
-                    const file = event.target.files[0];
-                    if (file) {
-                        baseImage = await ImagetoBase64(file);
-                        imagetag.setAttribute("src", baseImage);
+                function userLimitRange(event) {
+                    if (parseInt(event.target.value) <= 0) {
+                        alert(`Enter a valid user limit`)
+                        return;
                     }
-                });
-
-                async function ImagetoBase64(file) {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(file);
-
-                    return new Promise((resolve, reject) => {
-                        reader.onload = () => resolve(reader.result);
-                        reader.onerror = err => reject(err);
-                    });
+                    if (parseInt(event.target.value) > 10) {
+                        alert(`Are you sure you want to give coupons for ${event.target.value}`)
+                    }
                 }
 
-                async function updateUser(event) {
+                function usageLimitRange(event) {
+                    if (parseInt(event.target.value) <= 0) {
+                        alert(`Enter a valid usage limit`)
+                        return;
+                    }
+                    if (parseInt(event.target.value) > 3) {
+                        alert(`Are you sure about user Usage limit : ${event.target.value}`)
+                    }
+                }
+
+                function dateValidatorStart(event) {
+                    // Get the selected date from the input element
+                    const selectedDate = new Date(event.target.value);
+
+                    // Get the current date
+                    const currentDate = new Date();
+                    currentDate.setHours(0, 0, 0, 0);
+
+                    // Check if the selected date is valid and not in the past
+                    if (selectedDate < currentDate) {
+                        // If the selected date is in the past, clear the input field
+                        event.target.value = '';
+                        alert("Please enter a date from today onwards.");
+                    }
+                }
+
+                function dateValidatorEnd(event) {
+                    const startTime = new Date(document.getElementById('startTime').value)
+                    // Get the selected date from the input element
+                    const selectedDate = new Date(event.target.value);
+                    if (selectedDate <= startTime) {
+                        alert(`Coupon End Date must be greater than Starting Date`)
+                    }
+                    // Get the current date
+                    const currentDate = new Date();
+                    currentDate.setHours(0, 0, 0, 0);
+
+                    // Check if the selected date is valid and not in the past
+                    if (selectedDate <= currentDate) {
+                        console.log(selectedDate, currentDate)
+                        // If the selected date is in the past, clear the input field
+                        event.target.value = '';
+                        alert("Please enter a date from tomorrow onwards.");
+                    }
+                }
+
+                function couponCodeValidate(event) {
+                    const code = event.target.value;
+                    if (code !== code.toUpperCase()) {
+                        alert(`Coupon Code must be in Capital Letters`)
+                    }
+                }
+
+                function discountValidator(event) {
+                    const discountType = document.getElementById('discountType').value;
+                    if (parseInt(event.target.value) <= 0) {
+                        alert(`Zero or lesser is not acceptable!!`)
+                        return;
+                    }
+                    if (discountType === "per" && parseInt(event.target.value) > 85) {
+                        alert(`Percentange is too High`);
+                    }
+
+                }
+
+                function foodItemValidator(event) {
+                    if (event.target.value === "none") {
+                        alert(`Food Item can't be None`)
+                    }
+                }
+
+                async function updateCoupon(event) {
                     const fullname = document.getElementById('fullname').value;
                     const email = document.getElementById('email').value;
                     const phone = document.getElementById('phone').value;

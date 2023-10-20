@@ -35,6 +35,10 @@ const couponSchema = new mongoose.Schema({
     discountValue:{
         type:Number,
         required:true
+    },
+    status:{
+        type:String,
+        required:true
     }
 })
 
