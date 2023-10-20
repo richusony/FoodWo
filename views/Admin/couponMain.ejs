@@ -136,6 +136,8 @@
                                     <tr>
                                         <th scope="col" class="px-6 py-4">#</th>
                                         <th scope="col" class="px-6 py-4">Coupon Code</th>
+                                        <th scope="col" class="px-6 py-4">User Limit</th>
+                                        <th scope="col" class="px-6 py-4">Usage Limit</th>
                                         <th scope="col" class="px-6 py-4">Start time</th>
                                         <th scope="col" class="px-6 py-4">End time</th>
                                         <th scope="col" class="px-6 py-4">Discount Type</th>
@@ -150,13 +152,15 @@
                                         class="border-b transition duration-300 ease-in-out hover:bg-slate-100 dark:border-neutral-500 dark:hover:bg-slate-300">
                                         <td class="whitespace-nowrap px-6 py-4 font-medium"><%= index+1%></td>
                                         <td class="whitespace-nowrap px-6 py-4 font-bold"><%=coup.couponCode%></td>
+                                        <td class="whitespace-nowrap px-6 py-4 font-bold text-center"><%=coup.usersLimit%></td>
+                                        <td class="whitespace-nowrap px-6 py-4 font-bold text-center"><%=coup.usageLimit%></td>
                                         <td class="whitespace-nowrap px-6 py-4"><%=coup.startDate%></td>
                                         <td class="whitespace-nowrap px-6 py-4"><%=coup.endDate%></td>
-                                        <td class="whitespace-nowrap px-6 py-4 text-center"><%=coup.discountType%></td>
-                                        <td class="whitespace-nowrap px-6 py-4"><%=coup.discountValue%></td>
+                                        <td class="whitespace-nowrap px-6 py-4 text-center"><%=coup.discountType==="per"?"Percentage":"Amount"%></td>
+                                        <td class="whitespace-nowrap px-6 py-4 text-center"><%=coup.discountValue%><%=coup.discountType==="per"?"%":"Rs"%></td>
                                         <td class="whitespace-nowrap px-6 py-4">active</td>
                                         <td class="whitespace-nowrap px-6 py-4 text-center"><a
-                                                href="/admin/userUpdateDetails/"
+                                                href="/admin/coupon-update/<%=coup._id%>"
                                                 class="bg-blue-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
                                                     class="fa-solid fa-pencil"></i></a>
                                             <a href="/admin/delete-coupon/<%=coup._id%>"
@@ -395,6 +399,7 @@
                                 setTimeout(() => {
                                     alertBox.classList.add('opacity-0')
                                     alertBox.classList.add('-translate-x-full')
+                                    window.location.reload();
                                 }, 3000)
                             } else {
                                 window.scrollTo(0, 0)

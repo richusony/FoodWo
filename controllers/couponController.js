@@ -1,10 +1,27 @@
 const { couponModel } = require('../models/couponSchema')
 const productModel = require('../models/productSchema')
 
+// Helper function to format date in DD/MM/YYYY
+function formatDate(date) {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+}
+
 async function viewCouponMangemenPage(req, res) {
     const foodItem = await productModel.find({}).sort({ productName: 1 })
     const coupons = await couponModel.find({})
-    res.render('../views/Admin/couponMain.ejs', { food: foodItem , coupons:coupons});
+    // Format startDate and endDate to DD/MM/YYYY format
+    const formattedCoupons = coupons.map(coupon => {
+        return {
+            ...coupon._doc,
+            startDate: coupon.startDate.toLocaleDateString('en-GB'),
+            endDate: coupon.endDate.toLocaleDateString('en-GB'),
+        };
+    });
+    res.render('../views/Admin/couponMain.ejs', { food: foodItem , coupons:formattedCoupons});
 }
 
 async function createCoupon(req, res) {
@@ -27,8 +44,13 @@ async function deleteCoupon(req,res){
     }
 }
 
+async function viewCouponUpdatePage(req,res){
+res.render('../views/Admin/couponUpdate.ejs')
+}
+
 module.exports = {
     viewCouponMangemenPage,
     createCoupon,
-    deleteCoupon
+    deleteCoupon,
+    viewCouponUpdatePage
 }
