@@ -19,48 +19,58 @@
                 class="fa-solid fa-triangle-exclamation text-xl"></i> We are facing some issues.Please try later.</div>
         <section class="px-5 py-3">
 
-            <div class="">
+            <div class="flex justify-center py-5">
                 <form class="md:w-1/2" action="">
+                    <% if(coupon){ %>
                     <div class="w-full flex flex-col my-2">
                         <label for="mainImage">Coupon Code</label>
-                        <input type="text" id="couponCode"
+                        <input type="text" id="couponCode" value="<%=coupon[0].couponCode%>"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                     </div>
                     <div class="w-full flex flex-col my-2">
                         <label for="relatedImages">User Limit</label>
-                        <input type="text" id="userLimit"
+                        <input type="text" id="userLimit" value="<%=coupon[0].usersLimit%>"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                     </div>
                     <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">User Limit</label>
-                        <input type="text" id="userLimit"
+                        <label for="relatedImages">Usage Limit</label>
+                        <input type="text" id="usageLimit" value="<%=coupon[0].usageLimit%>"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                     </div>
                     <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">User Limit</label>
-                        <input type="text" id="userLimit"
+                        <label for="relatedImages">Start Date</label>
+                        <input type="date" id="startTime" value="<%=coupon[0].startDate%>"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                     </div>
                     <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">User Limit</label>
-                        <input type="text" id="userLimit"
+                        <label for="relatedImages">End Date</label>
+                        <input type="date" id="endTime" value="<%=coupon[0].endDate%>"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                     </div>
                     <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">User Limit</label>
-                        <input type="text" id="userLimit"
+                        <label for="relatedImages">Discount Type</label>
+                        <select name="" id="discountType" class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                            <option value="<%=coupon[0].discountType==='per'?'per':'amt'%>"><%=coupon[0].discountType==="per"?"Percentage":"Amount"%></option>
+                            <option value="per">Percentage</option>
+                            <option value="amt">Amount</option>
+                        </select>
+                    </div>
+                    <div class="w-full flex flex-col my-2">
+                        <label for="relatedImages">Discount Value</label>
+                        <input type="text" id="discountValue" value="<%=coupon[0].discountValue%>"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                     </div>
                     <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">User Limit</label>
-                        <input type="text" id="userLimit"
-                            class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        <label for="relatedImages">Status</label>
+                        <select name="" id="status" class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                            <option value="active">Active</option>
+                            <option value="deactive">deactive</option>
+                        </select>
                     </div>
-                    <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">User Limit</label>
-                        <input type="text" id="userLimit"
-                            class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                    <div class="text-center mt-5">
+                        <button class="px-4 py-2 bg-orange-500 text-white rounded-full">Update</button>
                     </div>
+                    <%}%>
                 </form>
             </div>
         </section>

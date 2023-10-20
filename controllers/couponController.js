@@ -45,7 +45,17 @@ async function deleteCoupon(req,res){
 }
 
 async function viewCouponUpdatePage(req,res){
-res.render('../views/Admin/couponUpdate.ejs')
+    const coupId = req.params.id;
+    const coupon = await couponModel.find({_id:coupId})
+    const formattedCoupons = coupon.map(coupon => {
+        return {
+            ...coupon._doc,
+            startDate: coupon.startDate.toISOString().split('T')[0],
+            endDate: coupon.endDate.toISOString().split('T')[0],
+        };
+    });
+    console.log(formattedCoupons)
+res.render('../views/Admin/couponUpdate.ejs',{coupon:formattedCoupons})
 }
 
 module.exports = {
