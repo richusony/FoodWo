@@ -1,5 +1,6 @@
 const { couponModel } = require('../models/couponSchema')
-const productModel = require('../models/productSchema')
+const productModel = require('../models/productSchema');
+const { userModel } = require('../models/userSchema');
 
 // Helper function to format date in DD/MM/YYYY
 function formatDate(date) {
@@ -63,18 +64,41 @@ async function updateCoupon(req, res) {
     const { userLimit, usageLimit, startTime, endTime, couponCode, foodItem, discountType, discountValue, status } = req.body;
 
     const updating = await couponModel.updateOne({ _id: coupId }, { usersLimit: userLimit, usageLimit: usageLimit, startDate: startTime, endDate: endTime, couponCode: couponCode, foodId: foodItem, discountType: discountType, discountValue: discountValue, status: status })
-    if(updating){
-        res.status(200).json({updated:true})
-    }else{
-        res.status(500).json({updated:false})
+    if (updating) {
+        res.status(200).json({ updated: true })
+    } else {
+        res.status(500).json({ updated: false })
     }
 }
 
-async function checkingCoupon(req,res){
-const userId = req.params.uid;
-const coupon = req.body;
-console.log('got it : ',coupon,userId)
-res.status(200);    
+async function checkingCoupon(req, res) {
+    const userId = req.params.uid;
+    const coupon = req.body.coupon;
+    const exists = await couponModel.findOne({ couponCode: coupon })
+    if (exists) {
+        if (exists.status === "deactive") {
+            res.status(500).json({ err: "This coupon has been blocked" })
+        } else {
+            const userData = userModel.findOne({_id:userId})
+ 
+            const startDate = exists.startDate
+            const endDate = exists.endDate
+            const usersLimit = exists.usersLimit
+            const usageLimit = exists.usageLimit
+
+            const usedOrNot = userData?.usedCoupons.map((coup)=>{
+                if(coup.couponId===exists._id){
+                    return coup;
+                }
+            })
+
+            res.status(200);
+        }
+
+    } else {
+        res.status(404).json({ err: "Coupon not found" })
+    }
+    
 }
 
 module.exports = {

@@ -616,6 +616,10 @@ video {
   margin: 0.5rem;
 }
 
+.m-10 {
+  margin: 2.5rem;
+}
+
 .mx-1 {
   margin-left: 0.25rem;
   margin-right: 0.25rem;
@@ -900,6 +904,10 @@ video {
 
 .w-screen {
   width: 100vw;
+}
+
+.w-96 {
+  width: 24rem;
 }
 
 .min-w-full {
@@ -1246,6 +1254,50 @@ video {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-\[\] {
+  background-color: ;
+}
+
+.bg-\[rgb\(234\2c 88\2c 12\)\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(234 88 12 / var(--tw-bg-opacity));
+}
+
+.bg-\[rgba\(234\2c 88\2c 12\)\] {
+  --tw-bg-opacity: 1;
+  background-color: rgba(234, 88, 12, var(--tw-bg-opacity));
+}
+
+.bg-\[rgba\(234\2c 88\2c 12\2c \)\] {
+  background-color: rgba(234,88,12,);
+}
+
+.bg-\[rgba\(234\2c 88\2c 12\2c 0\.5\)\] {
+  background-color: rgba(234,88,12,0.5);
+}
+
+.bg-\[rgba\(234\2c 88\2c 12\2c 0\.\)\] {
+  background-color: rgba(234,88,12,0.);
+}
+
+.bg-\[rgba\(234\2c 88\2c 12\2c 0\.8\)\] {
+  background-color: rgba(234,88,12,0.8);
+}
+
+.bg-\[rgba\(234\2c 88\2c 12\2c 0\.2\)\] {
+  background-color: rgba(234,88,12,0.2);
+}
+
+.bg-orange-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(154 52 18 / var(--tw-bg-opacity));
+}
+
+.bg-orange-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(194 65 12 / var(--tw-bg-opacity));
 }
 
 .bg-\[url\(\'https\:\/\/images\.pexels\.com\/photos\/4908011\/pexels-photo-4908011\.jpeg\'\)\] {
@@ -1641,6 +1693,11 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-orange-500:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 115 22 / var(--tw-bg-opacity));
+}
+
 .hover\:text-orange-500:hover {
   --tw-text-opacity: 1;
   color: rgb(249 115 22 / var(--tw-text-opacity));
@@ -1651,6 +1708,11 @@ video {
   color: rgb(226 232 240 / var(--tw-text-opacity));
 }
 
+.hover\:text-white:hover {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
 .hover\:underline:hover {
   text-decoration-line: underline;
 }
@@ -1658,6 +1720,11 @@ video {
 .active\:bg-orange-500:active {
   --tw-bg-opacity: 1;
   background-color: rgb(249 115 22 / var(--tw-bg-opacity));
+}
+
+.active\:bg-orange-800:active {
+  --tw-bg-opacity: 1;
+  background-color: rgb(154 52 18 / var(--tw-bg-opacity));
 }
 
 @media (prefers-color-scheme: dark) {
