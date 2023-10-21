@@ -75,6 +75,16 @@
                         onclick="addMoney(event)">Add Money</button>
                 </div>
             </div>
+            <% if(data.history){%>
+            <div class="text-center mt-10">
+                <h1 class="text-gray-500 font-bold text-xl">Payment History</h1>
+                <% data.history.forEach((his)=>{%>
+                <div class="my-5">
+                    <div class="my-2 py-3 px-5 bg-gray-200 rounded flex justify-between"><span class="text-lg">Date : <%=his.date%></span> <span class="text-lg text-orange-500 font-semibold">added <%=his.amt%>+</span></div>
+                </div>
+                <%})%>
+            </div>
+            <%}%>
         </section>
         <%- include('userFooter')%>
 
@@ -90,6 +100,7 @@
                             amt.classList.remove('bg-orange-700')
                             amt.classList.remove('text-white')
                             amt.classList.add('text-orange-500')
+                            selectedAmt=null;
                         } else {
                             amt.classList.add('bg-orange-700')
                             amt.classList.remove('text-orange-500')
@@ -166,6 +177,17 @@
                 }
 
                 async function addMoney(event) {
+                    if(!selectedAmt){
+                        window.scrollTo(0, 0)
+                                        alertBox.classList.remove('opacity-0')
+                                        alertBox.classList.remove('-translate-x-full')
+                                        alertMsg.innerText = `select any one of the amount`;
+                                        setTimeout(() => {
+                                            alertBox.classList.add('opacity-0')
+                                            alertBox.classList.add('-translate-x-full')
+                                        }, 3000)
+                        return
+                    }
                     try {
                         const orderUrl = '/user/orders'
                         const paying = await axios.post(orderUrl, { amount: selectedAmt })
