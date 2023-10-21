@@ -86,11 +86,12 @@ async function checkingCoupon(req, res) {
             const usersLimit = exists.usersLimit
             const usageLimit = exists.usageLimit
 
-            const usedOrNot = userData.usedCoupons.map((coup)=>{
+            const usedOrNot = userData?.usedCoupons.map((coup)=>{
                 if(coup.couponId===exists._id){
-                    return coup; 
+                    return coup;
                 }
             })
+
             res.status(200);
         }
 

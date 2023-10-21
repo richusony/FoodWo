@@ -660,7 +660,7 @@
                     const coupon = event.target.value;
                     // couponAlert.innerText =`${coupon.toString()}`;
                     if(coupon.toUpperCase() !== coupon){
-                        couponAlert.innerText =`Invalid Coupon`;
+                        couponAlert.innerText =`*Invalid Coupon`;
                         couponAlert.classList.remove('hidden');
                         return;
                     }else{
@@ -673,7 +673,7 @@
                 async function checkCoupon(event){
                     const couponInput = document.getElementById('couponInput').value;
                     if(couponInput.toUpperCase() !== couponInput){
-                        couponAlert.innerText =`Invalid Coupon`;
+                        couponAlert.innerText =`*Invalid Coupon`;
                         couponAlert.classList.remove('hidden');
                         return;
                     }
