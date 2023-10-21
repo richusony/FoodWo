@@ -48,7 +48,6 @@ async function viewCouponUpdatePage(req, res) {
     const coupId = req.params.id;
     const coupon = await couponModel.find({ _id: coupId })
     const foodItem = await productModel.find({})
-    console.log('checking .. ', foodItem)
     const formattedCoupons = coupon.map(coupon => {
         return {
             ...coupon._doc,
@@ -56,7 +55,6 @@ async function viewCouponUpdatePage(req, res) {
             endDate: coupon.endDate.toISOString().split('T')[0],
         };
     });
-    console.log(formattedCoupons)
     res.render('../views/Admin/couponUpdate.ejs', { coupon: formattedCoupons, food: foodItem })
 }
 
@@ -72,10 +70,18 @@ async function updateCoupon(req, res) {
     }
 }
 
+async function checkingCoupon(req,res){
+const userId = req.params.uid;
+const coupon = req.body;
+console.log('got it : ',coupon,userId)
+res.status(200);    
+}
+
 module.exports = {
     viewCouponMangemenPage,
     createCoupon,
     deleteCoupon,
     viewCouponUpdatePage,
-    updateCoupon
+    updateCoupon,
+    checkingCoupon
 }

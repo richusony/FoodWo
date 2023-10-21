@@ -224,10 +224,14 @@
                                     <%}%>
 
                                         <div class="my-3 px-3">
-                                            <div><input type="checkbox" name="" id="" class="mr-2"><span>Apply Code
+                                            <div><input type="checkbox" name="" id="couponCheck" class="mr-2"><span>Apply Code
                                                     :</span>
                                             </div>
-                                            <input type="text" name="" id="" class="rounded my-2">
+                                            <div>
+                                                <input type="text" name="" disabled="disabled" id="couponInput" class="rounded my-2 py-1 text-black diabled" onchange="onCouponChange(event)">
+                                                <button id="couponBtn" class="hidden px-2 py-1 bg-white text-orange-500 rounded" onclick="checkCoupon(event)">apply</button>
+                                                <p class="hidden" id="couponAlert"></p>
+                                            </div>
                                         </div>
                                         <div class="my-3 px-3 flex justify-center items-center">
                                             <input type="checkbox" name="" id="cod" class="mr-2"><span>Cash on
@@ -252,6 +256,8 @@
                 // let quantity = 1;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
+                const couponAlert = document.getElementById('couponAlert');
+                const couponCheck = document.getElementById('couponCheck');
 
 
                 let finalPrice = parseInt('<%-totalPrice %>');
@@ -635,6 +641,55 @@
                     }
                     const rzpl = new window.Razorpay(options)
                     rzpl.open()
+                }
+
+                couponCheck.addEventListener('change',(check)=>{
+                    const couponInput = document.getElementById('couponInput')
+                    if(couponCheck.checked){
+                        couponInput.disabled=false;
+                    }else{
+                        couponInput.disabled=true;
+                        const couponBtn = document.getElementById('couponBtn');
+                        couponBtn.classList.add('hidden')
+
+                    }
+                })
+
+                async function onCouponChange(event){
+                    event.preventDefault();
+                    const coupon = event.target.value;
+                    // couponAlert.innerText =`${coupon.toString()}`;
+                    if(coupon.toUpperCase() !== coupon){
+                        couponAlert.innerText =`Invalid Coupon`;
+                        couponAlert.classList.remove('hidden');
+                        return;
+                    }else{
+                        couponAlert.classList.add('hidden');
+                        const couponBtn = document.getElementById('couponBtn');
+                        couponBtn.classList.remove('hidden')
+                    }
+                }
+
+                async function checkCoupon(event){
+                    const couponInput = document.getElementById('couponInput').value;
+                    if(couponInput.toUpperCase() !== couponInput){
+                        couponAlert.innerText =`Invalid Coupon`;
+                        couponAlert.classList.remove('hidden');
+                        return;
+                    }
+
+                    const userId = sessionStorage.getItem('user_id');
+                    const coupon = {coupon:couponInput}
+                    const reqData = JSON.stringify(coupon)
+                    console.log(reqData)
+                    
+                    const res = await fetch(`/user/check-coupon/${userId}`,{
+                        method:'POST',
+                        headers:{
+                            'Content-Type':"application/json"
+                        },
+                        body:reqData
+                    })
                 }
 
                 async function handleCheckout(event) {
