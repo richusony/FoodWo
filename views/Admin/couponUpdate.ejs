@@ -242,6 +242,7 @@
                     const ending = new Date(endTime.value)
                     const currentDate = new Date();
                     currentDate.setHours(0, 0, 0, 0);
+                    console.log('dates : ',starting,ending)
 
                     if (parseInt(userLimit.value) <= 0) {
                         window.scrollTo(0, 0)
@@ -258,16 +259,6 @@
                         alertBox.classList.remove('opacity-0')
                         alertBox.classList.remove('-translate-x-full')
                         alertMsg.innerText = `user usage limit can't be zero or lesser`;
-                        setTimeout(() => {
-                            alertBox.classList.add('opacity-0')
-                            alertBox.classList.add('-translate-x-full')
-                        }, 3000)
-                        return;
-                    } else if (starting < currentDate) {
-                        window.scrollTo(0, 0)
-                        alertBox.classList.remove('opacity-0')
-                        alertBox.classList.remove('-translate-x-full')
-                        alertMsg.innerText = `Can't choose old Dates`;
                         setTimeout(() => {
                             alertBox.classList.add('opacity-0')
                             alertBox.classList.add('-translate-x-full')
@@ -317,8 +308,8 @@
                         const couponData = {
                             userLimit: parseInt(userLimit.value),
                             usageLimit: parseInt(usageLimit.value),
-                            startTime: startTime.value,
-                            endTime: endTime.value,
+                            startTime: starting,
+                            endTime:ending,
                             couponCode: couponCode.value,
                             foodItem: foodItem.value,
                             discountType: discountType.value,
@@ -345,7 +336,7 @@
                                 setTimeout(() => {
                                     alertBox.classList.add('opacity-0')
                                     alertBox.classList.add('-translate-x-full')
-                                    // window.location.reload();
+                                    window.location.reload();
                                 }, 3000)
                             } else {
                                 window.scrollTo(0, 0)
