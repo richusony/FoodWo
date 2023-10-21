@@ -7,6 +7,7 @@ const {viewProductSearchPage, searchFoodItems} = require('../controllers/searchC
 const {viewWishlistPage, removeWishlist} = require('../controllers/wishlistController')
 const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage, viewOrderItemPage, cancelOrder, updateUserAddress, addNewAddress} = require('../controllers/user');
 const { createOrders, verifyOrders } = require('../controllers/paymentController');
+const {checkingCoupon} = require('../controllers/couponController');
 
 
 
@@ -109,5 +110,7 @@ router.route('/orders')
 router.route('/verify')
 .post(verifyOrders)
 
+router.route('/check-coupon/:uid')
+.post(checkingCoupon)
 
 module.exports = router;

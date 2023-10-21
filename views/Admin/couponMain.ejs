@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupon Management</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-auto::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <%- include('adminNavbar') %>
+
+        <section class="px-5 min-h-screen overflow-x-hidden py-2">
+            <div id="alert"
+                class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+                <span id="alertMsg"></span>
+            </div>
+            <!-- Coupon Search -->
+            <div class="w-full my-5 px-5">
+                <div
+                    class="flex w-full md:w-1/2 mx-auto border border-gray-500 hover:border-orange-500 px-3 py-2 rounded items-center">
+                    <input type="text" placeholder="Search Coupons" class="outline-none w-full">
+                    <i class="fa-solid text-gray-500 fa-search"></i>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto overflow-y-hidden w-3/3 px-5">
+                <!-- Add New Coupon -->
+                <div class="my-5 border-2 border-orange-500 py-2 px-3 rounded w-fit mx-auto">
+                    <div class="w-full text-end">
+                        <button onclick="createCoupon(event)"
+                            class="transition delay-50 px-3 py-2 text-white bg-orange-500 rounded font-semibold ease-linear hover:bg-orange-600 active:bg-orange-500">Create
+                            Coupon</button>
+                    </div>
+
+                    <div class="flex justify-between bg-gray-100 px-3 py-2 mt-2 rounded w-fit">
+
+                        <div class="w-28 mx-2">
+                            <h3 class="text-gray-500 mb-1">User limit</h3>
+                            <input class="w-full px-2 py-1 outline-orange-500 rounded" id="userLimit" placeholder="0"
+                                value="" type="text" onchange="userLimitRange(event)">
+                        </div>
+
+                        <div class="w-28 mx-2">
+                            <h3 class="text-gray-500 mb-1">Usage limit</h3>
+                            <input class="w-full px-2 py-1 outline-orange-500 rounded" id="usageLimit"
+                                placeholder="per user" value="" type="text" onchange="usageLimitRange(event)">
+                        </div>
+
+                        <div class=" mx-2">
+                            <h3 class="text-gray-500 mb-1">Start time</h3>
+                            <input class="outline-orange-500 px-2 py-1 rounded" id="startTime" value="" type="date"
+                                onchange="dateValidatorStart(event)">
+                        </div>
+
+                        <div class=" mx-2">
+                            <h3 class="text-gray-500 mb-1">End time</h3>
+                            <input class="outline-orange-500 px-2 py-1 rounded" id="endTime" type="date"
+                                onchange="dateValidatorEnd(event)">
+                        </div>
+
+                        <div class=" mx-2">
+                            <h3 class="text-gray-500 mb-1">Coupon Code</h3>
+                            <input type="text" placeholder="Enter Coupon code" id="couponCode"
+                                class="px-2 py-1 rounded outline-orange-500" onchange="couponCodeValidate(event)">
+                        </div>
+
+                        <div class=" mx-2">
+                            <h3 class="text-gray-500 mb-1">Food Item</h3>
+                            <select name="" class="px-2 py-1 outline-orange-500 rounded" id="foodItem"
+                                onchange="foodItemValidator(event)">
+                                <option value="none">None</option>
+                                <% if(food){ food.forEach((item)=>{ %>
+                                    <option value="<%=item._id%>">
+                                        <%=item.productName%>
+                                    </option>
+                                    <% })}%>
+                            </select>
+                        </div>
+
+                        <div class=" mx-2">
+                            <h3 class="text-gray-500 mb-1">Discount Type</h3>
+                            <select name="" class="px-2 py-1 outline-orange-500 rounded" id="discountType">
+                                <option value="per">By Percentage</option>
+                                <option value="amt">By Amount</option>
+                            </select>
+                        </div>
+
+                        <div class=" mx-2">
+                            <h3 class="text-gray-500 mb-1">Discount Value</h3>
+                            <input type="text" placeholder="Enter the discount" id="discountValue"
+                                onchange="discountValidator(event)" class="px-2 py-1 outline-orange-500">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- List all Coupons -->
+            <div class="flex flex-col mx-auto w-full mt-10">
+                <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                        <div class="overflow-hidden">
+                            <table class="min-w-full text-left text-sm font-light">
+                                <thead class="border-b font-medium dark:border-neutral-500">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-4">#</th>
+                                        <th scope="col" class="px-6 py-4">Coupon Code</th>
+                                        <th scope="col" class="px-6 py-4">User Limit</th>
+                                        <th scope="col" class="px-6 py-4">Usage Limit</th>
+                                        <th scope="col" class="px-6 py-4">Start time</th>
+                                        <th scope="col" class="px-6 py-4">End time</th>
+                                        <th scope="col" class="px-6 py-4">Discount Type</th>
+                                        <th scope="col" class="px-6 py-4">Discount Value</th>
+                                        <th scope="col" class="px-6 py-4">Status</th>
+                                        <th scope="col" class="px-6 py-4 text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if(coupons){ coupons.forEach((coup,index)=>{%>
+                                    <tr
+                                        class="border-b transition duration-300 ease-in-out hover:bg-slate-100 dark:border-neutral-500 dark:hover:bg-slate-300">
+                                        <td class="whitespace-nowrap px-6 py-4 font-medium"><%= index+1%></td>
+                                        <td class="whitespace-nowrap px-6 py-4 font-bold"><%=coup.couponCode%></td>
+                                        <td class="whitespace-nowrap px-6 py-4 font-bold text-center"><%=coup.usersLimit%></td>
+                                        <td class="whitespace-nowrap px-6 py-4 font-bold text-center"><%=coup.usageLimit%></td>
+                                        <td class="whitespace-nowrap px-6 py-4"><%=coup.startDate%></td>
+                                        <td class="whitespace-nowrap px-6 py-4"><%=coup.endDate%></td>
+                                        <td class="whitespace-nowrap px-6 py-4 text-center"><%=coup.discountType==="per"?"Percentage":"Amount"%></td>
+                                        <td class="whitespace-nowrap px-6 py-4 text-center"><%=coup.discountValue%><%=coup.discountType==="per"?"%":"Rs"%></td>
+                                        <td class="whitespace-nowrap px-6 py-4"><%=coup.status %></td>
+                                        <td class="whitespace-nowrap px-6 py-4 text-center"><a
+                                                href="/admin/coupon-update/<%=coup._id%>"
+                                                class="bg-blue-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
+                                                    class="fa-solid fa-pencil"></i></a>
+                                            <a href="/admin/delete-coupon/<%=coup._id%>"
+                                                class="bg-red-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
+                                                    class="fa-solid fa-trash-can"></i></a>
+                                        </td>
+                                    </tr>
+                                    <%})}%>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <%- include('adminFooter') %>
+
+            <script>
+                const alertBox = document.getElementById('alert')
+                const alertMsg = document.getElementById('alertMsg')
+
+                function userLimitRange(event) {
+                    if (parseInt(event.target.value) <= 0) {
+                        alert(`Enter a valid user limit`)
+                        return;
+                    }
+                    if (parseInt(event.target.value) > 10) {
+                        alert(`Are you sure you want to give coupons for ${event.target.value}`)
+                    }
+                }
+
+                function usageLimitRange(event) {
+                    if (parseInt(event.target.value) <= 0) {
+                        alert(`Enter a valid usage limit`)
+                        return;
+                    }
+                    if (parseInt(event.target.value) > 3) {
+                        alert(`Are you sure about user Usage limit : ${event.target.value}`)
+                    }
+                }
+
+                function dateValidatorStart(event) {
+                    // Get the selected date from the input element
+                    const selectedDate = new Date(event.target.value);
+
+                    // Get the current date
+                    const currentDate = new Date();
+                    currentDate.setHours(0, 0, 0, 0);
+
+                    // Check if the selected date is valid and not in the past
+                    if (selectedDate < currentDate) {
+                        // If the selected date is in the past, clear the input field
+                        event.target.value = '';
+                        alert("Please enter a date from today onwards.");
+                    }
+                }
+
+                function dateValidatorEnd(event) {
+                    const startTime = new Date(document.getElementById('startTime').value)
+                    // Get the selected date from the input element
+                    const selectedDate = new Date(event.target.value);
+                    if (selectedDate <= startTime) {
+                        alert(`Coupon End Date must be greater than Starting Date`)
+                    }
+                    // Get the current date
+                    const currentDate = new Date();
+                    currentDate.setHours(0, 0, 0, 0);
+
+                    // Check if the selected date is valid and not in the past
+                    if (selectedDate <= currentDate) {
+                        console.log(selectedDate, currentDate)
+                        // If the selected date is in the past, clear the input field
+                        event.target.value = '';
+                        alert("Please enter a date from tomorrow onwards.");
+                    }
+                }
+
+                function couponCodeValidate(event) {
+                    const code = event.target.value;
+                    if (code !== code.toUpperCase()) {
+                        alert(`Coupon Code must be in Capital Letters`)
+                    }
+                }
+
+                function discountValidator(event) {
+                    const discountType = document.getElementById('discountType').value;
+                    if (parseInt(event.target.value) <= 0) {
+                        alert(`Zero or lesser is not acceptable!!`)
+                        return;
+                    }
+                    if (discountType === "per" && parseInt(event.target.value) > 85) {
+                        alert(`Percentange is too High`);
+                    }
+
+                }
+
+                function foodItemValidator(event) {
+                    if (event.target.value === "none") {
+                        alert(`Food Item can't be None`)
+                    }
+                }
+
+                async function createCoupon(event) {
+                    const userLimit = document.getElementById('userLimit')
+                    const usageLimit = document.getElementById('usageLimit')
+                    const startTime = document.getElementById('startTime')
+                    const endTime = document.getElementById('endTime')
+                    const couponCode = document.getElementById('couponCode')
+                    const foodItem = document.getElementById('foodItem')
+                    const discountType = document.getElementById('discountType')
+                    const discountValue = document.getElementById('discountValue')
+
+
+                    if (!userLimit.value ||
+                        !usageLimit.value ||
+                        !startTime.value ||
+                        !endTime.value ||
+                        !couponCode.value ||
+                        !discountType.value ||
+                        !discountValue.value) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `All fields are required`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    }
+                    const starting = new Date(startTime.value)
+                    const ending = new Date(endTime.value)
+                    const currentDate = new Date();
+                    currentDate.setHours(0, 0, 0, 0);
+
+                    if (parseInt(userLimit.value) <= 0) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `userLimit can't be zero or lesser`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else if (parseInt(usageLimit.value) <= 0) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `user usage limit can't be zero or lesser`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else if (starting < currentDate) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Can't choose old Dates`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else if (ending <= starting) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Ending Date must be greater than Starting`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else if (couponCode.value.toUpperCase() !== couponCode.value) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Coupon Code must be in Capital Letters`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else if (foodItem.value === "none") {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Select any food Item for the Coupon`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else if (discountType.value === "per" && parseInt(discountValue.value) <= 0) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Discount Value can't be zero or lesser`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else {
+                        const couponData = {
+                            userLimit: parseInt(userLimit.value),
+                            usageLimit: parseInt(usageLimit.value),
+                            startTime: startTime.value,
+                            endTime: endTime.value,
+                            couponCode: couponCode.value,
+                            foodItem: foodItem.value,
+                            discountType: discountType.value,
+                            discountValue: parseInt(discountValue.value)
+                        }
+                        console.log(couponData)
+                        const reqData = await JSON.stringify(couponData);
+                        const res = await fetch('/admin/create-coupon', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': "application/json"
+                            },
+                            body: reqData
+                        });
+                        console.log(res)
+                        if (res.ok) {
+                            const data = await res.json();
+                            if (data.added) {
+                                window.scrollTo(0, 0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `Coupon created successfully`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                    window.location.reload();
+                                }, 3000)
+                            } else {
+                                window.scrollTo(0, 0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `Coupon creation failed`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                }, 3000)
+                            }
+                        }else{
+                            window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Something went wrong.Please try again.`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        }
+                    }
+                }
+            </script>
+</body>
+
+</html>

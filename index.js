@@ -15,7 +15,7 @@ app.use(express.json());
 connectMongo(`${process.env.MONGODB_URI}`).then(() => { console.log('MongoDB Connected!!'); })
 
 app.set('view engine', 'ejs');
-app.use('/public/', express.static('./public'));
+app.use('/public/', express.static('./public')); 
 app.use('/uploads/', express.static('./uploads'));
 app.use('/products/', express.static('./products'));
 
