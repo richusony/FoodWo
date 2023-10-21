@@ -41,6 +41,9 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    usedCoupons:{
+        type:Array
+    },
     created_at: {
         type: String,
         default: () => {
