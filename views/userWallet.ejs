@@ -45,16 +45,16 @@
                 class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
                 <span id="alertMsg"></span>
             </div>
-            <div class="flex justify-center items-center mt-10 py-5">
-                <div class="w-96 mx-5">
-                    <h1 class="text-4xl font-bold">Let's Make it easy by,<br>
+            <div class="flex flex-col md:flex-row justify-center items-center mt-10 py-5">
+                <div class="md:w-96 mx-5">
+                    <h1 class="text-2xl md:text-4xl font-bold text-center">Let's Make it easy by,<br>
                         Using <span class="text-orange-500">FoodWo</span> Wallet</h1>
-                    <h3 class="mt-5 text-gray-500">FoodWo Wallet allows you to make instant payments for purchasing food
+                    <h3 class="mt-5 text-gray-500 text-center">FoodWo Wallet allows you to make instant payments for purchasing food
                         items without any
                         transactions issues caused by the banks</h3>
                 </div>
-                <div class="px-5 py-3 mx-5 flex flex-col justify-center items-center">
-                    <p class="text-5xl font-semibold my-3"><span class="text-gray-500">Balance</span> <span
+                <div class="px-5 py-3 mt-10 mx-5 flex flex-col justify-center items-center">
+                    <p class="text-3xl md:text-5xl font-semibold my-3"><span class="text-gray-500">Balance</span> <span
                             class="text-orange-500">₹</span><%= data?.balance?data.balance:0%>
                     </p>
                     <div class="flex justify-center items-center">
@@ -76,15 +76,17 @@
                 </div>
             </div>
             <% if(data.history){%>
-            <div class="text-center mt-10">
-                <h1 class="text-gray-500 font-bold text-xl">Payment History</h1>
-                <% data.history.forEach((his)=>{%>
-                <div class="my-5">
-                    <div class="my-2 py-3 px-5 bg-gray-200 rounded flex justify-between"><span class="text-lg">Date : <%=his.date%></span> <span class="text-lg text-orange-500 font-semibold">added <%=his.amt%>+</span></div>
+                <div class="text-center mt-10">
+                    <h1 class="text-gray-500 font-bold text-xl">Payment History</h1>
+                    <% data.history.forEach((his)=>{%>
+                        <div class="my-5">
+                            <div class="my-2 py-3 px-5 bg-gray-200 rounded flex justify-between"><span
+                                    class="text-lg">Date : <%=his.date%></span> <span
+                                    class="text-lg text-orange-500 font-semibold">added <%=his.amt%>+</span></div>
+                        </div>
+                        <%})%>
                 </div>
-                <%})%>
-            </div>
-            <%}%>
+                <%}%>
         </section>
         <%- include('userFooter')%>
 
@@ -100,7 +102,7 @@
                             amt.classList.remove('bg-orange-700')
                             amt.classList.remove('text-white')
                             amt.classList.add('text-orange-500')
-                            selectedAmt=null;
+                            selectedAmt = null;
                         } else {
                             amt.classList.add('bg-orange-700')
                             amt.classList.remove('text-orange-500')
@@ -177,15 +179,15 @@
                 }
 
                 async function addMoney(event) {
-                    if(!selectedAmt){
+                    if (!selectedAmt) {
                         window.scrollTo(0, 0)
-                                        alertBox.classList.remove('opacity-0')
-                                        alertBox.classList.remove('-translate-x-full')
-                                        alertMsg.innerText = `select any one of the amount`;
-                                        setTimeout(() => {
-                                            alertBox.classList.add('opacity-0')
-                                            alertBox.classList.add('-translate-x-full')
-                                        }, 3000)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `select any one of the amount`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
                         return
                     }
                     try {
