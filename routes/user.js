@@ -8,7 +8,7 @@ const {viewWishlistPage, removeWishlist} = require('../controllers/wishlistContr
 const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage, viewOrderItemPage, cancelOrder, updateUserAddress, addNewAddress} = require('../controllers/user');
 const { createOrders, verifyOrders } = require('../controllers/paymentController');
 const {checkingCoupon} = require('../controllers/couponController');
-const {viewWalletPage}=require('../controllers/walletController')
+const {viewWalletPage, addMoney}=require('../controllers/walletController')
 
 
 // User SignUp Get Request
@@ -113,7 +113,10 @@ router.route('/verify')
 router.route('/check-coupon/:uid')
 .post(checkingCoupon)
 
-router.route('/wallet')
+router.route('/wallet/:uid')
 .get(viewWalletPage)
+
+router.route('/addto-wallet/:uid')
+.post(addMoney)
 
 module.exports = router;
