@@ -15,76 +15,96 @@
 <body>
     <!-- Navigation -->
     <%- include('adminNavbar') %>
-        <div id="alert" class="transition delay-150 ease-linear hidden py-4 px-3 bg-red-400 text-white text-center"><i
-                class="fa-solid fa-triangle-exclamation text-xl"></i> We are facing some issues.Please try later.</div>
+    <div id="alert"
+    class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+    <span id="alertMsg"></span>
+</div>
         <section class="px-5 py-3">
 
             <div class="flex justify-center py-5">
                 <form class="md:w-1/2" action="">
                     <% if(coupon){ %>
-                    <div class="w-full flex flex-col my-2">
-                        <label for="mainImage">Coupon Code</label>
-                        <input type="text" id="couponCode" value="<%=coupon[0].couponCode%>" onchange="couponCodeValidate(event)"
-                            class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
-                    </div>
-                    <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">User Limit</label>
-                        <input type="text" id="userLimit" value="<%=coupon[0].usersLimit%>" onchange="userLimitRange(event)"
-                            class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
-                    </div>
-                    <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">Usage Limit</label>
-                        <input type="text" id="usageLimit" value="<%=coupon[0].usageLimit%>" onchange="usageLimitRange(event)"
-                            class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
-                    </div>
-                    <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">Start Date</label>
-                        <input type="date" id="startTime" value="<%=coupon[0].startDate%>" onchange="dateValidatorStart(event)"
-                            class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
-                    </div>
-                    <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">End Date</label>
-                        <input type="date" id="endTime" value="<%=coupon[0].endDate%>" onchange="dateValidatorEnd(event)"
-                            class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
-                    </div>
-                    <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">Food Item</label>
-                        <select name="" id="foodItem" class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
-                            <% food.forEach((fd)=>{%>
-                                <%if(fd._id==coupon[0].foodId){%>
-                                <option selected value="<%=fd._id%>"><%=fd.productName%></option>
-                                <%}%>
-                               <%})%>
-                           <% food.forEach((fd)=>{%>
-                            <option value="<%=fd._id%>"><%=fd.productName%></option>
-                           <%})%>
-                        </select>
-                    </div>
-                    <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">Discount Type</label>
-                        <select name="" id="discountType" class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
-                            <option value="<%=coupon[0].discountType==='per'?'per':'amt'%>"><%=coupon[0].discountType==="per"?"Percentage":"Amount"%></option>
-                            <option value="per">Percentage</option>
-                            <option value="amt">Amount</option>
-                        </select>
-                    </div>
-                    <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">Discount Value</label>
-                        <input type="text" id="discountValue" value="<%=coupon[0].discountValue%>" onchange="discountValidator(event)"
-                            class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
-                    </div>
-                    <div class="w-full flex flex-col my-2">
-                        <label for="relatedImages">Status</label>
-                        <select name="" id="status" class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
-                            <option value="<%=coupon[0].status%>"><%=coupon[0].status%></option>
-                            <option value="active">active</option>
-                            <option value="deactive">deactive</option>
-                        </select>
-                    </div>
-                    <div class="text-center mt-5">
-                        <button class="px-4 py-2 bg-orange-500 text-white rounded-full" id="<%=coupon[0]._id%>" onclick="updateCoupon(event)">Update</button>
-                    </div>
-                    <%}%>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="mainImage">Coupon Code</label>
+                            <input type="text" id="couponCode" value="<%=coupon[0].couponCode%>"
+                                onchange="couponCodeValidate(event)"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">User Limit</label>
+                            <input type="text" id="userLimit" value="<%=coupon[0].usersLimit%>"
+                                onchange="userLimitRange(event)"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">Usage Limit</label>
+                            <input type="text" id="usageLimit" value="<%=coupon[0].usageLimit%>"
+                                onchange="usageLimitRange(event)"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">Start Date</label>
+                            <input type="date" id="startTime" value="<%=coupon[0].startDate%>"
+                                onchange="dateValidatorStart(event)"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">End Date</label>
+                            <input type="date" id="endTime" value="<%=coupon[0].endDate%>"
+                                onchange="dateValidatorEnd(event)"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">Food Item</label>
+                            <select name="" id="foodItem"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                                <% food.forEach((fd)=>{%>
+                                    <%if(fd._id==coupon[0].foodId){%>
+                                        <option selected value="<%=fd._id%>">
+                                            <%=fd.productName%>
+                                        </option>
+                                        <%}%>
+                                            <%})%>
+                                                <% food.forEach((fd)=>{%>
+                                                    <option value="<%=fd._id%>">
+                                                        <%=fd.productName%>
+                                                    </option>
+                                                    <%})%>
+                            </select>
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">Discount Type</label>
+                            <select name="" id="discountType"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                                <option value="<%=coupon[0].discountType==='per'?'per':'amt'%>">
+                                    <%=coupon[0].discountType==="per"?"Percentage":"Amount"%>
+                                </option>
+                                <option value="per">Percentage</option>
+                                <option value="amt">Amount</option>
+                            </select>
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">Discount Value</label>
+                            <input type="text" id="discountValue" value="<%=coupon[0].discountValue%>"
+                                onchange="discountValidator(event)"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">Status</label>
+                            <select name="" id="status"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                                <option value="<%=coupon[0].status%>">
+                                    <%=coupon[0].status%>
+                                </option>
+                                <option value="active">active</option>
+                                <option value="deactive">deactive</option>
+                            </select>
+                        </div>
+                        <div class="text-center mt-5">
+                            <button class="px-4 py-2 bg-orange-500 text-white rounded-full" id="<%=coupon[0]._id%>"
+                                onclick="updateCoupon(event)">Update</button>
+                        </div>
+                        <%}%>
                 </form>
             </div>
         </section>
@@ -93,7 +113,7 @@
 
 
             <script>
-                     const alertBox = document.getElementById('alert')
+                const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
 
                 function userLimitRange(event) {
@@ -178,37 +198,175 @@
                 }
 
                 async function updateCoupon(event) {
-                    const fullname = document.getElementById('fullname').value;
-                    const email = document.getElementById('email').value;
-                    const phone = document.getElementById('phone').value;
-                    const address = document.getElementById('address').value;
-                    const imagetag = document.getElementById('imagetag').src;
+                    event.preventDefault();
+                    const userLimit = document.getElementById('userLimit')
+                    const usageLimit = document.getElementById('usageLimit')
+                    const startTime = document.getElementById('startTime')
+                    const endTime = document.getElementById('endTime')
+                    const couponCode = document.getElementById('couponCode')
+                    const foodItem = document.getElementById('foodItem')
+                    const discountType = document.getElementById('discountType')
+                    const discountValue = document.getElementById('discountValue')
+                    const status = document.getElementById('status')
+                    const couponData = {
+                            userLimit: parseInt(userLimit.value),
+                            usageLimit: parseInt(usageLimit.value),
+                            startTime: startTime.value,
+                            endTime: endTime.value,
+                            couponCode: couponCode.value,
+                            foodItem: foodItem.value,
+                            discountType: discountType.value,
+                            discountValue: parseInt(discountValue.value),
+                            status:status.value
+                        }
+                        console.log(couponData)
 
-                    const formData = {
-                        fullname: fullname,
-                        email: email,
-                        phone: phone,
-                        address: address,
-                        image: imagetag
+                    if (!userLimit.value ||
+                        !usageLimit.value ||
+                        !startTime.value ||
+                        !endTime.value ||
+                        !couponCode.value ||
+                        !discountType.value ||
+                        !discountValue.value) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `All fields are required`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
                     }
-                    const updateDetails = await JSON.stringify(formData);
+                    const starting = new Date(startTime.value)
+                    const ending = new Date(endTime.value)
+                    const currentDate = new Date();
+                    currentDate.setHours(0, 0, 0, 0);
 
-                    const response = await fetch('/admin/update-user', {
-                        method: 'PATCH',
-                        headers: {
-                            "Content-Type": "application/json",
-                            // 'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: updateDetails
-                    })
-                    console.log('response')
-                    if (!response.ok) {
-                        alert.classList.remove('hidden')
-                        alert.innerHTML = `<span>Something went wrong..</span>`
+                    if (parseInt(userLimit.value) <= 0) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `userLimit can't be zero or lesser`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else if (parseInt(usageLimit.value) <= 0) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `user usage limit can't be zero or lesser`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else if (starting < currentDate) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Can't choose old Dates`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else if (ending <= starting) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Ending Date must be greater than Starting`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else if (couponCode.value.toUpperCase() !== couponCode.value) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Coupon Code must be in Capital Letters`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else if (foodItem.value === "none") {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Select any food Item for the Coupon`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else if (discountType.value === "per" && parseInt(discountValue.value) <= 0) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Discount Value can't be zero or lesser`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
                     } else {
-                        alert.classList.remove('bg-red-400')
-                        alert.classList.add('bg-green-400')
-                        alert.innerHTML = `<span>User Details updated</span>`
+                        const couponData = {
+                            userLimit: parseInt(userLimit.value),
+                            usageLimit: parseInt(usageLimit.value),
+                            startTime: startTime.value,
+                            endTime: endTime.value,
+                            couponCode: couponCode.value,
+                            foodItem: foodItem.value,
+                            discountType: discountType.value,
+                            discountValue: parseInt(discountValue.value),
+                            status:status.value
+                        }
+                        console.log(couponData)
+                        const reqData = await JSON.stringify(couponData);
+                        const res = await fetch('/admin/coupon-update/<%=coupon[0]._id%>', {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': "application/json"
+                            },
+                            body: reqData
+                        });
+                        console.log(res)
+                        if (res.ok) {
+                            const data = await res.json();
+                            if (data.updated) {
+                                window.scrollTo(0, 0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `Coupon updated successfully`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                    // window.location.reload();
+                                }, 3000)
+                            } else {
+                                window.scrollTo(0, 0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `Coupon updation failed`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                }, 3000)
+                            }
+                        } else {
+                            window.scrollTo(0, 0)
+                            alertBox.classList.remove('opacity-0')
+                            alertBox.classList.remove('-translate-x-full')
+                            alertMsg.innerText = `Something went wrong.Please try again.`;
+                            setTimeout(() => {
+                                alertBox.classList.add('opacity-0')
+                                alertBox.classList.add('-translate-x-full')
+                            }, 3000)
+                        }
                     }
                 }
             </script>

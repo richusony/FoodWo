@@ -21,34 +21,34 @@ async function viewCouponMangemenPage(req, res) {
             endDate: coupon.endDate.toLocaleDateString('en-GB'),
         };
     });
-    res.render('../views/Admin/couponMain.ejs', { food: foodItem , coupons:formattedCoupons});
+    res.render('../views/Admin/couponMain.ejs', { food: foodItem, coupons: formattedCoupons });
 }
 
 async function createCoupon(req, res) {
     const { userLimit, usageLimit, startTime, endTime, couponCode, foodItem, discountType, discountValue } = req.body;
-    const addCoupon = await couponModel.create({usersLimit:userLimit,usageLimit:usageLimit,startDate:startTime,endDate:endTime,couponCode:couponCode,foodId:foodItem,discountType:discountType,discountValue:discountValue,status:"active"});
-    if(addCoupon){
-        res.status(200).json({added:true})
-    }else{
-        res.status(500).json({added:false})
+    const addCoupon = await couponModel.create({ usersLimit: userLimit, usageLimit: usageLimit, startDate: startTime, endDate: endTime, couponCode: couponCode, foodId: foodItem, discountType: discountType, discountValue: discountValue, status: "active" });
+    if (addCoupon) {
+        res.status(200).json({ added: true })
+    } else {
+        res.status(500).json({ added: false })
     }
 }
 
-async function deleteCoupon(req,res){
+async function deleteCoupon(req, res) {
     const coupId = req.params.id;
-    const deleteCoup = await couponModel.deleteOne({_id:coupId})
-    if(deleteCoup){
+    const deleteCoup = await couponModel.deleteOne({ _id: coupId })
+    if (deleteCoup) {
         res.redirect('/admin/coupons')
-    }else{
+    } else {
         res.redirect('/admin/coupons')
     }
 }
 
-async function viewCouponUpdatePage(req,res){
+async function viewCouponUpdatePage(req, res) {
     const coupId = req.params.id;
-    const coupon = await couponModel.find({_id:coupId})
+    const coupon = await couponModel.find({ _id: coupId })
     const foodItem = await productModel.find({})
-    console.log('checking .. ',foodItem)
+    console.log('checking .. ', foodItem)
     const formattedCoupons = coupon.map(coupon => {
         return {
             ...coupon._doc,
@@ -57,12 +57,25 @@ async function viewCouponUpdatePage(req,res){
         };
     });
     console.log(formattedCoupons)
-res.render('../views/Admin/couponUpdate.ejs',{coupon:formattedCoupons,food:foodItem})
+    res.render('../views/Admin/couponUpdate.ejs', { coupon: formattedCoupons, food: foodItem })
+}
+
+async function updateCoupon(req, res) {
+    const coupId = req.params.id;
+    const { userLimit, usageLimit, startTime, endTime, couponCode, foodItem, discountType, discountValue, status } = req.body;
+
+    const updating = await couponModel.updateOne({ _id: coupId }, { usersLimit: userLimit, usageLimit: usageLimit, startDate: startTime, endDate: endTime, couponCode: couponCode, foodId: foodItem, discountType: discountType, discountValue: discountValue, status: status })
+    if(updating){
+        res.status(200).json({updated:true})
+    }else{
+        res.status(500).json({updated:false})
+    }
 }
 
 module.exports = {
     viewCouponMangemenPage,
     createCoupon,
     deleteCoupon,
-    viewCouponUpdatePage
+    viewCouponUpdatePage,
+    updateCoupon
 }

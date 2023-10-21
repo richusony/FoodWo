@@ -33,7 +33,7 @@ const { viewLogInPage,
 const router = express.Router();
 const { adminAuth } = require('../middleware/sessionAuth')
 const {productUpload} = require('../middleware/multer')
-const {viewCouponMangemenPage,createCoupon, deleteCoupon, viewCouponUpdatePage}= require('../controllers/couponController')
+const {viewCouponMangemenPage,createCoupon, deleteCoupon, viewCouponUpdatePage, updateCoupon}= require('../controllers/couponController')
 
 // Admin Login Get Request
 router.route('/login')
@@ -147,5 +147,6 @@ router.route('/delete-coupon/:id')
 
 router.route('/coupon-update/:id')
 .get(viewCouponUpdatePage)
+.patch(updateCoupon)
 
 module.exports = router;
