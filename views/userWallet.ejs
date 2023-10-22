@@ -75,14 +75,14 @@
                         onclick="addMoney(event)">Add Money</button>
                 </div>
             </div>
-            <% if(data.history){%>
+            <% if(data?.history){%>
                 <div class="text-center mt-10">
                     <h1 class="text-gray-500 font-bold text-xl">Payment History</h1>
                     <% data.history.forEach((his)=>{%>
                         <div class="my-5">
                             <div class="my-2 py-3 px-5 bg-gray-200 rounded flex justify-between"><span
                                     class="text-lg">Date : <%=his.date%></span> <span
-                                    class="text-lg text-orange-500 font-semibold">added <%=his.amt%>+</span></div>
+                                    class="text-lg <%=his.update=='inc'?'text-green-500':'text-red-500'%> font-semibold"><%= his.update=="inc"?'added':'purchased'%> <%=his.amt%><%= his.update=="inc"?'+':'-'%></span></div>
                         </div>
                         <%})%>
                 </div>

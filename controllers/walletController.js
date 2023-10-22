@@ -18,7 +18,8 @@ async function addMoney(req, res) {
 
     const historyData = {
         date: currentDate,
-        amt: addedAmt
+        amt: addedAmt,
+        update:"inc"
     };
 
     if (exists) {

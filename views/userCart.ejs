@@ -754,18 +754,66 @@
                     }
 
                     if (walletPay.checked) {
-                        console.log('wallet payment...')
-                    } else if (!cod.checked) {
-                        try {
-                            const totalAmount = parseInt('<%=totalPrice%>')
-                            const orderUrl = '/user/orders'
-                            const paying = await axios.post(orderUrl, { amount: totalAmount })
-                            console.log(paying)
-                            initPayment(paying.data)
-                        } catch (error) {
-                            console.log(error)
-                        }
-                    } else {
+                        const walletBalance = parseInt('<%=wallet.balance%>')
+                        console.log(walletBalance)
+                        check.forEach(async (item, index) => {
+                            // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
+                            const productId = item._id;
+                            const productName = item.productName;
+                            const image = item.productMainImage[0];
+                            const productPrice = item.productPrice;
+                            const productQty = parseInt(qty[index].innerText);
+                            console.log('productName : ', productName)
+                            console.log('productPrice : ', productPrice)
+                            console.log('productQty : ', productQty)
+                            console.log('\n......................................')
+
+                            const productData = {
+                                user_id: user_id,
+                                customerName: customerName,
+                                productId: productId,
+                                productName: productName,
+                                image: image,
+                                productQty: productQty,
+                                productPrice: productPrice,
+                                paymentMethod: 'FoodWo Wallet',
+                                address: selectedAddress
+                            }
+
+                            const reqData = await JSON.stringify(productData);
+                            const checkResponse = await fetch('/user/cart-checkout', {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': "application/json",
+                                },
+                                body: reqData
+                            })
+
+                            if (checkResponse.ok) {
+                                const reqData = {
+                                    foodid: productId,
+                                    userid: user_id
+                                }
+                                const realData = await JSON.stringify(reqData);
+
+                                const response = await fetch('/user/removeFromCart', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': "application/json",
+                                    },
+                                    body: realData
+                                })
+                                if (response.ok) {
+                                    const data = await checkResponse.json();
+                                    console.log(data)
+                                    sessionStorage.setItem('orderid', data.orderid)
+                                    sessionStorage.setItem('orderaddress', data.address)
+                                    window.location.href = '/user/order-success'
+                                }
+                                console.log(`${productName} Ok.`)
+                            }
+                        });
+                    } else if(cod.checked){
                         check.forEach(async (item, index) => {
                             // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                             const productId = item._id;
@@ -823,6 +871,16 @@
                                 console.log(`${productName} Ok.`)
                             }
                         });
+                    }else{
+                        try {
+                            const totalAmount = parseInt('<%=totalPrice%>')
+                            const orderUrl = '/user/orders'
+                            const paying = await axios.post(orderUrl, { amount: totalAmount })
+                            console.log(paying)
+                            initPayment(paying.data)
+                        } catch (error) {
+                            console.log(error)
+                        }
                     }
                 }
             </script>
