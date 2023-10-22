@@ -754,8 +754,31 @@
                     }
 
                     if (walletPay.checked) {
-                        const walletBalance = parseInt('<%=wallet.balance%>')
-                        console.log(walletBalance)
+                        const walletBalance = parseInt('<%=wallet?.balance%>');
+                        if(!walletBalance){
+                            alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> There's nothing in your wallet`;
+                        alertBox.classList.remove('-translate-x-full')
+                        alertBox.classList.remove('opacity-0')
+                        window.scrollTo(0, 0)
+                        setTimeout(() => {
+                            alertBox.classList.add('-translate-x-full')
+                            alertBox.classList.add('opacity-0')
+                        }, 3000)
+                        return;
+                        }
+                        const totalAmt = parseInt('<%=totalPrice%>')
+                        if(walletBalance<totalAmt){
+                            alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Not enough money in your wallet`;
+                        alertBox.classList.remove('-translate-x-full')
+                        alertBox.classList.remove('opacity-0')
+                        window.scrollTo(0, 0)
+                        setTimeout(() => {
+                            alertBox.classList.add('-translate-x-full')
+                            alertBox.classList.add('opacity-0')
+                        }, 3000)
+                        return;
+                        }
+                        console.log(walletBalance,totalAmt)
                         check.forEach(async (item, index) => {
                             // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                             const productId = item._id;
