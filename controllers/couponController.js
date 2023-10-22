@@ -89,8 +89,12 @@ async function checkingCoupon(req, res) {
             const usedOrNot = userData?.usedCoupons.map((coup)=>{
                 if(coup.couponId===exists._id){
                     return coup;
+                }else{
+                    return false;
                 }
             })
+
+            
 
             res.status(200);
         }

@@ -1675,6 +1675,11 @@ video {
   text-decoration-line: underline;
 }
 
+.active\:border-orange-500:active {
+  --tw-border-opacity: 1;
+  border-color: rgb(249 115 22 / var(--tw-border-opacity));
+}
+
 .active\:bg-orange-500:active {
   --tw-bg-opacity: 1;
   background-color: rgb(249 115 22 / var(--tw-bg-opacity));

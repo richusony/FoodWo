@@ -143,7 +143,7 @@
                                                     class="cursor-pointer fa-solid fa-close"></i>
                                             </div>
                                             <img class="w-full h-full rounded object-cover" src="/<%=img%>"
-                                                alt="MainImage">
+                                                alt="RelatedImages">
                                         </div>
                                         <% finalIndex=index }) %>
                                 </div>
@@ -164,6 +164,7 @@
 
                     const toast = document.getElementById('toast');
                     async function handleProductUpload(event) {
+                        
                         //User Details
                         const productName = document.getElementById('productName').value;
                         const description = document.getElementById('description').value;
@@ -173,10 +174,11 @@
                         // const sold = document.getElementById('sold').value;
                         const inStock = document.getElementById('inStock').value;
 
+                        console.log(productName,description,productPrice,productType,category,inStock)
 
-
-
-                        if (!productName || !description || !productPrice || !productType || !category || !inStock) {
+                        if (productName=="" || description=="" || productPrice=="" || productType=="" || category=="" || inStock=="") {
+                            event.preventDefault();
+                            window.scrollTo(0,0)
                             toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> All fields are required.</span>`;
                             toast.classList.remove("hidden");
                             toast.classList.remove("translate-y-96");
@@ -184,6 +186,7 @@
                                 toast.classList.add("hidden");
                                 toast.classList.add("translate-y-96");
                             }, 3000)
+                            return;
                         }
                         else {
                             const formData = {
@@ -225,6 +228,7 @@
 
 
                     async function removeImage(event) {
+                        event.preventDefault();
                         const imageContainerId = event.target.id; // Get the ID of the clicked button
                         const dataImg = event.target.dataset.img;
 
