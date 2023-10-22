@@ -614,9 +614,10 @@ async function updateStock(req, res) {
                 })
             const historyData = {
                 date: currentDate,
-                amt: parseInt(productPrice),
+                amt: parseInt(productPrice)*parseInt(productQty),
                 update:"dec"
             };
+            
             const walletUpdate = await walletModel.updateOne(
                 { userId: user_id },
                 {
