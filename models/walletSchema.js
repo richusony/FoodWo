@@ -10,7 +10,11 @@ const walletSchema = new mongoose.Schema({
     balance: {
         type: Number,
         required: true
-    }
+    },
+    history:{
+        type:Array,
+    },
+    created_at: { type: String, default: () => { return moment(new Date()).format('DD/MM/YYYY') }}
 })
 
 const walletModel = mongoose.model('wallet', walletSchema);

@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 const { sessAuth } = require("../middleware/sessionAuth");
 const cartModel = require('../models/cartSchema');
 const orderModel = require('../models/orderSchema');
+const { walletModel } = require('../models/walletSchema');
+const moment = require('moment');
 
 function viewSignInPage(req, res) {
     res.render('userSignUp')
@@ -193,7 +195,8 @@ async function viewCartPage(req, res) {
             }
         ]
     );
-
+    
+    const wallet = await walletModel.findOne({userId:uid})
     const foodIds = foodItems.map(item => item.foodId);
     let cartItems = await productModel.find({ _id: { $in: foodIds } });
     const userDetails = await userModel.find({ _id: uid })
@@ -208,12 +211,12 @@ async function viewCartPage(req, res) {
             return item;
         });
     }
-    res.render('../views/userCart', { cartItems: cartItems, userId: uid, userData: userDetails });
+    res.render('../views/userCart', { cartItems: cartItems, userId: uid, userData: userDetails , wallet:wallet});
 }
 
 async function addToCart(req, res) {
     const { userid, foodid } = req.body;
-    console.log("got id", userid, foodid )
+    console.log("got id", userid, foodid)
     const exists = await cartModel.findOne({ foodId: foodid, userId: userid });
     if (exists) {
         res.status(200).json({ exist: 'item already exists in cart.' })
@@ -467,90 +470,90 @@ async function updateUserProfile(req, res) {
 
 }
 
-async function addNewAddress(req,res){
-    const {uid,aid} = req.params;
-    const newaddress= req.body.address;
+async function addNewAddress(req, res) {
+    const { uid, aid } = req.params;
+    const newaddress = req.body.address;
 
-    if(aid==1){
-        const updating = await userModel.updateOne({_id:uid},{address1:newaddress})
-        if(updating){
-            res.status(200).json({updated:true})
-        }else{
-            res.status(500).json({updated:false})
+    if (aid == 1) {
+        const updating = await userModel.updateOne({ _id: uid }, { address1: newaddress })
+        if (updating) {
+            res.status(200).json({ updated: true })
+        } else {
+            res.status(500).json({ updated: false })
         }
-    }else if(aid==2){
-        const updating = await userModel.updateOne({_id:uid},{address2:newaddress})
-         if(updating){
-                res.status(200).json({updated:true})
-            }else{
-                res.status(500).json({updated:false})
-            }
-    }else{
-        const updating = await userModel.updateOne({_id:uid},{address3:newaddress})
-         if(updating){
-                res.status(200).json({updated:true})
-            }else{
-                res.status(500).json({updated:false})
-            }
+    } else if (aid == 2) {
+        const updating = await userModel.updateOne({ _id: uid }, { address2: newaddress })
+        if (updating) {
+            res.status(200).json({ updated: true })
+        } else {
+            res.status(500).json({ updated: false })
+        }
+    } else {
+        const updating = await userModel.updateOne({ _id: uid }, { address3: newaddress })
+        if (updating) {
+            res.status(200).json({ updated: true })
+        } else {
+            res.status(500).json({ updated: false })
+        }
     }
 }
 
 
-async function updateUserAddress(req,res){
-    const {uid,aid} = req.params;
-    const newaddress= req.body.address;
-    const userDetails = userModel.findOne({_id:uid})
-    const oldAddress1=userDetails.address1;
-    const oldAddress2=userDetails.address2;
-    const oldAddress3=userDetails.address3;
+async function updateUserAddress(req, res) {
+    const { uid, aid } = req.params;
+    const newaddress = req.body.address;
+    const userDetails = userModel.findOne({ _id: uid })
+    const oldAddress1 = userDetails.address1;
+    const oldAddress2 = userDetails.address2;
+    const oldAddress3 = userDetails.address3;
     console.log(newaddress)
-    if(aid==1){
-        if(newaddress ===""){
-            const updating = await userModel.updateOne({_id:uid},{address1:oldAddress2,address2:oldAddress3,address3:false})
-            if(updating){
-                res.status(200).json({updated:true})
-            }else{
-                res.status(500).json({updated:false})
+    if (aid == 1) {
+        if (newaddress === "") {
+            const updating = await userModel.updateOne({ _id: uid }, { address1: oldAddress2, address2: oldAddress3, address3: false })
+            if (updating) {
+                res.status(200).json({ updated: true })
+            } else {
+                res.status(500).json({ updated: false })
             }
-        }else{
-            const updating = await userModel.updateOne({_id:uid},{address1:newaddress})
-            if(updating){
-                res.status(200).json({updated:true})
-            }else{
-                res.status(500).json({updated:false})
-            }
-        }
-        
-    }else if(aid==2){
-        if(newaddress ===""){
-            const updating = await userModel.updateOne({_id:uid},{address2:oldAddress3,address3:false})
-            if(updating){
-                res.status(200).json({updated:true})
-            }else{
-                res.status(500).json({updated:false})
-            }
-        }else{
-            const updating = await userModel.updateOne({_id:uid},{address2:newaddress})
-            if(updating){
-                res.status(200).json({updated:true})
-            }else{
-                res.status(500).json({updated:false})
+        } else {
+            const updating = await userModel.updateOne({ _id: uid }, { address1: newaddress })
+            if (updating) {
+                res.status(200).json({ updated: true })
+            } else {
+                res.status(500).json({ updated: false })
             }
         }
-    }else{
-        if(newaddress ===""){
-            const updating = await userModel.updateOne({_id:uid},{address3:false})
-            if(updating){
-                res.status(200).json({updated:true})
-            }else{
-                res.status(500).json({updated:false})
+
+    } else if (aid == 2) {
+        if (newaddress === "") {
+            const updating = await userModel.updateOne({ _id: uid }, { address2: oldAddress3, address3: false })
+            if (updating) {
+                res.status(200).json({ updated: true })
+            } else {
+                res.status(500).json({ updated: false })
             }
-        }else{
-            const updating = await userModel.updateOne({_id:uid},{address3:newaddress})
-            if(updating){
-                res.status(200).json({updated:true})
-            }else{
-                res.status(500).json({updated:false})
+        } else {
+            const updating = await userModel.updateOne({ _id: uid }, { address2: newaddress })
+            if (updating) {
+                res.status(200).json({ updated: true })
+            } else {
+                res.status(500).json({ updated: false })
+            }
+        }
+    } else {
+        if (newaddress === "") {
+            const updating = await userModel.updateOne({ _id: uid }, { address3: false })
+            if (updating) {
+                res.status(200).json({ updated: true })
+            } else {
+                res.status(500).json({ updated: false })
+            }
+        } else {
+            const updating = await userModel.updateOne({ _id: uid }, { address3: newaddress })
+            if (updating) {
+                res.status(200).json({ updated: true })
+            } else {
+                res.status(500).json({ updated: false })
             }
         }
 
@@ -561,6 +564,8 @@ async function updateUserAddress(req,res){
 async function updateStock(req, res) {
     const { user_id, productId, productName, image, customerName, productPrice, paymentMethod, productQty, address } = req.body;
     console.log(user_id, productId, productQty);
+    const currentDate = moment().format('DD-MM-YYYY');
+
 
     function generateOrderID() {
         // Generate a random number between 1000 and 9999
@@ -600,13 +605,25 @@ async function updateStock(req, res) {
                 }
             );
 
-            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, customerName: customerName, productId: productId, productName: productName,productQty:productQty, productImage: image, productPrice: productPrice, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
+            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, customerName: customerName, productId: productId, productName: productName, productQty: productQty, productImage: image, productPrice: productPrice, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
 
             const updating = await userModel.updateOne(
                 { _id: user_id },
                 {
                     $inc: { purchaseCount: 1 }
                 })
+            const historyData = {
+                date: currentDate,
+                amt: parseInt(productPrice),
+                update:"dec"
+            };
+            const walletUpdate = await walletModel.updateOne(
+                { userId: user_id },
+                {
+                    $inc: { balance: -parseInt(productPrice) }, // Decrement the balance
+                    $push: { history: historyData }
+                }
+            );
 
             if (result) {
                 res.status(200).json({ orderid: orderId, address: address });

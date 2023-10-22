@@ -224,18 +224,27 @@
                                     <%}%>
 
                                         <div class="my-3 px-3">
-                                            <div><input type="checkbox" name="" id="couponCheck" class="mr-2"><span>Apply Code
+                                            <div><input type="checkbox" name="" id="couponCheck"
+                                                    class="mr-2"><span>Apply Code
                                                     :</span>
                                             </div>
                                             <div>
-                                                <input type="text" name="" disabled="disabled" id="couponInput" class="rounded my-2 py-1 text-black diabled" onchange="onCouponChange(event)">
-                                                <button id="couponBtn" class="hidden px-2 py-1 bg-white text-orange-500 rounded" onclick="checkCoupon(event)">apply</button>
+                                                <input type="text" name="" disabled="disabled" id="couponInput"
+                                                    class="rounded my-2 py-1 text-black diabled"
+                                                    onchange="onCouponChange(event)">
+                                                <button id="couponBtn"
+                                                    class="hidden px-2 py-1 bg-white text-orange-500 rounded"
+                                                    onclick="checkCoupon(event)">apply</button>
                                                 <p class="hidden" id="couponAlert"></p>
                                             </div>
                                         </div>
                                         <div class="my-3 px-3 flex justify-center items-center">
                                             <input type="checkbox" name="" id="cod" class="mr-2"><span>Cash on
                                                 Delivery</span>
+                                        </div>
+                                        <div class="my-3 px-3 flex justify-center items-center">
+                                            <input type="checkbox" name="" id="walletPay" class="mr-2"><span>pay using
+                                                wallet</span>
                                         </div>
                                         <hr class="py-[0.28px] bg-white rounded my-5">
                                         <div class="flex justify-between px-3 font-bold"><span>Total : </span> <span
@@ -643,52 +652,52 @@
                     rzpl.open()
                 }
 
-                couponCheck.addEventListener('change',(check)=>{
+                couponCheck.addEventListener('change', (check) => {
                     const couponInput = document.getElementById('couponInput')
-                    if(couponCheck.checked){
-                        couponInput.disabled=false;
-                    }else{
-                        couponInput.disabled=true;
+                    if (couponCheck.checked) {
+                        couponInput.disabled = false;
+                    } else {
+                        couponInput.disabled = true;
                         const couponBtn = document.getElementById('couponBtn');
                         couponBtn.classList.add('hidden')
 
                     }
                 })
 
-                async function onCouponChange(event){
+                async function onCouponChange(event) {
                     event.preventDefault();
                     const coupon = event.target.value;
                     // couponAlert.innerText =`${coupon.toString()}`;
-                    if(coupon.toUpperCase() !== coupon){
-                        couponAlert.innerText =`*Invalid Coupon`;
+                    if (coupon.toUpperCase() !== coupon) {
+                        couponAlert.innerText = `*Invalid Coupon`;
                         couponAlert.classList.remove('hidden');
                         return;
-                    }else{
+                    } else {
                         couponAlert.classList.add('hidden');
                         const couponBtn = document.getElementById('couponBtn');
                         couponBtn.classList.remove('hidden')
                     }
                 }
 
-                async function checkCoupon(event){
+                async function checkCoupon(event) {
                     const couponInput = document.getElementById('couponInput').value;
-                    if(couponInput.toUpperCase() !== couponInput){
-                        couponAlert.innerText =`*Invalid Coupon`;
+                    if (couponInput.toUpperCase() !== couponInput) {
+                        couponAlert.innerText = `*Invalid Coupon`;
                         couponAlert.classList.remove('hidden');
                         return;
                     }
 
                     const userId = sessionStorage.getItem('user_id');
-                    const coupon = {coupon:couponInput}
+                    const coupon = { coupon: couponInput }
                     const reqData = JSON.stringify(coupon)
                     console.log(reqData)
-                    
-                    const res = await fetch(`/user/check-coupon/${userId}`,{
-                        method:'POST',
-                        headers:{
-                            'Content-Type':"application/json"
+
+                    const res = await fetch(`/user/check-coupon/${userId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': "application/json"
                         },
-                        body:reqData
+                        body: reqData
                     })
                 }
 
@@ -699,6 +708,7 @@
                     const checkAddress2 = document.getElementById('addressCheck2');
                     const checkAddress3 = document.getElementById('addressCheck3');
                     const cod = document.getElementById('cod');
+                    const walletPay = document.getElementById('walletPay');
                     const qty = document.querySelectorAll('.qty');
                     const cartItems = '<%-JSON.stringify(cartItems).trim()%>';
                     console.log(cartItems);
@@ -743,17 +753,90 @@
                         return;
                     }
 
-                    if (!cod.checked) {
-                        try {
-                            const totalAmount=parseInt('<%=totalPrice%>')
-                            const orderUrl = '/user/orders'
-                            const paying = await axios.post(orderUrl, { amount: totalAmount })
-                            console.log(paying)
-                            initPayment(paying.data)
-                        } catch (error) {
-                            console.log(error)
+                    if (walletPay.checked) {
+                        const walletBalance = parseInt('<%=wallet?.balance%>');
+                        if(!walletBalance){
+                            alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> There's nothing in your wallet`;
+                        alertBox.classList.remove('-translate-x-full')
+                        alertBox.classList.remove('opacity-0')
+                        window.scrollTo(0, 0)
+                        setTimeout(() => {
+                            alertBox.classList.add('-translate-x-full')
+                            alertBox.classList.add('opacity-0')
+                        }, 3000)
+                        return;
                         }
-                    } else {
+                        const totalAmt = parseInt('<%=totalPrice%>')
+                        if(walletBalance<totalAmt){
+                            alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Not enough money in your wallet`;
+                        alertBox.classList.remove('-translate-x-full')
+                        alertBox.classList.remove('opacity-0')
+                        window.scrollTo(0, 0)
+                        setTimeout(() => {
+                            alertBox.classList.add('-translate-x-full')
+                            alertBox.classList.add('opacity-0')
+                        }, 3000)
+                        return;
+                        }
+                        console.log(walletBalance,totalAmt)
+                        check.forEach(async (item, index) => {
+                            // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
+                            const productId = item._id;
+                            const productName = item.productName;
+                            const image = item.productMainImage[0];
+                            const productPrice = item.productPrice;
+                            const productQty = parseInt(qty[index].innerText);
+                            console.log('productName : ', productName)
+                            console.log('productPrice : ', productPrice)
+                            console.log('productQty : ', productQty)
+                            console.log('\n......................................')
+
+                            const productData = {
+                                user_id: user_id,
+                                customerName: customerName,
+                                productId: productId,
+                                productName: productName,
+                                image: image,
+                                productQty: productQty,
+                                productPrice: productPrice,
+                                paymentMethod: 'FoodWo Wallet',
+                                address: selectedAddress
+                            }
+
+                            const reqData = await JSON.stringify(productData);
+                            const checkResponse = await fetch('/user/cart-checkout', {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': "application/json",
+                                },
+                                body: reqData
+                            })
+
+                            if (checkResponse.ok) {
+                                const reqData = {
+                                    foodid: productId,
+                                    userid: user_id
+                                }
+                                const realData = await JSON.stringify(reqData);
+
+                                const response = await fetch('/user/removeFromCart', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': "application/json",
+                                    },
+                                    body: realData
+                                })
+                                if (response.ok) {
+                                    const data = await checkResponse.json();
+                                    console.log(data)
+                                    sessionStorage.setItem('orderid', data.orderid)
+                                    sessionStorage.setItem('orderaddress', data.address)
+                                    window.location.href = '/user/order-success'
+                                }
+                                console.log(`${productName} Ok.`)
+                            }
+                        });
+                    } else if(cod.checked){
                         check.forEach(async (item, index) => {
                             // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                             const productId = item._id;
@@ -811,6 +894,16 @@
                                 console.log(`${productName} Ok.`)
                             }
                         });
+                    }else{
+                        try {
+                            const totalAmount = parseInt('<%=totalPrice%>')
+                            const orderUrl = '/user/orders'
+                            const paying = await axios.post(orderUrl, { amount: totalAmount })
+                            console.log(paying)
+                            initPayment(paying.data)
+                        } catch (error) {
+                            console.log(error)
+                        }
                     }
                 }
             </script>
