@@ -195,8 +195,8 @@ async function viewCartPage(req, res) {
             }
         ]
     );
-    
-    const wallet = await walletModel.findOne({userId:uid})
+
+    const wallet = await walletModel.findOne({ userId: uid })
     const foodIds = foodItems.map(item => item.foodId);
     let cartItems = await productModel.find({ _id: { $in: foodIds } });
     const userDetails = await userModel.find({ _id: uid })
@@ -211,7 +211,7 @@ async function viewCartPage(req, res) {
             return item;
         });
     }
-    res.render('../views/userCart', { cartItems: cartItems, userId: uid, userData: userDetails , wallet:wallet});
+    res.render('../views/userCart', { cartItems: cartItems, userId: uid, userData: userDetails, wallet: wallet });
 }
 
 async function addToCart(req, res) {
@@ -614,14 +614,14 @@ async function updateStock(req, res) {
                 })
             const historyData = {
                 date: currentDate,
-                amt: parseInt(productPrice)*parseInt(productQty),
-                update:"dec"
+                amt: parseInt(productPrice) * parseInt(productQty),
+                update: "dec"
             };
-            
+
             const walletUpdate = await walletModel.updateOne(
                 { userId: user_id },
                 {
-                    $inc: { balance: -parseInt(productPrice) }, // Decrement the balance
+                    $inc: { balance: -parseInt(productPrice) * parseInt(productQty) }, // Decrement the balance
                     $push: { history: historyData }
                 }
             );

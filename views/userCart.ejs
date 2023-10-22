@@ -249,6 +249,10 @@
                                         <hr class="py-[0.28px] bg-white rounded my-5">
                                         <div class="flex justify-between px-3 font-bold"><span>Total : </span> <span
                                                 class="finalPrice">₹<%= totalPrice.toFixed(2) %></span>
+                                            <span id="dynamicTotalAmt" class="hidden">
+                                                <%= totalPrice %>
+                                            </span>
+
                                         </div>
                                         <div class="text-center my-4"><button onclick="handleCheckout(event)"
                                                 class="py-2 px-20 rounded bg-white shadow-md text-orange-500 font-bold">checkout</button>
@@ -755,30 +759,33 @@
 
                     if (walletPay.checked) {
                         const walletBalance = parseInt('<%=wallet?.balance%>');
-                        if(!walletBalance){
+                        if (!walletBalance) {
                             alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> There's nothing in your wallet`;
-                        alertBox.classList.remove('-translate-x-full')
-                        alertBox.classList.remove('opacity-0')
-                        window.scrollTo(0, 0)
-                        setTimeout(() => {
-                            alertBox.classList.add('-translate-x-full')
-                            alertBox.classList.add('opacity-0')
-                        }, 3000)
-                        return;
+                            alertBox.classList.remove('-translate-x-full')
+                            alertBox.classList.remove('opacity-0')
+                            window.scrollTo(0, 0)
+                            setTimeout(() => {
+                                alertBox.classList.add('-translate-x-full')
+                                alertBox.classList.add('opacity-0')
+                            }, 3000)
+                            return;
                         }
-                        const totalAmt = parseInt('<%=totalPrice%>')
-                        if(walletBalance<totalAmt){
+                        const dynamicTotalAmtElement = document.getElementById('dynamicTotalAmt');
+                        let totalAmt = parseInt(dynamicTotalAmtElement.textContent);
+
+                        if (walletBalance <  ) {
                             alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Not enough money in your wallet`;
-                        alertBox.classList.remove('-translate-x-full')
-                        alertBox.classList.remove('opacity-0')
-                        window.scrollTo(0, 0)
-                        setTimeout(() => {
-                            alertBox.classList.add('-translate-x-full')
-                            alertBox.classList.add('opacity-0')
-                        }, 3000)
-                        return;
+                            alertBox.classList.remove('-translate-x-full')
+                            alertBox.classList.remove('opacity-0')
+                            window.scrollTo(0, 0)
+                            setTimeout(() => {
+                                alertBox.classList.add('-translate-x-full')
+                                alertBox.classList.add('opacity-0')
+                            }, 3000)
+                            return;
                         }
-                        console.log(walletBalance,totalAmt)
+                        console.log(walletBalance, totalAmt)
+                        return;
                         check.forEach(async (item, index) => {
                             // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                             const productId = item._id;
@@ -836,7 +843,7 @@
                                 console.log(`${productName} Ok.`)
                             }
                         });
-                    } else if(cod.checked){
+                    } else if (cod.checked) {
                         check.forEach(async (item, index) => {
                             // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                             const productId = item._id;
@@ -894,7 +901,7 @@
                                 console.log(`${productName} Ok.`)
                             }
                         });
-                    }else{
+                    } else {
                         try {
                             const totalAmount = parseInt('<%=totalPrice%>')
                             const orderUrl = '/user/orders'
