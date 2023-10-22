@@ -248,10 +248,7 @@
                                         </div>
                                         <hr class="py-[0.28px] bg-white rounded my-5">
                                         <div class="flex justify-between px-3 font-bold"><span>Total : </span> <span
-                                                class="finalPrice">₹<%= totalPrice.toFixed(2) %></span>
-                                            <span id="dynamicTotalAmt" class="hidden">
-                                                <%= totalPrice %>
-                                            </span>
+                                                class="finalPrice">₹ <span id="dynamicTotalAmt"><%= totalPrice.toFixed(2) %></span></span>
 
                                         </div>
                                         <div class="text-center my-4"><button onclick="handleCheckout(event)"
@@ -704,6 +701,7 @@
                         body: reqData
                     })
                 }
+               
 
                 async function handleCheckout(event) {
                     const user_id = sessionStorage.getItem('user_id');
@@ -770,10 +768,10 @@
                             }, 3000)
                             return;
                         }
-                        const dynamicTotalAmtElement = document.getElementById('dynamicTotalAmt');
-                        let totalAmt = parseInt(dynamicTotalAmtElement.textContent);
-
-                        if (walletBalance <  ) {
+                        // let dynamicTotalAmt = document.getElementById('dynamicTotalAmt').innerText;
+                        let totalAmt = finalPrice
+                        console.log(walletBalance, totalAmt)
+                        if (walletBalance < totalAmt ) {
                             alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Not enough money in your wallet`;
                             alertBox.classList.remove('-translate-x-full')
                             alertBox.classList.remove('opacity-0')
@@ -784,8 +782,6 @@
                             }, 3000)
                             return;
                         }
-                        console.log(walletBalance, totalAmt)
-                        return;
                         check.forEach(async (item, index) => {
                             // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                             const productId = item._id;
