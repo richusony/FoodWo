@@ -72,193 +72,202 @@
 
             <div class="flex flex-col lg:flex-row my-3">
                 <% let totalItems=0; %>
-                <% let foodIds=[]; %>
-                    <% let totalPrice=0; %>
-                        <% let quantities=new Array(cartItems.length).fill(1); %>
-                            <div
-                                class="h-96 overflow-y-auto overflow-x-hidden w-full lg:w-1/2 px-3 py-3 my-2 shadow-sm">
-                                <% if(cartItems){ cartItems.forEach((cart, index)=> { %>
-                                    <div
-                                        class="bg-[#f0efef] md:px-5 py-3 my-2 flex justify-between items-center rounded shadow-md">
-                                        <div class=" w-20 h-16 object-cover rounded mx-2 md:mr-3 ">
-                                            <img class="w-full h-full rounded object-cover"
-                                                src="/<%= cart.productMainImage%>" alt="">
-                                        </div>
-
-                                        <div class=" mr-2 md:mr-3 w-40 overflow-hidden shadow-inner ">
-                                            <h2 class="text-sm md:text-xl font-semibold">
-                                                <%= cart.productName %>
-                                                <%= foodids.push(cart._id)%>
-                                            </h2>
-                                        </div>
-
-                                        <div class=" flex mr-2 md:mr-3 relative text-center justify-center">
-                                            <div onclick="priceDown(event)" data-index="<%= index %>"
-                                                data-stock="<%=cart.productInStock%>"
-                                                class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-l-full">
-                                                <i class="fa-solid fa-minus"></i>
-                                            </div>
-                                            <span id="<%= `qty${index}` %>" class="qty mx-3 text-sm my-auto">1</span>
-                                            <div onclick="priceUp(event)" data-index="<%= index %>"
-                                                data-stock="<%=cart.productInStock%>"
-                                                class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-r-full">
-                                                <i class="fa-solid fa-plus"></i>
-                                            </div>
-                                            <p class="hidden absolute mt-7 text-sm text-center text-orange-500"
-                                                id="<%= `stockAlert${index}`%>"></p>
-                                        </div>
-
-                                        <div class=" mr-2 md:mx-3">
-                                            <span class="text-orange-500 text-sm md:text-xl md:font-semibold">
-                                                <span data-actualPrice="<%= cart.productPrice %>"
-                                                    id="<%= `price${index}` %>">
-                                                    <%= '₹' +cart.productPrice %>
-                                                </span></span>
-                                        </div>
-                                        <% totalItems +=quantities[index]; %>
-                                            <% totalPrice +=quantities[index] * parseFloat(cart.productPrice); %>
-                                                <div class=" mr-2 md:mx-2">
-                                                    <span class="text-orange-500 md:text-2xl">
-                                                        <i onclick="deleteFromCart(event)" data-index="<%=index%>"
-                                                            data-foodid="<%=cart._id%>" data-userid="<%=userId%>"
-                                                            class="xmark cursor-pointer fa-solid fa-close">
-                                                        </i>
-                                                    </span>
+                    <% let foodIds=[]; %>
+                        <% let totalPrice=0; %>
+                            <% let quantities=new Array(cartItems.length).fill(1); %>
+                                <div
+                                    class="h-96 overflow-y-auto overflow-x-hidden w-full lg:w-1/2 px-3 py-3 my-2 shadow-sm">
+                                    <% if(cartItems){ cartItems.forEach((cart, index)=> { %>
+                                        <% foodIds.push(cart._id); %>
+                                            <div
+                                                class="bg-[#f0efef] md:px-5 py-3 my-2 flex justify-between items-center rounded shadow-md">
+                                                <div class=" w-20 h-16 object-cover rounded mx-2 md:mr-3 ">
+                                                    <img class="w-full h-full rounded object-cover"
+                                                        src="/<%= cart.productMainImage%>" alt="">
                                                 </div>
 
-                                    </div>
-                                    <% }) }else{ %>
-                                        <div class="flex flex-col justify-center items-center">
-                                            <h1 class="text-4xl text-orange-500 text-center font-bold my-3">No items in
-                                                the Cart!!</h1>
-                                            <div class="w-full h-72">
-                                                <img class="w-full h-full object-cover"
-                                                    src="http://media.istockphoto.com/vectors/female-hands-with-steel-fork-and-empty-ceramic-plate-vector-id642208480?k=6&m=642208480&s=612x612&w=0&h=u5WmG_7RuLq1M43PpGtMAuZBlytf-dA6wbkwljWpzdk="
-                                                    alt="">
-                                            </div>
-                                        </div>
-                                        <% } %>
-                            </div>
-
-                            <div class="bg-orange-500 mx-2 lg:w-1/2 px-4 py-5 shadow-2xl rounded-xl text-white">
-                                <div class="py-2 px-3 text-start">
-                                    <h2 class="py-2 text-xl md:text-2xl font-bold text-white">Summary</h2>
-                                </div>
-                                <div class="flex justify-between px-3 my-3">
-                                    <span class="font-bold">Items : <%= totalItems %></span>
-                                    <span class="finalPrice">₹<%= totalPrice.toFixed(2) %></span>
-                                </div>
-                                <div class="px-3 my-3">
-                                    <h3 class="font-bold">Shipping to :</h3>
-                                    <div id="addContainer">
-                                        <div
-                                            class='<%if(userData[0].address1 !=="false" ){%> block <%}else{%>hidden<%}%>'>
-                                            <span>
-                                                <div class="flex my-2 text-sm w-80">
-                                                    <input type="checkbox" name="" id="addressCheck1" class="mx-2">
-                                                    <span id="currentAdd1">
-                                                        <%=userData[0].address1%>
-                                                    </span>
+                                                <div class=" mr-2 md:mr-3 w-40 overflow-hidden shadow-inner ">
+                                                    <h2 class="text-sm md:text-xl font-semibold">
+                                                        <%= cart.productName %>
+                                                    </h2>
                                                 </div>
-                                            </span>
 
-                                            <div class="text-end"><span class="cursor-pointer" id="editAdd1" data-id="1"
-                                                    onclick="editAddress(event)">edit address</span></div>
-                                            <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd1"
-                                                    data-id="1" onclick="saveAddress(event)">save address</span></div>
-                                        </div>
-
-
-                                        <div
-                                            class='<%if(userData[0].address2 !=="false" ){%> block <%}else{%>hidden <% } %>'>
-                                            <span>
-                                                <div class="flex my-2 text-sm w-80">
-                                                    <input type="checkbox" name="" id="addressCheck2" class="mx-2">
-                                                    <span id="currentAdd2">
-                                                        <%=userData[0].address2%>
-                                                    </span>
+                                                <div class=" flex mr-2 md:mr-3 relative text-center justify-center">
+                                                    <div onclick="priceDown(event)" data-index="<%= index %>"
+                                                        data-stock="<%=cart.productInStock%>"
+                                                        class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-l-full">
+                                                        <i class="fa-solid fa-minus"></i>
+                                                    </div>
+                                                    <span id="<%= `qty${index}` %>"
+                                                        class="qty mx-3 text-sm my-auto">1</span>
+                                                    <div onclick="priceUp(event)" data-index="<%= index %>"
+                                                        data-stock="<%=cart.productInStock%>"
+                                                        class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-r-full">
+                                                        <i class="fa-solid fa-plus"></i>
+                                                    </div>
+                                                    <p class="hidden absolute mt-7 text-sm text-center text-orange-500"
+                                                        id="<%= `stockAlert${index}`%>"></p>
                                                 </div>
-                                            </span>
-                                            <div class="text-end"><span class="cursor-pointer" id="editAdd2" data-id="2"
-                                                    onclick="editAddress(event)">edit address</span>
-                                            </div>
-                                            <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd2"
-                                                    data-id="2" onclick="saveAddress(event)">save
-                                                    address</span></div>
 
-                                        </div>
-
-                                        <div
-                                            class='<%if(userData[0].address3 !=="false" ){%> block <%}else{%>hidden<%}%>'>
-                                            <span>
-                                                <div class="flex my-2 text-sm w-80">
-                                                    <input type="checkbox" name="" id="addressCheck3" class="mx-2">
-                                                    <span id="currentAdd3">
-                                                        <%=userData[0].address3%>
-                                                    </span>
+                                                <div class=" mr-2 md:mx-3">
+                                                    <span class="text-orange-500 text-sm md:text-xl md:font-semibold">
+                                                        <span data-actualPrice="<%= cart.productPrice %>"
+                                                            id="<%= `price${index}` %>">
+                                                            <%= '₹' +cart.productPrice %>
+                                                        </span></span>
                                                 </div>
-                                            </span>
-                                            <div class="text-end"><span class="cursor-pointer" data-id="3" id="editAdd3"
-                                                    onclick="editAddress(event)">edit address</span>
+                                                <% totalItems +=quantities[index]; %>
+                                                    <% totalPrice +=quantities[index] * parseFloat(cart.productPrice);
+                                                        %>
+                                                        <div class=" mr-2 md:mx-2">
+                                                            <span class="text-orange-500 md:text-2xl">
+                                                                <i onclick="deleteFromCart(event)"
+                                                                    data-index="<%=index%>" data-foodid="<%=cart._id%>"
+                                                                    data-userid="<%=userId%>"
+                                                                    class="xmark cursor-pointer fa-solid fa-close">
+                                                                </i>
+                                                            </span>
+                                                        </div>
+
                                             </div>
-                                            <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd3"
-                                                    data-id="3" onclick="saveAddress(event)">save address</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd1" cols=""
-                                        rows="4"></textarea>
-                                    <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd2" cols=""
-                                        rows="4"></textarea>
-                                    <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd3" cols=""
-                                        rows="4"></textarea>
+                                            <% }) }else{ %>
+                                                <div class="flex flex-col justify-center items-center">
+                                                    <h1 class="text-4xl text-orange-500 text-center font-bold my-3">No
+                                                        items in
+                                                        the Cart!!</h1>
+                                                    <div class="w-full h-72">
+                                                        <img class="w-full h-full object-cover"
+                                                            src="http://media.istockphoto.com/vectors/female-hands-with-steel-fork-and-empty-ceramic-plate-vector-id642208480?k=6&m=642208480&s=612x612&w=0&h=u5WmG_7RuLq1M43PpGtMAuZBlytf-dA6wbkwljWpzdk="
+                                                            alt="">
+                                                    </div>
+                                                </div>
+                                                <% } %>
                                 </div>
 
-                                <%if(userData[0].address3==="false" ){%>
-                                    <div class="px-3 my-4 text-end">
-                                        <textarea class="text-black hidden w-full px-3 rounded" name=""
-                                            id="addingAddressCon" cols="" rows="4"></textarea>
-                                        <span class="cursor-pointer" id="addingAddress"
-                                            onclick="addingAddress(event)">new address</span>
-                                        <span class="cursor-pointer hidden" id="savingAddress"
-                                            onclick="savingAddress(event)">save address</span>
+                                <div class="bg-orange-500 mx-2 lg:w-1/2 px-4 py-5 shadow-2xl rounded-xl text-white">
+                                    <div class="py-2 px-3 text-start">
+                                        <h2 class="py-2 text-xl md:text-2xl font-bold text-white">Summary</h2>
                                     </div>
-                                    <%}%>
+                                    <div class="flex justify-between px-3 my-3">
+                                        <span class="font-bold">Items : <%= totalItems %></span>
+                                        <span class="finalPrice">₹<%= totalPrice.toFixed(2) %></span>
+                                    </div>
+                                    <div class="px-3 my-3">
+                                        <h3 class="font-bold">Shipping to :</h3>
+                                        <div id="addContainer">
+                                            <div
+                                                class='<%if(userData[0].address1 !=="false" ){%> block <%}else{%>hidden<%}%>'>
+                                                <span>
+                                                    <div class="flex my-2 text-sm w-80">
+                                                        <input type="checkbox" name="" id="addressCheck1" class="mx-2">
+                                                        <span id="currentAdd1">
+                                                            <%=userData[0].address1%>
+                                                        </span>
+                                                    </div>
+                                                </span>
 
-                                        <div class="my-3 px-3">
-                                            <div><input type="checkbox" name="" id="couponCheck"
-                                                    class="mr-2"><span>Apply Code
-                                                    :</span>
+                                                <div class="text-end"><span class="cursor-pointer" id="editAdd1"
+                                                        data-id="1" onclick="editAddress(event)">edit address</span>
+                                                </div>
+                                                <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd1"
+                                                        data-id="1" onclick="saveAddress(event)">save
+                                                        address</span></div>
                                             </div>
-                                            <div>
-                                                <input type="text" name="" disabled="disabled" id="couponInput"
-                                                    class="rounded my-2 py-1 text-black diabled"
-                                                    onchange="onCouponChange(event)">
-                                                <button id="couponBtn"
-                                                    class="hidden px-2 py-1 bg-white text-orange-500 rounded"
-                                                    onclick="checkCoupon(event)">apply</button>
-                                                <p class="hidden" id="couponAlert"></p>
+
+
+                                            <div
+                                                class='<%if(userData[0].address2 !=="false" ){%> block <%}else{%>hidden <% } %>'>
+                                                <span>
+                                                    <div class="flex my-2 text-sm w-80">
+                                                        <input type="checkbox" name="" id="addressCheck2" class="mx-2">
+                                                        <span id="currentAdd2">
+                                                            <%=userData[0].address2%>
+                                                        </span>
+                                                    </div>
+                                                </span>
+                                                <div class="text-end"><span class="cursor-pointer" id="editAdd2"
+                                                        data-id="2" onclick="editAddress(event)">edit address</span>
+                                                </div>
+                                                <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd2"
+                                                        data-id="2" onclick="saveAddress(event)">save
+                                                        address</span></div>
+
+                                            </div>
+
+                                            <div
+                                                class='<%if(userData[0].address3 !=="false" ){%> block <%}else{%>hidden<%}%>'>
+                                                <span>
+                                                    <div class="flex my-2 text-sm w-80">
+                                                        <input type="checkbox" name="" id="addressCheck3" class="mx-2">
+                                                        <span id="currentAdd3">
+                                                            <%=userData[0].address3%>
+                                                        </span>
+                                                    </div>
+                                                </span>
+                                                <div class="text-end"><span class="cursor-pointer" data-id="3"
+                                                        id="editAdd3" onclick="editAddress(event)">edit
+                                                        address</span>
+                                                </div>
+                                                <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd3"
+                                                        data-id="3" onclick="saveAddress(event)">save
+                                                        address</span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="my-3 px-3 flex justify-center items-center">
-                                            <input type="checkbox" name="" id="cod" class="mr-2"><span>Cash on
-                                                Delivery</span>
+                                        <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd1"
+                                            cols="" rows="4"></textarea>
+                                        <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd2"
+                                            cols="" rows="4"></textarea>
+                                        <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd3"
+                                            cols="" rows="4"></textarea>
+                                    </div>
+
+                                    <%if(userData[0].address3==="false" ){%>
+                                        <div class="px-3 my-4 text-end">
+                                            <textarea class="text-black hidden w-full px-3 rounded" name=""
+                                                id="addingAddressCon" cols="" rows="4"></textarea>
+                                            <span class="cursor-pointer" id="addingAddress"
+                                                onclick="addingAddress(event)">new address</span>
+                                            <span class="cursor-pointer hidden" id="savingAddress"
+                                                onclick="savingAddress(event)">save address</span>
                                         </div>
-                                        <div class="my-3 px-3 flex justify-center items-center">
-                                            <input type="checkbox" name="" id="walletPay" class="mr-2"><span>pay using
-                                                wallet</span>
-                                        </div>
-                                        <hr class="py-[0.28px] bg-white rounded my-5">
-                                        <div class="flex justify-between px-3 font-bold"><span>Total : </span> <span
-                                                class="finalPrice">₹ <span id="dynamicTotalAmt">
-                                                    <%= totalPrice.toFixed(2) %>
-                                                </span></span>
-                                               
-                                        </div>
-                                        <div class="text-center my-4"><button onclick="handleCheckout(event)"
-                                                class="py-2 px-20 rounded bg-white shadow-md text-orange-500 font-bold">checkout</button>
-                                        </div>
-                            </div>
+                                        <%}%>
+
+                                            <div class="my-3 px-3">
+                                                <div><input type="checkbox" name="" id="couponCheck"
+                                                        class="mr-2"><span>Apply Code
+                                                        :</span>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="" disabled="disabled" id="couponInput"
+                                                        class="rounded my-2 py-1 text-black diabled"
+                                                        onchange="onCouponChange(event)">
+                                                    <button id="couponBtn"
+                                                        class="hidden px-2 py-1 bg-white text-orange-500 rounded"
+                                                        onclick="checkCoupon(event)">apply</button>
+                                                    <p class="hidden" id="couponAlert"></p>
+                                                </div>
+                                            </div>
+                                            <div class="my-3 px-3 flex justify-center items-center">
+                                                <input type="checkbox" name="" id="cod" class="mr-2"><span>Cash on
+                                                    Delivery</span>
+                                            </div>
+                                            <div class="my-3 px-3 flex justify-center items-center">
+                                                <input type="checkbox" name="" id="walletPay" class="mr-2"><span>pay
+                                                    using
+                                                    wallet</span>
+                                            </div>
+                                            <hr class="py-[0.28px] bg-white rounded my-5">
+                                            <div class="flex justify-between px-3 font-bold"><span>Total : </span>
+                                                <span class="finalPrice">₹ <span id="dynamicTotalAmt">
+                                                        <%= totalPrice.toFixed(2) %>
+                                                    </span></span>
+
+                                            </div>
+                                            <div class="text-center my-4"><button onclick="handleCheckout(event)"
+                                                    class="py-2 px-20 rounded bg-white shadow-md text-orange-500 font-bold">checkout</button>
+                                            </div>
+                                </div>
             </div>
 
         </section>
@@ -267,8 +276,7 @@
         <%- include('../views/userFooter.ejs') %>
 
             <script>
-                const foodides = '<%=foodIds%>'
-                console.log('success : ',foodides)
+
                 // let quantity = 1;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
@@ -696,11 +704,9 @@
                     }
 
                     const userId = sessionStorage.getItem('user_id');
-                    const cartItems = '<%-JSON.stringify(cartItems).trim()%>';
-                    const check = await JSON.parse(cartItems);
-                    console.log(check)
-                    const foodIds = check.map(food=>food._id)
-                    const coupon = { coupon: couponInput, foodids:foodIds }
+                    const foodides = '<%=foodIds%>'
+                    console.log('success : ', foodides)
+                    const coupon = { coupon: couponInput, foodids: foodides }
                     const reqData = JSON.stringify(coupon)
                     console.log(reqData, userId)
 
@@ -712,13 +718,38 @@
                         body: reqData
                     })
 
+                    if (res.status == 404) {
+                        const data = await res.json();
+                        couponAlert.innerText = `${data.err}`;
+                        couponAlert.classList.remove('hidden');
+                        return;
+                    }
+                
+                    if (res.status == 400) {
+                        const data = await res.json();
+                        couponAlert.innerText = `${data.err}`;
+                        couponAlert.classList.remove('hidden');
+                        return;
+                    }
+
+                    console.log('added ', res);
                     if (res.ok) {
                         const data = await res.json();
                         if (data.added) {
                             const disType = data.discountType
                             const disValue = parseInt(data.discountValue);
+                            couponAlert.innerText = `coupon added`;
+                            couponAlert.classList.remove('hidden');
 
+                        } else {
+                            couponAlert.innerText = `${data.err}`;
+                            couponAlert.classList.remove('hidden');
+                            return;
                         }
+                    } else {
+                        couponAlert.innerText = `Something went wrong.Please try again.`;
+                        couponAlert.classList.remove('hidden');
+                        return;
                     }
                 }
 
