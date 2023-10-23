@@ -95,16 +95,15 @@ async function checkingCoupon(req, res) {
                 const discountValue = exists.discountValue
 
                 const usedOrNot = userData?.usedCoupons.map((coup) => {
-                    console.log(typeof coup.couponId,typeof exists._id)
                     if (coup.couponId == exists._id.toString()) {
                         return coup;
                     } else {
                         return false;
                     }
                 })
-                console.log('coupon : ', usedOrNot)
+                console.log('coupon : ', usedOrNot.length)
 
-                if (usedOrNot.length <= 0) {
+                if (usedOrNot.length <= 0 || false) {
                     const currentDate = new Date();
                     currentDate.setHours(0, 0, 0, 0);
                     console.log(startDate, endDate)
@@ -115,29 +114,45 @@ async function checkingCoupon(req, res) {
                             couponId: exists._id.toString(),
                             usedCount: 1
                         }
+                        console.log("usedCoupons before update: ", userModel.usedCoupons);
                         const updatingUser = await userModel.updateOne({ _id: userId }, { $push: { usedCoupons: updateData } })
                         if (updatingUser) {
-                            res.status(200).json({ added: true, sucess:"coupon added", discountType: discountType, discountValue: discountValue })
+                            res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue })
+
+                            console.log("usedCoupons after update: ", userModel.usedCoupons);
                         } else {
                             res.status(500).json({ added: false, err: "Database is having some issues" })
                         }
                     }
                 } else {
-                    console.log('used : ',usedOrNot)
-                    const usedCount = parseInt(usedOrNot[0].usedCount);
-                    if(usedCount>=usageLimit){
-                        res.status(400).json({added:false,err:"reached coupon limit."})
+                    const findCoupon = usedOrNot.map((coup) => {
+                        if (coup.couponId == exists._id.toString()) {
+                            return coup
+                        } else {
+                            return false
+                        }
+                    })
+                    console.log('findcoupon', findCoupon)
+                    const usedCount = parseInt(findCoupon[0].usedCount);
+                    if (usedCount >= usageLimit) {
+                        res.status(400).json({ added: false, err: "reached coupon limit." })
                         return;
-                    }else{
-                        const updating = await userModel.updateOne({_id:userId},{})
+                    } else {
+                        const updating = await userModel.updateOne({ _id: userId, 'usedCoupons.couponId': findCoupon[0].couponId },
+                            { $inc: { 'usedCoupons.$.usedCount': 1 } })
+                        if (updating) {
+                            res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue })
+                        } else {
+                            res.status(500).json({ added: false, err: "Database is having some issues" })
+                        }
                     }
                 }
 
 
             }
 
-        }else{
-            res.status(400).json({err:"The offer is not for this product"})
+        } else {
+            res.status(400).json({ err: "The offer is not for this product" })
         }
 
     } else {
