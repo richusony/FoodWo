@@ -71,7 +71,7 @@
                             <button onclick="removeFromWishlist(event)" data-foodid="<%=wish._id%>"
                                 class="px-5 mx-1 py-2 border border-orange-500 rounded text-orange-500">remove </button>
                             <button class="px-5 mx-1 py-2 bg-orange-500 rounded text-white">Cart<i
-                                    class="fa-solid text-xl fa-cart-shopping"></i></button>
+                                    class="fa-solid text-xl fa-cart-shopping" data-foodid="<%=wish._id%>" onclick="addToCart(event)"></i></button>
                         </div>
 
                     </div>
@@ -122,6 +122,57 @@
                             alertBox.classList.add('-translate-x-full')
                         }, 3000)
                        }
+                    }
+                }
+
+                async function addToCart(event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    const userid = sessionStorage.getItem('user_id') //event.target.getAttribute('data-userid')
+                    const foodid = event.target.getAttribute('data-foodid')
+                    console.log(event)
+
+                    const reqData = {
+                        userid: userid,
+                        foodid: foodid,
+                    }
+                    const realData = JSON.stringify(reqData);
+                    if (!userid) {
+                        window.location.href = '/user/login';
+                    } else {
+                        const response = await fetch('/user/addToCart/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': "application/json",
+                            },
+                            body: realData
+                        })
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.added) {
+                                window.scrollTo(0, 0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `${data.added}`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                }, 3000)
+                            } else if (data.exist) {
+                                window.scrollTo(0, 0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `${data.exist}`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                }, 3000)
+                            }
+                            else {
+                                alert('something went wrong.')
+                            }
+                        }
                     }
                 }
             </script>
