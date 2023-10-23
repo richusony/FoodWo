@@ -66,7 +66,7 @@ async function signInUser(req, res) {
                 password,
                 baseImage
             };
-
+            console.log(otp)
             // Redirect to OTP verification page
             res.redirect('/user/otpVerify');
         } catch (err) {

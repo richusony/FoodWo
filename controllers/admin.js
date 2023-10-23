@@ -363,7 +363,7 @@ async function deleteType(req, res) {
     }
 }
 
-async function removeImage(req, res) {
+async function removeImage(req, res) { 
     const { foodid, foodimg } = req.body;
     const removeImage = await productModel.updateOne({ _id: foodid }, { $pull: { productRelatedImages: foodimg } })
     if (removeImage) {

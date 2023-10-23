@@ -75,16 +75,19 @@ async function checkingCoupon(req, res) {
     const userId = req.params.uid;
     const coupon = req.body.coupon;
     const exists = await couponModel.findOne({ couponCode: coupon })
-    if (exists) {
+    if (exists) { 
         if (exists.status === "deactive") {
             res.status(500).json({ err: "This coupon has been blocked" })
         } else {
-            const userData = userModel.findOne({_id:userId})
+            const userData = await userModel.findOne({_id:userId})
+            console.log('user : ',userData)
  
             const startDate = exists.startDate
             const endDate = exists.endDate
             const usersLimit = exists.usersLimit
             const usageLimit = exists.usageLimit
+            const discountType = exists.discountType
+            const discountValue = exists.discountValue
 
             const usedOrNot = userData?.usedCoupons.map((coup)=>{
                 if(coup.couponId===exists._id){
@@ -93,10 +96,32 @@ async function checkingCoupon(req, res) {
                     return false;
                 }
             })
+            console.log('coupon : ',usedOrNot)
 
+            if(usedOrNot.length<=0){
+                const currentDate = new Date();
+                    currentDate.setHours(0, 0, 0, 0);
+                console.log(startDate,endDate)
+                if(endDate<currentDate){
+                    res.status(400).json({err:"coupon expired"})
+                }else{
+                    const updateData = {
+                        couponId: exists._id,
+                        usedCount:1
+                    }
+                    const updatingUser = await userModel.updateOne({_id:userId},{$push:{usedCoupons:updateData}})
+                    if(updatingUser){
+                        res.status(200).json({added:true,discountType:discountType,discountValue:discountValue})
+                    }else{
+                        res.status(500).json({added:false,err:"Database is having some issues"})
+                    }
+                }
+            }else{
+
+                res.status(200);
+            }
             
 
-            res.status(200);
         }
 
     } else {
