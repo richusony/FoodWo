@@ -87,6 +87,7 @@ async function checkingCoupon(req, res) {
     if (exists) {
         if(exists.usedUsersCount>=exists.usageLimit){
             res.status(400).json({err:"you are late"})
+            return;
         }
         if (checkFood) {
             if (exists.status === "deactive") {
@@ -119,6 +120,8 @@ async function checkingCoupon(req, res) {
                         console.log("usedCoupons before update: ", userModel.usedCoupons);
                         const updatingUser = await userModel.updateOne({ _id: userId }, { $push: { usedCoupons: updateData } })
                         if (updatingUser) {
+                            const updateCoupon = await couponModel.updateOne({_id:exists._id.toString()},{$inc:{usedUsersCount:1}})
+                            console.log(updateCoupon)
                             res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue })
 
                             console.log("usedCoupons after update: ", userModel.usedCoupons);
