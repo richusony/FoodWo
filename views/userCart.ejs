@@ -277,6 +277,7 @@
 
             <script>
                 // let quantity = 1;
+                let finalamout =0;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const couponAlert = document.getElementById('couponAlert');
@@ -742,11 +743,9 @@
                             couponAlert.classList.remove('hidden'); 
                             const finalP=parseInt('<%= totalPrice%>')
                             if(disType=="per"){
-                                amount = finalP - (disValue * finalP / 100);
-                                `<%= totalPrice=${amount}%>`
+                                finalamout = finalP - (disValue * finalP / 100);
                             }else{
-                                 amount = finalP -disValue;
-                                 `<%= totalPrice=${amount}%>`
+                                 finalamout = finalP -disValue;
                             }
                           
                         } else {
@@ -960,7 +959,7 @@
                         try {
                             const totalAmount = parseInt('<%=totalPrice%>')
                             const orderUrl = '/user/orders'
-                            const paying = await axios.post(orderUrl, { amount: totalAmount })
+                            const paying = await axios.post(orderUrl, { amount: finalamout==0?totalAmount:finalamout })
                             console.log(paying)
                             initPayment(paying.data)
                         } catch (error) {
