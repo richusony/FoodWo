@@ -94,16 +94,10 @@ async function checkingCoupon(req, res) {
                 const discountType = exists.discountType
                 const discountValue = exists.discountValue
 
-                const usedOrNot = userData?.usedCoupons.map((coup) => {
-                    if (coup.couponId == exists._id.toString()) {
-                        return coup;
-                    } else {
-                        return false;
-                    }
-                })
-                console.log('coupon : ', usedOrNot.length)
+                const usedOrNot = userData.usedCoupons.length == 0 ? false : userData?.usedCoupons.filter((coup) => coup && coup.couponId == exists._id.toString());
+                console.log('coupon : ', usedOrNot)
 
-                if (usedOrNot.length <= 0 || false) {
+                if (usedOrNot == false || usedOrNot[0] == false) {
                     const currentDate = new Date();
                     currentDate.setHours(0, 0, 0, 0);
                     console.log(startDate, endDate)
@@ -125,13 +119,7 @@ async function checkingCoupon(req, res) {
                         }
                     }
                 } else {
-                    const findCoupon = usedOrNot.map((coup) => {
-                        if (coup.couponId == exists._id.toString()) {
-                            return coup
-                        } else {
-                            return false
-                        }
-                    })
+                    const findCoupon = usedOrNot.filter((coup) => coup && coup.couponId == exists._id.toString());
                     console.log('findcoupon', findCoupon)
                     const usedCount = parseInt(findCoupon[0].usedCount);
                     if (usedCount >= usageLimit) {

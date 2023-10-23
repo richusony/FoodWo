@@ -276,7 +276,6 @@
         <%- include('../views/userFooter.ejs') %>
 
             <script>
-
                 // let quantity = 1;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
@@ -736,11 +735,20 @@
                     if (res.ok) {
                         const data = await res.json();
                         if (data.added) {
+                            let amount=0;
                             const disType = data.discountType
                             const disValue = parseInt(data.discountValue);
                             couponAlert.innerText = `coupon added`;
-                            couponAlert.classList.remove('hidden');
-
+                            couponAlert.classList.remove('hidden'); 
+                            const finalP=parseInt('<%= totalPrice%>')
+                            if(disType=="per"){
+                                amount = finalP - (disValue * finalP / 100);
+                                `<%= totalPrice=${amount}%>`
+                            }else{
+                                 amount = finalP -disValue;
+                                 `<%= totalPrice=${amount}%>`
+                            }
+                          
                         } else {
                             couponAlert.innerText = `${data.err}`;
                             couponAlert.classList.remove('hidden');
