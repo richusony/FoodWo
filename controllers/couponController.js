@@ -27,7 +27,12 @@ async function viewCouponMangemenPage(req, res) {
 
 async function createCoupon(req, res) {
     const { userLimit, usageLimit, startTime, endTime, couponCode, foodItem, discountType, discountValue } = req.body;
-    const addCoupon = await couponModel.create({ usersLimit: userLimit, usageLimit: usageLimit, startDate: startTime, endDate: endTime, couponCode: couponCode, foodId: foodItem, discountType: discountType, discountValue: discountValue, status: "active" });
+    const exists = await couponModel.findOne({couponCode:couponCode});
+    if(exists){
+        res.status(400).json({err:'coupon already existed'});
+        return;
+    }
+    const addCoupon = await couponModel.create({ usersLimit: userLimit, usageLimit: usageLimit, startDate: startTime, endDate: endTime, couponCode: couponCode, foodId: foodItem, discountType: discountType, discountValue: discountValue, status: "active",usedUsersCount:0 });
     if (addCoupon) {
         res.status(200).json({ added: true })
     } else {
@@ -80,6 +85,9 @@ async function checkingCoupon(req, res) {
     const checkFood = foodids.includes(exists?.foodId)
     console.log("food checking : ", checkFood)
     if (exists) {
+        if(exists.usedUsersCount>=exists.usageLimit){
+            res.status(400).json({err:"you are late"})
+        }
         if (checkFood) {
             if (exists.status === "deactive") {
                 res.status(500).json({ err: "This coupon has been blocked" })

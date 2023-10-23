@@ -737,6 +737,7 @@
                         const data = await res.json();
                         if (data.added) {
                             let amount=0;
+                            const finalamountElement = document.getElementById('dynamicTotalAmt');
                             const disType = data.discountType
                             const disValue = parseInt(data.discountValue);
                             couponAlert.innerText = `coupon added`;
@@ -744,8 +745,10 @@
                             const finalP=parseInt('<%= totalPrice%>')
                             if(disType=="per"){
                                 finalamout = finalP - (disValue * finalP / 100);
+                                finalamountElement.innerText=finalamout;
                             }else{
-                                 finalamout = finalP -disValue;
+                                finalamout = finalP -disValue;
+                                finalamountElement.innerText=finalamout;
                             }
                           
                         } else {

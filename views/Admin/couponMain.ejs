@@ -412,10 +412,11 @@
                                 }, 3000)
                             }
                         }else{
+                            const data = await res.json();
                             window.scrollTo(0, 0)
                         alertBox.classList.remove('opacity-0')
                         alertBox.classList.remove('-translate-x-full')
-                        alertMsg.innerText = `Something went wrong.Please try again.`;
+                        alertMsg.innerText = `${data.err}`;
                         setTimeout(() => {
                             alertBox.classList.add('opacity-0')
                             alertBox.classList.add('-translate-x-full')
