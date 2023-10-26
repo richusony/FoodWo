@@ -249,14 +249,19 @@
                                                 </div>
                                             </div>
                                             <div class="my-3 px-3 flex justify-center items-center">
-                                                <input type="checkbox" name="" id="cod" class="mr-2"><span>Cash on
+                                                <input type="checkbox" name="" id="cod" onchange="checkChange(event)" class="mr-2"><span>Cash on
                                                     Delivery</span>
                                             </div>
                                             <div class="my-3 px-3 flex justify-center items-center">
-                                                <input type="checkbox" name="" id="walletPay" class="mr-2"><span>pay
+                                                <input type="checkbox" name="" id="walletPay" onchange="checkChange(event)" class="mr-2"><span>pay
                                                     using
                                                     wallet</span>
                                             </div>
+                                            <div class="my-3 px-3 flex justify-center items-center">
+                                                <input type="checkbox" checked  name="" id="onlinePayment" onchange="checkChange(event)"
+                                                    class="mr-2"><span>pay online</span>
+                                            </div>
+                                            <div class="transition delay-150 text-end ease-linear hidden" id="walletBalance"><span>Wallet Balance : ₹<span class="font-semibold"><%=wallet.balance%></span></span></div>
                                             <hr class="py-[0.28px] bg-white rounded my-5">
                                             <div class="flex justify-between px-3 font-bold"><span>Total : </span>
                                                 <span class="finalPrice">₹ <span id="dynamicTotalAmt">
@@ -277,7 +282,7 @@
 
             <script>
                 // let quantity = 1;
-                let finalamout =0;
+                let finalamout = 0;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const couponAlert = document.getElementById('couponAlert');
@@ -292,6 +297,30 @@
                 const addContainer = document.getElementById('addContainer');
 
                 const final = document.querySelectorAll(`.finalPrice`);
+
+                function checkChange(event) {
+                    event.preventDefault();
+                    const cod = document.getElementById('cod');
+                    const walletPay = document.getElementById('walletPay');
+                    const onlinePayment = document.getElementById('onlinePayment');
+                    const walletBalance = document.getElementById('walletBalance');
+
+                    if (cod.checked) {
+                        walletPay.checked = false;
+                        onlinePayment.checked = false;
+                        walletBalance.classList.add('hidden')
+                    } else if (walletPay.checked) {
+                        walletBalance.classList.remove('hidden')
+                        cod.checked = false;
+                        onlinePayment.checked = false;
+                    } else if(onlinePayment.checked) {
+                        walletBalance.classList.add('hidden')
+                        cod.checked = false;
+                        walletPay.checked = false;
+                    }else{
+                        console.log('Not selected any payment methods...')
+                    }
+                }
 
                 function priceUp(event) {
                     const index = event.currentTarget.getAttribute('data-index');
@@ -724,7 +753,7 @@
                         couponAlert.classList.remove('hidden');
                         return;
                     }
-                
+
                     if (res.status == 400) {
                         const data = await res.json();
                         couponAlert.innerText = `${data.err}`;
@@ -736,21 +765,21 @@
                     if (res.ok) {
                         const data = await res.json();
                         if (data.added) {
-                            let amount=0;
+                            let amount = 0;
                             const finalamountElement = document.getElementById('dynamicTotalAmt');
                             const disType = data.discountType
                             const disValue = parseInt(data.discountValue);
                             couponAlert.innerText = `coupon added`;
-                            couponAlert.classList.remove('hidden'); 
-                            const finalP=parseInt('<%= totalPrice%>')
-                            if(disType=="per"){
+                            couponAlert.classList.remove('hidden');
+                            const finalP = parseInt('<%= totalPrice%>')
+                            if (disType == "per") {
                                 finalamout = finalP - (disValue * finalP / 100);
-                                finalamountElement.innerText=finalamout;
-                            }else{
-                                finalamout = finalP -disValue;
-                                finalamountElement.innerText=finalamout;
+                                finalamountElement.innerText = finalamout;
+                            } else {
+                                finalamout = finalP - disValue;
+                                finalamountElement.innerText = finalamout;
                             }
-                          
+
                         } else {
                             couponAlert.innerText = `${data.err}`;
                             couponAlert.classList.remove('hidden');
@@ -772,6 +801,7 @@
                     const checkAddress3 = document.getElementById('addressCheck3');
                     const cod = document.getElementById('cod');
                     const walletPay = document.getElementById('walletPay');
+                    const onlinePayment = document.getElementById('onlinePayment');
                     const qty = document.querySelectorAll('.qty');
                     const cartItems = '<%-JSON.stringify(cartItems).trim()%>';
                     console.log(cartItems);
@@ -962,7 +992,7 @@
                         try {
                             const totalAmount = parseInt('<%=totalPrice%>')
                             const orderUrl = '/user/orders'
-                            const paying = await axios.post(orderUrl, { amount: finalamout==0?totalAmount:finalamout })
+                            const paying = await axios.post(orderUrl, { amount: finalamout == 0 ? totalAmount : finalamout })
                             console.log(paying)
                             initPayment(paying.data)
                         } catch (error) {
