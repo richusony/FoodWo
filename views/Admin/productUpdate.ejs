@@ -31,7 +31,8 @@
 
                     <div class="flex flex-col md:flex-row ">
                         <!-- Input Fields -->
-                        <form class="md:w-1/2" action="/admin/update-product" method="post" enctype="multipart/form-data">
+                        <form class="md:w-1/2" action="/admin/update-product" method="post"
+                            enctype="multipart/form-data">
                             <div class="w-full flex flex-col my-2">
                                 <label for="mainImage">Main Image</label>
                                 <input type="file" name="mainimage" id="mainImage" accept="image/*"
@@ -44,7 +45,7 @@
                                     class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                             </div>
                             <% if(data){ %>
-                            <input type="hidden" name="id" value="<%=data[0]._id%>">
+                                <input type="hidden" name="id" value="<%=data[0]._id%>">
                                 <div class="flex flex-col my-2">
                                     <label for="">Product Name</label>
                                     <input type="text" name="productName" maxlength="20" id="productName"
@@ -118,7 +119,8 @@
                                 </div>
                                 <div class="my-8 text-center">
                                     <button type="submit" onclick="handleProductUpload(event)"
-                                        class="bg-orange-500 rounded-full py-2 px-6 md:px-6 text-white text-xl md:text-xl">Update stock</button>
+                                        class="bg-orange-500 rounded-full py-2 px-6 md:px-6 text-white text-xl md:text-xl">Update
+                                        stock</button>
                                 </div>
                                 <% } %>
                         </form>
@@ -129,9 +131,11 @@
                             <div>
                                 <h3 class="font-semibold my-3">Main Image</h3>
                                 <% if(data){ %>
-                                <div class="w-48 h-48 rounded" id="mainImageContainer">
-                                        <div class="w-full h-full rounded"><img class="w-full h-full rounded object-cover" src="/<%=data[0].productMainImage%>" alt="MainImage"></div>
-                                </div>
+                                    <div class="w-48 h-48 rounded" id="mainImageContainer">
+                                        <div class="w-full h-full rounded"><img
+                                                class="w-full h-full rounded object-cover"
+                                                src="/<%=data[0].productMainImage%>" alt="MainImage"></div>
+                                    </div>
                             </div>
                             <div>
                                 <h3 class="font-semibold my-3">Related Images</h3>
@@ -164,7 +168,7 @@
 
                     const toast = document.getElementById('toast');
                     async function handleProductUpload(event) {
-                        
+
                         //User Details
                         const productName = document.getElementById('productName').value;
                         const description = document.getElementById('description').value;
@@ -174,11 +178,11 @@
                         // const sold = document.getElementById('sold').value;
                         const inStock = document.getElementById('inStock').value;
 
-                        console.log(productName,description,productPrice,productType,category,inStock)
+                        console.log(productName, description, productPrice, productType, category, inStock)
 
-                        if (productName=="" || description=="" || productPrice=="" || productType=="" || category=="" || inStock=="") {
+                        if (productName == "" || description == "" || productPrice == "" || productType == "" || category == "" || inStock == "") {
                             event.preventDefault();
-                            window.scrollTo(0,0)
+                            window.scrollTo(0, 0)
                             toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> All fields are required.</span>`;
                             toast.classList.remove("hidden");
                             toast.classList.remove("translate-y-96");
@@ -295,7 +299,7 @@
                         });
 
                         relatedImagesInput.files = newFileList.files;
-                         relatedImagesPreview.removeChild(imageContainer);
+                        relatedImagesPreview.removeChild(imageContainer);
                     }
 
 
@@ -322,7 +326,7 @@
                         }
 
                         let index = parseInt('<%=finalIndex%>');
-                            index++;
+                        index++;
                         for (const file of relatedImagesInput.files) {
                             const imageContainer = document.createElement('div');
                             imageContainer.id = index;
