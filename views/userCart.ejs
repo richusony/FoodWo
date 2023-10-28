@@ -293,6 +293,7 @@
                 let finalamout = 0;
                 let disType;
                 let disValue;
+                let couponAddedOrNot=false;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const couponAlert = document.getElementById('couponAlert');
@@ -784,6 +785,7 @@
                             couponBtn.classList.add('hidden')
                             couponRemoveBtn.classList.remove('hidden');
                             couponAlert.innerText = `coupon added`;
+                            couponAddedOrNot=true;
                             couponAlert.classList.remove('hidden');
                             const finalP = parseInt('<%= totalPrice%>')
                             if (disType == "per") {
@@ -824,6 +826,7 @@
                     }
 
                     couponAlert.innerText = `coupon removed`;
+                    couponAddedOrNot=false;
                     couponAlert.classList.remove('hidden');
 
                     couponRemoveBtn.classList.add('hidden');
