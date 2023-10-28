@@ -113,21 +113,21 @@ async function checkingCoupon(req, res) {
                     if (endDate < currentDate) {
                         res.status(400).json({ err: "coupon expired" })
                     } else {
-                        const updateData = {
-                            couponId: exists._id.toString(),
-                            usedCount: 1
-                        }
-                        console.log("usedCoupons before update: ", userModel.usedCoupons);
-                        const updatingUser = await userModel.updateOne({ _id: userId }, { $push: { usedCoupons: updateData } })
-                        if (updatingUser) {
-                            const updateCoupon = await couponModel.updateOne({_id:exists._id.toString()},{$inc:{usedUsersCount:1}})
-                            console.log(updateCoupon)
+                        // const updateData = {
+                        //     couponId: exists._id.toString(),
+                        //     usedCount: 1
+                        // }
+                        // console.log("usedCoupons before update: ", userModel.usedCoupons);
+                        // const updatingUser = await userModel.updateOne({ _id: userId }, { $push: { usedCoupons: updateData } })
+                        // if (updatingUser) {
+                        //     const updateCoupon = await couponModel.updateOne({_id:exists._id.toString()},{$inc:{usedUsersCount:1}})
+                        //     console.log(updateCoupon)
                             res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue })
 
-                            console.log("usedCoupons after update: ", userModel.usedCoupons);
-                        } else {
-                            res.status(500).json({ added: false, err: "Database is having some issues" })
-                        }
+                        //     console.log("usedCoupons after update: ", userModel.usedCoupons);
+                        // } else {
+                        //     res.status(500).json({ added: false, err: "Database is having some issues" })
+                        // }
                     }
                 } else {
                     const findCoupon = usedOrNot.filter((coup) => coup && coup.couponId == exists._id.toString());
@@ -137,13 +137,13 @@ async function checkingCoupon(req, res) {
                         res.status(400).json({ added: false, err: "reached coupon limit." })
                         return;
                     } else {
-                        const updating = await userModel.updateOne({ _id: userId, 'usedCoupons.couponId': findCoupon[0].couponId },
-                            { $inc: { 'usedCoupons.$.usedCount': 1 } })
-                        if (updating) {
+                        // const updating = await userModel.updateOne({ _id: userId, 'usedCoupons.couponId': findCoupon[0].couponId },
+                        //     { $inc: { 'usedCoupons.$.usedCount': 1 } })
+                        // if (updating) {
                             res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue })
-                        } else {
-                            res.status(500).json({ added: false, err: "Database is having some issues" })
-                        }
+                        // } else {
+                        //     res.status(500).json({ added: false, err: "Database is having some issues" })
+                        // }
                     }
                 }
 

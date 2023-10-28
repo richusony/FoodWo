@@ -245,23 +245,31 @@
                                                     <button id="couponBtn"
                                                         class="hidden px-2 py-1 bg-white text-orange-500 rounded"
                                                         onclick="checkCoupon(event)">apply</button>
+                                                    <button id="couponRemoveBtn"
+                                                        class="hidden px-2 py-1 bg-white text-orange-500 rounded"
+                                                        onclick="removeCoupon(event)">remove</button>
                                                     <p class="hidden" id="couponAlert"></p>
                                                 </div>
                                             </div>
                                             <div class="my-3 px-3 flex justify-center items-center">
-                                                <input type="checkbox" name="" id="cod" onchange="checkChange(event)" class="mr-2"><span>Cash on
+                                                <input type="checkbox" name="" id="cod" onchange="checkChange(event)"
+                                                    class="mr-2"><span>Cash on
                                                     Delivery</span>
                                             </div>
                                             <div class="my-3 px-3 flex justify-center items-center">
-                                                <input type="checkbox" name="" id="walletPay" onchange="checkChange(event)" class="mr-2"><span>pay
+                                                <input type="checkbox" name="" id="walletPay"
+                                                    onchange="checkChange(event)" class="mr-2"><span>pay
                                                     using
                                                     wallet</span>
                                             </div>
                                             <div class="my-3 px-3 flex justify-center items-center">
-                                                <input type="checkbox" checked  name="" id="onlinePayment" onchange="checkChange(event)"
-                                                    class="mr-2"><span>pay online</span>
+                                                <input type="checkbox" checked name="" id="onlinePayment"
+                                                    onchange="checkChange(event)" class="mr-2"><span>pay online</span>
                                             </div>
-                                            <div class="transition delay-150 text-end ease-linear hidden" id="walletBalance"><span>Wallet Balance : ₹<span class="font-semibold"><%=wallet.balance%></span></span></div>
+                                            <div class="transition delay-150 text-end ease-linear hidden"
+                                                id="walletBalance"><span>Wallet Balance : ₹<span class="font-semibold">
+                                                        <%=wallet.balance%>
+                                                    </span></span></div>
                                             <hr class="py-[0.28px] bg-white rounded my-5">
                                             <div class="flex justify-between px-3 font-bold"><span>Total : </span>
                                                 <span class="finalPrice">₹ <span id="dynamicTotalAmt">
@@ -283,6 +291,8 @@
             <script>
                 // let quantity = 1;
                 let finalamout = 0;
+                let disType;
+                let disValue;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const couponAlert = document.getElementById('couponAlert');
@@ -313,11 +323,11 @@
                         walletBalance.classList.remove('hidden')
                         cod.checked = false;
                         onlinePayment.checked = false;
-                    } else if(onlinePayment.checked) {
+                    } else if (onlinePayment.checked) {
                         walletBalance.classList.add('hidden')
                         cod.checked = false;
                         walletPay.checked = false;
-                    }else{
+                    } else {
                         console.log('Not selected any payment methods...')
                     }
                 }
@@ -726,6 +736,8 @@
                 async function checkCoupon(event) {
                     event.preventDefault();
                     const couponInput = document.getElementById('couponInput').value;
+                    const couponRemoveBtn = document.getElementById("couponRemoveBtn");
+                    const couponBtn = document.getElementById('couponBtn');
                     if (couponInput.toUpperCase() !== couponInput) {
                         couponAlert.innerText = `*Invalid Coupon`;
                         couponAlert.classList.remove('hidden');
@@ -767,8 +779,10 @@
                         if (data.added) {
                             let amount = 0;
                             const finalamountElement = document.getElementById('dynamicTotalAmt');
-                            const disType = data.discountType
-                            const disValue = parseInt(data.discountValue);
+                            disType = data.discountType
+                            disValue = parseInt(data.discountValue);
+                            couponBtn.classList.add('hidden')
+                            couponRemoveBtn.classList.remove('hidden');
                             couponAlert.innerText = `coupon added`;
                             couponAlert.classList.remove('hidden');
                             const finalP = parseInt('<%= totalPrice%>')
@@ -790,6 +804,30 @@
                         couponAlert.classList.remove('hidden');
                         return;
                     }
+                }
+
+                function removeCoupon(event) {
+                    event.preventDefault();
+                    const couponRemoveBtn = document.getElementById("couponRemoveBtn");
+                    const couponBtn = document.getElementById('couponBtn');
+                    const finalamountElement = document.getElementById('dynamicTotalAmt');
+
+                    const finalP = parseInt('<%= totalPrice%>')
+                    const discountedAmount = parseInt(finalamountElement.innerText)
+                    console.log('discountedAmount : ',discountedAmount);
+                    if (disType == "per") {
+                        finalamout = discountedAmount + (disValue * finalP / 100);
+                        finalamountElement.innerText = finalamout;
+                    } else {
+                        finalamout = discountedAmount + disValue;
+                        finalamountElement.innerText = finalamout;
+                    }
+
+                    couponAlert.innerText = `coupon removed`;
+                    couponAlert.classList.remove('hidden');
+
+                    couponRemoveBtn.classList.add('hidden');
+                    couponBtn.classList.remove('hidden')
                 }
 
 
