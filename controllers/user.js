@@ -689,19 +689,21 @@ async function updateStock(req, res) {
                 {
                     $inc: { purchaseCount: 1 }
                 })
-            const historyData = {
-                date: currentDate,
-                amt: parseInt(productPrice) * parseInt(productQty),
-                update: "dec"
-            };
-
-            const walletUpdate = await walletModel.updateOne(
-                { userId: user_id },
-                {
-                    $inc: { balance: -parseInt(productPrice) * parseInt(productQty) }, // Decrement the balance
-                    $push: { history: historyData }
+                if(paymentMethod=="FoodWo Wallet"){
+                    const historyData = {
+                        date: currentDate,
+                        amt: parseInt(productPrice) * parseInt(productQty),
+                        update: "dec"
+                    };
+        
+                    const walletUpdate = await walletModel.updateOne(
+                        { userId: user_id },
+                        {
+                            $inc: { balance: -parseInt(productPrice) * parseInt(productQty) }, // Decrement the balance
+                            $push: { history: historyData }
+                        }
+                    );
                 }
-            );
 
             if (result) {
                 res.status(200).json({ orderid: orderId, address: address });

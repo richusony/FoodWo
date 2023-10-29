@@ -1030,12 +1030,25 @@
 
                             const reqData = await JSON.stringify(productData);
                             const checkResponse = await fetch('/user/cart-checkout', {
-                                method: 'PATCH',
+                                method: 'POST',
                                 headers: {
                                     'Content-Type': "application/json",
                                 },
                                 body: reqData
                             })
+
+                            if (checkResponse.status == 400 || checkResponse.status == 404 || checkResponse.status == 500) {
+                                const data = await checkResponse.json();
+                                alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.err}`;
+                                alertBox.classList.remove('-translate-x-full')
+                                alertBox.classList.remove('opacity-0')
+                                window.scrollTo(0, 0)
+                                setTimeout(() => {
+                                    alertBox.classList.add('-translate-x-full')
+                                    alertBox.classList.add('opacity-0')
+                                }, 3000)
+                                return;
+                            }
 
                             if (checkResponse.ok) {
                                 const reqData = {
