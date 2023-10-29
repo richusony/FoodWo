@@ -27,7 +27,12 @@ async function viewCouponMangemenPage(req, res) {
 
 async function createCoupon(req, res) {
     const { userLimit, usageLimit, startTime, endTime, couponCode, foodItem, discountType, discountValue } = req.body;
-    const addCoupon = await couponModel.create({ usersLimit: userLimit, usageLimit: usageLimit, startDate: startTime, endDate: endTime, couponCode: couponCode, foodId: foodItem, discountType: discountType, discountValue: discountValue, status: "active" });
+    const exists = await couponModel.findOne({couponCode:couponCode});
+    if(exists){
+        res.status(400).json({err:'coupon already existed'});
+        return;
+    }
+    const addCoupon = await couponModel.create({ usersLimit: userLimit, usageLimit: usageLimit, startDate: startTime, endDate: endTime, couponCode: couponCode, foodId: foodItem, discountType: discountType, discountValue: discountValue, status: "active",usedUsersCount:0 });
     if (addCoupon) {
         res.status(200).json({ added: true })
     } else {
@@ -74,31 +79,85 @@ async function updateCoupon(req, res) {
 async function checkingCoupon(req, res) {
     const userId = req.params.uid;
     const coupon = req.body.coupon;
+    const foodids = req.body.foodids.split(",");
+    console.log("foodids : ", foodids)
     const exists = await couponModel.findOne({ couponCode: coupon })
+    const checkFood = foodids.includes(exists?.foodId)
+    console.log("food checking : ", checkFood)
     if (exists) {
-        if (exists.status === "deactive") {
-            res.status(500).json({ err: "This coupon has been blocked" })
-        } else {
-            const userData = userModel.findOne({_id:userId})
- 
-            const startDate = exists.startDate
-            const endDate = exists.endDate
-            const usersLimit = exists.usersLimit
-            const usageLimit = exists.usageLimit
+        if(exists.usedUsersCount>=exists.usageLimit){
+            res.status(400).json({err:"you are late. maximum user limit has been reached"})
+            return;
+        }
+        if (checkFood) {
+            if (exists.status === "deactive") {
+                res.status(500).json({ err: "This coupon has been blocked" })
+            } else {
+                const userData = await userModel.findOne({ _id: userId })
+                console.log('user : ', userData)
 
-            const usedOrNot = userData?.usedCoupons.map((coup)=>{
-                if(coup.couponId===exists._id){
-                    return coup;
+                const startDate = exists.startDate
+                const endDate = exists.endDate
+                const usersLimit = exists.usersLimit
+                const usageLimit = exists.usageLimit
+                const discountType = exists.discountType
+                const discountValue = exists.discountValue
+
+                const usedOrNot = userData.usedCoupons.length == 0 ? false : userData?.usedCoupons.filter((coup) => coup && coup.couponId == exists._id.toString());
+                console.log('coupon : ', usedOrNot)
+
+                if (usedOrNot == false || usedOrNot[0] == false) {
+                    const currentDate = new Date();
+                    currentDate.setHours(0, 0, 0, 0);
+                    console.log(startDate, endDate)
+                    if (endDate < currentDate) {
+                        res.status(400).json({ err: "coupon expired" })
+                    } else {
+                        // const updateData = {
+                        //     couponId: exists._id.toString(),
+                        //     usedCount: 1
+                        // }
+                        // console.log("usedCoupons before update: ", userModel.usedCoupons);
+                        // const updatingUser = await userModel.updateOne({ _id: userId }, { $push: { usedCoupons: updateData } })
+                        // if (updatingUser) {
+                        //     const updateCoupon = await couponModel.updateOne({_id:exists._id.toString()},{$inc:{usedUsersCount:1}})
+                        //     console.log(updateCoupon)
+                            res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue })
+
+                        //     console.log("usedCoupons after update: ", userModel.usedCoupons);
+                        // } else {
+                        //     res.status(500).json({ added: false, err: "Database is having some issues" })
+                        // }
+                    }
+                } else {
+                    const findCoupon = usedOrNot.filter((coup) => coup && coup.couponId == exists._id.toString());
+                    console.log('findcoupon', findCoupon)
+                    const usedCount = parseInt(findCoupon[0].usedCount);
+                    if (usedCount >= usageLimit) {
+                        res.status(400).json({ added: false, err: "Coupon usage limit has been reached." })
+                        return;
+                    } else {
+                        // const updating = await userModel.updateOne({ _id: userId, 'usedCoupons.couponId': findCoupon[0].couponId },
+                        //     { $inc: { 'usedCoupons.$.usedCount': 1 } })
+                        // if (updating) {
+                            res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue })
+                        // } else {
+                        //     res.status(500).json({ added: false, err: "Database is having some issues" })
+                        // }
+                    }
                 }
-            })
 
-            res.status(200);
+
+            }
+
+        } else {
+            res.status(400).json({ err: "The offer is not for this product" })
         }
 
     } else {
         res.status(404).json({ err: "Coupon not found" })
     }
-    
+
 }
 
 module.exports = {

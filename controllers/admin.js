@@ -126,6 +126,14 @@ async function viewAddProductsPage(req, res) {
 async function addProduct(req, res) {
     const { productName, description, productPrice, productType, category, sold, inStock, baseImage } = req.body;
     console.log(req.body)
+    if(productPrice <=0){
+        res.status(400).json({err:"Product Price must be greater than zero."})
+        return ;
+    }
+    if(inStock <=0){
+        res.status(400).json({err:"Stock must be greater than zero."})
+        return ;
+    }
     const relatedImages = req.files.relatedimages.map(img => img.path);
     const mainImage = req.files.mainimage.map(img => img.path);
     console.log('mainImage : ', mainImage)
@@ -162,6 +170,15 @@ async function updateProducts(req, res) {
     const mainImage = req.files.mainimage ? req.files.mainimage.map(img => img.path) : [];
     const relatedImages = req.files.relatedimages ? req.files.relatedimages.map(img => img.path) : [];
     console.log('checkkinng  .. ', relatedImages, mainImage)
+
+    if(productPrice <=0){
+        res.status(400).json({err:"Product Price must be greater than zero."})
+        return ;
+    }
+    if(inStock <=0){
+        res.status(400).json({err:"Stock must be greater than zero."})
+        return ;
+    }
 
     if (mainImage.length == 0 && relatedImages.length == 0) {
         const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock });
@@ -363,7 +380,7 @@ async function deleteType(req, res) {
     }
 }
 
-async function removeImage(req, res) {
+async function removeImage(req, res) { 
     const { foodid, foodimg } = req.body;
     const removeImage = await productModel.updateOne({ _id: foodid }, { $pull: { productRelatedImages: foodimg } })
     if (removeImage) {

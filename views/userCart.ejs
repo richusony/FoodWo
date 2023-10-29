@@ -72,188 +72,217 @@
 
             <div class="flex flex-col lg:flex-row my-3">
                 <% let totalItems=0; %>
-                    <% let totalPrice=0; %>
-                        <% let quantities=new Array(cartItems.length).fill(1); %>
-                            <div
-                                class="h-96 overflow-y-auto overflow-x-hidden w-full lg:w-1/2 px-3 py-3 my-2 shadow-sm">
-                                <% if(cartItems){ cartItems.forEach((cart, index)=> { %>
-                                    <div
-                                        class="bg-[#f0efef] md:px-5 py-3 my-2 flex justify-between items-center rounded shadow-md">
-                                        <div class=" w-20 h-16 object-cover rounded mx-2 md:mr-3 ">
-                                            <img class="w-full h-full rounded object-cover"
-                                                src="/<%= cart.productMainImage%>" alt="">
-                                        </div>
-
-                                        <div class=" mr-2 md:mr-3 w-40 overflow-hidden shadow-inner ">
-                                            <h2 class="text-sm md:text-xl font-semibold">
-                                                <%= cart.productName %>
-                                            </h2>
-                                        </div>
-
-                                        <div class=" flex mr-2 md:mr-3 relative text-center justify-center">
-                                            <div onclick="priceDown(event)" data-index="<%= index %>"
-                                                data-stock="<%=cart.productInStock%>"
-                                                class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-l-full">
-                                                <i class="fa-solid fa-minus"></i>
-                                            </div>
-                                            <span id="<%= `qty${index}` %>" class="qty mx-3 text-sm my-auto">1</span>
-                                            <div onclick="priceUp(event)" data-index="<%= index %>"
-                                                data-stock="<%=cart.productInStock%>"
-                                                class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-r-full">
-                                                <i class="fa-solid fa-plus"></i>
-                                            </div>
-                                            <p class="hidden absolute mt-7 text-sm text-center text-orange-500"
-                                                id="<%= `stockAlert${index}`%>"></p>
-                                        </div>
-
-                                        <div class=" mr-2 md:mx-3">
-                                            <span class="text-orange-500 text-sm md:text-xl md:font-semibold">
-                                                <span data-actualPrice="<%= cart.productPrice %>"
-                                                    id="<%= `price${index}` %>">
-                                                    <%= '₹' +cart.productPrice %>
-                                                </span></span>
-                                        </div>
-                                        <% totalItems +=quantities[index]; %>
-                                            <% totalPrice +=quantities[index] * parseFloat(cart.productPrice); %>
-                                                <div class=" mr-2 md:mx-2">
-                                                    <span class="text-orange-500 md:text-2xl">
-                                                        <i onclick="deleteFromCart(event)" data-index="<%=index%>"
-                                                            data-foodid="<%=cart._id%>" data-userid="<%=userId%>"
-                                                            class="xmark cursor-pointer fa-solid fa-close">
-                                                        </i>
-                                                    </span>
+                    <% let foodIds=[]; %>
+                        <% let totalPrice=0; %>
+                            <% let quantities=new Array(cartItems.length).fill(1); %>
+                                <div
+                                    class="h-96 overflow-y-auto overflow-x-hidden w-full lg:w-1/2 px-3 py-3 my-2 shadow-sm">
+                                    <% if(cartItems){ cartItems.forEach((cart, index)=> { %>
+                                        <% foodIds.push(cart._id); %>
+                                            <div
+                                                class="bg-[#f0efef] md:px-5 py-3 my-2 flex justify-between items-center rounded shadow-md">
+                                                <div class=" w-20 h-16 object-cover rounded mx-2 md:mr-3 ">
+                                                    <img class="w-full h-full rounded object-cover"
+                                                        src="/<%= cart.productMainImage%>" alt="">
                                                 </div>
 
-                                    </div>
-                                    <% }) }else{ %>
-                                        <div class="flex flex-col justify-center items-center">
-                                            <h1 class="text-4xl text-orange-500 text-center font-bold my-3">No items in
-                                                the Cart!!</h1>
-                                            <div class="w-full h-72">
-                                                <img class="w-full h-full object-cover"
-                                                    src="http://media.istockphoto.com/vectors/female-hands-with-steel-fork-and-empty-ceramic-plate-vector-id642208480?k=6&m=642208480&s=612x612&w=0&h=u5WmG_7RuLq1M43PpGtMAuZBlytf-dA6wbkwljWpzdk="
-                                                    alt="">
-                                            </div>
-                                        </div>
-                                        <% } %>
-                            </div>
-
-                            <div class="bg-orange-500 mx-2 lg:w-1/2 px-4 py-5 shadow-2xl rounded-xl text-white">
-                                <div class="py-2 px-3 text-start">
-                                    <h2 class="py-2 text-xl md:text-2xl font-bold text-white">Summary</h2>
-                                </div>
-                                <div class="flex justify-between px-3 my-3">
-                                    <span class="font-bold">Items : <%= totalItems %></span>
-                                    <span class="finalPrice">₹<%= totalPrice.toFixed(2) %></span>
-                                </div>
-                                <div class="px-3 my-3">
-                                    <h3 class="font-bold">Shipping to :</h3>
-                                    <div id="addContainer">
-                                        <div
-                                            class='<%if(userData[0].address1 !=="false" ){%> block <%}else{%>hidden<%}%>'>
-                                            <span>
-                                                <div class="flex my-2 text-sm w-80">
-                                                    <input type="checkbox" name="" id="addressCheck1" class="mx-2">
-                                                    <span id="currentAdd1">
-                                                        <%=userData[0].address1%>
-                                                    </span>
+                                                <div class=" mr-2 md:mr-3 w-40 overflow-hidden shadow-inner ">
+                                                    <h2 class="text-sm md:text-xl font-semibold">
+                                                        <%= cart.productName %>
+                                                    </h2>
                                                 </div>
-                                            </span>
 
-                                            <div class="text-end"><span class="cursor-pointer" id="editAdd1" data-id="1"
-                                                    onclick="editAddress(event)">edit address</span></div>
-                                            <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd1"
-                                                    data-id="1" onclick="saveAddress(event)">save address</span></div>
-                                        </div>
-
-
-                                        <div
-                                            class='<%if(userData[0].address2 !=="false" ){%> block <%}else{%>hidden <% } %>'>
-                                            <span>
-                                                <div class="flex my-2 text-sm w-80">
-                                                    <input type="checkbox" name="" id="addressCheck2" class="mx-2">
-                                                    <span id="currentAdd2">
-                                                        <%=userData[0].address2%>
-                                                    </span>
+                                                <div class=" flex mr-2 md:mr-3 relative text-center justify-center">
+                                                    <div onclick="priceDown(event)" data-index="<%= index %>"
+                                                        data-stock="<%=cart.productInStock%>"
+                                                        class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-l-full">
+                                                        <i class="fa-solid fa-minus"></i>
+                                                    </div>
+                                                    <span id="<%= `qty${index}` %>"
+                                                        class="qty mx-3 text-sm my-auto">1</span>
+                                                    <div onclick="priceUp(event)" data-index="<%= index %>"
+                                                        data-stock="<%=cart.productInStock%>"
+                                                        class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-r-full">
+                                                        <i class="fa-solid fa-plus"></i>
+                                                    </div>
+                                                    <p class="hidden absolute mt-7 text-sm text-center text-orange-500"
+                                                        id="<%= `stockAlert${index}`%>"></p>
                                                 </div>
-                                            </span>
-                                            <div class="text-end"><span class="cursor-pointer" id="editAdd2" data-id="2"
-                                                    onclick="editAddress(event)">edit address</span>
-                                            </div>
-                                            <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd2"
-                                                    data-id="2" onclick="saveAddress(event)">save
-                                                    address</span></div>
 
-                                        </div>
-
-                                        <div
-                                            class='<%if(userData[0].address3 !=="false" ){%> block <%}else{%>hidden<%}%>'>
-                                            <span>
-                                                <div class="flex my-2 text-sm w-80">
-                                                    <input type="checkbox" name="" id="addressCheck3" class="mx-2">
-                                                    <span id="currentAdd3">
-                                                        <%=userData[0].address3%>
-                                                    </span>
+                                                <div class=" mr-2 md:mx-3">
+                                                    <span class="text-orange-500 text-sm md:text-xl md:font-semibold">
+                                                        <span data-actualPrice="<%= cart.productPrice %>"
+                                                            id="<%= `price${index}` %>">
+                                                            <%= '₹' +cart.productPrice %>
+                                                        </span></span>
                                                 </div>
-                                            </span>
-                                            <div class="text-end"><span class="cursor-pointer" data-id="3" id="editAdd3"
-                                                    onclick="editAddress(event)">edit address</span>
+                                                <% totalItems +=quantities[index]; %>
+                                                    <% totalPrice +=quantities[index] * parseFloat(cart.productPrice);
+                                                        %>
+                                                        <div class=" mr-2 md:mx-2">
+                                                            <span class="text-orange-500 md:text-2xl">
+                                                                <i onclick="deleteFromCart(event)"
+                                                                    data-index="<%=index%>" data-foodid="<%=cart._id%>"
+                                                                    data-userid="<%=userId%>"
+                                                                    class="xmark cursor-pointer fa-solid fa-close">
+                                                                </i>
+                                                            </span>
+                                                        </div>
+
                                             </div>
-                                            <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd3"
-                                                    data-id="3" onclick="saveAddress(event)">save address</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd1" cols=""
-                                        rows="4"></textarea>
-                                    <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd2" cols=""
-                                        rows="4"></textarea>
-                                    <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd3" cols=""
-                                        rows="4"></textarea>
+                                            <% }) }else{ %>
+                                                <div class="flex flex-col justify-center items-center">
+                                                    <h1 class="text-4xl text-orange-500 text-center font-bold my-3">No
+                                                        items in
+                                                        the Cart!!</h1>
+                                                    <div class="w-full h-72">
+                                                        <img class="w-full h-full object-cover"
+                                                            src="http://media.istockphoto.com/vectors/female-hands-with-steel-fork-and-empty-ceramic-plate-vector-id642208480?k=6&m=642208480&s=612x612&w=0&h=u5WmG_7RuLq1M43PpGtMAuZBlytf-dA6wbkwljWpzdk="
+                                                            alt="">
+                                                    </div>
+                                                </div>
+                                                <% } %>
                                 </div>
 
-                                <%if(userData[0].address3==="false" ){%>
-                                    <div class="px-3 my-4 text-end">
-                                        <textarea class="text-black hidden w-full px-3 rounded" name=""
-                                            id="addingAddressCon" cols="" rows="4"></textarea>
-                                        <span class="cursor-pointer" id="addingAddress"
-                                            onclick="addingAddress(event)">new address</span>
-                                        <span class="cursor-pointer hidden" id="savingAddress"
-                                            onclick="savingAddress(event)">save address</span>
+                                <div class="bg-orange-500 mx-2 lg:w-1/2 px-4 py-5 shadow-2xl rounded-xl text-white">
+                                    <div class="py-2 px-3 text-start">
+                                        <h2 class="py-2 text-xl md:text-2xl font-bold text-white">Summary</h2>
                                     </div>
-                                    <%}%>
+                                    <div class="flex justify-between px-3 my-3">
+                                        <span class="font-bold">Items : <%= totalItems %></span>
+                                        <span class="finalPrice">₹<%= totalPrice.toFixed(2) %></span>
+                                    </div>
+                                    <div class="px-3 my-3">
+                                        <h3 class="font-bold">Shipping to :</h3>
+                                        <div id="addContainer">
+                                            <div
+                                                class='<%if(userData[0].address1 !=="false" ){%> block <%}else{%>hidden<%}%>'>
+                                                <span>
+                                                    <div class="flex my-2 text-sm w-80">
+                                                        <input type="checkbox" name="" id="addressCheck1" class="mx-2">
+                                                        <span id="currentAdd1">
+                                                            <%=userData[0].address1%>
+                                                        </span>
+                                                    </div>
+                                                </span>
 
-                                        <div class="my-3 px-3">
-                                            <div><input type="checkbox" name="" id="couponCheck"
-                                                    class="mr-2"><span>Apply Code
-                                                    :</span>
+                                                <div class="text-end"><span class="cursor-pointer" id="editAdd1"
+                                                        data-id="1" onclick="editAddress(event)">edit address</span>
+                                                </div>
+                                                <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd1"
+                                                        data-id="1" onclick="saveAddress(event)">save
+                                                        address</span></div>
                                             </div>
-                                            <div>
-                                                <input type="text" name="" disabled="disabled" id="couponInput"
-                                                    class="rounded my-2 py-1 text-black diabled"
-                                                    onchange="onCouponChange(event)">
-                                                <button id="couponBtn"
-                                                    class="hidden px-2 py-1 bg-white text-orange-500 rounded"
-                                                    onclick="checkCoupon(event)">apply</button>
-                                                <p class="hidden" id="couponAlert"></p>
+
+
+                                            <div
+                                                class='<%if(userData[0].address2 !=="false" ){%> block <%}else{%>hidden <% } %>'>
+                                                <span>
+                                                    <div class="flex my-2 text-sm w-80">
+                                                        <input type="checkbox" name="" id="addressCheck2" class="mx-2">
+                                                        <span id="currentAdd2">
+                                                            <%=userData[0].address2%>
+                                                        </span>
+                                                    </div>
+                                                </span>
+                                                <div class="text-end"><span class="cursor-pointer" id="editAdd2"
+                                                        data-id="2" onclick="editAddress(event)">edit address</span>
+                                                </div>
+                                                <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd2"
+                                                        data-id="2" onclick="saveAddress(event)">save
+                                                        address</span></div>
+
+                                            </div>
+
+                                            <div
+                                                class='<%if(userData[0].address3 !=="false" ){%> block <%}else{%>hidden<%}%>'>
+                                                <span>
+                                                    <div class="flex my-2 text-sm w-80">
+                                                        <input type="checkbox" name="" id="addressCheck3" class="mx-2">
+                                                        <span id="currentAdd3">
+                                                            <%=userData[0].address3%>
+                                                        </span>
+                                                    </div>
+                                                </span>
+                                                <div class="text-end"><span class="cursor-pointer" data-id="3"
+                                                        id="editAdd3" onclick="editAddress(event)">edit
+                                                        address</span>
+                                                </div>
+                                                <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd3"
+                                                        data-id="3" onclick="saveAddress(event)">save
+                                                        address</span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="my-3 px-3 flex justify-center items-center">
-                                            <input type="checkbox" name="" id="cod" class="mr-2"><span>Cash on
-                                                Delivery</span>
+                                        <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd1"
+                                            cols="" rows="4"></textarea>
+                                        <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd2"
+                                            cols="" rows="4"></textarea>
+                                        <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd3"
+                                            cols="" rows="4"></textarea>
+                                    </div>
+
+                                    <%if(userData[0].address3==="false" ){%>
+                                        <div class="px-3 my-4 text-end">
+                                            <textarea class="text-black hidden w-full px-3 rounded" name=""
+                                                id="addingAddressCon" cols="" rows="4"></textarea>
+                                            <span class="cursor-pointer" id="addingAddress"
+                                                onclick="addingAddress(event)">new address</span>
+                                            <span class="cursor-pointer hidden" id="savingAddress"
+                                                onclick="savingAddress(event)">save address</span>
                                         </div>
-                                        <div class="my-3 px-3 flex justify-center items-center">
-                                            <input type="checkbox" name="" id="walletPay" class="mr-2"><span>pay using
-                                                wallet</span>
-                                        </div>
-                                        <hr class="py-[0.28px] bg-white rounded my-5">
-                                        <div class="flex justify-between px-3 font-bold"><span>Total : </span> <span
-                                                class="finalPrice">₹<%= totalPrice.toFixed(2) %></span>
-                                        </div>
-                                        <div class="text-center my-4"><button onclick="handleCheckout(event)"
-                                                class="py-2 px-20 rounded bg-white shadow-md text-orange-500 font-bold">checkout</button>
-                                        </div>
-                            </div>
+                                        <%}%>
+
+                                            <div class="my-3 px-3">
+                                                <div><input type="checkbox" name="" id="couponCheck"
+                                                        class="mr-2"><span>Apply Code
+                                                        :</span>
+                                                </div>
+                                                <div>
+                                                    <input type="text" name="" disabled="disabled" id="couponInput"
+                                                        class="rounded my-2 py-1 text-black diabled"
+                                                        onchange="onCouponChange(event)">
+                                                    <button id="couponBtn"
+                                                        class="hidden px-2 py-1 bg-white text-orange-500 rounded"
+                                                        onclick="checkCoupon(event)">apply</button>
+                                                    <button id="couponRemoveBtn"
+                                                        class="hidden px-2 py-1 bg-white text-orange-500 rounded"
+                                                        onclick="removeCoupon(event)">remove</button>
+                                                    <p class="hidden" id="couponAlert"></p>
+                                                </div>
+                                            </div>
+                                            <div class="my-3 px-3 flex justify-center items-center">
+                                                <input type="checkbox" name="" id="cod" onchange="checkChange(event)"
+                                                    class="mr-2"><span>Cash on
+                                                    Delivery</span>
+                                            </div>
+                                            <div class="my-3 px-3 flex justify-center items-center">
+                                                <input type="checkbox" name="" id="walletPay"
+                                                    onchange="checkChange(event)" class="mr-2"><span>pay
+                                                    using
+                                                    wallet</span>
+                                            </div>
+                                            <div class="my-3 px-3 flex justify-center items-center">
+                                                <input type="checkbox" checked name="" id="onlinePayment"
+                                                    onchange="checkChange(event)" class="mr-2"><span>pay online</span>
+                                            </div>
+                                            <div class="transition delay-150 text-end ease-linear hidden"
+                                                id="walletBalance"><span>Wallet Balance : ₹<span class="font-semibold">
+                                                        <% if(wallet){%>
+                                                            <%=wallet.balance%>
+                                                                <%} else{%>0.00<%}%>
+                                                    </span></span></div>
+                                            <hr class="py-[0.28px] bg-white rounded my-5">
+                                            <div class="flex justify-between px-3 font-bold"><span>Total : </span>
+                                                <span class="finalPrice">₹ <span id="dynamicTotalAmt">
+                                                        <%= totalPrice.toFixed(2) %>
+                                                    </span></span>
+
+                                            </div>
+                                            <div class="text-center my-4"><button onclick="handleCheckout(event)"
+                                                    class="py-2 px-20 rounded bg-white shadow-md text-orange-500 font-bold">checkout</button>
+                                            </div>
+                                </div>
             </div>
 
         </section>
@@ -263,6 +292,10 @@
 
             <script>
                 // let quantity = 1;
+                let finalamout = parseInt('<%-totalPrice %>');;
+                let disType;
+                let disValue;
+                let couponAddedOrNot = false;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const couponAlert = document.getElementById('couponAlert');
@@ -277,6 +310,30 @@
                 const addContainer = document.getElementById('addContainer');
 
                 const final = document.querySelectorAll(`.finalPrice`);
+
+                function checkChange(event) {
+                    event.preventDefault();
+                    const cod = document.getElementById('cod');
+                    const walletPay = document.getElementById('walletPay');
+                    const onlinePayment = document.getElementById('onlinePayment');
+                    const walletBalance = document.getElementById('walletBalance');
+
+                    if (cod.checked) {
+                        walletPay.checked = false;
+                        onlinePayment.checked = false;
+                        walletBalance.classList.add('hidden')
+                    } else if (walletPay.checked) {
+                        walletBalance.classList.remove('hidden')
+                        cod.checked = false;
+                        onlinePayment.checked = false;
+                    } else if (onlinePayment.checked) {
+                        walletBalance.classList.add('hidden')
+                        cod.checked = false;
+                        walletPay.checked = false;
+                    } else {
+                        console.log('Not selected any payment methods...')
+                    }
+                }
 
                 function priceUp(event) {
                     const index = event.currentTarget.getAttribute('data-index');
@@ -531,6 +588,8 @@
 
                 function initPayment(data) {
                     console.log("amount :", data)
+                    const couponInput = document.getElementById('couponInput').value;
+                    const foodides = '<%=foodIds%>'
                     const options = {
                         key: "<%=process.env.RAZOR_PAY_KEY_ID%>",
                         amount: parseInt(data.data.amount),
@@ -603,17 +662,32 @@
                                             productQty: productQty,
                                             productPrice: productPrice,
                                             paymentMethod: 'Online Payment',
-                                            address: selectedAddress
+                                            address: selectedAddress,
+                                            coupon: couponInput,
+                                            foodides: foodides
                                         }
 
                                         const reqData = await JSON.stringify(productData);
                                         const checkResponse = await fetch('/user/cart-checkout', {
-                                            method: 'PATCH',
+                                            method: 'POST',
                                             headers: {
                                                 'Content-Type': "application/json",
                                             },
                                             body: reqData
                                         })
+                                        if (checkResponse.status == 400 || checkResponse.status == 404 || checkResponse.status == 500) {
+                                            const data = await checkResponse.json();
+                                            alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.err}`;
+                                            alertBox.classList.remove('-translate-x-full')
+                                            alertBox.classList.remove('opacity-0')
+                                            window.scrollTo(0, 0)
+                                            setTimeout(() => {
+                                                alertBox.classList.add('-translate-x-full')
+                                                alertBox.classList.add('opacity-0')
+                                            }, 3000)
+                                            return;
+                                        }
+
 
                                         if (checkResponse.ok) {
                                             const reqData = {
@@ -680,7 +754,10 @@
                 }
 
                 async function checkCoupon(event) {
+                    event.preventDefault();
                     const couponInput = document.getElementById('couponInput').value;
+                    const couponRemoveBtn = document.getElementById("couponRemoveBtn");
+                    const couponBtn = document.getElementById('couponBtn');
                     if (couponInput.toUpperCase() !== couponInput) {
                         couponAlert.innerText = `*Invalid Coupon`;
                         couponAlert.classList.remove('hidden');
@@ -688,9 +765,11 @@
                     }
 
                     const userId = sessionStorage.getItem('user_id');
-                    const coupon = { coupon: couponInput }
+                    const foodides = '<%=foodIds%>'
+                    console.log('success : ', foodides)
+                    const coupon = { coupon: couponInput, foodids: foodides }
                     const reqData = JSON.stringify(coupon)
-                    console.log(reqData)
+                    console.log(reqData, userId)
 
                     const res = await fetch(`/user/check-coupon/${userId}`, {
                         method: 'POST',
@@ -699,16 +778,112 @@
                         },
                         body: reqData
                     })
+
+                    if (res.status == 404) {
+                        const data = await res.json();
+                        couponAlert.innerText = `${data.err}`;
+                        couponAlert.classList.remove('hidden');
+                        return;
+                    }
+
+                    if (res.status == 400) {
+                        const data = await res.json();
+                        couponAlert.innerText = `${data.err}`;
+                        couponAlert.classList.remove('hidden');
+                        return;
+                    }
+
+                    console.log('added ', res);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.added) {
+                            let amount = 0;
+                            const finalamountElement = document.getElementById('dynamicTotalAmt');
+                            disType = data.discountType
+                            disValue = parseInt(data.discountValue);
+                            couponBtn.classList.add('hidden')
+                            couponRemoveBtn.classList.remove('hidden');
+                            couponAlert.innerText = `coupon added`;
+                            couponAddedOrNot = true;
+                            couponAlert.classList.remove('hidden');
+                            const finalP = parseInt('<%= totalPrice%>')
+                            if (disType == "per") {
+                                finalamout = finalP - (disValue * finalP / 100);
+                                finalamountElement.innerText = finalamout;
+                            } else {
+                                finalamout = finalP - disValue;
+                                finalamountElement.innerText = finalamout;
+                            }
+
+                        } else {
+                            couponAlert.innerText = `${data.err}`;
+                            couponAlert.classList.remove('hidden');
+                            return;
+                        }
+                    } else {
+                        couponAlert.innerText = `Something went wrong.Please try again.`;
+                        couponAlert.classList.remove('hidden');
+                        return;
+                    }
                 }
 
+                function removeCoupon(event) {
+                    event.preventDefault();
+                    const couponRemoveBtn = document.getElementById("couponRemoveBtn");
+                    const couponBtn = document.getElementById('couponBtn');
+                    const finalamountElement = document.getElementById('dynamicTotalAmt');
+
+                    const finalP = parseInt('<%= totalPrice%>')
+                    const discountedAmount = parseInt(finalamountElement.innerText)
+                    console.log('discountedAmount : ', discountedAmount);
+                    if (disType == "per") {
+                        finalamout = discountedAmount + (disValue * finalP / 100);
+                        finalamountElement.innerText = finalamout;
+                    } else {
+                        finalamout = discountedAmount + disValue;
+                        finalamountElement.innerText = finalamout;
+                    }
+
+                    couponAlert.innerText = `coupon removed`;
+                    couponAddedOrNot = false;
+                    couponAlert.classList.remove('hidden');
+
+                    couponRemoveBtn.classList.add('hidden');
+                    couponBtn.classList.remove('hidden')
+                }
+
+                couponCheck.addEventListener("change", () => {
+                    console.log("changed.....")
+                    if (!couponCheck.checked) {
+                        const couponRemoveBtn = document.getElementById("couponRemoveBtn");
+                        const couponBtn = document.getElementById('couponBtn');
+                        const couponInput = document.getElementById('couponInput');
+                        const finalamountElement = document.getElementById('dynamicTotalAmt');
+                        if (couponAddedOrNot) {
+                            couponRemoveBtn.classList.add('hidden');
+                            couponBtn.classList.add('hidden')
+                            couponInput.value = null;
+                            couponAlert.innerText = ``;
+                            couponAddedOrNot = false;
+                            finalamout = finalPrice;
+                            finalamountElement.innerText = finalamout;
+                        }
+                    }
+                })
+
+
                 async function handleCheckout(event) {
+                    console.log("added or not : ", couponAddedOrNot)
                     const user_id = sessionStorage.getItem('user_id');
                     const customerName = sessionStorage.getItem('username');
                     const checkAddress1 = document.getElementById('addressCheck1');
                     const checkAddress2 = document.getElementById('addressCheck2');
                     const checkAddress3 = document.getElementById('addressCheck3');
+                    const couponInput = document.getElementById('couponInput').value;
+                    const foodides = '<%=foodIds%>'
                     const cod = document.getElementById('cod');
                     const walletPay = document.getElementById('walletPay');
+                    const onlinePayment = document.getElementById('onlinePayment');
                     const qty = document.querySelectorAll('.qty');
                     const cartItems = '<%-JSON.stringify(cartItems).trim()%>';
                     console.log(cartItems);
@@ -755,30 +930,31 @@
 
                     if (walletPay.checked) {
                         const walletBalance = parseInt('<%=wallet?.balance%>');
-                        if(!walletBalance){
+                        if (!walletBalance) {
                             alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> There's nothing in your wallet`;
-                        alertBox.classList.remove('-translate-x-full')
-                        alertBox.classList.remove('opacity-0')
-                        window.scrollTo(0, 0)
-                        setTimeout(() => {
-                            alertBox.classList.add('-translate-x-full')
-                            alertBox.classList.add('opacity-0')
-                        }, 3000)
-                        return;
+                            alertBox.classList.remove('-translate-x-full')
+                            alertBox.classList.remove('opacity-0')
+                            window.scrollTo(0, 0)
+                            setTimeout(() => {
+                                alertBox.classList.add('-translate-x-full')
+                                alertBox.classList.add('opacity-0')
+                            }, 3000)
+                            return;
                         }
-                        const totalAmt = parseInt('<%=totalPrice%>')
-                        if(walletBalance<totalAmt){
+                        // let dynamicTotalAmt = document.getElementById('dynamicTotalAmt').innerText;
+                        let totalAmt = finalPrice
+                        console.log(walletBalance, finalamout)
+                        if (walletBalance < finalamout) {
                             alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Not enough money in your wallet`;
-                        alertBox.classList.remove('-translate-x-full')
-                        alertBox.classList.remove('opacity-0')
-                        window.scrollTo(0, 0)
-                        setTimeout(() => {
-                            alertBox.classList.add('-translate-x-full')
-                            alertBox.classList.add('opacity-0')
-                        }, 3000)
-                        return;
+                            alertBox.classList.remove('-translate-x-full')
+                            alertBox.classList.remove('opacity-0')
+                            window.scrollTo(0, 0)
+                            setTimeout(() => {
+                                alertBox.classList.add('-translate-x-full')
+                                alertBox.classList.add('opacity-0')
+                            }, 3000)
+                            return;
                         }
-                        console.log(walletBalance,totalAmt)
                         check.forEach(async (item, index) => {
                             // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                             const productId = item._id;
@@ -800,17 +976,32 @@
                                 productQty: productQty,
                                 productPrice: productPrice,
                                 paymentMethod: 'FoodWo Wallet',
-                                address: selectedAddress
+                                address: selectedAddress,
+                                coupon: couponInput,
+                                foodides: foodides
                             }
 
                             const reqData = await JSON.stringify(productData);
                             const checkResponse = await fetch('/user/cart-checkout', {
-                                method: 'PATCH',
+                                method: 'POST',
                                 headers: {
                                     'Content-Type': "application/json",
                                 },
                                 body: reqData
                             })
+                            if (checkResponse.status == 400 || checkResponse.status == 404 || checkResponse.status == 500) {
+                                const data = await checkResponse.json();
+                                alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.err}`;
+                                alertBox.classList.remove('-translate-x-full')
+                                alertBox.classList.remove('opacity-0')
+                                window.scrollTo(0, 0)
+                                setTimeout(() => {
+                                    alertBox.classList.add('-translate-x-full')
+                                    alertBox.classList.add('opacity-0')
+                                }, 3000)
+                                return;
+                            }
+
 
                             if (checkResponse.ok) {
                                 const reqData = {
@@ -836,7 +1027,7 @@
                                 console.log(`${productName} Ok.`)
                             }
                         });
-                    } else if(cod.checked){
+                    } else if (cod.checked) {
                         check.forEach(async (item, index) => {
                             // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                             const productId = item._id;
@@ -858,17 +1049,32 @@
                                 productQty: productQty,
                                 productPrice: productPrice,
                                 paymentMethod: cod.checked ? 'COD' : 'CREDIT CARD',
-                                address: selectedAddress
+                                address: selectedAddress,
+                                coupon: couponInput,
+                                foodides: foodides
                             }
 
                             const reqData = await JSON.stringify(productData);
                             const checkResponse = await fetch('/user/cart-checkout', {
-                                method: 'PATCH',
+                                method: 'POST',
                                 headers: {
                                     'Content-Type': "application/json",
                                 },
                                 body: reqData
                             })
+
+                            if (checkResponse.status == 400 || checkResponse.status == 404 || checkResponse.status == 500) {
+                                const data = await checkResponse.json();
+                                alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.err}`;
+                                alertBox.classList.remove('-translate-x-full')
+                                alertBox.classList.remove('opacity-0')
+                                window.scrollTo(0, 0)
+                                setTimeout(() => {
+                                    alertBox.classList.add('-translate-x-full')
+                                    alertBox.classList.add('opacity-0')
+                                }, 3000)
+                                return;
+                            }
 
                             if (checkResponse.ok) {
                                 const reqData = {
@@ -894,11 +1100,11 @@
                                 console.log(`${productName} Ok.`)
                             }
                         });
-                    }else{
+                    } else {
                         try {
                             const totalAmount = parseInt('<%=totalPrice%>')
                             const orderUrl = '/user/orders'
-                            const paying = await axios.post(orderUrl, { amount: totalAmount })
+                            const paying = await axios.post(orderUrl, { amount: finalamout == 0 ? totalAmount : finalamout })
                             console.log(paying)
                             initPayment(paying.data)
                         } catch (error) {
