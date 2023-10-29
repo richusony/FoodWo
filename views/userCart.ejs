@@ -268,7 +268,9 @@
                                             </div>
                                             <div class="transition delay-150 text-end ease-linear hidden"
                                                 id="walletBalance"><span>Wallet Balance : ₹<span class="font-semibold">
-                                                        <% if(wallet){ wallet.balance } else{%>0.00<%}%>
+                                                        <% if(wallet){%>
+                                                            <%=wallet.balance%>
+                                                                <%} else{%>0.00<%}%>
                                                     </span></span></div>
                                             <hr class="py-[0.28px] bg-white rounded my-5">
                                             <div class="flex justify-between px-3 font-bold"><span>Total : </span>
@@ -586,6 +588,8 @@
 
                 function initPayment(data) {
                     console.log("amount :", data)
+                    const couponInput = document.getElementById('couponInput').value;
+                    const foodides = '<%=foodIds%>'
                     const options = {
                         key: "<%=process.env.RAZOR_PAY_KEY_ID%>",
                         amount: parseInt(data.data.amount),
@@ -658,7 +662,9 @@
                                             productQty: productQty,
                                             productPrice: productPrice,
                                             paymentMethod: 'Online Payment',
-                                            address: selectedAddress
+                                            address: selectedAddress,
+                                            coupon: couponInput,
+                                            foodides: foodides
                                         }
 
                                         const reqData = await JSON.stringify(productData);
@@ -843,7 +849,7 @@
                         if (couponAddedOrNot) {
                             couponRemoveBtn.classList.add('hidden');
                             couponBtn.classList.add('hidden')
-                            couponInput.value=null;
+                            couponInput.value = null;
                             couponAlert.innerText = ``;
                             couponAddedOrNot = false;
                             finalamout = finalPrice;
@@ -860,6 +866,8 @@
                     const checkAddress1 = document.getElementById('addressCheck1');
                     const checkAddress2 = document.getElementById('addressCheck2');
                     const checkAddress3 = document.getElementById('addressCheck3');
+                    const couponInput = document.getElementById('couponInput').value;
+                    const foodides = '<%=foodIds%>'
                     const cod = document.getElementById('cod');
                     const walletPay = document.getElementById('walletPay');
                     const onlinePayment = document.getElementById('onlinePayment');
@@ -955,7 +963,9 @@
                                 productQty: productQty,
                                 productPrice: productPrice,
                                 paymentMethod: 'FoodWo Wallet',
-                                address: selectedAddress
+                                address: selectedAddress,
+                                coupon: couponInput,
+                                foodides: foodides
                             }
 
                             const reqData = await JSON.stringify(productData);
@@ -1013,7 +1023,9 @@
                                 productQty: productQty,
                                 productPrice: productPrice,
                                 paymentMethod: cod.checked ? 'COD' : 'CREDIT CARD',
-                                address: selectedAddress
+                                address: selectedAddress,
+                                coupon: couponInput,
+                                foodides: foodides
                             }
 
                             const reqData = await JSON.stringify(productData);
