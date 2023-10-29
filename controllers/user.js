@@ -700,10 +700,13 @@ async function updateStock(req, res) {
                         update: "dec"
                     };
 
+                    const calculatedAmount = (parseInt(productPrice) * parseInt(productQty)) - productPrice;
+                    console.log('Calculated.... : : ',calculatedAmount);
+                    console.log('Reduced.... : : ',calculatedAmount+afterDiscountPrice);
                     const walletUpdate = await walletModel.updateOne(
                         { userId: user_id },
                         {
-                            $inc: { balance: -(parseInt(productPrice) * parseInt(productQty)) - productPrice + afterDiscountPrice }, // Decrement the balance
+                            $inc: { balance: -calculatedAmount + afterDiscountPrice }, // Decrement the balance
                             $push: { history: historyData }
                         }
                     );

@@ -300,6 +300,7 @@
                 const alertMsg = document.getElementById('alertMsg')
                 const couponAlert = document.getElementById('couponAlert');
                 const couponCheck = document.getElementById('couponCheck');
+                const finalamountElement = document.getElementById('dynamicTotalAmt');
 
 
                 let finalPrice = parseInt('<%-totalPrice %>');
@@ -362,7 +363,7 @@
                         qty.innerText = quantity;
                         currentPrice.innerText = "₹" + newPrice
                         final.forEach((item) => {
-                            item.innerText = "₹" + finalPrice.toFixed(2)
+                            item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
                         })
                         // Update the final price
                         // finalPrice = newPrice;
@@ -394,7 +395,7 @@
                         qty.innerText = quantity;
                         currentPrice.innerText = "₹" + newPrice;
                         final.forEach((item) => {
-                            item.innerText = "₹" + finalPrice.toFixed(2)
+                            item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
                         })
 
                         // Update the final price
@@ -798,7 +799,6 @@
                         const data = await res.json();
                         if (data.added) {
                             let amount = 0;
-                            const finalamountElement = document.getElementById('dynamicTotalAmt');
                             disType = data.discountType
                             disValue = parseInt(data.discountValue);
                             couponBtn.classList.add('hidden')
@@ -810,6 +810,7 @@
                             if (disType == "per") {
                                 finalamout = finalP - (disValue * finalP / 100);
                                 finalamountElement.innerText = finalamout;
+                                console.log('fianlPreview ',finalamountElement.innerText)
                             } else {
                                 finalamout = finalP - disValue;
                                 finalamountElement.innerText = finalamout;
@@ -943,8 +944,8 @@
                         }
                         // let dynamicTotalAmt = document.getElementById('dynamicTotalAmt').innerText;
                         let totalAmt = finalPrice
-                        console.log(walletBalance, finalamout)
-                        if (walletBalance < finalamout) {
+                        console.log('pricessss : : ',walletBalance, finalPrice)
+                        if (walletBalance < finalPrice) {
                             alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Not enough money in your wallet`;
                             alertBox.classList.remove('-translate-x-full')
                             alertBox.classList.remove('opacity-0')
