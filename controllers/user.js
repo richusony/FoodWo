@@ -9,6 +9,7 @@ const orderModel = require('../models/orderSchema');
 const { walletModel } = require('../models/walletSchema');
 const moment = require('moment');
 const { couponModel } = require('../models/couponSchema');
+const { addressModel } = require('../models/addressSchema');
 
 function viewSignInPage(req, res) {
     res.render('userSignUp')
@@ -106,7 +107,7 @@ function otppage(req, res) {
 
 
 // OTP Verification POST Request
-function otpVerification(req, res) {
+async function otpVerification(req, res) {
     const userInputOtp = parseInt(req.body.otp);
     const storedOtp = parseInt(req.session.otp);
 
@@ -140,10 +141,11 @@ function otpVerification(req, res) {
         });
 
         newUser.save()
-            .then(() => {
+            .then(async () => {
                 // Clear OTP and user data from session
                 delete req.session.otp;
                 delete req.session.userData;
+                const addingAddress = await addressModel.create({userId:newUser._id,address1:address})
                 res.status(201).json({ success: "Account created" });
             })
             .catch((error) => {
