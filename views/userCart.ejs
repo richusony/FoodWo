@@ -268,7 +268,7 @@
                                             </div>
                                             <div class="transition delay-150 text-end ease-linear hidden"
                                                 id="walletBalance"><span>Wallet Balance : ₹<span class="font-semibold">
-                                                        <%=wallet.balance%>
+                                                        <% if(wallet){ wallet.balance } else{%>0.00<%}%>
                                                     </span></span></div>
                                             <hr class="py-[0.28px] bg-white rounded my-5">
                                             <div class="flex justify-between px-3 font-bold"><span>Total : </span>
@@ -293,7 +293,7 @@
                 let finalamout = 0;
                 let disType;
                 let disValue;
-                let couponAddedOrNot=false;
+                let couponAddedOrNot = false;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const couponAlert = document.getElementById('couponAlert');
@@ -785,7 +785,7 @@
                             couponBtn.classList.add('hidden')
                             couponRemoveBtn.classList.remove('hidden');
                             couponAlert.innerText = `coupon added`;
-                            couponAddedOrNot=true;
+                            couponAddedOrNot = true;
                             couponAlert.classList.remove('hidden');
                             const finalP = parseInt('<%= totalPrice%>')
                             if (disType == "per") {
@@ -816,7 +816,7 @@
 
                     const finalP = parseInt('<%= totalPrice%>')
                     const discountedAmount = parseInt(finalamountElement.innerText)
-                    console.log('discountedAmount : ',discountedAmount);
+                    console.log('discountedAmount : ', discountedAmount);
                     if (disType == "per") {
                         finalamout = discountedAmount + (disValue * finalP / 100);
                         finalamountElement.innerText = finalamout;
@@ -826,15 +826,35 @@
                     }
 
                     couponAlert.innerText = `coupon removed`;
-                    couponAddedOrNot=false;
+                    couponAddedOrNot = false;
                     couponAlert.classList.remove('hidden');
 
                     couponRemoveBtn.classList.add('hidden');
                     couponBtn.classList.remove('hidden')
                 }
 
+                couponCheck.addEventListener("change", () => {
+                    console.log("changed.....")
+                    if (!couponCheck.checked) {
+                        const couponRemoveBtn = document.getElementById("couponRemoveBtn");
+                        const couponBtn = document.getElementById('couponBtn');
+                        const couponInput = document.getElementById('couponInput');
+                        const finalamountElement = document.getElementById('dynamicTotalAmt');
+                        if (couponAddedOrNot) {
+                            couponRemoveBtn.classList.add('hidden');
+                            couponBtn.classList.add('hidden')
+                            couponInput.value=null;
+                            couponAlert.innerText = ``;
+                            couponAddedOrNot = false;
+                            finalamout = finalPrice;
+                            finalamountElement.innerText = finalamout;
+                        }
+                    }
+                })
+
 
                 async function handleCheckout(event) {
+                    console.log("added or not : ", couponAddedOrNot)
                     const user_id = sessionStorage.getItem('user_id');
                     const customerName = sessionStorage.getItem('username');
                     const checkAddress1 = document.getElementById('addressCheck1');
