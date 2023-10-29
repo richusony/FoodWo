@@ -574,12 +574,11 @@ async function updateStock(req, res) {
     if (coupon != undefined && coupon != "") {
         if (existCoupon) {
             if (existCoupon.usedUsersCount >= existCoupon.usersLimit) {
-                res.status(400).json({ err: "Coupon has been reached the maximum users limit" })
-                return;
+               return res.status(400).json({ err: "Coupon has been reached the maximum users limit" })
             }
             if (checkFood) {
                 if (existCoupon.status === "deactive") {
-                    res.status(500).json({ err: "This coupon has been blocked" })
+                   return res.status(500).json({ err: "This coupon has been blocked" })
                 } else {
                     const userData = await userModel.findOne({ _id: user_id })
                     console.log('user : ', userData)
@@ -599,7 +598,7 @@ async function updateStock(req, res) {
                         currentDate.setHours(0, 0, 0, 0);
                         console.log(startDate, endDate)
                         if (endDate < currentDate) {
-                            res.status(400).json({ err: "coupon has been expired" })
+                           return res.status(400).json({ err: "coupon has been expired" })
                         } else {
 
                             const updateData = {
@@ -617,7 +616,7 @@ async function updateStock(req, res) {
                                 }
                                 console.log("usedCoupons after update: ", userModel.usedCoupons);
                             } else {
-                                res.status(500).json({ added: false, err: "Database is having some issues" })
+                               return res.status(500).json({ added: false, err: "Database is having some issues" })
                             }
                         }
                     } else {
@@ -625,8 +624,7 @@ async function updateStock(req, res) {
                         console.log('findcoupon', findCoupon)
                         const usedCount = parseInt(findCoupon[0].usedCount);
                         if (usedCount >= usageLimit) {
-                            res.status(400).json({ added: false, err: "reached coupon limit." })
-                            return;
+                           return res.status(400).json({ added: false, err: "reached coupon limit." })
                         } else {
                             const updating = await userModel.updateOne({ _id: user_id, 'usedCoupons.couponId': findCoupon[0].couponId },
                                 { $inc: { 'usedCoupons.$.usedCount': 1 } })
@@ -637,18 +635,15 @@ async function updateStock(req, res) {
                                 }
                                 console.log("coupon added")
                             } else {
-                                res.status(500).json({ added: false, err: "Database is having some issues" })
+                              return res.status(500).json({ added: false, err: "Database is having some issues" })
                             }
                         }
                     }
                 }
-
-            } else {
-                res.status(400).json({ err: "The offer is not for this product" })
             }
 
         } else {
-            res.status(404).json({ err: "Coupon not found" })
+           return res.status(404).json({ err: "Coupon not found" })
         }
     }
     function generateOrderID() {
@@ -674,7 +669,7 @@ async function updateStock(req, res) {
         }
 
         if (product.productInStock <= 0) {
-            res.status(404).json({ err: 'Stock out' })
+           return res.status(404).json({ err: 'Stock out' })
         } else {
 
             // Calculate the updated stock quantity by subtracting 'productQty'
@@ -697,7 +692,7 @@ async function updateStock(req, res) {
                     $inc: { purchaseCount: 1 }
                 })
 
-            if (existCoupon.foodId == productId) {
+            if (existCoupon && existCoupon.foodId == productId) {
                 if (paymentMethod == "FoodWo Wallet") {
                     const historyData = {
                         date: currentDate,
@@ -729,7 +724,7 @@ async function updateStock(req, res) {
                     );
                 }
             }
-
+ 
 
             if (result) {
                 res.status(200).json({ orderid: orderId, address: address });
