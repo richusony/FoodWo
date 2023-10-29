@@ -563,8 +563,9 @@ async function updateUserAddress(req, res) {
 
 
 async function updateStock(req, res) {
-    const { user_id, productId, productName, image, customerName, productPrice, paymentMethod, productQty, address,coupon } = req.body;
+    const { user_id, productId, productName, image, customerName, productPrice, paymentMethod, productQty, address, coupon } = req.body;
     console.log(user_id, productId, productQty);
+    let afterDiscountPrice = parseInt(productPrice);
     const currentDate = moment().format('DD-MM-YYYY');
     // const coupon = req.body.coupon;
     const existCoupon = await couponModel.findOne({ couponCode: coupon })
@@ -600,6 +601,7 @@ async function updateStock(req, res) {
                         if (endDate < currentDate) {
                             res.status(400).json({ err: "coupon has been expired" })
                         } else {
+
                             const updateData = {
                                 couponId: existCoupon._id.toString(),
                                 usedCount: 1
@@ -609,7 +611,10 @@ async function updateStock(req, res) {
                             if (updatingUser) {
                                 const updateCoupon = await couponModel.updateOne({ _id: existCoupon._id.toString() }, { $inc: { usedUsersCount: 1 } })
                                 console.log(updateCoupon)
-
+                                if (existCoupon.discountType == "per") {
+                                    afterDiscountPrice = parseInt(productPrice) - (existCoupon.discountValue * parseInt(productPrice) / 100);
+                                    console.log("after discount : : : : : ", afterDiscountPrice)
+                                }
                                 console.log("usedCoupons after update: ", userModel.usedCoupons);
                             } else {
                                 res.status(500).json({ added: false, err: "Database is having some issues" })
@@ -626,14 +631,16 @@ async function updateStock(req, res) {
                             const updating = await userModel.updateOne({ _id: user_id, 'usedCoupons.couponId': findCoupon[0].couponId },
                                 { $inc: { 'usedCoupons.$.usedCount': 1 } })
                             if (updating) {
+                                if (existCoupon.discountType == "per") {
+                                    afterDiscountPrice = parseInt(productPrice) - (existCoupon.discountValue * parseInt(productPrice) / 100);
+                                    console.log("after discount : : : : : ", afterDiscountPrice)
+                                }
                                 console.log("coupon added")
                             } else {
                                 res.status(500).json({ added: false, err: "Database is having some issues" })
                             }
                         }
                     }
-
-
                 }
 
             } else {
@@ -682,20 +689,37 @@ async function updateStock(req, res) {
                 }
             );
 
-            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, customerName: customerName, productId: productId, productName: productName, productQty: productQty, productImage: image, productPrice: productPrice, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
+            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, customerName: customerName, productId: productId, productName: productName, productQty: productQty, productImage: image, productPrice: afterDiscountPrice, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
 
             const updating = await userModel.updateOne(
                 { _id: user_id },
                 {
                     $inc: { purchaseCount: 1 }
                 })
-                if(paymentMethod=="FoodWo Wallet"){
+
+            if (existCoupon.foodId == productId) {
+                if (paymentMethod == "FoodWo Wallet") {
+                    const historyData = {
+                        date: currentDate,
+                        amt: (parseInt(productPrice) * parseInt(productQty)) - productPrice + afterDiscountPrice,
+                        update: "dec"
+                    };
+
+                    const walletUpdate = await walletModel.updateOne(
+                        { userId: user_id },
+                        {
+                            $inc: { balance: -(parseInt(productPrice) * parseInt(productQty)) - productPrice + afterDiscountPrice }, // Decrement the balance
+                            $push: { history: historyData }
+                        }
+                    );
+                }
+            } else {
+                if (paymentMethod == "FoodWo Wallet") {
                     const historyData = {
                         date: currentDate,
                         amt: parseInt(productPrice) * parseInt(productQty),
                         update: "dec"
                     };
-        
                     const walletUpdate = await walletModel.updateOne(
                         { userId: user_id },
                         {
@@ -704,6 +728,8 @@ async function updateStock(req, res) {
                         }
                     );
                 }
+            }
+
 
             if (result) {
                 res.status(200).json({ orderid: orderId, address: address });

@@ -86,7 +86,7 @@ async function checkingCoupon(req, res) {
     console.log("food checking : ", checkFood)
     if (exists) {
         if(exists.usedUsersCount>=exists.usageLimit){
-            res.status(400).json({err:"you are late"})
+            res.status(400).json({err:"you are late. maximum user limit has been reached"})
             return;
         }
         if (checkFood) {
@@ -134,7 +134,7 @@ async function checkingCoupon(req, res) {
                     console.log('findcoupon', findCoupon)
                     const usedCount = parseInt(findCoupon[0].usedCount);
                     if (usedCount >= usageLimit) {
-                        res.status(400).json({ added: false, err: "reached coupon limit." })
+                        res.status(400).json({ added: false, err: "Coupon usage limit has been reached." })
                         return;
                     } else {
                         // const updating = await userModel.updateOne({ _id: userId, 'usedCoupons.couponId': findCoupon[0].couponId },
