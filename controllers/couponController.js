@@ -3,7 +3,7 @@ const productModel = require('../models/productSchema');
 const { userModel } = require('../models/userSchema');
 
 // Helper function to format date in DD/MM/YYYY
-function formatDate(date) {
+function formatDate(date) { 
     const d = new Date(date);
     const day = String(d.getDate()).padStart(2, '0');
     const month = String(d.getMonth() + 1).padStart(2, '0');
@@ -32,7 +32,8 @@ async function createCoupon(req, res) {
         res.status(400).json({err:'coupon already existed'});
         return;
     }
-    const addCoupon = await couponModel.create({ usersLimit: userLimit, usageLimit: usageLimit, startDate: startTime, endDate: endTime, couponCode: couponCode, foodId: foodItem, discountType: discountType, discountValue: discountValue, status: "active",usedUsersCount:0 });
+    const food = await productModel.findOne({_id:foodItem})
+    const addCoupon = await couponModel.create({ usersLimit: userLimit, usageLimit: usageLimit, startDate: startTime, endDate: endTime, couponCode: couponCode, foodId: foodItem,foodName:food.productName, discountType: discountType, discountValue: discountValue, status: "active",usedUsersCount:0 });
     if (addCoupon) {
         res.status(200).json({ added: true })
     } else {
@@ -44,9 +45,9 @@ async function deleteCoupon(req, res) {
     const coupId = req.params.id;
     const deleteCoup = await couponModel.deleteOne({ _id: coupId })
     if (deleteCoup) {
-        res.redirect('/admin/coupons')
+        res.status(200).json({deleted:true})
     } else {
-        res.redirect('/admin/coupons')
+        res.status(400).json({deleted:false})
     }
 }
 
@@ -160,11 +161,22 @@ async function checkingCoupon(req, res) {
 
 }
 
+async function getPrice(req,res){
+ const fid = req.params.fid;
+ const food = await productModel.findOne({_id:fid});
+ if(food){
+    res.status(200).json({foodData:food})
+ }else{
+    res.status(400).json({err:"food dosen't exists."})
+ }
+}
+
 module.exports = {
     viewCouponMangemenPage,
     createCoupon,
     deleteCoupon,
     viewCouponUpdatePage,
     updateCoupon,
-    checkingCoupon
+    checkingCoupon,
+    getPrice
 }

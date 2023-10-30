@@ -156,12 +156,12 @@
                                         <h3 class="font-bold">Shipping to :</h3>
                                         <div id="addContainer">
                                             <div
-                                                class='<%if(userData[0].address1 !=="false" ){%> block <%}else{%>hidden<%}%>'>
+                                                class='<%if(userAddress.address1 !=="false" ){%> block <%}else{%>hidden<%}%>'>
                                                 <span>
                                                     <div class="flex my-2 text-sm w-80">
                                                         <input type="checkbox" name="" id="addressCheck1" class="mx-2">
                                                         <span id="currentAdd1">
-                                                            <%=userData[0].address1%>
+                                                            <%=userAddress.address1%>
                                                         </span>
                                                     </div>
                                                 </span>
@@ -176,12 +176,12 @@
 
 
                                             <div
-                                                class='<%if(userData[0].address2 !=="false" ){%> block <%}else{%>hidden <% } %>'>
+                                                class='<%if(userAddress.address2 !=="false" ){%> block <%}else{%>hidden <% } %>'>
                                                 <span>
                                                     <div class="flex my-2 text-sm w-80">
                                                         <input type="checkbox" name="" id="addressCheck2" class="mx-2">
                                                         <span id="currentAdd2">
-                                                            <%=userData[0].address2%>
+                                                            <%=userAddress.address2%>
                                                         </span>
                                                     </div>
                                                 </span>
@@ -195,12 +195,12 @@
                                             </div>
 
                                             <div
-                                                class='<%if(userData[0].address3 !=="false" ){%> block <%}else{%>hidden<%}%>'>
+                                                class='<%if(userAddress.address3 !=="false" ){%> block <%}else{%>hidden<%}%>'>
                                                 <span>
                                                     <div class="flex my-2 text-sm w-80">
                                                         <input type="checkbox" name="" id="addressCheck3" class="mx-2">
                                                         <span id="currentAdd3">
-                                                            <%=userData[0].address3%>
+                                                            <%=userAddress.address3%>
                                                         </span>
                                                     </div>
                                                 </span>
@@ -222,7 +222,7 @@
                                             cols="" rows="4"></textarea>
                                     </div>
 
-                                    <%if(userData[0].address3==="false" ){%>
+                                    <%if(userAddress.address3==="false" ){%>
                                         <div class="px-3 my-4 text-end">
                                             <textarea class="text-black hidden w-full px-3 rounded" name=""
                                                 id="addingAddressCon" cols="" rows="4"></textarea>
@@ -300,6 +300,7 @@
                 const alertMsg = document.getElementById('alertMsg')
                 const couponAlert = document.getElementById('couponAlert');
                 const couponCheck = document.getElementById('couponCheck');
+                const finalamountElement = document.getElementById('dynamicTotalAmt');
 
 
                 let finalPrice = parseInt('<%-totalPrice %>');
@@ -362,7 +363,7 @@
                         qty.innerText = quantity;
                         currentPrice.innerText = "₹" + newPrice
                         final.forEach((item) => {
-                            item.innerText = "₹" + finalPrice.toFixed(2)
+                            item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
                         })
                         // Update the final price
                         // finalPrice = newPrice;
@@ -394,7 +395,7 @@
                         qty.innerText = quantity;
                         currentPrice.innerText = "₹" + newPrice;
                         final.forEach((item) => {
-                            item.innerText = "₹" + finalPrice.toFixed(2)
+                            item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
                         })
 
                         // Update the final price
@@ -469,19 +470,19 @@
                     const container1 = document.getElementById('currentAdd1');
                     const container2 = document.getElementById('currentAdd2');
                     const container3 = document.getElementById('currentAdd3');
-                    const address1 = '<%=userData[0].address1%>';
-                    const address2 = '<%=userData[0].address2%>';
-                    const address3 = '<%=userData[0].address3%>';
+                    const address1 = '<%=userAddress.address1%>';
+                    const address2 = '<%=userAddress.address2%>';
+                    const address3 = '<%=userAddress.address3%>';
                     let flag = 0;
 
                     if (address1 === "false") {
                         container1.innerText = textContainer.innerText.trim();
                         flag = 1;
                     } else if (address2 === "false") {
-                        container2.innerText = textContainer.value.trim();
+                        container2.innerText = textContainer.innerText.trim();
                         flag = 2;
                     } else {
-                        container3.innerText = textContainer.value;
+                        container3.innerText = textContainer.innerText.trim();
                         flag = 3;
                     }
                     console.log(textContainer.value);
@@ -798,7 +799,6 @@
                         const data = await res.json();
                         if (data.added) {
                             let amount = 0;
-                            const finalamountElement = document.getElementById('dynamicTotalAmt');
                             disType = data.discountType
                             disValue = parseInt(data.discountValue);
                             couponBtn.classList.add('hidden')
@@ -810,6 +810,7 @@
                             if (disType == "per") {
                                 finalamout = finalP - (disValue * finalP / 100);
                                 finalamountElement.innerText = finalamout;
+                                console.log('fianlPreview ', finalamountElement.innerText)
                             } else {
                                 finalamout = finalP - disValue;
                                 finalamountElement.innerText = finalamout;
@@ -943,8 +944,8 @@
                         }
                         // let dynamicTotalAmt = document.getElementById('dynamicTotalAmt').innerText;
                         let totalAmt = finalPrice
-                        console.log(walletBalance, finalamout)
-                        if (walletBalance < finalamout) {
+                        console.log('pricessss : : ', walletBalance, finalPrice)
+                        if (walletBalance < finalPrice) {
                             alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Not enough money in your wallet`;
                             alertBox.classList.remove('-translate-x-full')
                             alertBox.classList.remove('opacity-0')
@@ -1101,12 +1102,58 @@
                             }
                         });
                     } else {
+                        let valid = true;
                         try {
-                            const totalAmount = parseInt('<%=totalPrice%>')
-                            const orderUrl = '/user/orders'
-                            const paying = await axios.post(orderUrl, { amount: finalamout == 0 ? totalAmount : finalamout })
-                            console.log(paying)
-                            initPayment(paying.data)
+                             check.map(async (item, index) => {
+                                // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
+                                const productId = item._id;
+                                const productName = item.productName;
+                                const image = item.productMainImage[0];
+                                const productPrice = item.productPrice;
+                                const productQty = parseInt(qty[index].innerText);
+                                console.log('productName : ', productName)
+                                console.log('productPrice : ', productPrice)
+                                console.log('productQty : ', productQty)
+                                console.log('\n......................................')
+
+                                const qtyData = {
+                                    productId: productId,
+                                    productQty: productQty
+                                }
+                                const checkingData = await JSON.stringify(qtyData);
+                                const checkingQty = await fetch('/user/check-qty', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': "application/json"
+                                    },
+                                    body: checkingData
+                                })
+
+                                if (checkingQty.status == 400) {
+                                    const data = await checkingQty.json();
+                                    alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.err}`;
+                                    alertBox.classList.remove('-translate-x-full')
+                                    alertBox.classList.remove('opacity-0')
+                                    window.scrollTo(0, 0)
+                                    setTimeout(() => {
+                                        alertBox.classList.add('-translate-x-full')
+                                        alertBox.classList.add('opacity-0')
+                                    }, 3000)
+                                    valid = false;
+                                    return false;
+                                }
+                            })
+                            console.log('checkinggggg : : ',valid)
+                            if (valid == false) {
+                                return
+                            } else {
+                                const totalAmount = parseInt('<%=totalPrice%>')
+                                const orderUrl = '/user/orders'
+                                const paying = await axios.post(orderUrl, { amount: finalamout == 0 ? totalAmount : finalamout })
+                                console.log(paying)
+                                initPayment(paying.data)
+                            }
+
                         } catch (error) {
                             console.log(error)
                         }

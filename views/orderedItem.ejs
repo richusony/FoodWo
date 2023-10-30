@@ -37,17 +37,22 @@
 </head>
 
 <body>
-    <%-include('../views/userNavbar.ejs') %>
+    <%-include('userNavbar') %>
 
         <section class="px-5 md:px-10 py-10">
-            <div class="bg-orange-500 px-5 py-5 rounded shadow-md">
+            <div id="alert"
+                class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+                <span id="alertMsg"></span>
+            </div>
+            <div class="bg-orange-500 px-5 py-5 rounded shadow-md my-2">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="w-full">
-                        <h3 class="text-white font-semibold text-xl cursor-pointer w-fit mb-5" onclick="redirectTo('/user/my-orders/<%=order.userId%>')"><i
+                        <h3 class="text-white font-semibold text-xl cursor-pointer w-fit mb-5"
+                            onclick="redirectTo('/user/my-orders/<%=order.userId%>')"><i
                                 class="fa-solid fa-arrow-left"></i> Orders</h3>
                         <h2 class="text-white flex items-center"><span class="text-sm mr-2">Order ID :
-                                <%=order.orderId%></span> <span
-                                class="bg-white py-1 px-4 text-orange-500 text-center rounded">
+                                <%=order.orderId%>
+                            </span> <span class="bg-white py-1 px-4 text-orange-500 text-center rounded">
                                 <%=order.orderStatus%>
                             </span></h2>
                         <h3 class="text-white mb-5 md:mb-10">Date : <%=order.created_at%>
@@ -81,37 +86,79 @@
                 </div>
 
                 <div class="my-3">
-                    <% if(order.orderStatus !=="Pending"){%>
-                    <button class="bg-white opacity-50 cursor-not-allowed py-2 px-4 text-orange-500 text-center rounded" >Cancel</button>
-                    <%}else{%>
-                    <button class="bg-white hover:bg-slate-100 py-2 px-4 text-orange-500 text-center rounded" data-oid="<%=order.orderId%>" onclick="cancelOrder(event)" >Cancel</button>
-                    <%}%>
+                    <% if(order.orderStatus !=="Pending" ){%>
+                        <button
+                            class="bg-white opacity-50 cursor-not-allowed py-2 px-4 text-orange-500 text-center rounded">Cancel</button>
+                        <%}else{%>
+                            <button class="bg-white hover:bg-slate-100 py-2 px-4 text-orange-500 text-center rounded"
+                                data-oid="<%=order.orderId%>" onclick="cancelOrder(event)">Cancel</button>
+                            <%}%>
                 </div>
             </div>
         </section>
 
-        <%-include('../views/userFooter.ejs') %>
+        <%-include('userFooter') %>
 
-        <script>
-            function redirectTo(url){
-                window.location.href=url;
-            }
+            <script>
+                const alertBox = document.getElementById('alert')
+                const alertMsg = document.getElementById('alertMsg')
 
-            async function cancelOrder(event){
-                const orderId = event.target.dataset.oid;
-                if(orderId){
-                    const response = await fetch(`/user/cancel-order/${orderId}`,{
-                        method:'PATCH'
-                    })
-                    if(response.ok){
-                    window.location.reload();
-                }
+                function redirectTo(url) {
+                    window.location.href = url;
                 }
 
-                
-            }
+                async function cancelOrder(event) {
+                    const orderId = event.target.dataset.oid;
+                    if (orderId) {
+                        const response = await fetch(`/user/cancel-order/${orderId}`, {
+                            method: 'PATCH'
+                        })
 
-            
+                        if (response.status == 400) {
+                            const data = await response.json();
+                           if(!data.updated){
+                            alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Cancellation is not working at the moment.`;
+                            alertBox.classList.remove('-translate-x-full')
+                            alertBox.classList.remove('opacity-0')
+                            window.scrollTo(0, 0)
+                            setTimeout(() => {
+                                alertBox.classList.add('-translate-x-full')
+                                alertBox.classList.add('opacity-0')
+                            }, 3000)
+                            return;
+                           }
+                           if(!data.refund){
+                            alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Couldn't refund the amount.Please contact customer care.`;
+                            alertBox.classList.remove('-translate-x-full')
+                            alertBox.classList.remove('opacity-0')
+                            window.scrollTo(0, 0)
+                            setTimeout(() => {
+                                alertBox.classList.add('-translate-x-full')
+                                alertBox.classList.add('opacity-0')
+                            }, 3000)
+                            return;
+                           }
+                        }
+                        if (response.ok) {
+                            const data = await response.json();
+                            if(data.refund){
+                                alertMsg.innerHTML = `<i class="fa-solid fa-check text-xl"></i> Amount has been refunded to your account.`;
+                            alertBox.classList.remove('-translate-x-full')
+                            alertBox.classList.remove('opacity-0')
+                            window.scrollTo(0, 0)
+                            setTimeout(() => {
+                                alertBox.classList.add('-translate-x-full')
+                                alertBox.classList.add('opacity-0')
+                                window.location.reload();
+                            }, 3000)
+                            }
+                        }
+                    }
+
+
+                }
+
+
             </script>
 </body>
 

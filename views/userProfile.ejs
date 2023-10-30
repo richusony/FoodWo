@@ -41,8 +41,8 @@
         <section class="px-5 py-2">
             <%  let address2; %>
             <%  let address3; %>
-            <% if(userData.address2 !=="false"){ address2=true}else{ address2=false;}%>
-            <% if(userData.address3 !=="false"){ address3=true}else{ address3=false;}%>
+            <% if(userAddress.address2 !="false"){ address2=true}else{ address2=false;}%>
+            <% if(userAddress.address3 !="false"){ address3=true}else{ address3=false;}%>
                 <% if(userData){ %>
                     <div class="my-4 mx-auto">
                         <form action="/user/userProfile/<%=userData._id%>" method="post" enctype="multipart/form-data">
@@ -80,29 +80,29 @@
                                 </div>
 
                                 <div class="flex flex-col" id="addContainer">
-                                                <div class=' flex flex-col my-2'>
+                                                <div class='<% if(userAddress.address1 !="false"){%> block <%}else{%>hidden <%} %> flex flex-col my-2'>
                                                     <label class="text-white" for="address">Address 1</label>
                                                     <textarea name="address1"
                                                         id="address" cols="30" rows="5" value=""
-                                                        class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><%=userData.address1%></textarea>
+                                                        class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><%=userAddress.address1%></textarea>
                                                 </div>
                                                 
                                               
-                                                    <div class='<% if(userData.address2 !=="false"){%> block <%}else{%>hidden <%} %> flex flex-col my-2'
+                                                    <div class='<% if(userAddress.address2 !="false"){%> block <%}else{%>hidden <%} %> flex flex-col my-2'
                                                         id="newAddContainer2">
                                                         <label class="text-white" for="address">Address 2
                                                                 </label>
                                                         <textarea name="address2"
                                                             id="address2" cols="30" rows="5" value=""
-                                                            class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><% if(userData.address2 !=="false"){%><%=userData.address2%><%}%></textarea>
+                                                            class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><% if(userAddress.address2 !=="false"){%><%=userAddress.address2%><%}%></textarea>
                                                     </div>
-                                                    <div class='<% if(userData.address3 !=="false"){%> block <%}else{%>hidden <%} %> flex flex-col my-2'
+                                                    <div class='<% if(userAddress.address3 !="false"){%> block <%}else{%>hidden <%} %> flex flex-col my-2'
                                                         id="newAddContainer3">
                                                         <label class="text-white" for="address">Address 3
                                                                 </label>
                                                         <textarea name="address3"
                                                             id="address3" cols="30" rows="5" value=""
-                                                            class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><% if(userData.address3 !=="false"){%><%=userData.address3%><%}%></textarea>
+                                                            class="text-gray-500 rounded outline-orange-500 border-none py-1 px-2"><% if(userAddress.address3!=="false"){%><%=userAddress.address3%><%}%></textarea>
                                                     </div>
                                                     <div id="addressBtn"
                                                         class="w-full text-right">

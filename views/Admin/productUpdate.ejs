@@ -191,6 +191,29 @@
                             }, 3000)
                             return;
                         }
+                        else if (parseInt(productPrice) <= 0) {
+                        event.preventDefault();
+                        window.scrollTo(0, 0)
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Product price must be greater than zero.</span>`;
+                        toast.classList.remove("hidden");
+                        toast.classList.remove("translate-y-96");
+                        setTimeout(() => {
+                            toast.classList.add("hidden");
+                            toast.classList.add("translate-y-96");
+                        }, 3000)
+                        return;
+                    }else if (parseInt(inStock) <= 0) {
+                        event.preventDefault();
+                        window.scrollTo(0, 0)
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Stock must be greater than zero.</span>`;
+                        toast.classList.remove("hidden");
+                        toast.classList.remove("translate-y-96");
+                        setTimeout(() => {
+                            toast.classList.add("hidden");
+                            toast.classList.add("translate-y-96");
+                        }, 3000)
+                        return;
+                    }
                         else {
                             const formData = {
                                 productName: productName,

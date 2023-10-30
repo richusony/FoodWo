@@ -215,14 +215,14 @@ async function updateProducts(req, res) {
     }
 
 }
-
+ 
 async function deleteProduct(req, res) {
-    const id = req.params.id;
+    const id = req.params.id;  
     const deleting = await productModel.deleteOne({ _id: id });
     if (deleting) {
-        res.redirect('/admin/products')
+        res.status(200).json({deleted:true}) 
     } else {
-        res.status(500).json({ err: "Database having some issues.." })
+        res.status(500).json({deleted:false, err: "Database having some issues.." })
     }
 }
 

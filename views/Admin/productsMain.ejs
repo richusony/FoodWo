@@ -17,6 +17,11 @@
     <%- include('adminNavbar') %>
 
         <section class="px-5 py-2 md:h-screen mb-5">
+            <div id="alert"
+                class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+                <span id="alertMsg"></span>
+            </div>
+
             <div class="flex justify-between mx-3 items-center my-3">
                 <h1 class="font-bold py-3 border-green-300 text-xl">Product List</h1> <a
                     class="bg-orange-500 py-2 px-3 rounded text-white" href="/admin/addProducts">New Product</a>
@@ -55,7 +60,7 @@
                                                     Plate <% } %>
                                     </td>
                                     <td class=" px-5 text-start">
-                                        <%= item.category %> 
+                                        <%= item.category %>
                                     </td>
                                     <td class=" px-5">
                                         <%= item.productSold %>
@@ -71,11 +76,11 @@
                                         <a href="/admin/user-block/"
                                             class="bg-gray-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm">
                                             <i class="fa-solid fa-lock-open"></i>
-                                            <!-- <i class="fa-solid fa-lock"></i> -->
+                                            <!-- <i class="fa-solid fa-lock"></i> --> 
 
                                         </a>
-                                        <a href="/admin/product-delete/<%= item._id %>"
-                                            class="bg-red-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
+                                        <a href=""
+                                            class="bg-red-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i data-foodid="<%=item._id%>" onclick="deleteProduct(event)"
                                                 class="fa-solid fa-trash-can"></i></a>
                                     </td>
                                 </tr>
@@ -88,6 +93,35 @@
 
         <!-- Footer -->
         <%- include('adminFooter') %>
+            <script>
+                const alertBox = document.getElementById('alert')
+                const alertMsg = document.getElementById('alertMsg')
+                async function deleteProduct(event) {
+                    event.preventDefault();
+                    console.log(event)
+                    const foodId = event.target.dataset.foodid;
+                    console.log(foodId)
+                    const confirmDeletion = confirm("Are you sure? want to delete this product.");
+                    if (confirmDeletion) {
+                        const deleting = await fetch(`/admin/product-delete/${foodId}`);
+                        if (deleting.ok) {
+                            const data = await deleting.json();
+                            if (data.deleted) {
+                                window.scrollTo(0, 0)
+                                alertBox.classList.remove('opacity-0')
+                                alertBox.classList.remove('-translate-x-full')
+                                alertMsg.innerText = `Product Deleted`;
+                                setTimeout(() => {
+                                    alertBox.classList.add('opacity-0')
+                                    alertBox.classList.add('-translate-x-full')
+                                    window.location.reload();
+                                }, 3000)
+                                return;
+                            }
+                        }
+                    }
+                }
+            </script>
 </body>
 
 </html>
