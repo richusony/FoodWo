@@ -140,6 +140,7 @@
                                         <th scope="col" class="px-6 py-4">Usage Limit</th>
                                         <th scope="col" class="px-6 py-4">Start time</th>
                                         <th scope="col" class="px-6 py-4">End time</th>
+                                        <th scope="col" class="px-6 py-4">Food Item</th>
                                         <th scope="col" class="px-6 py-4">Discount Type</th>
                                         <th scope="col" class="px-6 py-4">Discount Value</th>
                                         <th scope="col" class="px-6 py-4">Status</th>
@@ -148,27 +149,48 @@
                                 </thead>
                                 <tbody>
                                     <% if(coupons){ coupons.forEach((coup,index)=>{%>
-                                    <tr
-                                        class="border-b transition duration-300 ease-in-out hover:bg-slate-100 dark:border-neutral-500 dark:hover:bg-slate-300">
-                                        <td class="whitespace-nowrap px-6 py-4 font-medium"><%= index+1%></td>
-                                        <td class="whitespace-nowrap px-6 py-4 font-bold"><%=coup.couponCode%></td>
-                                        <td class="whitespace-nowrap px-6 py-4 font-bold text-center"><%=coup.usersLimit%></td>
-                                        <td class="whitespace-nowrap px-6 py-4 font-bold text-center"><%=coup.usageLimit%></td>
-                                        <td class="whitespace-nowrap px-6 py-4"><%=coup.startDate%></td>
-                                        <td class="whitespace-nowrap px-6 py-4"><%=coup.endDate%></td>
-                                        <td class="whitespace-nowrap px-6 py-4 text-center"><%=coup.discountType==="per"?"Percentage":"Amount"%></td>
-                                        <td class="whitespace-nowrap px-6 py-4 text-center"><%=coup.discountValue%><%=coup.discountType==="per"?"%":"Rs"%></td>
-                                        <td class="whitespace-nowrap px-6 py-4"><%=coup.status %></td>
-                                        <td class="whitespace-nowrap px-6 py-4 text-center"><a
-                                                href="/admin/coupon-update/<%=coup._id%>"
-                                                class="bg-blue-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
-                                                    class="fa-solid fa-pencil"></i></a>
-                                            <a href="/admin/delete-coupon/<%=coup._id%>"
-                                                class="bg-red-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
-                                                    class="fa-solid fa-trash-can"></i></a>
-                                        </td>
-                                    </tr>
-                                    <%})}%>
+                                        <tr
+                                            class="border-b transition duration-300 ease-in-out hover:bg-slate-100 dark:border-neutral-500 dark:hover:bg-slate-300">
+                                            <td class="whitespace-nowrap px-6 py-4 font-medium">
+                                                <%= index+1%>
+                                            </td>
+                                            <td class="whitespace-nowrap px-6 py-4 font-bold">
+                                                <%=coup.couponCode%>
+                                            </td>
+                                            <td class="whitespace-nowrap px-6 py-4 font-bold text-center">
+                                                <%=coup.usersLimit%>
+                                            </td>
+                                            <td class="whitespace-nowrap px-6 py-4 font-bold text-center">
+                                                <%=coup.usageLimit%>
+                                            </td>
+                                            <td class="whitespace-nowrap px-6 py-4">
+                                                <%=coup.startDate%>
+                                            </td>
+                                            <td class="whitespace-nowrap px-6 py-4">
+                                                <%=coup.endDate%>
+                                            </td>
+                                            <td class="whitespace-nowrap px-6 py-4 font-bold">
+                                                <%=coup.foodName%>
+                                            </td>
+                                            <td class="whitespace-nowrap px-6 py-4 text-center">
+                                                <%=coup.discountType==="per"?"Percentage":"Amount"%>
+                                            </td>
+                                            <td class="whitespace-nowrap px-6 py-4 text-center">
+                                                <%=coup.discountValue%><%=coup.discountType==="per"?"%":"Rs"%>
+                                            </td>
+                                            <td class="whitespace-nowrap px-6 py-4">
+                                                <%=coup.status %>
+                                            </td>
+                                            <td class="whitespace-nowrap px-6 py-4 text-center"><a
+                                                    href="/admin/coupon-update/<%=coup._id%>"
+                                                    class="bg-blue-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
+                                                        class="fa-solid fa-pencil"></i></a>
+                                                <a href="" onclick="deleteCoupon(event)" data-coupid="<%=coup._id%>"
+                                                    class="bg-red-500 m-2 py-2 px-3 rounded cursor-pointer text-white text-sm"><i
+                                                        class="fa-solid fa-trash-can"></i></a>
+                                            </td>
+                                        </tr>
+                                        <%})}%>
                                 </tbody>
                             </table>
                         </div>
@@ -181,6 +203,7 @@
         <%- include('adminFooter') %>
 
             <script>
+                let food;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
 
@@ -259,9 +282,17 @@
 
                 }
 
-                function foodItemValidator(event) {
+               async function foodItemValidator(event) {
                     if (event.target.value === "none") {
                         alert(`Food Item can't be None`)
+                        return;
+                    }
+                    const fetchingFood = await fetch(`/admin/food-price/${event.target.value}`);
+                    if(fetchingFood.ok){
+                        const data = await fetchingFood.json();
+                        if(fetchingFood.status==200){
+                            food = data.foodData;
+                        }
                     }
                 }
 
@@ -368,6 +399,26 @@
                             alertBox.classList.add('-translate-x-full')
                         }, 3000)
                         return;
+                    }else if (discountType.value === "amt" && parseInt(discountValue.value) <= 0) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Discount Value can't be zero or lesser`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    }else if (discountType.value === "amt" && parseInt(discountValue.value)>parseInt(food.productPrice)){
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Discount Amount can't be greater than food price : ₹${food.productPrice}`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
                     } else {
                         const couponData = {
                             userLimit: parseInt(userLimit.value),
@@ -411,16 +462,51 @@
                                     alertBox.classList.add('-translate-x-full')
                                 }, 3000)
                             }
-                        }else{
+                        } else {
                             const data = await res.json();
                             window.scrollTo(0, 0)
-                        alertBox.classList.remove('opacity-0')
-                        alertBox.classList.remove('-translate-x-full')
-                        alertMsg.innerText = `${data.err}`;
-                        setTimeout(() => {
-                            alertBox.classList.add('opacity-0')
-                            alertBox.classList.add('-translate-x-full')
-                        }, 3000)
+                            alertBox.classList.remove('opacity-0')
+                            alertBox.classList.remove('-translate-x-full')
+                            alertMsg.innerText = `${data.err}`;
+                            setTimeout(() => {
+                                alertBox.classList.add('opacity-0')
+                                alertBox.classList.add('-translate-x-full')
+                            }, 3000)
+                        }
+                    }
+                }
+
+                async function deleteCoupon(event) {
+                    event.preventDefault();
+                    const coupId = event.target.dataset.coupid;
+                    const confirmDelete = confirm("Are you sure? want to delete coupon.");
+                    console.log(confirmDelete);
+                    if (confirmDelete) {
+                        if (coupId) {
+                            const deleting = await fetch(`/admin/delete-coupon/${coupId}`);
+                            if (deleting.ok) {
+                                const data = await deleting.json();
+                                if (data.deleted) {
+                                    window.scrollTo(0, 0)
+                                    alertBox.classList.remove('opacity-0')
+                                    alertBox.classList.remove('-translate-x-full')
+                                    alertMsg.innerText = `Coupon Deleted`;
+                                    setTimeout(() => {
+                                        alertBox.classList.add('opacity-0')
+                                        alertBox.classList.add('-translate-x-full')
+                                        window.location.reload();
+                                    }, 3000)
+                                } else {
+                                    window.scrollTo(0, 0)
+                                    alertBox.classList.remove('opacity-0')
+                                    alertBox.classList.remove('-translate-x-full')
+                                    alertMsg.innerText = `Problem while deleting coupon.`;
+                                    setTimeout(() => {
+                                        alertBox.classList.add('opacity-0')
+                                        alertBox.classList.add('-translate-x-full')
+                                    }, 3000)
+                                }
+                            }
                         }
                     }
                 }

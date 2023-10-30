@@ -28,6 +28,10 @@ const couponSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    foodName:{
+        type:String,
+        required:true
+    },
     discountType:{
         type:String,
         required:true
