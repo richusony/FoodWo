@@ -474,9 +474,13 @@ async function updateStock(req, res) {
     // const coupon = req.body.coupon;
     const existCoupon = await couponModel.findOne({ couponCode: coupon })
     const checkFood = existCoupon && existCoupon.foodId == productId;
+    const product = await productModel.findOne({_id:productId});
+    if(parseInt(productQty)>parseInt(product.productInStock)){
+       return res.status(400).json({err:`only ${product.productInStock} left for ${productName}`})
+    }
     console.log('coupong : ', coupon)
     if (coupon != undefined && coupon != "") {
-        if (existCoupon) {
+        if (existCoupon) { 
             if (existCoupon.usedUsersCount >= existCoupon.usersLimit) {
                 return res.status(400).json({ err: "Coupon has been reached the maximum users limit" })
             }
