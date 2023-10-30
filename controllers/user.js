@@ -203,6 +203,7 @@ async function viewCartPage(req, res) {
     const foodIds = foodItems.map(item => item.foodId);
     let cartItems = await productModel.find({ _id: { $in: foodIds } });
     const userDetails = await userModel.find({ _id: uid })
+    const addressDetails = await addressModel.findOne({userId:uid});
 
     if (cartItems.length < 1) {
         cartItems = false
@@ -214,7 +215,7 @@ async function viewCartPage(req, res) {
             return item;
         });
     }
-    res.render('../views/userCart', { cartItems: cartItems, userId: uid, userData: userDetails, wallet: wallet });
+    res.render('../views/userCart', { cartItems: cartItems, userId: uid, userData: userDetails, wallet: wallet,userAddress:addressDetails });
 }
 
 async function addToCart(req, res) {
@@ -329,6 +330,7 @@ async function viewUserProfile(req, res) {
 async function updateUserProfile(req, res) {
     const { userid, fullname, email, phone, address1, address2, address3 } = req.body;
     const image = req.file?.path;
+    console.log(address1)
 
     const updating = await userModel.updateOne({ _id: userid }, {
         fullname,
@@ -343,13 +345,13 @@ async function updateUserProfile(req, res) {
         return res.status(400).json({ error: "Address limit reached" });
     }
     if (!address1 && !address3) {
-        const updateAddress = await addressModel.updateOne({userId:userid},{address1:false,address2:address2,address3:false})
+        const updateAddress = await addressModel.updateOne({userId:userid},{address1:address2,address2:false,address3:false})
        
     } else if (!address2 && !address3) {
         const updateAddress = await addressModel.updateOne({userId:userid},{address1:address1,address2:false,address3:false})
 
     } else if (!address1 && !address2) {
-        const updateAddress = await addressModel.updateOne({userId:userid},{address1:false,address2:false,address3:address3})
+        const updateAddress = await addressModel.updateOne({userId:userid},{address1:address3,address2:false,address3:false})
     }
     else if (!address1) {
         const updateAddress = await addressModel.updateOne({userId:userid},{address1:address2,address2:address3,address3:false})

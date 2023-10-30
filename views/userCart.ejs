@@ -156,12 +156,12 @@
                                         <h3 class="font-bold">Shipping to :</h3>
                                         <div id="addContainer">
                                             <div
-                                                class='<%if(userData[0].address1 !=="false" ){%> block <%}else{%>hidden<%}%>'>
+                                                class='<%if(userAddress.address1 !=="false" ){%> block <%}else{%>hidden<%}%>'>
                                                 <span>
                                                     <div class="flex my-2 text-sm w-80">
                                                         <input type="checkbox" name="" id="addressCheck1" class="mx-2">
                                                         <span id="currentAdd1">
-                                                            <%=userData[0].address1%>
+                                                            <%=userAddress.address1%>
                                                         </span>
                                                     </div>
                                                 </span>
@@ -176,12 +176,12 @@
 
 
                                             <div
-                                                class='<%if(userData[0].address2 !=="false" ){%> block <%}else{%>hidden <% } %>'>
+                                                class='<%if(userAddress.address2 !=="false" ){%> block <%}else{%>hidden <% } %>'>
                                                 <span>
                                                     <div class="flex my-2 text-sm w-80">
                                                         <input type="checkbox" name="" id="addressCheck2" class="mx-2">
                                                         <span id="currentAdd2">
-                                                            <%=userData[0].address2%>
+                                                            <%=userAddress.address2%>
                                                         </span>
                                                     </div>
                                                 </span>
@@ -195,12 +195,12 @@
                                             </div>
 
                                             <div
-                                                class='<%if(userData[0].address3 !=="false" ){%> block <%}else{%>hidden<%}%>'>
+                                                class='<%if(userAddress.address3 !=="false" ){%> block <%}else{%>hidden<%}%>'>
                                                 <span>
                                                     <div class="flex my-2 text-sm w-80">
                                                         <input type="checkbox" name="" id="addressCheck3" class="mx-2">
                                                         <span id="currentAdd3">
-                                                            <%=userData[0].address3%>
+                                                            <%=userAddress.address3%>
                                                         </span>
                                                     </div>
                                                 </span>
