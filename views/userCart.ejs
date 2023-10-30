@@ -222,7 +222,7 @@
                                             cols="" rows="4"></textarea>
                                     </div>
 
-                                    <%if(userData[0].address3==="false" ){%>
+                                    <%if(userAddress.address3==="false" ){%>
                                         <div class="px-3 my-4 text-end">
                                             <textarea class="text-black hidden w-full px-3 rounded" name=""
                                                 id="addingAddressCon" cols="" rows="4"></textarea>
@@ -470,19 +470,19 @@
                     const container1 = document.getElementById('currentAdd1');
                     const container2 = document.getElementById('currentAdd2');
                     const container3 = document.getElementById('currentAdd3');
-                    const address1 = '<%=userData[0].address1%>';
-                    const address2 = '<%=userData[0].address2%>';
-                    const address3 = '<%=userData[0].address3%>';
+                    const address1 = '<%=userAddress.address1%>';
+                    const address2 = '<%=userAddress.address2%>';
+                    const address3 = '<%=userAddress.address3%>';
                     let flag = 0;
 
                     if (address1 === "false") {
                         container1.innerText = textContainer.innerText.trim();
                         flag = 1;
                     } else if (address2 === "false") {
-                        container2.innerText = textContainer.value.trim();
+                        container2.innerText = textContainer.innerText.trim();
                         flag = 2;
                     } else {
-                        container3.innerText = textContainer.value;
+                        container3.innerText = textContainer.innerText.trim();
                         flag = 3;
                     }
                     console.log(textContainer.value);

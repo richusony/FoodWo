@@ -371,21 +371,21 @@ async function addNewAddress(req, res) {
     const newaddress = req.body.address;
 
     if (aid == 1) {
-        const updating = await userModel.updateOne({ _id: uid }, { address1: newaddress })
+        const updating = await addressModel.updateOne({ userId: uid }, { address1: newaddress })
         if (updating) {
             res.status(200).json({ updated: true })
         } else {
             res.status(500).json({ updated: false })
         }
     } else if (aid == 2) {
-        const updating = await userModel.updateOne({ _id: uid }, { address2: newaddress })
+        const updating = await addressModel.updateOne({ userId: uid }, { address2: newaddress })
         if (updating) {
             res.status(200).json({ updated: true })
         } else {
             res.status(500).json({ updated: false })
         }
     } else {
-        const updating = await userModel.updateOne({ _id: uid }, { address3: newaddress })
+        const updating = await addressModel.updateOne({ userId: uid }, { address3: newaddress })
         if (updating) {
             res.status(200).json({ updated: true })
         } else {
@@ -398,21 +398,29 @@ async function addNewAddress(req, res) {
 async function updateUserAddress(req, res) {
     const { uid, aid } = req.params;
     const newaddress = req.body.address;
-    const userDetails = userModel.findOne({ _id: uid })
-    const oldAddress1 = userDetails.address1;
-    const oldAddress2 = userDetails.address2;
-    const oldAddress3 = userDetails.address3;
+    const addressDetails = await addressModel.findOne({ userId: uid })
+    const oldAddress1 = addressDetails.address1;
+    const oldAddress2 = addressDetails.address2;
+    const oldAddress3 = addressDetails.address3;
     console.log(newaddress)
+    console.log(addressDetails)
+    console.log(uid)
+    console.log(oldAddress1)
+    console.log(oldAddress2)
+    console.log(oldAddress3)
+    console.log("aid : ",aid)
     if (aid == 1) {
         if (newaddress === "") {
-            const updating = await userModel.updateOne({ _id: uid }, { address1: oldAddress2, address2: oldAddress3, address3: false })
+            console.log("blank")
+            const updating = await addressModel.updateOne({ userId: uid }, { address1: oldAddress2, address2: oldAddress3, address3: false })
             if (updating) {
                 res.status(200).json({ updated: true })
             } else {
                 res.status(500).json({ updated: false })
             }
         } else {
-            const updating = await userModel.updateOne({ _id: uid }, { address1: newaddress })
+            console.log("not blank")
+            const updating = await addressModel.updateOne({ userId: uid }, { address1: newaddress })
             if (updating) {
                 res.status(200).json({ updated: true })
             } else {
@@ -422,14 +430,14 @@ async function updateUserAddress(req, res) {
 
     } else if (aid == 2) {
         if (newaddress === "") {
-            const updating = await userModel.updateOne({ _id: uid }, { address2: oldAddress3, address3: false })
+            const updating = await addressModel.updateOne({ userId: uid }, { address2: oldAddress3, address3: false })
             if (updating) {
                 res.status(200).json({ updated: true })
             } else {
                 res.status(500).json({ updated: false })
             }
         } else {
-            const updating = await userModel.updateOne({ _id: uid }, { address2: newaddress })
+            const updating = await addressModel.updateOne({ userId: uid }, { address2: newaddress })
             if (updating) {
                 res.status(200).json({ updated: true })
             } else {
@@ -438,14 +446,14 @@ async function updateUserAddress(req, res) {
         }
     } else {
         if (newaddress === "") {
-            const updating = await userModel.updateOne({ _id: uid }, { address3: false })
+            const updating = await addressModel.updateOne({ userId: uid }, { address3: false })
             if (updating) {
                 res.status(200).json({ updated: true })
             } else {
                 res.status(500).json({ updated: false })
             }
         } else {
-            const updating = await userModel.updateOne({ _id: uid }, { address3: newaddress })
+            const updating = await addressModel.updateOne({ userId: uid }, { address3: newaddress })
             if (updating) {
                 res.status(200).json({ updated: true })
             } else {
