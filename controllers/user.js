@@ -145,7 +145,8 @@ async function otpVerification(req, res) {
                 // Clear OTP and user data from session
                 delete req.session.otp;
                 delete req.session.userData;
-                const addingAddress = await addressModel.create({userId:newUser._id,address1:address})
+                const addingAddress = await addressModel.create({ userId: newUser._id, address1: address })
+                const creatingZeroWallet = await walletModel.create({ userId: newUser._id, balance: 0 });
                 res.status(201).json({ success: "Account created" });
             })
             .catch((error) => {
@@ -203,7 +204,7 @@ async function viewCartPage(req, res) {
     const foodIds = foodItems.map(item => item.foodId);
     let cartItems = await productModel.find({ _id: { $in: foodIds } });
     const userDetails = await userModel.find({ _id: uid })
-    const addressDetails = await addressModel.findOne({userId:uid});
+    const addressDetails = await addressModel.findOne({ userId: uid });
 
     if (cartItems.length < 1) {
         cartItems = false
@@ -215,7 +216,7 @@ async function viewCartPage(req, res) {
             return item;
         });
     }
-    res.render('../views/userCart', { cartItems: cartItems, userId: uid, userData: userDetails, wallet: wallet,userAddress:addressDetails });
+    res.render('../views/userCart', { cartItems: cartItems, userId: uid, userData: userDetails, wallet: wallet, userAddress: addressDetails });
 }
 
 async function addToCart(req, res) {
@@ -319,9 +320,9 @@ async function viewUserProfile(req, res) {
     const id = req.params.id;
 
     const userDetails = await userModel.findOne({ _id: id });
-    const addressDetails = await addressModel.findOne({userId:id});
+    const addressDetails = await addressModel.findOne({ userId: id });
     if (userDetails) {
-        res.render('../views/userProfile.ejs', { userData: userDetails,userAddress:addressDetails })
+        res.render('../views/userProfile.ejs', { userData: userDetails, userAddress: addressDetails })
     } else {
         res.status(500).json({ err: 'Database is having an issue.' })
     }
@@ -345,23 +346,23 @@ async function updateUserProfile(req, res) {
         return res.status(400).json({ error: "Address limit reached" });
     }
     if (!address1 && !address3) {
-        const updateAddress = await addressModel.updateOne({userId:userid},{address1:address2,address2:false,address3:false})
-       
+        const updateAddress = await addressModel.updateOne({ userId: userid }, { address1: address2, address2: false, address3: false })
+
     } else if (!address2 && !address3) {
-        const updateAddress = await addressModel.updateOne({userId:userid},{address1:address1,address2:false,address3:false})
+        const updateAddress = await addressModel.updateOne({ userId: userid }, { address1: address1, address2: false, address3: false })
 
     } else if (!address1 && !address2) {
-        const updateAddress = await addressModel.updateOne({userId:userid},{address1:address3,address2:false,address3:false})
+        const updateAddress = await addressModel.updateOne({ userId: userid }, { address1: address3, address2: false, address3: false })
     }
     else if (!address1) {
-        const updateAddress = await addressModel.updateOne({userId:userid},{address1:address2,address2:address3,address3:false})
+        const updateAddress = await addressModel.updateOne({ userId: userid }, { address1: address2, address2: address3, address3: false })
     } else if (!address2) {
-        const updateAddress = await addressModel.updateOne({userId:userid},{address1:address1,address2:address3,address3:false})
+        const updateAddress = await addressModel.updateOne({ userId: userid }, { address1: address1, address2: address3, address3: false })
     } else if (!address3) {
-        const updateAddress = await addressModel.updateOne({userId:userid},{address1:address1,address2:address2,address3:false})
-    } 
+        const updateAddress = await addressModel.updateOne({ userId: userid }, { address1: address1, address2: address2, address3: false })
+    }
     else {
-        const updateAddress = await addressModel.updateOne({userId:userid},{address1:address1,address2:address2,address3:address3})
+        const updateAddress = await addressModel.updateOne({ userId: userid }, { address1: address1, address2: address2, address3: address3 })
     }
 
 }
@@ -408,7 +409,7 @@ async function updateUserAddress(req, res) {
     console.log(oldAddress1)
     console.log(oldAddress2)
     console.log(oldAddress3)
-    console.log("aid : ",aid)
+    console.log("aid : ", aid)
     if (aid == 1) {
         if (newaddress === "") {
             console.log("blank")
@@ -477,11 +478,11 @@ async function updateStock(req, res) {
     if (coupon != undefined && coupon != "") {
         if (existCoupon) {
             if (existCoupon.usedUsersCount >= existCoupon.usersLimit) {
-               return res.status(400).json({ err: "Coupon has been reached the maximum users limit" })
+                return res.status(400).json({ err: "Coupon has been reached the maximum users limit" })
             }
             if (checkFood) {
                 if (existCoupon.status === "deactive") {
-                   return res.status(500).json({ err: "This coupon has been blocked" })
+                    return res.status(500).json({ err: "This coupon has been blocked" })
                 } else {
                     const userData = await userModel.findOne({ _id: user_id })
                     console.log('user : ', userData)
@@ -501,7 +502,7 @@ async function updateStock(req, res) {
                         currentDate.setHours(0, 0, 0, 0);
                         console.log(startDate, endDate)
                         if (endDate < currentDate) {
-                           return res.status(400).json({ err: "coupon has been expired" })
+                            return res.status(400).json({ err: "coupon has been expired" })
                         } else {
 
                             const updateData = {
@@ -519,7 +520,7 @@ async function updateStock(req, res) {
                                 }
                                 console.log("usedCoupons after update: ", userModel.usedCoupons);
                             } else {
-                               return res.status(500).json({ added: false, err: "Database is having some issues" })
+                                return res.status(500).json({ added: false, err: "Database is having some issues" })
                             }
                         }
                     } else {
@@ -527,7 +528,7 @@ async function updateStock(req, res) {
                         console.log('findcoupon', findCoupon)
                         const usedCount = parseInt(findCoupon[0].usedCount);
                         if (usedCount >= usageLimit) {
-                           return res.status(400).json({ added: false, err: "reached coupon limit." })
+                            return res.status(400).json({ added: false, err: "reached coupon limit." })
                         } else {
                             const updating = await userModel.updateOne({ _id: user_id, 'usedCoupons.couponId': findCoupon[0].couponId },
                                 { $inc: { 'usedCoupons.$.usedCount': 1 } })
@@ -538,7 +539,7 @@ async function updateStock(req, res) {
                                 }
                                 console.log("coupon added")
                             } else {
-                              return res.status(500).json({ added: false, err: "Database is having some issues" })
+                                return res.status(500).json({ added: false, err: "Database is having some issues" })
                             }
                         }
                     }
@@ -546,7 +547,7 @@ async function updateStock(req, res) {
             }
 
         } else {
-           return res.status(404).json({ err: "Coupon not found" })
+            return res.status(404).json({ err: "Coupon not found" })
         }
     }
     function generateOrderID() {
@@ -572,7 +573,7 @@ async function updateStock(req, res) {
         }
 
         if (product.productInStock <= 0) {
-           return res.status(404).json({ err: 'Stock out' })
+            return res.status(404).json({ err: 'Stock out' })
         } else {
 
             // Calculate the updated stock quantity by subtracting 'productQty'
@@ -604,8 +605,8 @@ async function updateStock(req, res) {
                     };
 
                     const calculatedAmount = (parseInt(productPrice) * parseInt(productQty)) - productPrice;
-                    console.log('Calculated.... : : ',calculatedAmount);
-                    console.log('Reduced.... : : ',calculatedAmount+afterDiscountPrice);
+                    console.log('Calculated.... : : ', calculatedAmount);
+                    console.log('Reduced.... : : ', calculatedAmount + afterDiscountPrice);
                     const walletUpdate = await walletModel.updateOne(
                         { userId: user_id },
                         {
@@ -630,7 +631,7 @@ async function updateStock(req, res) {
                     );
                 }
             }
- 
+
 
             if (result) {
                 res.status(200).json({ orderid: orderId, address: address });
@@ -696,11 +697,29 @@ async function viewOrderItemPage(req, res) {
 
 async function cancelOrder(req, res) {
     const orderId = req.params.oid;
-
+    const orderDetails = await orderModel.findOne({ orderId: orderId });
+    const productId = orderDetails.productId;
+    const userId = orderDetails.userId;
+    const purchasedPrice = parseInt(orderDetails.productPrice);
+    const purchasedQty = parseInt(orderDetails.productQty);
     if (orderId) {
         const updating = await orderModel.updateOne({ orderId: orderId }, { orderStatus: "Cancelled" })
         if (updating) {
-            res.status(200).json({ updated: true })
+            const updateProductQty = await productModel.updateOne({ _id: productId }, { $inc: { productInStock: purchasedQty, productSold:-purchasedQty } })
+            const currentDate = moment().format('DD-MM-YYYY'); // Get the current date in 'DD-MM-YYYY' format
+            const historyData = {
+                date: currentDate,
+                amt: purchasedPrice * purchasedQty,
+                update: "inc"
+            };
+            const refundToWallet = await walletModel.updateOne({ userId: userId }, { $inc: { balance: purchasedPrice * purchasedQty }, $push: { history: historyData } })
+            if (refundToWallet) {
+                res.status(200).json({ updated: true, refund: true })
+            } else {
+                res.status(400).json({updated:true, refund: false })
+            }
+        } else {
+            res.status(400).json({ updated: false, refund: false })
         }
     }
 }
