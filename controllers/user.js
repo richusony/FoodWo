@@ -465,6 +465,18 @@ async function updateUserAddress(req, res) {
     }
 }
 
+async function checkingQuantity(req,res){
+    const {productId,productQty} = req.body;
+    console.log('working.... :: ',productId,productQty)
+    const product = await productModel.findOne({_id:productId});
+
+    if(product){
+        if(parseInt(productQty)>parseInt(product.productInStock)){
+           return res.status(400).json({err:`only ${product.productInStock} left for ${product.productName}`})
+        }
+    }
+}
+
 
 async function updateStock(req, res) {
     const { user_id, productId, productName, image, customerName, productPrice, paymentMethod, productQty, address, coupon } = req.body;
@@ -474,13 +486,13 @@ async function updateStock(req, res) {
     // const coupon = req.body.coupon;
     const existCoupon = await couponModel.findOne({ couponCode: coupon })
     const checkFood = existCoupon && existCoupon.foodId == productId;
-    const product = await productModel.findOne({_id:productId});
-    if(parseInt(productQty)>parseInt(product.productInStock)){
-       return res.status(400).json({err:`only ${product.productInStock} left for ${productName}`})
+    const product = await productModel.findOne({ _id: productId });
+    if (parseInt(productQty) > parseInt(product.productInStock)) {
+        return res.status(400).json({ err: `only ${product.productInStock} left for ${productName}` })
     }
     console.log('coupong : ', coupon)
     if (coupon != undefined && coupon != "") {
-        if (existCoupon) { 
+        if (existCoupon) {
             if (existCoupon.usedUsersCount >= existCoupon.usersLimit) {
                 return res.status(400).json({ err: "Coupon has been reached the maximum users limit" })
             }
@@ -709,7 +721,7 @@ async function cancelOrder(req, res) {
     if (orderId) {
         const updating = await orderModel.updateOne({ orderId: orderId }, { orderStatus: "Cancelled" })
         if (updating) {
-            const updateProductQty = await productModel.updateOne({ _id: productId }, { $inc: { productInStock: purchasedQty, productSold:-purchasedQty } })
+            const updateProductQty = await productModel.updateOne({ _id: productId }, { $inc: { productInStock: purchasedQty, productSold: -purchasedQty } })
             const currentDate = moment().format('DD-MM-YYYY'); // Get the current date in 'DD-MM-YYYY' format
             const historyData = {
                 date: currentDate,
@@ -720,7 +732,7 @@ async function cancelOrder(req, res) {
             if (refundToWallet) {
                 res.status(200).json({ updated: true, refund: true })
             } else {
-                res.status(400).json({updated:true, refund: false })
+                res.status(400).json({ updated: true, refund: false })
             }
         } else {
             res.status(400).json({ updated: false, refund: false })
@@ -754,5 +766,6 @@ module.exports = {
     viewOrderItemPage,
     cancelOrder,
     updateUserAddress,
-    addNewAddress
+    addNewAddress,
+    checkingQuantity
 }
