@@ -3,7 +3,7 @@ const productModel = require('../models/productSchema');
 const { userModel } = require('../models/userSchema');
 
 // Helper function to format date in DD/MM/YYYY
-function formatDate(date) {
+function formatDate(date) { 
     const d = new Date(date);
     const day = String(d.getDate()).padStart(2, '0');
     const month = String(d.getMonth() + 1).padStart(2, '0');
