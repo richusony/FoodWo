@@ -15,11 +15,11 @@
 <body>
     <!-- Navigation -->
     <%- include('adminNavbar') %>
-        <div id="alert"
-            class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
-            <span id="alertMsg"></span>
-        </div>
-        <section class="px-5 py-3">
+    <section class="px-5 py-3">
+            <div id="alert"
+                class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+                <span id="alertMsg"></span>
+            </div>
 
             <div class="flex justify-center py-5">
                 <form class="md:w-1/2" action="">
@@ -114,6 +114,8 @@
 
             <script>
                 let food;
+                const alertBox = document.getElementById('alert')
+                const alertMsg = document.getElementById('alertMsg')
                 (async()=>{
                     const foodId = document.getElementById('foodItem').value
                     const fetchingFood = await fetch(`/admin/food-price/${foodId}`);
@@ -124,8 +126,6 @@
                         }
                     }
                 })()
-                const alertBox = document.getElementById('alert')
-                const alertMsg = document.getElementById('alertMsg')
 
                 function userLimitRange(event) {
                     if (parseInt(event.target.value) <= 0) {
