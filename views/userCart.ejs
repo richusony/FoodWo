@@ -251,7 +251,35 @@
                                                     <p class="hidden" id="couponAlert"></p>
                                                 </div>
                                             </div>
-                                            <div class="my-3 px-3 flex justify-center items-center">
+
+                                            <h2 class="text-center font-bold mt-5">Payment Method</h2>
+                                            <div class="flex flex-col md:flex-row justify-between items-center my-5">
+                                                <label for="cod"
+                                                    class="my-2 md:my-0 w-52 md:w-36 text-center py-2 px-3 text-white border border-white cursor-pointer rounded ease-linear hover:text-orange-500 hover:bg-white paymentBtns"
+                                                    onclick="handlePayment('cod')">
+                                                    <input type="radio" name="paymentMethod" id="cod" class="hidden"
+                                                        onchange="checkChange(event)" />
+                                                    COD
+                                                </label>
+
+                                                <label for="walletPay"
+                                                    class="my-2 md:my-0 w-52 md:w-36 text-center py-2 px-3 text-white border border-white cursor-pointer rounded ease-linear hover:text-orange-500 hover:bg-white paymentBtns"
+                                                    onclick="handlePayment('walletPay')">
+                                                    <input type="radio" name="paymentMethod" id="walletPay"
+                                                        class="hidden" onchange="checkChange(event)" />
+                                                    FoodWo Wallet
+                                                </label>
+
+                                                <label for="onlinePayment"
+                                                    class="my-2 md:my-0 w-52 md:w-36 text-center py-2 px-3 text-white border border-white cursor-pointer rounded ease-linear hover:text-orange-500 hover:bg-white paymentBtns"
+                                                    onclick="handlePayment('onlinePayment')">
+                                                    <input type="radio" name="paymentMethod" id="onlinePayment"
+                                                        class="hidden" onchange="checkChange(event)" checked />
+                                                    Online Payment
+                                                </label>
+                                            </div>
+
+                                            <!-- <div class="my-3 px-3 flex justify-center items-center">
                                                 <input type="checkbox" name="" id="cod" onchange="checkChange(event)"
                                                     class="mr-2"><span>Cash on
                                                     Delivery</span>
@@ -265,7 +293,7 @@
                                             <div class="my-3 px-3 flex justify-center items-center">
                                                 <input type="checkbox" checked name="" id="onlinePayment"
                                                     onchange="checkChange(event)" class="mr-2"><span>pay online</span>
-                                            </div>
+                                            </div> -->
                                             <div class="transition delay-150 text-end ease-linear hidden"
                                                 id="walletBalance"><span>Wallet Balance : ₹<span class="font-semibold">
                                                         <% if(wallet){%>
@@ -312,29 +340,58 @@
 
                 const final = document.querySelectorAll(`.finalPrice`);
 
-                function checkChange(event) {
-                    event.preventDefault();
-                    const cod = document.getElementById('cod');
-                    const walletPay = document.getElementById('walletPay');
-                    const onlinePayment = document.getElementById('onlinePayment');
+                function handlePayment(id) {
+                    const radioInput = document.getElementById(id);
                     const walletBalance = document.getElementById('walletBalance');
-
-                    if (cod.checked) {
-                        walletPay.checked = false;
-                        onlinePayment.checked = false;
-                        walletBalance.classList.add('hidden')
-                    } else if (walletPay.checked) {
+                    radioInput.checked = true;
+                    paymentMethods(event);
+                    walletBalance.classList.add('hidden')
+                    if(id=="walletPay"){
                         walletBalance.classList.remove('hidden')
-                        cod.checked = false;
-                        onlinePayment.checked = false;
-                    } else if (onlinePayment.checked) {
-                        walletBalance.classList.add('hidden')
-                        cod.checked = false;
-                        walletPay.checked = false;
-                    } else {
-                        console.log('Not selected any payment methods...')
                     }
                 }
+
+                function paymentMethods(event) {
+                    event.preventDefault();
+                    console.log(event)
+                    // Get all elements with the 'paymentBtns' class
+                    const paymentButtons = document.querySelectorAll('.paymentBtns');
+
+                    // Remove the 'bg-white' and 'text-orange-500' classes from all buttons
+                    paymentButtons.forEach(button => {
+                        button.classList.remove('bg-white', 'text-orange-500');
+                    });
+
+                    // Add the 'bg-white' and 'text-orange-500' classes to the clicked button
+                    event.target.classList.remove('text-white');
+                    event.target.classList.add('bg-white', 'text-orange-500');
+                }
+
+
+                // function checkChange(event) {
+                //     event.preventDefault();
+                //     console.log("clikcedddd : ", event)
+                //     const cod = document.getElementById('cod');
+                //     const walletPay = document.getElementById('walletPay');
+                //     const onlinePayment = document.getElementById('onlinePayment');
+                //     const walletBalance = document.getElementById('walletBalance');
+
+                //     if (cod.checked) {
+                //         walletPay.checked = false;
+                //         onlinePayment.checked = false;
+                //         walletBalance.classList.add('hidden')
+                //     } else if (walletPay.checked) {
+                //         walletBalance.classList.remove('hidden')
+                //         cod.checked = false;
+                //         onlinePayment.checked = false;
+                //     } else if (onlinePayment.checked) {
+                //         walletBalance.classList.add('hidden')
+                //         cod.checked = false;
+                //         walletPay.checked = false;
+                //     } else {
+                //         console.log('Not selected any payment methods...')
+                //     }
+                // }
 
                 function priceUp(event) {
                     const index = event.currentTarget.getAttribute('data-index');
@@ -1104,7 +1161,7 @@
                     } else {
                         let valid = true;
                         try {
-                             check.map(async (item, index) => {
+                            check.map(async (item, index) => {
                                 // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                                 const productId = item._id;
                                 const productName = item.productName;
@@ -1143,7 +1200,7 @@
                                     return false;
                                 }
                             })
-                            console.log('checkinggggg : : ',valid)
+                            console.log('checkinggggg : : ', valid)
                             if (valid == false) {
                                 return
                             } else {
