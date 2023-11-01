@@ -42,7 +42,7 @@ async function sendOTP(phone, otp) {
 // SignUp POST Request
 async function signInUser(req, res) {
     console.log(req.body);
-    const { fullname, email, phone, address, password, baseImage } = req.body;
+    const { fullname, email, phone, address, password } = req.body;
     const userExistsEmail = await userModel.findOne({ email: email });
     const userExistsPhone = await userModel.findOne({ phone: phone });
     if (!fullname || !email || !phone || !address || !password) {
@@ -66,7 +66,6 @@ async function signInUser(req, res) {
                 phone,
                 address,
                 password,
-                baseImage
             };
             console.log(otp)
             // Redirect to OTP verification page
@@ -123,7 +122,7 @@ async function otpVerification(req, res) {
         console.log("also here");
 
         // Create the user account
-        const { fullname, email, phone, address, password, baseImage } = userData;
+        const { fullname, email, phone, address, password } = userData;
         const hashedPassword = bcrypt.hashSync(password, 10);
 
         // Save user data to the database
@@ -131,11 +130,7 @@ async function otpVerification(req, res) {
             fullname,
             email,
             phone,
-            address1: address,
-            address2: null,
-            address3: null,
             password: hashedPassword,
-            image: baseImage,
             blocked: false,
             purchaseCount: 0,
         });

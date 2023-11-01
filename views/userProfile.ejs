@@ -37,7 +37,7 @@
 </head>
 
 <body>
-    <%-include('../views/userNavbar.ejs') %>
+    <%-include('userNavbar') %>
         <section class="px-5 py-2">
             <%  let address2; %>
             <%  let address3; %>
@@ -138,7 +138,7 @@
                                 onclick="logoutUser(event)">Logout <i class="fa-solid fa-power-off"></i></a>
                         </div>
         </section>
-        <%-include('../views/userFooter.ejs') %>
+        <%-include('userFooter') %>
 
             <script>
 

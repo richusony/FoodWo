@@ -22,6 +22,16 @@
 </nav>
 
 <script>
+(()=>{
+ const logged = document.getElementById('logged');
+if (sessionStorage.getItem('username')) {
+        const Name = sessionStorage.getItem('username').split(' ')
+        const id = sessionStorage.getItem('user_id');
+        logged.innerHTML = `<a href='/user/userProfile/${id}' onclick="" class=""><i class="fa-regular fa-user"></i> ${Name[0]}</a>`;
+    } else {
+        logged.innerHTML = `<a href="/user/login"><i class="fa-solid fa-life-ring"></i> Login</a>`
+    }
+})()
     function toCart(){
         window.location.href=`/user/cart/${sessionStorage.getItem('user_id')}`
     }
@@ -34,13 +44,7 @@
 
 // }
 
-    if (sessionStorage.getItem('username')) {
-        const Name = sessionStorage.getItem('username').split(' ')
-        const id = sessionStorage.getItem('user_id');
-        logged.innerHTML = `<a href='/user/userProfile/${id}' onclick="" class=""><i class="fa-regular fa-user"></i> ${Name[0]}</a>`;
-    } else {
-        logged.innerHTML = `<a href="/user/login"><i class="fa-solid fa-life-ring"></i> Login</a>`
-    }
+    
 
 
     function userLogout(event) {
