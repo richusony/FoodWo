@@ -84,7 +84,7 @@ router.route('/addProducts')
 
 // Admin adds Products
 router.route('/addproduct')
-    .post(productUpload.fields([{name:'mainimage',maxCount:5},{name:'relatedimages',maxCount:10}]),addProduct)
+    .post(productUpload.array("images"),addProduct)
 
 // Admin views updateProduct page
 router.route('/productUpdateDetails/:id')

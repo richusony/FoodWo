@@ -120,7 +120,7 @@ async function viewProductsPage(req, res) {
 async function viewAddProductsPage(req, res) {
     const categories = await categoryModel.find({}).sort({ category: 1 })
     const types = await typeModel.find({}).sort({ productType: 1 })
-    res.render('../views/Admin/adminAddProuduct', { data: categories, types: types })
+    res.render('../views/Admin/adminAddProuduct', { data: categories, types: types }) 
 }
 
 async function addProduct(req, res) {
@@ -134,10 +134,10 @@ async function addProduct(req, res) {
         res.status(400).json({err:"Stock must be greater than zero."})
         return ;
     }
-    const relatedImages = req.files.relatedimages.map(img => img.path);
-    const mainImage = req.files.mainimage.map(img => img.path);
-    console.log('mainImage : ', mainImage)
-    console.log('files : ', relatedImages)
+    // const relatedImages = req.files.relatedimages.map(img => img.path);
+    const images = req.files.map(img => img.path);
+    // console.log('mainImage : ', mainImage)
+    console.log('files : ', req.files)
     res.status(200)
     const addingProduct = await productModel.create(
         {
@@ -148,12 +148,16 @@ async function addProduct(req, res) {
             category: category.trim(),
             productSold: 0,
             productInStock: inStock,
-            productMainImage: mainImage[0],
-            productRelatedImages: [...relatedImages],
+            productMainImage: "aldkfadf",
+            productRelatedImages: [],
+            productImages:images,
             purchaseCount: 0,
         });
     console.log('addingProduct :: ', addingProduct)
-    res.redirect('/admin/products')
+    if(addingProduct){
+    res.status(200).json({success:"Product Added."})
+    }else{
+    res.status(400).json({err:"Problem while adding products"})}
 }
 
 async function viewProductUpdatePage(req, res) {
@@ -166,12 +170,12 @@ async function viewProductUpdatePage(req, res) {
 
 //  Admin updates products
 async function updateProducts(req, res) {
-    const { id, productName, description, productPrice, productType, category, sold, inStock, image } = req.body;
-    const mainImage = req.files.mainimage ? req.files.mainimage.map(img => img.path) : [];
-    const relatedImages = req.files.relatedimages ? req.files.relatedimages.map(img => img.path) : [];
+    const { id, productName, description, productPrice, productType, category, sold, inStock } = req.body;
+    const images = req.files? req.files.map(img => img.path) : [];
+    // const relatedImages = req.files.relatedimages ? req.files.relatedimages.map(img => img.path) : [];
     console.log('checkkinng  .. ', relatedImages, mainImage)
 
-    if(productPrice <=0){
+    if(productPrice <=0){ 
         res.status(400).json({err:"Product Price must be greater than zero."})
         return ;
     }
@@ -180,38 +184,16 @@ async function updateProducts(req, res) {
         return ;
     }
 
-    if (mainImage.length == 0 && relatedImages.length == 0) {
-        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock });
+    if (images.length != 0) {
+        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock ,productImages:images });
         if (updating) {
             const updatedDetails = await productModel.find({ _id: id });
             res.redirect(`/admin/productUpdateDetails/${id}`)
         } else {
             res.status(500).json({ err: "Database is having some issues." })
         }
-    } else if (mainImage && relatedImages.length == 0) {
-        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock, productMainImage: mainImage[0] });
-        if (updating) {
-            const updatedDetails = await productModel.find({ _id: id });
-            res.redirect(`/admin/productUpdateDetails/${id}`)
-        } else {
-            res.status(500).json({ err: "Database is having some issues." })
-        }
-    } else if (mainImage.length == 0 && relatedImages) {
-        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock, $push: { productRelatedImages: relatedImages } });
-        if (updating) {
-            const updatedDetails = await productModel.find({ _id: id });
-            res.redirect(`/admin/productUpdateDetails/${id}`)
-        } else {
-            res.status(500).json({ err: "Database is having some issues." })
-        }
-    } else {
-        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock, productMainImage: mainImage[0], $push: { productRelatedImages: relatedImages } });
-        if (updating) {
-            const updatedDetails = await productModel.find({ _id: id });
-            res.redirect(`/admin/productUpdateDetails/${id}`)
-        } else {
-            res.status(500).json({ err: "Database is having some issues." })
-        }
+    }else{
+        res.status(400).json({err:"Product images is required"})
     }
 
 }

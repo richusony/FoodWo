@@ -176,11 +176,11 @@
                                    <% if(food.productInStock <=0){%>
                                     <img onclick="redirectTo('/user/product-details/<%=food._id%>')"
                                     class="w-full h-full cursor-pointer grayscale rounded-2xl object-cover"
-                                    src="/<%= food.productMainImage %>" alt="">
+                                    src="/<%= food.productImages[0] %>" alt="">
                                     <%}else{%>
                                     <img onclick="redirectTo('/user/product-details/<%=food._id%>')"
                                         class="w-full h-full cursor-pointer rounded-2xl object-cover"
-                                        src="/<%= food.productMainImage %>" alt="">
+                                        src="/<%= food.productImages[0] %>" alt="">
                                         <%}%>
                                     </div>
                                 <h3 class="font-bold my-1 text-xl">

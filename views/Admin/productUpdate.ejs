@@ -126,20 +126,9 @@
 
                         <div class="md:w-1/2 bg-orange-500 py-4 px-5 my-5 md:my-0 md:mx-5 rounded-xl text-white">
                             <h1 class="text-xl font-bold my-3">Image Preview</h1>
-
                             <div>
-                                <h3 class="font-semibold my-3">Main Image</h3>
-                                <% if(data){ %>
-                                    <div class="w-48 h-48 rounded" id="mainImageContainer">
-                                        <div class="w-full h-full rounded"><img
-                                                class="w-full h-full rounded object-cover"
-                                                src="/<%=data[0].productMainImage%>" alt="MainImage"></div>
-                                    </div>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold my-3">Related Images</h3>
                                 <div id="relatedImagesPreview" class="flex flex-wrap justify-between items-center">
-                                    <% data[0].productRelatedImages.forEach((img,index)=>{ %>
+                                    <% data[0].productImages.forEach((img,index)=>{ %>
                                         <div id="<%=index%>" class="w-48 h-48 mx-2 my-4">
                                             <div class="text-end ">
                                                 <i id="<%=index%>" data-img="<%=img%>" onclick="removeImage(event)"

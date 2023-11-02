@@ -29,8 +29,9 @@
 
                 <div class="flex flex-col md:flex-row ">
                     <!-- Input Fields -->
-                    <form class="md:w-1/2" action="/admin/addproduct" method="post" enctype="multipart/form-data">
-                        <div class="w-full flex flex-col my-2">
+                    <form id="form" class="md:w-1/2" action="/admin/addproduct" method="post"
+                        enctype="multipart/form-data">
+                        <!-- <div class="w-full flex flex-col my-2">
                             <label for="mainImage">Main Image</label>
                             <input type="file" name="mainimage" id="mainImage" accept="image/*"
                                 class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
@@ -38,6 +39,12 @@
                         <div class="w-full flex flex-col my-2">
                             <label for="relatedImages">Related Images</label>
                             <input type="file" name="relatedimages" id="relatedImages" accept="image/*" maxlength="4"
+                                multiple="multiple"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div> -->
+                        <div class="w-full flex flex-col my-2">
+                            <label for="images">Images</label>
+                            <input type="file" name="images" id="images" accept="image/*" maxlength="4"
                                 multiple="multiple"
                                 class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                         </div>
@@ -99,7 +106,7 @@
                                 class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                         </div>
                         <div class="my-8 text-center">
-                            <button type="submit" onclick="handleProductUpload(event)"
+                            <button type="submit" id="submit" onclick="handleProductUpload(event)"
                                 class="bg-orange-500 rounded-full py-2 px-6 md:px-6 text-white text-xl md:text-xl">Add
                                 to stock</button>
                         </div>
@@ -109,14 +116,7 @@
                     <div class="md:w-1/2 bg-orange-500 py-4 px-5 my-5 md:my-0 md:mx-5 rounded-xl text-white">
                         <h1 class="text-xl font-bold my-3">Image Preview</h1>
                         <div>
-                            <h3 class="font-semibold my-3">Main Image</h3>
-                            <div class="w-48 h-48" id="mainImageContainer">
-
-                            </div>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold my-3">Related Images</h3>
-                            <div id="relatedImagesPreview" class="flex flex-wrap justify-between items-center">
+                            <div class="flex flex-wrap" id="imageContainer">
 
                             </div>
                         </div>
@@ -130,8 +130,11 @@
 
             <script>
 
+                const images = document.getElementById('images')
+                let imagePreview = document.getElementById('imageContainer');
 
                 async function handleProductUpload(event) {
+                    event.preventDefault();
                     //User Details
                     const productName = document.getElementById('productName').value;
                     const description = document.getElementById('description').value;
@@ -141,10 +144,11 @@
                     // const sold = document.getElementById('sold').value;
                     const inStock = document.getElementById('inStock').value;
                     const toast = document.getElementById('toast');
+                    const submit = document.getElementById('submit');
+                    const form = document.getElementById('form');
 
                     const mainImage = document.getElementById('mainImage')
                     const relatedImages = document.getElementById('relatedImages')
-
 
 
 
@@ -158,10 +162,11 @@
                             toast.classList.add("hidden");
                             toast.classList.add("translate-y-96");
                         }, 3000)
-                    } else if (mainImage.files.length < 1) {
+                    }
+                    else if (images.files.length < 1) {
                         event.preventDefault();
                         window.scrollTo(0, 0)
-                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Product Main Image is required.</span>`;
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Product Images are required.</span>`;
                         toast.classList.remove("hidden");
                         toast.classList.remove("translate-y-96");
                         setTimeout(() => {
@@ -169,17 +174,18 @@
                             toast.classList.add("translate-y-96");
                         }, 3000)
                     }
-                    else if (relatedImages.files.length < 1) {
+                    else if (images.files.length > 5) {
                         event.preventDefault();
                         window.scrollTo(0, 0)
-                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Product Related Images are required.</span>`;
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i>Maximum 5 Product Images are allowed.</span>`;
                         toast.classList.remove("hidden");
                         toast.classList.remove("translate-y-96");
                         setTimeout(() => {
                             toast.classList.add("hidden");
                             toast.classList.add("translate-y-96");
                         }, 3000)
-                    } else if (parseInt(productPrice) <= 0) {
+                    }
+                    else if (parseInt(productPrice) <= 0) {
                         event.preventDefault();
                         window.scrollTo(0, 0)
                         toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Product price must be greater than zero.</span>`;
@@ -203,7 +209,7 @@
                         return;
                     }
                     else {
-                        const formData = {
+                        const formDatas = {
                             productName: productName,
                             description: description,
                             productPrice: productPrice,
@@ -211,10 +217,67 @@
                             category: category,
                             sold: 0,
                             inStock: inStock,
+                            images: images.files
                         }
-                        console.log('formdata :: ', formData)
+                        const formData = new FormData(form)
+
+
+                        for (let item of formData) {
+                            console.log(item[0], " ", item[1])
+                        }
+
+                        const res = await fetch('/admin/addproduct', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        if (res.status == 400) {
+                            const data = await res.json();
+                            window.scrollTo(0, 0)
+                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.err}</span>`;
+                            toast.classList.remove("hidden");
+                            toast.classList.remove("translate-y-96");
+                            setTimeout(() => {
+                                toast.classList.add("hidden");
+                                toast.classList.add("translate-y-96");
+                            }, 3000)
+                            return;
+                        }
+                        if (res.ok) {
+                            const data = await res.json();
+                            window.scrollTo(0, 0)
+                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-check text-xl"></i> ${data.success}</span>`;
+                            toast.classList.remove("hidden");
+                            toast.classList.remove("translate-y-96");
+                            setTimeout(() => {
+                                toast.classList.add("hidden");
+                                toast.classList.add("translate-y-96");
+                                window.location.href="/admin/products"
+                            }, 3000)
+                        }
                     }
                 }
+
+                images.addEventListener('change', () => {
+
+
+                    imagePreview.innerHTML = "";
+                    console.log(images.files)
+                    if (images.files) {
+
+                        let index = 1;
+                        for (const file of images.files) {
+                            const imageContainer = document.createElement('div');
+
+                            imageContainer.classList.add('w-40', 'h-40', 'mx-2', 'my-4')
+                            imageContainer.id = index;
+                            imageContainer.innerHTML = `
+                                        <div class="text-end"><span class="text-white"><i id="${index}" onclick="removeImage(event)" class="cursor-pointer fa-solid fa-close"></i></span></div>
+                                        <img class="w-full h-full rounded object-cover" src=${URL.createObjectURL(file)} alt="productImages">`;
+                            imagePreview.appendChild(imageContainer);
+                            index++;
+                        }
+                    }
+                })
 
                 // Get references to HTML elements
                 const mainImageInput = document.querySelector('input[name="mainimage"]');
@@ -231,60 +294,73 @@
 
                     if (imageContainer) {
                         // Remove the image container from the relatedImagesPreview
-                        relatedImagesPreview.removeChild(imageContainer);
+                        imagePreview.removeChild(imageContainer);
 
                         // Create a new FileList without the removed file
                         const newFilesList = new DataTransfer();
-                        for (let i = 0; i < relatedImagesInput.files.length; i++) {
+                        for (let i = 0; i < images.files.length; i++) {
                             if (i !== parseInt(imageContainerId) - 1) {
-                                newFilesList.items.add(relatedImagesInput.files[i]);
+                                newFilesList.items.add(images.files[i]);
                             }
                         }
 
                         // Update the input element with the new FileList
-                        relatedImagesInput.files = newFilesList.files;
-                        console.log('new one : ', relatedImagesInput.files);
+                        images.files = newFilesList.files;
+                        imagePreview.innerHTML = "";
+                        let index = 1;
+                        for (const file of images.files) {
+                            const imageContainer = document.createElement('div');
+
+                            imageContainer.classList.add('w-40', 'h-40', 'mx-2', 'my-4')
+                            imageContainer.id = index;
+                            imageContainer.innerHTML = `
+                                        <div class="text-end"><span class="text-white"><i id="${index}" onclick="removeImage(event)" class="cursor-pointer fa-solid fa-close"></i></span></div>
+                                        <img class="w-full h-full rounded object-cover" src=${URL.createObjectURL(file)} alt="productImages">`;
+                            imagePreview.appendChild(imageContainer);
+                            index++;
+                        }
+                        console.log('new one : ', images.files);
                     }
                 }
 
 
 
-                // Add event listeners to the file input fields
-                mainImageInput.addEventListener('change', () => {
-                    if (mainImageInput.files) {
-                        const mainImageContainer = document.getElementById('mainImageContainer');
-                        mainImageContainer.innerHTML = `
-<img id="imgElement" class="w-full h-full object-cover rounded" src="${URL.createObjectURL(mainImageInput.files[0])}" alt="mainImage">`;
-                    }
-                });
+                //                 // Add event listeners to the file input fields
+                //                 mainImageInput.addEventListener('change', () => {
+                //                     if (mainImageInput.files) {
+                //                         const mainImageContainer = document.getElementById('mainImageContainer');
+                //                         mainImageContainer.innerHTML = `
+                // <img id="imgElement" class="w-full h-full object-cover rounded" src="${URL.createObjectURL(mainImageInput.files[0])}" alt="mainImage">`;
+                //                     }
+                //                 });
 
-                relatedImagesInput.addEventListener('change', () => {
-                    // Clear previous previews
-                    // relatedImagesPreview.innerHTML = '';
-                    console.log(relatedImagesInput.files);
-                    // Display previews for related images
-                    if (relatedImagesInput.files.length > 4) {
-                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i>Only 4 images are allowed for related Images.</span>`;
-                        toast.classList.remove("hidden");
-                        toast.classList.remove("translate-y-96");
-                        setTimeout(() => {
-                            toast.classList.add("hidden");
-                            toast.classList.add("translate-y-96");
-                        }, 3000)
-                        return;
-                    }
-                    let index = 1;
-                    for (const file of relatedImagesInput.files) {
-                        const imageContainer = document.createElement('div');
-                        imageContainer.classList.add('w-32', 'h-32', 'mx-2', 'my-4')
-                        imageContainer.id = index;
-                        imageContainer.innerHTML = `
-                        <div class="text-end"><span class="text-white"><i id=${index} onclick="removeImage(event)" class="cursor-pointer fa-solid fa-close"></i></span></div>
-                        <img class="w-full h-full rounded object-cover" src=${URL.createObjectURL(file)} alt="relatedImages">`;
-                        relatedImagesPreview.appendChild(imageContainer);
-                        index++;
-                    }
-                });
+                //                 relatedImagesInput.addEventListener('change', () => {
+                //                     // Clear previous previews
+                //                     // relatedImagesPreview.innerHTML = '';
+                //                     console.log(relatedImagesInput.files);
+                //                     // Display previews for related images
+                //                     if (relatedImagesInput.files.length > 4) {
+                //                         toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i>Only 4 images are allowed for related Images.</span>`;
+                //                         toast.classList.remove("hidden");
+                //                         toast.classList.remove("translate-y-96");
+                //                         setTimeout(() => {
+                //                             toast.classList.add("hidden");
+                //                             toast.classList.add("translate-y-96");
+                //                         }, 3000)
+                //                         return;
+                //                     }
+                //                     let index = 1;
+                //                     for (const file of relatedImagesInput.files) {
+                //                         const imageContainer = document.createElement('div');
+                //                         imageContainer.classList.add('w-32', 'h-32', 'mx-2', 'my-4')
+                //                         imageContainer.id = index;
+                //                         imageContainer.innerHTML = `
+                //                         <div class="text-end"><span class="text-white"><i id=${index} onclick="removeImage(event)" class="cursor-pointer fa-solid fa-close"></i></span></div>
+                //                         <img class="w-full h-full rounded object-cover" src=${URL.createObjectURL(file)} alt="relatedImages">`;
+                //                         relatedImagesPreview.appendChild(imageContainer);
+                //                         index++;
+                //                     }
+                //                 });
 
             </script>
 </body>
