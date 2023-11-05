@@ -83,7 +83,7 @@
                                                 class="bg-[#f0efef] md:px-5 py-3 my-2 flex justify-between items-center rounded shadow-md">
                                                 <div class=" w-20 h-16 object-cover rounded mx-2 md:mr-3 ">
                                                     <img class="w-full h-full rounded object-cover"
-                                                        src="/<%= cart.productMainImage%>" alt="">
+                                                        src="/<%= cart.productImages[0]%>" alt="">
                                                 </div>
 
                                                 <div class=" mr-2 md:mr-3 w-40 overflow-hidden shadow-inner ">
@@ -1017,7 +1017,7 @@
                             // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                             const productId = item._id;
                             const productName = item.productName;
-                            const image = item.productMainImage[0];
+                            const image = item.productImages[0];
                             const productPrice = item.productPrice;
                             const productQty = parseInt(qty[index].innerText);
                             console.log('productName : ', productName)

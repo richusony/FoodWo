@@ -205,8 +205,7 @@ async function viewCartPage(req, res) {
         cartItems = false
     } else {
         cartItems = cartItems.map((item) => {
-            item.productMainImage[0] = item.productMainImage[0].replace(/\\/g, '//').trim();
-            item.productRelatedImages = item.productRelatedImages.map((img) => img.replace(/\\/g, '//').trim());
+            item.productImages = item.productImages[0].replace(/\\/g, '//').trim();
             item.category.trim()
             return item;
         });

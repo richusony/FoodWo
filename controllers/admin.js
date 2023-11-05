@@ -173,7 +173,7 @@ async function updateProducts(req, res) {
     const { id, productName, description, productPrice, productType, category, sold, inStock } = req.body;
     const images = req.files? req.files.map(img => img.path) : [];
     // const relatedImages = req.files.relatedimages ? req.files.relatedimages.map(img => img.path) : [];
-    console.log('checkkinng  .. ', relatedImages, mainImage)
+    console.log('checkkinng  .. ', images)
 
     if(productPrice <=0){ 
         res.status(400).json({err:"Product Price must be greater than zero."})
@@ -188,7 +188,7 @@ async function updateProducts(req, res) {
         const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock ,productImages:images });
         if (updating) {
             const updatedDetails = await productModel.find({ _id: id });
-            res.redirect(`/admin/productUpdateDetails/${id}`)
+            res.status(200).json({success:"Product updated"})
         } else {
             res.status(500).json({ err: "Database is having some issues." })
         }
@@ -364,11 +364,11 @@ async function deleteType(req, res) {
 
 async function removeImage(req, res) { 
     const { foodid, foodimg } = req.body;
-    const removeImage = await productModel.updateOne({ _id: foodid }, { $pull: { productRelatedImages: foodimg } })
+    const removeImage = await productModel.updateOne({ _id: foodid }, { $pull: { productImages: foodimg } })
     if (removeImage) {
         res.status(200).json({ success: 'image removed.' })
     } else {
-        res.status(500).json({ err: "couldn't remove image." })
+        res.status(400).json({ err: "couldn't remove image." })
     }
 }
 

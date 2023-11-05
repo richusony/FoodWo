@@ -239,9 +239,9 @@
                             <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
                                 <div class="w-full h-36 rounded-2xl">
                                  <% if(food.productInStock <=0){%>
-                            <img onclick="redirectTo('/user/product-details/<%=food._id%>')" class="cursor-pointer grayscale w-full h-full rounded-2xl object-cover" src="/<%= food.productMainImage %>" alt="">
+                            <img onclick="redirectTo('/user/product-details/<%=food._id%>')" class="cursor-pointer grayscale w-full h-full rounded-2xl object-cover" src="/<%= food.productImages[0] %>" alt="">
                                 <%}else{%>
-                            <img onclick="redirectTo('/user/product-details/<%=food._id%>')" class="cursor-pointer w-full h-full rounded-2xl object-cover" src="/<%= food.productMainImage %>" alt="">
+                            <img onclick="redirectTo('/user/product-details/<%=food._id%>')" class="cursor-pointer w-full h-full rounded-2xl object-cover" src="/<%= food.productImages[0] %>" alt="">
                                 <%}%>
                             </div>
                                 <h3 class="font-bold my-1 text-xl">

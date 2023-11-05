@@ -92,7 +92,7 @@ router.route('/productUpdateDetails/:id')
 
 // Admin update products
 router.route('/update-product')
-    .post(productUpload.fields([{name:'mainimage',maxCount:5},{name:'relatedimages',maxCount:10}]),updateProducts)
+    .post(productUpload.array("images"),updateProducts)
 
 // Admin deletes products
 router.route('/product-delete/:id')

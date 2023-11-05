@@ -93,17 +93,17 @@
                         <div class="img-zoom-container transition delay-150 w-full rounded-xl h-80 md:w-96 md:h-96 mx-auto overflow-hidden">
                             <% if(food.productInStock<=0){%>
                             <img class="transition delay-150 w-full h-full grayscale rounded-xl object-cover  ease-linear " id="mainImage"
-                                src="/<%=food.productMainImage%>" alt="" >
+                                src="/<%=food.productImages[0]%>" alt="" >
                                 <%}else{%>
                             <img class="transition delay-150 w-full h-full rounded-xl object-cover  ease-linear " id="mainImage"
-                                src="/<%=food.productMainImage%>" alt="">
+                                src="/<%=food.productImages[0]%>" alt="">
                                 <%}%>
                             </div>
                         
 
                         <!-- Related Images -->
                         <div class="flex md:w-96 mx-auto justify-between my-2">
-                            <% food.productRelatedImages.forEach((img)=>{ %>
+                            <% food.productImages.forEach((img)=>{ %>
                                 <div class="mx-1 rounded w-20 h-20">
                                     <% if(food.productInStock<=0){%>
                                         <img data-foodpath="/<%=img%>"
