@@ -31,17 +31,13 @@
 
                     <div class="flex flex-col md:flex-row ">
                         <!-- Input Fields -->
-                        <form class="md:w-1/2" action="/admin/update-product" method="post"
+                        <form id="form" class="md:w-1/2" action="/admin/update-product" method="post"
                             enctype="multipart/form-data">
+
                             <div class="w-full flex flex-col my-2">
-                                <label for="mainImage">Main Image</label>
-                                <input type="file" name="mainimage" id="mainImage" accept="image/*"
-                                    class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
-                            </div>
-                            <div class="w-full flex flex-col my-2">
-                                <label for="relatedImages">Related Images</label>
-                                <input type="file" name="relatedimages" id="relatedImages" accept="image/*"
-                                    maxlength="4" multiple="multiple"
+                                <label for="images">Product Images</label>
+                                <input type="file" name="images" id="images" accept="image/*" maxlength="4"
+                                    multiple="multiple"
                                     class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                             </div>
                             <% if(data){ %>
@@ -140,7 +136,6 @@
                                         <% finalIndex=index }) %>
                                 </div>
                             </div>
-                            <% } %>
                         </div>
                     </div>
                 </div>
@@ -151,12 +146,14 @@
             <%- include('adminFooter') %>
 
                 <script>
-
+                    const images = document.getElementById('images')
+                    const form = document.getElementById('form');
+                    let imagePreview = document.getElementById('imageContainer');
                     console.log('final index : ', '<%=finalIndex%>')
 
                     const toast = document.getElementById('toast');
                     async function handleProductUpload(event) {
-
+                        event.preventDefault();
                         //User Details
                         const productName = document.getElementById('productName').value;
                         const description = document.getElementById('description').value;
@@ -179,32 +176,53 @@
                                 toast.classList.add("translate-y-96");
                             }, 3000)
                             return;
+                        } else if (images.files.length < 1) {
+                            event.preventDefault();
+                            window.scrollTo(0, 0)
+                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Product Images are required.</span>`;
+                            toast.classList.remove("hidden");
+                            toast.classList.remove("translate-y-96");
+                            setTimeout(() => {
+                                toast.classList.add("hidden");
+                                toast.classList.add("translate-y-96");
+                            }, 3000)
+                        }
+                        else if (images.files.length > 5) {
+                            event.preventDefault();
+                            window.scrollTo(0, 0)
+                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i>Maximum 5 Product Images are allowed.</span>`;
+                            toast.classList.remove("hidden");
+                            toast.classList.remove("translate-y-96");
+                            setTimeout(() => {
+                                toast.classList.add("hidden");
+                                toast.classList.add("translate-y-96");
+                            }, 3000)
                         }
                         else if (parseInt(productPrice) <= 0) {
-                        event.preventDefault();
-                        window.scrollTo(0, 0)
-                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Product price must be greater than zero.</span>`;
-                        toast.classList.remove("hidden");
-                        toast.classList.remove("translate-y-96");
-                        setTimeout(() => {
-                            toast.classList.add("hidden");
-                            toast.classList.add("translate-y-96");
-                        }, 3000)
-                        return;
-                    }else if (parseInt(inStock) <= 0) {
-                        event.preventDefault();
-                        window.scrollTo(0, 0)
-                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Stock must be greater than zero.</span>`;
-                        toast.classList.remove("hidden");
-                        toast.classList.remove("translate-y-96");
-                        setTimeout(() => {
-                            toast.classList.add("hidden");
-                            toast.classList.add("translate-y-96");
-                        }, 3000)
-                        return;
-                    }
+                            event.preventDefault();
+                            window.scrollTo(0, 0)
+                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Product price must be greater than zero.</span>`;
+                            toast.classList.remove("hidden");
+                            toast.classList.remove("translate-y-96");
+                            setTimeout(() => {
+                                toast.classList.add("hidden");
+                                toast.classList.add("translate-y-96");
+                            }, 3000)
+                            return;
+                        } else if (parseInt(inStock) <= 0) {
+                            event.preventDefault();
+                            window.scrollTo(0, 0)
+                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Stock must be greater than zero.</span>`;
+                            toast.classList.remove("hidden");
+                            toast.classList.remove("translate-y-96");
+                            setTimeout(() => {
+                                toast.classList.add("hidden");
+                                toast.classList.add("translate-y-96");
+                            }, 3000)
+                            return;
+                        }
                         else {
-                            const formData = {
+                            const formDatas = {
                                 productName: productName,
                                 description: description,
                                 productPrice: productPrice,
@@ -213,29 +231,36 @@
                                 sold: 0,
                                 inStock: inStock,
                             }
+                            const formData = new FormData(form)
+
+
+                            for (let item of formData) {
+                                console.log(item[0], " ", item[1])
+                            }
+
                             console.log('formdata :: ', formData)
                         }
                     }
 
                     // Get references to HTML elements
-                    const mainImageInput = document.querySelector('input[name="mainimage"]');
-                    const relatedImagesInput = document.querySelector('input[name="relatedimages"]');
-                    const mainImagePreview = document.getElementById('mainImagePreview');
-                    const relatedImagesPreview = document.getElementById('relatedImagesPreview');
+                    // const mainImageInput = document.querySelector('input[name="mainimage"]');
+                    // const relatedImagesInput = document.querySelector('input[name="relatedimages"]');
+                    // const mainImagePreview = document.getElementById('mainImagePreview');
+                    // const relatedImagesPreview = document.getElementById('relatedImagesPreview');
 
-                    const foodId = '<%=data[0]._id%>'
+                    // const foodId = '<%=data[0]._id%>'
 
-                    // Create an array to store the image file names
-                    let imageFileNames = '<%= data[0].productRelatedImages.map(img => img).join(", ") %>';
-                    imageFileNames = imageFileNames.split(',')
-                    console.log(imageFileNames)
+                    // // Create an array to store the image file names
+                    // let imageFileNames = ;
+                    // imageFileNames = imageFileNames.split(',')
+                    // console.log(imageFileNames)
 
-                    // Create a DataTransfer object and add each file name as a new File object
-                    const dbRImages = new DataTransfer();
-                    imageFileNames.forEach(fileName => {
-                        const file = new File([fileName], fileName);
-                        dbRImages.items.add(file);
-                    });
+                    // // Create a DataTransfer object and add each file name as a new File object
+                    // const dbRImages = new DataTransfer();
+                    // imageFileNames.forEach(fileName => {
+                    //     const file = new File([fileName], fileName);
+                    //     dbRImages.items.add(file);
+                    // });
 
                     // // Set the files property of the relatedImagesInput element to the DataTransfer object
                     // relatedImagesInput.files = dbRImages.files;
