@@ -161,7 +161,9 @@
                         const category = document.getElementById('category').value;
                         // const sold = document.getElementById('sold').value;
                         const inStock = document.getElementById('inStock').value;
-
+                        const imagesCount = parseInt('<%=data[0].productImages.length%>');
+                        console.log("Count ",imagesCount);
+                        return;
                         console.log(productName, description, productPrice, productType, category, inStock)
 
                         if (productName == "" || description == "" || productPrice == "" || productType == "" || category == "" || inStock == "") {
@@ -175,7 +177,7 @@
                                 toast.classList.add("translate-y-96");
                             }, 3000)
                             return;
-                        }
+                        }else if(images.files.length <= 0 && )
                         else if (images.files.length > 5) {
                             event.preventDefault();
                             window.scrollTo(0, 0)

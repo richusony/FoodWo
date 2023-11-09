@@ -120,19 +120,19 @@ async function viewProductsPage(req, res) {
 async function viewAddProductsPage(req, res) {
     const categories = await categoryModel.find({}).sort({ category: 1 })
     const types = await typeModel.find({}).sort({ productType: 1 })
-    res.render('../views/Admin/adminAddProuduct', { data: categories, types: types }) 
+    res.render('../views/Admin/adminAddProuduct', { data: categories, types: types })
 }
 
 async function addProduct(req, res) {
     const { productName, description, productPrice, productType, category, sold, inStock, baseImage } = req.body;
     console.log(req.body)
-    if(productPrice <=0){
-        res.status(400).json({err:"Product Price must be greater than zero."})
-        return ;
+    if (productPrice <= 0) {
+        res.status(400).json({ err: "Product Price must be greater than zero." })
+        return;
     }
-    if(inStock <=0){
-        res.status(400).json({err:"Stock must be greater than zero."})
-        return ;
+    if (inStock <= 0) {
+        res.status(400).json({ err: "Stock must be greater than zero." })
+        return;
     }
     // const relatedImages = req.files.relatedimages.map(img => img.path);
     const images = req.files.map(img => img.path);
@@ -150,14 +150,15 @@ async function addProduct(req, res) {
             productInStock: inStock,
             productMainImage: "aldkfadf",
             productRelatedImages: [],
-            productImages:images,
+            productImages: images,
             purchaseCount: 0,
         });
     console.log('addingProduct :: ', addingProduct)
-    if(addingProduct){
-    res.status(200).json({success:"Product Added."})
-    }else{
-    res.status(400).json({err:"Problem while adding products"})}
+    if (addingProduct) {
+        res.status(200).json({ success: "Product Added." })
+    } else {
+        res.status(400).json({ err: "Problem while adding products" })
+    }
 }
 
 async function viewProductUpdatePage(req, res) {
@@ -171,40 +172,40 @@ async function viewProductUpdatePage(req, res) {
 //  Admin updates products
 async function updateProducts(req, res) {
     const { id, productName, description, productPrice, productType, category, sold, inStock } = req.body;
-    const images = req.files? req.files.map(img => img.path) : [];
+    const images = req.files ? req.files.map(img => img.path) : [];
     // const relatedImages = req.files.relatedimages ? req.files.relatedimages.map(img => img.path) : [];
     console.log('checkkinng  .. ', images)
 
-    if(productPrice <=0){ 
-        res.status(400).json({err:"Product Price must be greater than zero."})
-        return ;
+    if (productPrice <= 0) {
+        res.status(400).json({ err: "Product Price must be greater than zero." })
+        return;
     }
-    if(inStock <=0){
-        res.status(400).json({err:"Stock must be greater than zero."})
-        return ;
+    if (inStock <= 0) {
+        res.status(400).json({ err: "Stock must be greater than zero." })
+        return;
     }
 
     if (images.length != 0) {
-        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock ,productImages:images });
+        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock, $push: { productImages: { $each: images, $slice: -5 } } }, { new: true });
         if (updating) {
             const updatedDetails = await productModel.find({ _id: id });
-            res.status(200).json({success:"Product updated"})
+            res.status(200).json({ success: "Product updated" })
         } else {
             res.status(500).json({ err: "Database is having some issues." })
         }
-    }else{
-        res.status(400).json({err:"Product images is required"})
+    } else {
+        res.status(400).json({ err: "Product images is required" })
     }
 
 }
- 
+
 async function deleteProduct(req, res) {
-    const id = req.params.id;  
+    const id = req.params.id;
     const deleting = await productModel.deleteOne({ _id: id });
     if (deleting) {
-        res.status(200).json({deleted:true}) 
+        res.status(200).json({ deleted: true })
     } else {
-        res.status(500).json({deleted:false, err: "Database having some issues.." })
+        res.status(500).json({ deleted: false, err: "Database having some issues.." })
     }
 }
 
@@ -254,12 +255,12 @@ async function updateCategory(req, res) {
     const id = req.params.id;
     const { category } = req.body;
     const upperCategory = category.toUpperCase();
-    const exist = await categoryModel.findOne({category:upperCategory});
-    if(exist){
-        if(exist._id === id){
+    const exist = await categoryModel.findOne({ category: upperCategory });
+    if (exist) {
+        if (exist._id === id) {
             console.log("got it :: ", id, category);
             const updating = await categoryModel.updateOne({ _id: id }, { category: upperCategory.trim() });
-        
+
             if (updating) {
                 const updatedDetails = await categoryModel.find({ _id: id });
                 if (updatedDetails) {
@@ -271,13 +272,13 @@ async function updateCategory(req, res) {
             } else {
                 res.status(500).json({ err: "Database is having some issues" })
             }
-        }else{
+        } else {
             res.status(401).json({ err: 'Category already existed.' })
         }
-    }else{
+    } else {
         console.log("got it :: ", id, category);
         const updating = await categoryModel.updateOne({ _id: id }, { category: upperCategory.trim() });
-    
+
         if (updating) {
             const updatedDetails = await categoryModel.find({ _id: id });
             if (updatedDetails) {
@@ -362,7 +363,7 @@ async function deleteType(req, res) {
     }
 }
 
-async function removeImage(req, res) { 
+async function removeImage(req, res) {
     const { foodid, foodimg } = req.body;
     const removeImage = await productModel.updateOne({ _id: foodid }, { $pull: { productImages: foodimg } })
     if (removeImage) {
@@ -373,14 +374,14 @@ async function removeImage(req, res) {
 }
 
 
-async function updateOrderStatus(req,res){
+async function updateOrderStatus(req, res) {
     const orderId = req.params.oid;
     const orderStatus = req.body.status;
 
-    if(orderId&&orderStatus){
-        const updating = await orderModel.updateOne({orderId:orderId},{orderStatus:orderStatus})
-        if(updating){
-            res.status(200).json({updated:true})
+    if (orderId && orderStatus) {
+        const updating = await orderModel.updateOne({ orderId: orderId }, { orderStatus: orderStatus })
+        if (updating) {
+            res.status(200).json({ updated: true })
         }
     }
 }
