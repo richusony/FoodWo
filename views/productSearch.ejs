@@ -337,7 +337,7 @@
                 </div>
 
                 <div class="relative flex justify-center ml-4 md:mx-2">
-                    <div class="w-28 h-28"><img onclick="redirectTo('/user/product-details/${item._id}')" class="w-full h-full ${item.productInStock <= 0 ? 'grayscale' : ''} object-cover rounded cursor-pointer" src="/${item.productMainImage}" alt=""></div>
+                    <div class="w-28 h-28"><img onclick="redirectTo('/user/product-details/${item._id}')" class="w-full h-full ${item.productInStock <= 0 ? 'grayscale' : ''} object-cover rounded cursor-pointer" src="/${item.productImages[0]}" alt=""></div>
                     <button onclick="addToCart(event)" data-foodid="${item._id}" class="absolute -bottom-2 px-5 py-2 bg-orange-500 rounded text-white"><i data-foodid="${item._id}" class="fa-solid text-xl fa-cart-shopping"></i></button>
                 </div>
             </div>
