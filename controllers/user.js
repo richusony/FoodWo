@@ -739,10 +739,17 @@ async function deleteAccount(req, res) {
     const deleting = await userModel.deleteOne({ _id: userId });
     if (deleting) {
         const deleteAddress = await addressModel.deleteOne({ userId: userId })
+        const deleteCart = await cartModel.deleteOne({ userId: userId })
+        const deleteWishlist = await wishListModel.deleteOne({ userId: userId })
+        const deleteWallet = await walletModel.deleteOne({ userId: userId })
         res.status(200).json({ deleted: true });
     } else {
         res.status(400).json({ deleted: false })
     }
+}
+
+function viewInvoice (req,res){
+    res.render('../public/html/invoice.ejs')
 }
 
 module.exports = {
@@ -773,5 +780,6 @@ module.exports = {
     updateUserAddress,
     addNewAddress,
     checkingQuantity,
-    deleteAccount
+    deleteAccount,
+    viewInvoice
 }
