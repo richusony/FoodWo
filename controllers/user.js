@@ -459,14 +459,14 @@ async function updateUserAddress(req, res) {
     }
 }
 
-async function checkingQuantity(req,res){
-    const {productId,productQty} = req.body;
-    console.log('working.... :: ',productId,productQty)
-    const product = await productModel.findOne({_id:productId});
+async function checkingQuantity(req, res) {
+    const { productId, productQty } = req.body;
+    console.log('working.... :: ', productId, productQty)
+    const product = await productModel.findOne({ _id: productId });
 
-    if(product){
-        if(parseInt(productQty)>parseInt(product.productInStock)){
-           return res.status(400).json({err:`only ${product.productInStock} left for ${product.productName}`})
+    if (product) {
+        if (parseInt(productQty) > parseInt(product.productInStock)) {
+            return res.status(400).json({ err: `only ${product.productInStock} left for ${product.productName}` })
         }
     }
 }
@@ -734,6 +734,17 @@ async function cancelOrder(req, res) {
     }
 }
 
+async function deleteAccount(req, res) {
+    const userId = req.params.uid;
+    const deleting = await userModel.deleteOne({ _id: userId });
+    if (deleting) {
+        const deleteAddress = await addressModel.deleteOne({ userId: userId })
+        res.status(200).json({ deleted: true });
+    } else {
+        res.status(400).json({ deleted: false })
+    }
+}
+
 module.exports = {
     signInUser,
     viewSignInPage,
@@ -761,5 +772,6 @@ module.exports = {
     cancelOrder,
     updateUserAddress,
     addNewAddress,
-    checkingQuantity
+    checkingQuantity,
+    deleteAccount
 }
