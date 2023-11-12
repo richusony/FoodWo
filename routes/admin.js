@@ -156,5 +156,7 @@ router.route('/food-price/:fid')
 router.route('/sales-report')
 .get(viewSaleReportPage)
 
+router.route('/')
+
 
 module.exports = router;

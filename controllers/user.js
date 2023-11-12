@@ -192,7 +192,7 @@ async function viewCartPage(req, res) {
                     foodId: 1,
                     quantity: 1,
                 }
-            } 
+            }
         ]
     );
 
@@ -645,7 +645,7 @@ async function updateStock(req, res) {
 
 
             if (result) {
-                const createInvoice = await invoiceModel.create({userId:user_id,orderId:orderId,productId:productId,productName:productName,productQty:productQty,shippingAddress:address,amount:afterDiscountPrice,paymentMethod:paymentMethod})
+                const createInvoice = await invoiceModel.create({ userId: user_id, orderId: orderId, productId: productId, productName: productName, productQty: productQty, shippingAddress: address, amount: afterDiscountPrice, paymentMethod: paymentMethod })
                 res.status(200).json({ orderid: orderId, address: address });
 
             } else {
@@ -690,7 +690,7 @@ async function viewProductDetailsPage(req, res) {
 
 async function viewMyOrderPage(req, res) {
     const user_id = req.params.id;
-    const allOrders = await orderModel.find({ userId: user_id })
+    const allOrders = await orderModel.find({ userId: user_id }).sort({ createdAt: -1 })
     res.render('../views/userOrders.ejs', { orders: allOrders })
 }
 
