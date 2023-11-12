@@ -93,6 +93,11 @@
                             <button class="bg-white hover:bg-slate-100 py-2 px-4 text-orange-500 text-center rounded"
                                 data-oid="<%=order.orderId%>" onclick="cancelOrder(event)">Cancel</button>
                             <%}%>
+
+                                <button
+                                    class="mx-3 border border-white hover:bg-slate-100 py-2 px-4 text-white hover:text-orange-500 text-center rounded"
+                                    data-oid="<%=order.orderId%>" onclick="downloadInvoice(event)"><i
+                                        class="fa-solid fa-download"></i> Invoice</button>
                 </div>
             </div>
         </section>
@@ -116,47 +121,69 @@
 
                         if (response.status == 400) {
                             const data = await response.json();
-                           if(!data.updated){
-                            alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Cancellation is not working at the moment.`;
-                            alertBox.classList.remove('-translate-x-full')
-                            alertBox.classList.remove('opacity-0')
-                            window.scrollTo(0, 0)
-                            setTimeout(() => {
-                                alertBox.classList.add('-translate-x-full')
-                                alertBox.classList.add('opacity-0')
-                            }, 3000)
-                            return;
-                           }
-                           if(!data.refund){
-                            alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Couldn't refund the amount.Please contact customer care.`;
-                            alertBox.classList.remove('-translate-x-full')
-                            alertBox.classList.remove('opacity-0')
-                            window.scrollTo(0, 0)
-                            setTimeout(() => {
-                                alertBox.classList.add('-translate-x-full')
-                                alertBox.classList.add('opacity-0')
-                            }, 3000)
-                            return;
-                           }
+                            if (!data.updated) {
+                                alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Cancellation is not working at the moment.`;
+                                alertBox.classList.remove('-translate-x-full')
+                                alertBox.classList.remove('opacity-0')
+                                window.scrollTo(0, 0)
+                                setTimeout(() => {
+                                    alertBox.classList.add('-translate-x-full')
+                                    alertBox.classList.add('opacity-0')
+                                }, 3000)
+                                return;
+                            }
+                            if (!data.refund) {
+                                alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Couldn't refund the amount.Please contact customer care.`;
+                                alertBox.classList.remove('-translate-x-full')
+                                alertBox.classList.remove('opacity-0')
+                                window.scrollTo(0, 0)
+                                setTimeout(() => {
+                                    alertBox.classList.add('-translate-x-full')
+                                    alertBox.classList.add('opacity-0')
+                                }, 3000)
+                                return;
+                            }
                         }
                         if (response.ok) {
                             const data = await response.json();
-                            if(data.refund){
+                            if (data.refund) {
                                 alertMsg.innerHTML = `<i class="fa-solid fa-check text-xl"></i> Amount has been refunded to your account.`;
-                            alertBox.classList.remove('-translate-x-full')
-                            alertBox.classList.remove('opacity-0')
-                            window.scrollTo(0, 0)
-                            setTimeout(() => {
-                                alertBox.classList.add('-translate-x-full')
-                                alertBox.classList.add('opacity-0')
-                                window.location.reload();
-                            }, 3000)
+                                alertBox.classList.remove('-translate-x-full')
+                                alertBox.classList.remove('opacity-0')
+                                window.scrollTo(0, 0)
+                                setTimeout(() => {
+                                    alertBox.classList.add('-translate-x-full')
+                                    alertBox.classList.add('opacity-0')
+                                    window.location.reload();
+                                }, 3000)
                             }
                         }
                     }
-
-
                 }
+
+                async function downloadInvoice(event) {
+                    event.preventDefault();
+                    const orderId = event.target.dataset.oid;
+
+                    // Create a link element
+                    const downloadLink = document.createElement('a');
+
+                    // Set the href to the PDF download URL
+                    downloadLink.href = `/user/download-invoice/${orderId}`;
+
+                    // Set the download attribute with the desired file name
+                    downloadLink.download = `invoice_${orderId}.pdf`;
+
+                    // Append the link to the document
+                    document.body.appendChild(downloadLink);
+
+                    // Trigger a click on the link to start the download
+                    downloadLink.click();
+
+                    // Remove the link from the document
+                    document.body.removeChild(downloadLink);
+                }
+
 
 
             </script>

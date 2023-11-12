@@ -10,6 +10,7 @@ const { walletModel } = require('../models/walletSchema');
 const moment = require('moment');
 const { couponModel } = require('../models/couponSchema');
 const { addressModel } = require('../models/addressSchema');
+const { invoiceModel } = require('../models/invoiceSchema');
 
 function viewSignInPage(req, res) {
     res.render('userSignUp')
@@ -191,7 +192,7 @@ async function viewCartPage(req, res) {
                     foodId: 1,
                     quantity: 1,
                 }
-            }
+            } 
         ]
     );
 
@@ -644,6 +645,7 @@ async function updateStock(req, res) {
 
 
             if (result) {
+                const createInvoice = await invoiceModel.create({userId:user_id,orderId:orderId,productId:productId,productName:productName,productQty:productQty,shippingAddress:address,amount:afterDiscountPrice,paymentMethod:paymentMethod})
                 res.status(200).json({ orderid: orderId, address: address });
 
             } else {
@@ -748,9 +750,6 @@ async function deleteAccount(req, res) {
     }
 }
 
-function viewInvoice (req,res){
-    res.render('../public/html/invoice.ejs')
-}
 
 module.exports = {
     signInUser,
@@ -781,5 +780,4 @@ module.exports = {
     addNewAddress,
     checkingQuantity,
     deleteAccount,
-    viewInvoice
 }

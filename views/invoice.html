@@ -11,16 +11,12 @@
         <div class="px-5">
             <div class="flex border-b-2 border-slate-300">
                 <span class="mx-2 text-xl font-bold">FoodWo Invoice</span>
-                <span>Order Id : </span>
+                <span>Order Id : {{orderId}}</span>
             </div>
 
             <div >
                 <h2 class="font-semibold">Shipping Address</h2>
-                <p>Richu Sony,
-                    karimthakara Kunnel House,
-                    Chempanthotty,Kannur, Kerala -
-                    670142
-                </p>
+                <p>{{shippingAddress}}</p>
             </div>
 
             <div class="w-8/12 my-5">
@@ -33,10 +29,10 @@
                     </tr>
 
                     <tr>
-                        <td>Chicken Biryani</td>
-                        <td>2</td>
+                        <td>{{productName}}</td>
+                        <td>{{productQty}}</td>
                         <td>0.00</td>
-                        <td>158.00</td>
+                        <td>{{amount}}</td>
                     </tr>
                 </table>
             </div>
