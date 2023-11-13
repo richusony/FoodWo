@@ -3,10 +3,75 @@ const pdf = require("html-pdf-lts");
 const ExcelJS = require('exceljs');
 const workbook = new ExcelJS.Workbook();
 const worksheet = workbook.addWorksheet('Sales Data');
+const moment = require('moment');
 const orderModel = require('../models/orderSchema');
 
 async function viewSalePage(req,res){
-    res.render('../views/Admin/salesReport.ejs')
+    res.render('../views/Admin/salesReport.ejs');
+}
+async function filterSales(req, res) {
+    const filter = req.query.filter || 'monthly'; // Default to monthly if no filter provided
+    try {
+        // Fetch and format sales data based on the filter
+        const salesData = await getSalesData(filter);
+
+        // Render the HTML page with the sales data
+        res.json({
+            labels: salesData.labels,
+            data: salesData.data,
+        });
+    } catch (error) {
+        console.error('Error fetching sales data:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+// Function to get sales data based on the filter (implement as needed)
+async function getSalesData(filter) {
+    let aggregationPipeline = [];
+
+    if (filter === 'monthly') {
+        // Aggregate monthly sales
+        aggregationPipeline = [
+            {
+                $match: { orderStatus: 'Confirmed' }, // Add a match stage to filter by orderStatus
+            },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: { $dateFromString: { dateString: '$created_at', format: '%d/%m/%Y' } } },
+                        month: { $month: { $dateFromString: { dateString: '$created_at', format: '%d/%m/%Y' } } },
+                    },
+                    totalSales: { $sum: 1 },
+                },
+            },
+        ];
+    } else if (filter === 'yearly') {
+        // Aggregate yearly sales
+        aggregationPipeline = [
+            {
+                $match: { orderStatus: 'Confirmed' }, // Add a match stage to filter by orderStatus
+            },
+            {
+                $group: {
+                    _id: { $year: { $dateFromString: { dateString: '$created_at', format: '%d/%m/%Y' } } },
+                    totalSales: { $sum: 1 },
+                },
+            },
+        ];
+    } else {
+        // Handle other filters if needed
+    }
+
+    const salesData = await orderModel.aggregate(aggregationPipeline);
+
+    // Format data for the chart
+    const formattedData = {
+        labels: salesData.map(entry => filter === 'monthly' ? moment(`${entry._id.year}-${entry._id.month}`, 'YYYY-MM').format('MMMM YYYY') : entry._id.toString()),
+        data: salesData.map(entry => entry.totalSales),
+    };
+
+    return formattedData;
 }
 
 async function salesToPdf(req, res) {
@@ -47,7 +112,7 @@ async function salesToPdf(req, res) {
 }
 
 async function salesToExcel(req, res) {
-    
+
     // Add Header Row
     worksheet.columns = [
         { header: 'SL No', key: 'slNo', width: 10 },
@@ -60,12 +125,12 @@ async function salesToExcel(req, res) {
         // Add other headers as needed
     ];
 
-    
+
     // Set text alignment to center for all columns
     worksheet.columns.forEach(column => {
         column.alignment = { horizontal: 'center' };
     });
-    
+
     let result = await orderModel.find({ orderStatus: 'Confirmed' })
     console.log(result)
     // Add Data Rows
@@ -80,7 +145,7 @@ async function salesToExcel(req, res) {
             productPrice: document.productPrice,
             // Add other properties as needed
         };
-        
+
         worksheet.addRow(rowData);
     });
     console.log('not here');
@@ -94,5 +159,6 @@ async function salesToExcel(req, res) {
 module.exports = {
     viewSalePage,
     salesToPdf,
-    salesToExcel
+    salesToExcel,
+    filterSales
 };
