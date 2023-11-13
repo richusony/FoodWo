@@ -34,7 +34,7 @@ const router = express.Router();
 const { adminAuth } = require('../middleware/sessionAuth')
 const {productUpload} = require('../middleware/multer')
 const {viewCouponMangemenPage,createCoupon, deleteCoupon, viewCouponUpdatePage, updateCoupon, checkingCoupon, getPrice}= require('../controllers/couponController');
-const { viewSaleReportPage } = require('../controllers/reportController');
+const { salesToExcel, salesToPdf, viewSalePage } = require('../controllers/reportController');
 
 // Admin Login Get Request
 router.route('/login')
@@ -153,10 +153,14 @@ router.route('/coupon-update/:id')
 router.route('/food-price/:fid')
 .get(getPrice)
 
-router.route('/sales-report')
-.get(viewSaleReportPage)
+router.route('/sales')
+.get(viewSalePage)
 
-router.route('/')
+router.route('/sales-to-pdf')
+.get(salesToPdf)
+
+router.route('/sales-to-excel')
+.get(salesToExcel)
 
 
 module.exports = router;
