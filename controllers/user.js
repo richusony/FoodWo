@@ -141,7 +141,7 @@ async function otpVerification(req, res) {
                 // Clear OTP and user data from session
                 delete req.session.otp;
                 delete req.session.userData;
-                const addingAddress = await addressModel.create({ userId: newUser._id, address1: address })
+                const addingAddress = await addressModel.create({ userId: newUser._id, address1: address ,address2:false,address3:false})
                 const creatingZeroWallet = await walletModel.create({ userId: newUser._id, balance: 0 });
                 res.status(201).json({ success: "Account created" });
             })
