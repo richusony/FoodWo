@@ -10,6 +10,7 @@ const { createOrders, verifyOrders } = require('../controllers/paymentController
 const {checkingCoupon} = require('../controllers/couponController');
 const {viewWalletPage, addMoney}=require('../controllers/walletController');
 const { viewInvoice } = require('../controllers/invoiceController');
+const { viewReferalPage, verifyReferal } = require('../controllers/referalController');
 
 
 // User SignUp Get Request
@@ -52,6 +53,9 @@ router.route('/newpassword')
 
 router.route('/product-details/:id')
 .get(viewProductDetailsPage)
+
+router.route('/verify-referal')
+.get(verifyReferal)
 
 // User Session Middleware
 router.use(userAuth)
@@ -128,5 +132,9 @@ router.route('/delete-account/:uid')
 
 router.route('/download-invoice/:oid')
 .get(viewInvoice)
+
+router.route('/referal/:uid')
+.get(viewReferalPage)
+
 
 module.exports = router;

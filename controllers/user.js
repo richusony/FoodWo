@@ -11,6 +11,7 @@ const moment = require('moment');
 const { couponModel } = require('../models/couponSchema');
 const { addressModel } = require('../models/addressSchema');
 const { invoiceModel } = require('../models/invoiceSchema');
+const { referModel } = require('../models/referalSchema');
 
 function viewSignInPage(req, res) {
     res.render('userSignUp')
@@ -43,7 +44,7 @@ async function sendOTP(phone, otp) {
 // SignUp POST Request
 async function signInUser(req, res) {
     console.log(req.body);
-    const { fullname, email, phone, address, password } = req.body;
+    const { fullname, email, phone, address, password ,referCode} = req.body;
     const userExistsEmail = await userModel.findOne({ email: email });
     const userExistsPhone = await userModel.findOne({ phone: phone });
     if (!fullname || !email || !phone || !address || !password) {
@@ -67,6 +68,7 @@ async function signInUser(req, res) {
                 phone,
                 address,
                 password,
+                referCode
             };
             console.log(otp)
             // Redirect to OTP verification page
@@ -123,7 +125,7 @@ async function otpVerification(req, res) {
         console.log("also here");
 
         // Create the user account
-        const { fullname, email, phone, address, password } = userData;
+        const { fullname, email, phone, address, password, referCode } = userData;
         const hashedPassword = bcrypt.hashSync(password, 10);
 
         // Save user data to the database
@@ -141,8 +143,24 @@ async function otpVerification(req, res) {
                 // Clear OTP and user data from session
                 delete req.session.otp;
                 delete req.session.userData;
-                const addingAddress = await addressModel.create({ userId: newUser._id, address1: address ,address2:false,address3:false})
+                const addingAddress = await addressModel.create({ userId: newUser._id, address1: address, address2: false, address3: false })
                 const creatingZeroWallet = await walletModel.create({ userId: newUser._id, balance: 0 });
+                const findCode = await referModel.findOne({ referalCode: referCode });
+                console.log("findout ::::::::: ::::::::::: ",findCode,referCode)
+                if (findCode) {
+                    const codeOwner = findCode.userId;
+                    const currentDate = moment().format('DD-MM-YYYY'); // Get the current date in 'DD-MM-YYYY' format
+                    const historyData = {
+                        date: currentDate,
+                        amt: 100,
+                        update: "inc"
+                    };
+                    const addToWallet = await walletModel.updateOne({ userId: codeOwner }, {
+                        $inc: { balance: 100 },
+                        $push: { history: historyData }
+                    })
+                    const addNewUserToReferModel = await referModel.updateOne({ referalCode: referCode }, { $push: { usedUsers: newUser._id } })
+                } 
                 res.status(201).json({ success: "Account created" });
             })
             .catch((error) => {

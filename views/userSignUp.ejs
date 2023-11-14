@@ -66,6 +66,13 @@
                             placeholder="Enter Password"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                     </div>
+                    <div class="flex flex-col my-2">
+                        <label for="">Referal Code</label>
+                        <input type="text" name="referCode" id="referCode" placeholder="Referal Code (optional)"
+                            class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        <div class="text-end my-2"><span onclick="verifyReferalCode(event)"
+                                class="text-orange-500 cursor-pointer">verify code</span></div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -77,7 +84,7 @@
 
 
         <div id="toast"
-            class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+            class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto my-2 ease-linear opacity-0 -translate-x-full">
         </div>
 
 
@@ -95,20 +102,22 @@
             // const uploadtext = document.getElementById('uploadtext');
             // const userIcon = document.getElementById('userIcon');
 
-            // const toast = document.getElementById('toast');
-            // // const toastMessage = document.getElementById('toastMessage');
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+
+            let codeVerifiedOrNot = false;
 
 
 
             // image.addEventListener('change', async (event) => {
             //     baseImage = event.target.files[0];
-                // if (file) {
-                //     baseImage = await ImagetoBase64(file);
-                //     imagetag.style.display = "block";
-                //     userIcon.style.display = "none";
-                //     uploadtext.style.display = "none";
-                //     imagetag.setAttribute("src", baseImage);
-                // }
+            // if (file) {
+            //     baseImage = await ImagetoBase64(file);
+            //     imagetag.style.display = "block";
+            //     userIcon.style.display = "none";
+            //     uploadtext.style.display = "none";
+            //     imagetag.setAttribute("src", baseImage);
+            // }
             // });
 
             // async function ImagetoBase64(file) {
@@ -129,6 +138,8 @@
                 const phone = document.getElementById('phone').value;
                 const address = document.getElementById('address').value;
                 const password = document.getElementById('password').value;
+                const referCode = document.getElementById('referCode').value;
+
 
                 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
                 const isPasswordValid = passwordRegex.test(password);
@@ -172,6 +183,14 @@
                         toast.classList.add("opacity-0");
                         toast.classList.add("-translate-x-full");
                     }, 3000)
+                } else if (referCode !== "" && !codeVerifiedOrNot) {
+                    toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Verify you code before creating your Account.</span>`;
+                    toast.classList.remove("opacity-0");
+                    toast.classList.remove("-translate-x-full");
+                    setTimeout(() => {
+                        toast.classList.add("opacity-0");
+                        toast.classList.add("-translate-x-full");
+                    }, 3000)
                 }
                 else {
                     const formData = {
@@ -180,6 +199,7 @@
                         phone: phone,
                         address: address,
                         password: password,
+                        referCode: referCode
                     }
 
 
@@ -222,6 +242,49 @@
                     } catch (error) {
                         // Handle any network, request, or other errors here
                         console.error(error);
+                    }
+                }
+            }
+
+            async function verifyReferalCode(event) {
+                event.preventDefault();
+                const referCode = document.getElementById('referCode').value;
+                if (referCode == "") {
+                    toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Enter Referal code for verifying</span>`;
+                    toast.classList.remove("opacity-0");
+                    toast.classList.remove("-translate-x-full");
+                    setTimeout(() => {
+                        toast.classList.add("opacity-0");
+                        toast.classList.add("-translate-x-full");
+                    }, 3000);
+                    return;
+                }
+                console.log(`/user/verify-referal?code=${referCode.trim()}`)
+                const res = await fetch(`/user/verify-referal?code=${referCode.trim()}`);
+                if (res.status == 400) {
+                    const data = await res.json();
+                    toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.failed}</span>`;
+                    toast.classList.remove("opacity-0");
+                    toast.classList.remove("-translate-x-full");
+                    setTimeout(() => {
+                        toast.classList.add("opacity-0");
+                        toast.classList.add("-translate-x-full");
+                    }, 3000);
+                    return;
+                }
+                if (res.ok) {
+                    console.log(res)
+                    const data = await res.json();
+                    console.log(data)
+                    if (data.sucess) {
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-check text-xl"></i> Your Referal Code has been verified.</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000);
+                        codeVerifiedOrNot = true;
                     }
                 }
             }

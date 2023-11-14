@@ -52,6 +52,8 @@
     </footer>
 
     <script>
+        const userData = sessionStorage.getItem('signUpUserDetails');
+            console.log(userData)
         const otpForm = document.getElementById('otpForm');
         const errorMessage = document.getElementById('errorMessage');
         const countdownElement = document.getElementById('countdown');

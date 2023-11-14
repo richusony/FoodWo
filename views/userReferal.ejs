@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referal Code</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <%-include('userNavbar')%>
+        <section class="px-5 py-2 min-h-screen">
+            <div class="p-5 bg-orange-500 text-white rounded text-center">
+                <p class="text-lg"><i class="fa-solid fa-circle-info"></i> Refer your friend to get ₹100. Amount will be
+                    added to your wallet after your friend's signup.</p>
+            </div>
+            <div class="flex flex-col md:flex-row">
+                <div class="md:w-1/2 mx-2 mb-2">
+                    <img class="w-full h-full" src="/public/images/referalMainGif.gif" alt="friends">
+                </div>
+
+                <div class="md:w-1/2 bg-orange-500 my-2 rounded flex justify-center items-center py-5 md:py-0">
+                    <div>
+                        <h3 class="text-white my-2">Your Referal Code :</h3>
+                        <span class="bg-white text-gray-500 py-2 px-3 rounded"><%=referCode%></span><span
+                            class="px-3 py-2 text-gray-500 bg-white rounded mx-2">copy</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%-include('userFooter')%>
+</body>
+
+</html>
