@@ -39,6 +39,11 @@
                     </div>
                 </div>
 
+                <div>
+                    <button class="px-3 py-2 bg-orange-500 text-white" onclick="downloadSalesPdf(event)">Download PDF</button>
+                    <button class="px-3 py-2 bg-orange-500 text-white" onclick="downloadSalesExcel(event)">Download Excel</button>
+                </div>
+
             </div>
         </section>
 
@@ -171,6 +176,51 @@
 
                 // Initial load (you can choose monthly or yearly as default)
                 loadSalesData('monthly');
+
+
+                async function downloadSalesPdf(event){
+                    event.preventDefault();
+
+                    // Create a link element
+                    const downloadLink = document.createElement('a');
+
+                    // Set the href to the PDF download URL
+                    downloadLink.href = `/admin/sales-to-pdf`;
+
+                    // Set the download attribute with the desired file name
+                    downloadLink.download = `Sales-Report.pdf`;
+
+                    // Append the link to the document
+                    document.body.appendChild(downloadLink);
+
+                    // Trigger a click on the link to start the download
+                    downloadLink.click();
+
+                    // Remove the link from the document
+                    document.body.removeChild(downloadLink);
+                }
+
+                async function downloadSalesExcel(event){
+                    event.preventDefault();
+
+                    // Create a link element
+                    const downloadLink = document.createElement('a');
+
+                    // Set the href to the PDF download URL
+                    downloadLink.href = `/admin/sales-to-excel`;
+
+                    // Set the download attribute with the desired file name
+                    downloadLink.download = `Sales-Report.xlsx`;
+
+                    // Append the link to the document
+                    document.body.appendChild(downloadLink);
+
+                    // Trigger a click on the link to start the download
+                    downloadLink.click();
+
+                    // Remove the link from the document
+                    document.body.removeChild(downloadLink);
+                }
             </script>
 </body>
 

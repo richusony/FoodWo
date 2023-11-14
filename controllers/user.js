@@ -44,7 +44,7 @@ async function sendOTP(phone, otp) {
 // SignUp POST Request
 async function signInUser(req, res) {
     console.log(req.body);
-    const { fullname, email, phone, address, password ,referCode} = req.body;
+    const { fullname, email, phone, address, password, referCode } = req.body;
     const userExistsEmail = await userModel.findOne({ email: email });
     const userExistsPhone = await userModel.findOne({ phone: phone });
     if (!fullname || !email || !phone || !address || !password) {
@@ -146,7 +146,7 @@ async function otpVerification(req, res) {
                 const addingAddress = await addressModel.create({ userId: newUser._id, address1: address, address2: false, address3: false })
                 const creatingZeroWallet = await walletModel.create({ userId: newUser._id, balance: 0 });
                 const findCode = await referModel.findOne({ referalCode: referCode });
-                console.log("findout ::::::::: ::::::::::: ",findCode,referCode)
+                console.log("findout ::::::::: ::::::::::: ", findCode, referCode)
                 if (findCode) {
                     const codeOwner = findCode.userId;
                     const currentDate = moment().format('DD-MM-YYYY'); // Get the current date in 'DD-MM-YYYY' format
@@ -160,7 +160,7 @@ async function otpVerification(req, res) {
                         $push: { history: historyData }
                     })
                     const addNewUserToReferModel = await referModel.updateOne({ referalCode: referCode }, { $push: { usedUsers: newUser._id } })
-                } 
+                }
                 res.status(201).json({ success: "Account created" });
             })
             .catch((error) => {
@@ -494,6 +494,7 @@ async function checkingQuantity(req, res) {
 async function updateStock(req, res) {
     const { user_id, productId, productName, image, customerName, productPrice, paymentMethod, productQty, address, coupon } = req.body;
     console.log(user_id, productId, productQty);
+    let discountAddedOrNot = false;
     let afterDiscountPrice = parseInt(productPrice);
     const currentDate = moment().format('DD-MM-YYYY');
     // const coupon = req.body.coupon;
@@ -544,8 +545,9 @@ async function updateStock(req, res) {
                                 const updateCoupon = await couponModel.updateOne({ _id: existCoupon._id.toString() }, { $inc: { usedUsersCount: 1 } })
                                 console.log(updateCoupon)
                                 if (existCoupon.discountType == "per") {
-                                    afterDiscountPrice = parseInt(productPrice) - (existCoupon.discountValue * parseInt(productPrice) / 100);
+                                    afterDiscountPrice = parseInt(productPrice * productQty) - (existCoupon.discountValue * parseInt(productPrice) / 100);
                                     console.log("after discount : : : : : ", afterDiscountPrice)
+                                    discountAddedOrNot = true;
                                 }
                                 console.log("usedCoupons after update: ", userModel.usedCoupons);
                             } else {
