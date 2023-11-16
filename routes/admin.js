@@ -32,11 +32,11 @@ const { viewLogInPage,
 } = require('../controllers/admin');
 const router = express.Router();
 const { adminAuth } = require('../middleware/sessionAuth')
-const {productUpload} = require('../middleware/multer')
+const {productUpload,bannerUpload} = require('../middleware/multer')
 const {viewCouponMangemenPage,createCoupon, deleteCoupon, viewCouponUpdatePage, updateCoupon, checkingCoupon, getPrice}= require('../controllers/couponController');
 const { salesToExcel, salesToPdf, viewSalePage, filterSales } = require('../controllers/reportController');
 const { viewPageNotFound } = require('../controllers/user');
-const { listAllBanners } = require('../controllers/bannerController');
+const { listAllBanners, uploadBanner, viewBannerPage, deleteBanner } = require('../controllers/bannerController');
 
 // Admin Login Get Request
 router.route('/login')
@@ -167,8 +167,13 @@ router.route('/sales-to-excel')
 router.route('/sales-filter')
 .get(filterSales)
 
+router.route('/view-banners')
+.get(viewBannerPage)
+
 router.route('/banners')
 .get(listAllBanners)
+.post(bannerUpload.array("banner"),uploadBanner)
+.delete(deleteBanner)
 
 
 

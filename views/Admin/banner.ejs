@@ -10,6 +10,31 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
     <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
 </head>
 
 <body>
@@ -17,9 +42,13 @@
     <%- include('adminNavbar') %>
 
         <section class="px-5 py-2 min-h-screen">
-            
+
+            <div id="toast"
+                class="my-3 transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+            </div>
+
             <div class="md:px-10 my-4 md:mt-8 flex justify-between">
-                <h2 class="font-bold text-xl md:text-2xl">Best offers for you</h2>
+                <h2 class="font-bold text-xl md:text-2xl">Banners</h2>
                 <div class="flex justify-between">
                     <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
                             class="fa-solid fa-arrow-left"></i></span>
@@ -28,34 +57,240 @@
                 </div>
             </div>
             <div class="my-2 md:my-6 overflow-hidden flex justify-center items-center">
-                <div class="foodContainer flex justify-center items-center md:py-3 overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
-                    <div class="md:w-96 h-full mx-3">
+                <div id="bannerContainer"
+                    class="foodContainer md:py-3 overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
+                    <!-- <div class="md:w-96 h-full mx-3 inline-block">
                         <img class="w-full h-full" src="/public/images/banner.svg" alt="banner">
                     </div>
-                    <div class="md:w-96 h-full mx-3 ">
+                    <div class="md:w-96 h-full mx-3 inline-block">
                         <img class="w-full h-full" src="/public/images/banner2.svg" alt="banner">
                     </div>
-                    <div class="md:w-96 h-full mx-3 ">
+                    <div class="md:w-96 h-full mx-3 inline-block">
                         <img class="w-full h-full" src="/public/images/banner3.svg" alt="banner">
                     </div>
-                    <div class="md:w-96 h-full mx-3 ">
+                    <div class="md:w-96 h-full mx-3 inline-block">
                         <img class="w-full h-full" src="/public/images/banner4.svg" alt="banner">
                     </div>
-                    <div class="md:w-96 h-full mx-3 ">
+                    <div class="md:w-96 h-full mx-3 inline-block">
                         <img class="w-full h-full" src="/public/images/banner5.svg" alt="banner">
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
+            <form id="form" class="my-5 w-56 h-fit text-white text-center mx-auto rounded">
+                <label for="image" class="w-full py-3 px-10 rounded h-full bg-orange-500 cursor-pointer">
+                    <input type="file" name="banner" id="image" accept="image/*" class="hidden w-full text-xl">
+                    <span>Select Banner</span>
+                </label>
+            </form>
+
+            <!-- Banner Preview -->
+            <div id="imagePreview" class="w-72 mx-auto my-5">
+                <!-- <img class="w-full h-full" src="" alt=""> -->
+            </div>
+            <div id="uploadBtn" class="my-5 text-center hidden">
+                <button class="mx-auto py-3 px-10 rounded text-white h-full bg-orange-500 cursor-pointer"
+                    onclick="uploadBanner(event)">Upload</button>
+            </div>
+
+            <div class="my-5 bg-slate-200 rounded py-2 px-3 w-1/2 mx-auto" id="deleteBannerContainer">
+                <div class="my-3 flex justify-between items-center bg-white px-3">
+                    <span>1</span>
+                    <div class="w-28 h-28"><img class="w-full h-full" src="/public/images/banner2.svg" alt=""></div>
+                    <div><i class="fa fa-trash cursor-pointer"></i></div>
+                </div>
+            </div>
         </section>
-        <form class="md:w-96  mx-3 bg-orange-400">
-            <label for="image" class="">
-                <input type="file">
-                <span>Add Image</span>
-            </label>
-        </form>
-    <!-- Footer -->
-    <%- include('adminFooter') %>
+        <!-- Footer -->
+        <%- include('adminFooter') %>
+
+            <script>
+                const form = document.getElementById('form');
+                const toast = document.getElementById('toast');
+                const banner = document.getElementById('image');
+                const imagePreview = document.getElementById('imagePreview');
+                const uploadBtn = document.getElementById('uploadBtn');
+                const bannerContainer = document.getElementById('bannerContainer');
+                const deleteBannerContainer = document.getElementById('deleteBannerContainer');
+
+                (async () => {
+                    try {
+                        const response = await fetch('/admin/banners');
+                        if (response.ok) {
+                            const bannersData = await response.json();
+                            // Handle bannersData - process or display the fetched data here
+                            console.log(bannersData);
+                            bannersData.banners.forEach((banner, index) => {
+                                bannerContainer.innerHTML += `
+                                <div class="md:w-[500px] h-72 mx-3 inline-block">
+                        <img class="w-full h-full object-cover" src="/${banner.imageUrl}" alt="banner">
+                    </div>`
+
+                                deleteBannerContainer.innerHTML += `
+                            <div class="my-3 flex justify-between items-center bg-white px-3">
+                    <span>${index + 1}</span>
+                    <div class="w-28 h-28"><img class="w-full h-full" src="/${banner.imageUrl}" alt="banner"></div>
+                    <div><i data-image="${banner.imageUrl}" onclick="deleteBanner(event)" class="fa fa-trash cursor-pointer"></i></div>
+                </div>
+                            `
+                            })
+                        } else {
+                            throw new Error('Failed to fetch banners');
+                        }
+                    } catch (error) {
+                        // Handle errors if the fetch request fails
+                        console.error('Error fetching banners:', error.message);
+                    }
+                })();
+
+                // Get references to the scroll buttons and the container of food items
+                const scrollLeftButtons = document.querySelectorAll('.scroll-left');
+                const scrollRightButtons = document.querySelectorAll('.scroll-right');
+                const foodContainers = document.querySelectorAll('.foodContainer');
+
+                // Set the amount to scroll when the buttons are clicked (adjust as needed)
+                const scrollAmount = 200;
+
+                function updateScrollButtonsState(container, leftButton, rightButton) {
+                    // Check if there's content to scroll to the left
+                    if (container.scrollLeft > 0) {
+                        leftButton.style.display = "block";
+                    } else {
+                        leftButton.style.display = "none";
+                    }
+
+                    // Check if there's content to scroll to the right
+                    if (container.scrollLeft < container.scrollWidth - container.clientWidth) {
+                        rightButton.style.display = "block";
+                    } else {
+                        rightButton.style.display = "none";
+                    }
+                }
+
+                scrollLeftButtons.forEach((leftButton, index) => {
+                    leftButton.addEventListener('click', () => {
+                        // Scroll the container to the left
+                        foodContainers[index].scrollLeft -= scrollAmount;
+                        updateScrollButtonsState(foodContainers[index], leftButton, scrollRightButtons[index]);
+                    });
+                });
+
+                scrollRightButtons.forEach((rightButton, index) => {
+                    rightButton.addEventListener('click', () => {
+                        // Scroll the container to the right
+                        foodContainers[index].scrollLeft += scrollAmount;
+                        updateScrollButtonsState(foodContainers[index], scrollLeftButtons[index], rightButton);
+                    });
+                });
+
+                // Initial state of the buttons
+                foodContainers.forEach((container, index) => {
+                    updateScrollButtonsState(container, scrollLeftButtons[index], scrollRightButtons[index]);
+                });
+
+
+                async function uploadBanner(event) {
+                    const formData = new FormData(form);
+
+                    const res = await fetch('/admin/banners', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    if (res.status == 400) {
+                        const data = await res.json();
+                        window.scrollTo(0, 0)
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.error}</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000)
+                        return;
+                    }
+                    if (res.status == 500) {
+                        const data = await res.json();
+                        window.scrollTo(0, 0)
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.error}</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000)
+                        return;
+                    }
+                    if (res.ok) {
+                        const data = await res.json();
+                        window.scrollTo(0, 0)
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-check text-xl"></i> ${data.success}</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                            window.location.href = "/admin/view-banners"
+                        }, 3000)
+                    }
+                }
+
+                banner.addEventListener('change', () => {
+                    if (banner.files) {
+                        for (const file of banner.files) {
+                            imagePreview.innerHTML = `
+                <img class="w-full h-full rounded object-cover" src=${URL.createObjectURL(file)} alt="Banner">`;
+                        }
+                        uploadBtn.classList.remove('hidden')
+                    }
+                })
+
+                async function deleteBanner(event){
+                    event.preventDefault();
+                    const confirm = window.confirm("Are you sure? want to delete this banner")
+                    if(confirm){
+                        const imageUrl = event.target.dataset.image;
+                        const deleting = await fetch(`/admin/banners?image=${imageUrl}`,{method:'DELETE'});
+                        
+                        if (deleting.status == 404) {
+                        const data = await deleting.json();
+                        window.scrollTo(0, 0)
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.error}</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000)
+                        return;
+                    }
+                    if (deleting.status == 500) {
+                        const data = await deleting.json();
+                        window.scrollTo(0, 0)
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.error}</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000)
+                        return;
+                    }
+                    if (deleting.ok) {
+                        const data = await deleting.json();
+                        window.scrollTo(0, 0)
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-check text-xl"></i> ${data.success}</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                            window.location.href = "/admin/view-banners"
+                        }, 3000)
+                    }
+                    }
+                }
+
+            </script>
 </body>
 
 </html>

@@ -18,6 +18,7 @@ app.set('view engine', 'ejs');
 app.use('/public/', express.static('./public')); 
 app.use('/uploads/', express.static('./uploads'));
 app.use('/products/', express.static('./products'));
+app.use('/banners/', express.static('./banners'));
 
 // Session and Cookie
 app.use(session({
