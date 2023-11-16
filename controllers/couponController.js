@@ -9,7 +9,7 @@ function formatDate(date) {
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const year = d.getFullYear();
     return `${day}/${month}/${year}`;
-}
+} 
 
 async function viewCouponMangemenPage(req, res) {
     const foodItem = await productModel.find({}).sort({ productName: 1 })
