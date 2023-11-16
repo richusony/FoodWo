@@ -7,22 +7,35 @@ async function generateUniqueReferalCode() {
 }
 
 async function viewReferalPage(req, res) {
-    const userId = req.params.uid;
-    let referCode;
+    try {
+        const userId = req.params.uid;
+        let referCode;
 
-    const existReferCode = await referModel.findOne({ userId: userId });
+        const user = await userModel.findOne({ _id: userId });
 
-    if (existReferCode) {
-        referCode = existReferCode.referalCode;
-    } else {
-        const newReferalCode = await generateUniqueReferalCode();
-        const creating = await referModel.create({ userId: userId, referalCode: newReferalCode });
-        referCode = newReferalCode;
+        if (!user) {
+            return res.render("../views/pageNotFound.ejs")
+        }
+
+        const existReferCode = await referModel.findOne({ userId: userId });
+
+        if (existReferCode) {
+            referCode = existReferCode.referalCode;
+        } else {
+            const newReferalCode = await generateUniqueReferalCode(userId);
+            await referModel.create({ userId: userId, referalCode: newReferalCode });
+            referCode = newReferalCode;
+        }
+
+        res.render('../views/userReferal.ejs', { referCode: referCode });
+    } catch (err) {
+        console.error('Error fetching referral details:', err);
+        res.render("../views/pageNotFound.ejs");
     }
-
-    const findUser = await userModel.findOne({ _id: userId });
-    res.render('../views/userReferal.ejs', { referCode: referCode });
 }
+
+
+
 
 async function verifyReferal(req, res) {
     const code = req.query.code;

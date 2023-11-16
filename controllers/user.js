@@ -198,9 +198,10 @@ async function productPage(req, res) {
 }
 
 async function viewCartPage(req, res) {
-    const uid = req.params.id;
-    const foodItems = await cartModel.aggregate(
-        [
+    try {
+        const uid = req.params.id;
+
+        const foodItems = await cartModel.aggregate([
             {
                 $match: { userId: uid }
             },
@@ -211,26 +212,37 @@ async function viewCartPage(req, res) {
                     quantity: 1,
                 }
             }
-        ]
-    );
+        ]);
 
-    const wallet = await walletModel.findOne({ userId: uid })
-    const foodIds = foodItems.map(item => item.foodId);
-    let cartItems = await productModel.find({ _id: { $in: foodIds } });
-    const userDetails = await userModel.find({ _id: uid })
-    const addressDetails = await addressModel.findOne({ userId: uid });
+        const wallet = await walletModel.findOne({ userId: uid });
+        const foodIds = foodItems.map(item => item.foodId);
+        let cartItems = await productModel.find({ _id: { $in: foodIds } });
+        const userDetails = await userModel.findOne({ _id: uid });
+        const addressDetails = await addressModel.findOne({ userId: uid });
 
-    if (cartItems.length < 1) {
-        cartItems = false
-    } else {
-        cartItems = cartItems.map((item) => {
-            item.productImages = item.productImages[0].replace(/\\/g, '//').trim();
-            item.category.trim()
-            return item;
+        if (cartItems.length === 0) {
+            cartItems = false;
+        } else {
+            cartItems = cartItems.map((item) => {
+                item.productImages = item.productImages[0].replace(/\\/g, '/').trim();
+                item.category = item.category.trim();
+                return item;
+            });
+        }
+
+        res.render('../views/userCart', {
+            cartItems: cartItems,
+            userId: uid,
+            userData: userDetails,
+            wallet: wallet,
+            userAddress: addressDetails
         });
+    } catch (err) {
+        console.error('Error fetching cart details:', err);
+        res.render("../views/pageNotFound.ejs");
     }
-    res.render('../views/userCart', { cartItems: cartItems, userId: uid, userData: userDetails, wallet: wallet, userAddress: addressDetails });
 }
+
 
 async function addToCart(req, res) {
     const { userid, foodid } = req.body;
@@ -330,16 +342,25 @@ async function sendResetUrl(req, res) {
 }
 
 async function viewUserProfile(req, res) {
-    const id = req.params.id;
+    try {
+        const id = req.params.id;
 
-    const userDetails = await userModel.findOne({ _id: id });
-    const addressDetails = await addressModel.findOne({ userId: id });
-    if (userDetails) {
-        res.render('../views/userProfile.ejs', { userData: userDetails, userAddress: addressDetails })
-    } else {
-        res.status(500).json({ err: 'Database is having an issue.' })
+        const [userDetails, addressDetails] = await Promise.all([
+            userModel.findOne({ _id: id }),
+            addressModel.findOne({ userId: id })
+        ]);
+
+        if (userDetails) {
+            res.render('../views/userProfile.ejs', { userData: userDetails, userAddress: addressDetails || {} });
+        } else {
+            res.status(404).json({ err: 'User not found.' });
+        }
+    } catch (err) {
+        console.error('Error fetching user profile:', err);
+        res.redirect('../views/pageNotFound.ejs');
     }
 }
+
 
 async function updateUserProfile(req, res) {
     const { userid, fullname, email, phone, address1, address2, address3 } = req.body;
@@ -719,12 +740,28 @@ async function viewOrderSuccessPage(req, res) {
 }
 
 async function viewOrderItemPage(req, res) {
-    const orderId = req.params.oid;
-    const orderedItem = await orderModel.findOne({ orderId: orderId })
-    const userid = orderedItem.userId;
-    const userDetails = await userModel.findOne({ _id: userid })
-    res.render('../views/orderedItem.ejs', { order: orderedItem, user: userDetails })
+    try {
+        const orderId = req.params.oid;
+        const orderedItem = await orderModel.findOne({ orderId: orderId });
+
+        if (!orderedItem) {
+            return res.render("../views/pageNotFound.ejs")
+        }
+
+        const userId = orderedItem.userId;
+        const userDetails = await userModel.findOne({ _id: userId });
+
+        if (!userDetails) {
+            return res.status(404).json({ err: 'User details not found.' });
+        }
+
+        res.render('../views/orderedItem.ejs', { order: orderedItem, user: userDetails });
+    } catch (err) {
+        console.error('Error fetching order item details:', err);
+        res.render("../views/pageNotFound.ejs")
+    }
 }
+
 
 
 async function cancelOrder(req, res) {
