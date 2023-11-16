@@ -34,10 +34,11 @@ app.get('/', (req, res) => {
   res.render('mainSearch');
 })
 
+// Admin Routes
+app.use('/admin', adminRouter)
+
 // User Routes
 app.use('/', userRouter);
-
-app.use('/admin', adminRouter)
 
 
 app.listen(PORT, () => {

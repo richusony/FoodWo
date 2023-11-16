@@ -36,6 +36,7 @@ const {productUpload} = require('../middleware/multer')
 const {viewCouponMangemenPage,createCoupon, deleteCoupon, viewCouponUpdatePage, updateCoupon, checkingCoupon, getPrice}= require('../controllers/couponController');
 const { salesToExcel, salesToPdf, viewSalePage, filterSales } = require('../controllers/reportController');
 const { viewPageNotFound } = require('../controllers/user');
+const { listAllBanners } = require('../controllers/bannerController');
 
 // Admin Login Get Request
 router.route('/login')
@@ -166,6 +167,12 @@ router.route('/sales-to-excel')
 router.route('/sales-filter')
 .get(filterSales)
 
+router.route('/banners')
+.get(listAllBanners)
+
+
+
+// 404 Page Not Found
 router.route('/*')
 .get(viewPageNotFound)
 

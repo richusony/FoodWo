@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banner Management</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <%- include('adminNavbar') %>
+
+        <section class="px-5 py-2 min-h-screen">
+            
+            <div class="md:px-10 my-4 md:mt-8 flex justify-between">
+                <h2 class="font-bold text-xl md:text-2xl">Best offers for you</h2>
+                <div class="flex justify-between">
+                    <span class="scroll-left cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                            class="fa-solid fa-arrow-left"></i></span>
+                    <span class="scroll-right cursor-pointer mx-2 bg-[#E2E2E7] rounded-full px-2 text-center py-1"><i
+                            class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </div>
+            <div class="my-2 md:my-6 overflow-hidden flex justify-center items-center">
+                <div class="foodContainer flex justify-center items-center md:py-3 overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
+                    <div class="md:w-96 h-full mx-3">
+                        <img class="w-full h-full" src="/public/images/banner.svg" alt="banner">
+                    </div>
+                    <div class="md:w-96 h-full mx-3 ">
+                        <img class="w-full h-full" src="/public/images/banner2.svg" alt="banner">
+                    </div>
+                    <div class="md:w-96 h-full mx-3 ">
+                        <img class="w-full h-full" src="/public/images/banner3.svg" alt="banner">
+                    </div>
+                    <div class="md:w-96 h-full mx-3 ">
+                        <img class="w-full h-full" src="/public/images/banner4.svg" alt="banner">
+                    </div>
+                    <div class="md:w-96 h-full mx-3 ">
+                        <img class="w-full h-full" src="/public/images/banner5.svg" alt="banner">
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <form class="md:w-96  mx-3 bg-orange-400">
+            <label for="image" class="">
+                <input type="file">
+                <span>Add Image</span>
+            </label>
+        </form>
+    <!-- Footer -->
+    <%- include('adminFooter') %>
+</body>
+
+</html>
