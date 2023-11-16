@@ -58,10 +58,12 @@
             </div>
             <div class="my-2 md:my-6 overflow-hidden flex justify-center items-center">
                 <div class="foodContainer md:py-3 overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
-                    <div class="md:w-96 h-full mx-3 inline-block">
-                        <img class="w-full h-full" src="/public/images/banner.svg" alt="banner">
+                   <% if(banners){banners.forEach((banner)=>{ %>
+                    <div class="md:w-96 h-[150px] md:h-[200px] mx-3 inline-block">
+                        <img class="w-full h-full rounded-xl object-cover" src="/<%=banner.imageUrl%>" alt="banner">
                     </div>
-                    <div class="md:w-96 h-full mx-3 inline-block">
+                <%})} %>
+                    <!-- <div class="md:w-96 h-full mx-3 inline-block">
                         <img class="w-full h-full" src="/public/images/banner2.svg" alt="banner">
                     </div>
                     <div class="md:w-96 h-full mx-3 inline-block">
@@ -72,7 +74,7 @@
                     </div>
                     <div class="md:w-96 h-full mx-3 inline-block">
                         <img class="w-full h-full" src="/public/images/banner5.svg" alt="banner">
-                    </div>
+                    </div> -->
                 </div>
             </div>
 

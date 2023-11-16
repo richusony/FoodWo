@@ -12,6 +12,7 @@ const { couponModel } = require('../models/couponSchema');
 const { addressModel } = require('../models/addressSchema');
 const { invoiceModel } = require('../models/invoiceSchema');
 const { referModel } = require('../models/referalSchema');
+const { bannerModel } = require('../models/bannerSchema');
 
 function viewSignInPage(req, res) {
     res.render('userSignUp')
@@ -193,8 +194,9 @@ async function productPage(req, res) {
     const categories = await categoryModel.aggregate([{ $sample: { size: 1 } }]);
     console.log(categories[0].category)
     const catProducts = await productModel.find({ category: categories[0].category })
+    const banners = await bannerModel.find({}).sort({ createdAt: 1 });
     // console.log("random :: ",categories);
-    res.render('mainProducts', { data: products, category: catProducts, userId: userId, wishData: wishlist });
+    res.render('mainProducts', { data: products, category: catProducts, userId: userId, wishData: wishlist, banners: banners });
 }
 
 async function viewCartPage(req, res) {
@@ -811,7 +813,7 @@ function viewPageNotFound(req, res) {
     console.log("Page not found!!!!!!!!!!");
     if (req.session.admin) {
         res.render("../views/Admin/pageNotFound.ejs")
-    }else{
+    } else {
         res.render("../views/pageNotFound.ejs")
     }
 }
