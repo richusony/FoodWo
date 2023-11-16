@@ -770,6 +770,14 @@ async function deleteAccount(req, res) {
     }
 }
 
+function viewPageNotFound(req, res) {
+    console.log("Page not found!!!!!!!!!!");
+    if (req.session.admin) {
+        res.render("../views/Admin/pageNotFound.ejs")
+    }else{
+        res.render("../views/pageNotFound.ejs")
+    }
+}
 
 module.exports = {
     signInUser,
@@ -800,4 +808,5 @@ module.exports = {
     addNewAddress,
     checkingQuantity,
     deleteAccount,
+    viewPageNotFound
 }

@@ -35,6 +35,7 @@ const { adminAuth } = require('../middleware/sessionAuth')
 const {productUpload} = require('../middleware/multer')
 const {viewCouponMangemenPage,createCoupon, deleteCoupon, viewCouponUpdatePage, updateCoupon, checkingCoupon, getPrice}= require('../controllers/couponController');
 const { salesToExcel, salesToPdf, viewSalePage, filterSales } = require('../controllers/reportController');
+const { viewPageNotFound } = require('../controllers/user');
 
 // Admin Login Get Request
 router.route('/login')
@@ -164,6 +165,9 @@ router.route('/sales-to-excel')
 
 router.route('/sales-filter')
 .get(filterSales)
+
+router.route('/*')
+.get(viewPageNotFound)
 
 
 module.exports = router;
