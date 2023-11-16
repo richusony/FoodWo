@@ -1,6 +1,6 @@
 <nav class="py-4 px-5 md:px-10 flex justify-between items-center shadow-md">
     <div class="text-center p-2 bg-MainSearchBg">
-        <a href="/user/products" class="text-orange-500 font-bold text-2xl md:text-3xl ">FoodWo</a>
+        <a href="/products" class="text-orange-500 font-bold text-2xl md:text-3xl ">FoodWo</a>
     </div>
     <div class="flex justify-between items-center">
         <span id="open" class="md:hidden text-2xl"><i class="fa-solid fa-bars"></i></span>
@@ -8,11 +8,11 @@
             class="transition ease-linear delay-1000 hidden md:flex absolute md:static top-3 md:top-0 right-3 md:right-0 rounded md:rounded-none bg-orange-500 md:bg-transparent text-white md:text-black p-5 md:p-0">
             <div class="md:hidden text-2xl w-full text-end"><i id="close" class="fa-solid fa-xmark text-end"></i>
             </div>
-            <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/user/search-products"><i
+            <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/search-products"><i
                         class="fa-solid fa-magnifying-glass"></i> Search</a></li>
-            <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/user/offers"><i
+            <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/offers"><i
                         class="fa-solid fa-tag"></i> Offers</a></li>
-            <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/user/help"><i
+            <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="/help"><i
                         class="fa-solid fa-life-ring"></i> Help</a></li>
             <li id="logged" class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"></li>
             <li class="mx-3 my-5 md:my-4 md:text-slate-600 text-xl md:hover:text-orange-500"><a href="#" onclick="toCart()"><i
@@ -27,13 +27,13 @@
 if (sessionStorage.getItem('username')) {
         const Name = sessionStorage.getItem('username').split(' ')
         const id = sessionStorage.getItem('user_id');
-        logged.innerHTML = `<a href='/user/userProfile/${id}' onclick="" class=""><i class="fa-regular fa-user"></i> ${Name[0]}</a>`;
+        logged.innerHTML = `<a href='/userProfile/${id}' onclick="" class=""><i class="fa-regular fa-user"></i> ${Name[0]}</a>`;
     } else {
-        logged.innerHTML = `<a href="/user/login"><i class="fa-solid fa-life-ring"></i> Login</a>`
+        logged.innerHTML = `<a href="/login"><i class="fa-solid fa-life-ring"></i> Login</a>`
     }
 })()
     function toCart(){
-        window.location.href=`/user/cart/${sessionStorage.getItem('user_id')}`
+        window.location.href=`/cart/${sessionStorage.getItem('user_id')}`
     }
     const open = document.getElementById('open');
     const closes = document.getElementById('close');

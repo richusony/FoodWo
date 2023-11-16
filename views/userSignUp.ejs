@@ -26,8 +26,8 @@
             <span class="text-orange-500 font-bold text-2xl md:text-3xl ">FoodWo</span>
         </div>
         <div class="flex justify-between items-center">
-            <a href="/user/login" class="font-semibold text-xl mx-2">Login</a>
-            <a href="/user/signup"
+            <a href="/login" class="font-semibold text-xl mx-2">Login</a>
+            <a href="/signup"
                 class="px-4 text-center py-2 text-white bg-orange-500 rounded-full mx-2 md:text-xl">Signup</a>
         </div>
     </nav>
@@ -91,7 +91,7 @@
     </section>
 
     <!-- footer -->
-    <%- include('../views/userFooter.ejs') %>
+    <%- include('userFooter') %>
 
 
         <script>
@@ -208,7 +208,7 @@
                     console.log("userdDATA :: : :", formData)
                     try {
                         // Send a POST request to the server using async/await
-                        const response = await fetch(`/user/signup`, {
+                        const response = await fetch(`/signup`, {
                             method: 'POST',
                             headers: {
                                 "Content-Type": "application/json",
@@ -233,7 +233,7 @@
 
                         }
                         if (response.ok) {
-                            window.location.href = "/user/otpVerify"
+                            window.location.href = "/otpVerify"
                         }
 
 
@@ -259,8 +259,8 @@
                     }, 3000);
                     return;
                 }
-                console.log(`/user/verify-referal?code=${referCode.trim()}`)
-                const res = await fetch(`/user/verify-referal?code=${referCode.trim()}`);
+                console.log(`/verify-referal?code=${referCode.trim()}`)
+                const res = await fetch(`/verify-referal?code=${referCode.trim()}`);
                 if (res.status == 400) {
                     const data = await res.json();
                     toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.failed}</span>`;

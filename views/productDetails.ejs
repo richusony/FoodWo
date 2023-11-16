@@ -316,9 +316,9 @@
                     const realData = await JSON.stringify(reqData);
 
                     if (!userid) {
-                        window.location.href = '/user/login';
+                        window.location.href = '/login';
                     } else {
-                        const response = await fetch(`/user/addWishlist/${foodid}/${userid}`, {
+                        const response = await fetch(`/addWishlist/${foodid}/${userid}`, {
                             method: 'POST',
                             headers: {
                                 "Content-Type": "application/json",
@@ -354,9 +354,9 @@
                     }
                     const realData = JSON.stringify(reqData);
                     if (!userid) {
-                        window.location.href = '/user/login';
+                        window.location.href = '/login';
                     } else {
-                        const response = await fetch('/user/addToCart/', {
+                        const response = await fetch('/addToCart/', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': "application/json",

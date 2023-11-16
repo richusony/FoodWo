@@ -72,7 +72,7 @@ async function signInUser(req, res) {
             };
             console.log(otp)
             // Redirect to OTP verification page
-            res.redirect('/user/otpVerify');
+            res.redirect('/otpVerify');
         } catch (err) {
             console.error(err);
         }
@@ -260,7 +260,7 @@ async function removeFromCart(req, res) {
 
 async function logoutUser(req, res) {
     req.session.destroy();
-    res.redirect('/user/login')
+    res.redirect('/login')
 }
 
 async function addToWishlist(req, res) {
@@ -313,7 +313,7 @@ async function sendResetUrl(req, res) {
     const exist = await userModel.findOne({ phone: phone })
 
     if (exist) {
-        const message = `your reset url  is http://localhost:8080/user/forgotPassword/${exist._id}`;
+        const message = `your reset url  is http://localhost:8080/forgotPassword/${exist._id}`;
         const sending = await client.messages.create({
             body: message,
             from: '+17854652553',

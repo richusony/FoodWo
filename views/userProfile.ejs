@@ -45,7 +45,7 @@
                         <% if(userAddress.address3 !="false" ){ address3=true}else{ address3=false;}%>
                             <% if(userData){ %>
                                 <div class="my-4 mx-auto">
-                                    <form action="/user/userProfile/<%=userData._id%>" method="post"
+                                    <form action="/userProfile/<%=userData._id%>" method="post"
                                         enctype="multipart/form-data">
 
                                         <label for="doc"
@@ -253,23 +253,23 @@
 
 
                 function logoutUser(event) {
-                    window.location.href = '/user/logout';
+                    window.location.href = '/logout';
                     sessionStorage.clear()
                 }
 
                 function redirectToOrders() {
-                    window.location.href = `/user/my-orders/${sessionStorage.getItem('user_id')}`;
+                    window.location.href = `/my-orders/${sessionStorage.getItem('user_id')}`;
                 }
 
                 function redirectToWish() {
-                    window.location.href = `/user/wishlist/${sessionStorage.getItem('user_id')}`;
+                    window.location.href = `/wishlist/${sessionStorage.getItem('user_id')}`;
                 }
 
                 function redirectToWallet() {
-                    window.location.href = `/user/wallet/${sessionStorage.getItem('user_id')}`;
+                    window.location.href = `/wallet/${sessionStorage.getItem('user_id')}`;
                 }
                 function redirectToReferal() {
-                    window.location.href = `/user/referal/${sessionStorage.getItem('user_id')}`;
+                    window.location.href = `/referal/${sessionStorage.getItem('user_id')}`;
                 }
 
                 let address3 = '<%=address3%>';
@@ -305,7 +305,7 @@
                     const confirm = window.confirm("Are you sure. You want delete your account?");
                     if (confirm) {
                         const user_id = '<%=userData._id%>'
-                        const deleting = await fetch(`/user/delete-account/${user_id}`, {
+                        const deleting = await fetch(`/delete-account/${user_id}`, {
                             method: 'DELETE'
                         });
 
@@ -318,7 +318,7 @@
                                 setTimeout(() => {
                                     toast.classList.add("opacity-0");
                                     toast.classList.add("-translate-x-full");
-                                    window.location.href = '/user/login';
+                                    window.location.href = '/login';
                                 }, 3000);
                             } else {
                                 toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Something went wrong.Please try again later</span>`;

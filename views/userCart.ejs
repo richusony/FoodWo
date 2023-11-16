@@ -65,7 +65,7 @@
             </div>
             <div class="flex items-center justify-between px-3 py-5">
                 <span class=" px-3 py-2 text-lg md:text-2xl text-center font-bold">Shopping Cart</span>
-                <a href="/user/products"
+                <a href="/products"
                     class="flex items-center justify-between text-sm md:text-lg hover:text-orange-500 cursor-pointer"><i
                         class="fa-solid fa-arrow-left mx-2"></i> <span>Continue Shopping</span></a>
             </div>
@@ -479,7 +479,7 @@
                     }
                     const realData = await JSON.stringify(reqData);
 
-                    const response = await fetch('/user/removeFromCart', {
+                    const response = await fetch('/removeFromCart', {
                         method: 'POST',
                         headers: {
                             'Content-Type': "application/json",
@@ -548,7 +548,7 @@
                     }
                     const userid = sessionStorage.getItem('user_id');
                     const reqData = await JSON.stringify(newaddress)
-                    const adding = await fetch(`/user/add-newaddres/${userid}/${flag}`, {
+                    const adding = await fetch(`/add-newaddres/${userid}/${flag}`, {
                         method: 'PATCH',
                         headers: {
                             'Content-Type': "application/json"
@@ -607,7 +607,7 @@
                         address: currentAdd.innerText,
                     }
                     const address = JSON.stringify(newaddress)
-                    const saveAddressToDB = await fetch(`/user/save-address/${userid}/${id}`, {
+                    const saveAddressToDB = await fetch(`/save-address/${userid}/${id}`, {
                         method: 'PATCH',
                         headers: {
                             'Content-Type': "application/json"
@@ -659,7 +659,7 @@
                         handler: async (response) => {
                             try {
                                 console.log('response :', response)
-                                const verifyUrl = '/user/verify'
+                                const verifyUrl = '/verify'
                                 const data = await axios.post(verifyUrl, response)
                                 console.log('verifyData : ', data)
                                 if (data.status === 200) {
@@ -726,7 +726,7 @@
                                         }
 
                                         const reqData = await JSON.stringify(productData);
-                                        const checkResponse = await fetch('/user/cart-checkout', {
+                                        const checkResponse = await fetch('/cart-checkout', {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': "application/json",
@@ -754,7 +754,7 @@
                                             }
                                             const realData = await JSON.stringify(reqData);
 
-                                            const response = await fetch('/user/removeFromCart', {
+                                            const response = await fetch('/removeFromCart', {
                                                 method: 'POST',
                                                 headers: {
                                                     'Content-Type': "application/json",
@@ -766,7 +766,7 @@
                                                 console.log(data)
                                                 sessionStorage.setItem('orderid', data.orderid)
                                                 sessionStorage.setItem('orderaddress', data.address)
-                                                window.location.href = '/user/order-success'
+                                                window.location.href = '/order-success'
                                             }
                                             console.log(`${productName} Ok.`)
                                         }
@@ -829,7 +829,7 @@
                     const reqData = JSON.stringify(coupon)
                     console.log(reqData, userId)
 
-                    const res = await fetch(`/user/check-coupon/${userId}`, {
+                    const res = await fetch(`/check-coupon/${userId}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': "application/json"
@@ -1040,7 +1040,7 @@
                             }
 
                             const reqData = await JSON.stringify(productData);
-                            const checkResponse = await fetch('/user/cart-checkout', {
+                            const checkResponse = await fetch('/cart-checkout', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': "application/json",
@@ -1068,7 +1068,7 @@
                                 }
                                 const realData = await JSON.stringify(reqData);
 
-                                const response = await fetch('/user/removeFromCart', {
+                                const response = await fetch('/removeFromCart', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': "application/json",
@@ -1080,7 +1080,7 @@
                                     console.log(data)
                                     sessionStorage.setItem('orderid', data.orderid)
                                     sessionStorage.setItem('orderaddress', data.address)
-                                    window.location.href = '/user/order-success'
+                                    window.location.href = '/order-success'
                                 }
                                 console.log(`${productName} Ok.`)
                             }
@@ -1113,7 +1113,7 @@
                             }
 
                             const reqData = await JSON.stringify(productData);
-                            const checkResponse = await fetch('/user/cart-checkout', {
+                            const checkResponse = await fetch('/cart-checkout', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': "application/json",
@@ -1141,7 +1141,7 @@
                                 }
                                 const realData = await JSON.stringify(reqData);
 
-                                const response = await fetch('/user/removeFromCart', {
+                                const response = await fetch('/removeFromCart', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': "application/json",
@@ -1153,7 +1153,7 @@
                                     console.log(data)
                                     sessionStorage.setItem('orderid', data.orderid)
                                     sessionStorage.setItem('orderaddress', data.address)
-                                    window.location.href = '/user/order-success'
+                                    window.location.href = '/order-success'
                                 }
                                 console.log(`${productName} Ok.`)
                             }
@@ -1178,7 +1178,7 @@
                                     productQty: productQty
                                 }
                                 const checkingData = await JSON.stringify(qtyData);
-                                const checkingQty = await fetch('/user/check-qty', {
+                                const checkingQty = await fetch('/check-qty', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': "application/json"
@@ -1205,7 +1205,7 @@
                                 return
                             } else {
                                 const totalAmount = parseInt('<%=totalPrice%>')
-                                const orderUrl = '/user/orders'
+                                const orderUrl = '/orders'
                                 const paying = await axios.post(orderUrl, { amount: finalamout == 0 ? totalAmount : finalamout })
                                 console.log(paying)
                                 initPayment(paying.data)

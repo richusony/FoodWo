@@ -174,11 +174,11 @@
                             <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
                                 <div class="w-full h-36 rounded-2xl">
                                    <% if(food.productInStock <=0){%>
-                                    <img onclick="redirectTo('/user/product-details/<%=food._id%>')"
+                                    <img onclick="redirectTo('/product-details/<%=food._id%>')"
                                     class="w-full h-full cursor-pointer grayscale rounded-2xl object-cover"
                                     src="/<%= food.productImages[0] %>" alt="">
                                     <%}else{%>
-                                    <img onclick="redirectTo('/user/product-details/<%=food._id%>')"
+                                    <img onclick="redirectTo('/product-details/<%=food._id%>')"
                                         class="w-full h-full cursor-pointer rounded-2xl object-cover"
                                         src="/<%= food.productImages[0] %>" alt="">
                                         <%}%>
@@ -239,9 +239,9 @@
                             <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
                                 <div class="w-full h-36 rounded-2xl">
                                  <% if(food.productInStock <=0){%>
-                            <img onclick="redirectTo('/user/product-details/<%=food._id%>')" class="cursor-pointer grayscale w-full h-full rounded-2xl object-cover" src="/<%= food.productImages[0] %>" alt="">
+                            <img onclick="redirectTo('/product-details/<%=food._id%>')" class="cursor-pointer grayscale w-full h-full rounded-2xl object-cover" src="/<%= food.productImages[0] %>" alt="">
                                 <%}else{%>
-                            <img onclick="redirectTo('/user/product-details/<%=food._id%>')" class="cursor-pointer w-full h-full rounded-2xl object-cover" src="/<%= food.productImages[0] %>" alt="">
+                            <img onclick="redirectTo('/product-details/<%=food._id%>')" class="cursor-pointer w-full h-full rounded-2xl object-cover" src="/<%= food.productImages[0] %>" alt="">
                                 <%}%>
                             </div>
                                 <h3 class="font-bold my-1 text-xl">
@@ -304,9 +304,9 @@
                     }
                     const realData = JSON.stringify(reqData);
                     if (!userid) {
-                        window.location.href = '/user/login';
+                        window.location.href = '/login';
                     } else {
-                        const response = await fetch('/user/addToCart/', {
+                        const response = await fetch('/addToCart/', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': "application/json",
@@ -354,9 +354,9 @@
                     const realData = await JSON.stringify(reqData);
 
                     if (!userid) {
-                        window.location.href = '/user/login';
+                        window.location.href = '/login';
                     } else {
-                        const response = await fetch(`/user/addWishlist/${foodid}/${userid}`, {
+                        const response = await fetch(`/addWishlist/${foodid}/${userid}`, {
                             method: 'POST',
                             headers: {
                                 "Content-Type": "application/json",

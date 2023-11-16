@@ -19,8 +19,8 @@
             <a href="/" class="text-orange-500 font-bold text-2xl md:text-3xl">FoodWo</a>
         </div>
         <div class="flex justify-between items-center">
-            <a href="/user/login" class="font-semibold text-xl mx-2">Login</a>
-            <a href="/user/signup"
+            <a href="/login" class="font-semibold text-xl mx-2">Login</a>
+            <a href="/signup"
                 class="px-4 text-center py-2 text-white bg-orange-500 rounded-full mx-2 md:text-xl">Signup</a>
         </div>
     </nav>
@@ -88,7 +88,7 @@
 
             // Send a POST request to the server to verify the OTP
             try {
-                const response = await fetch('/user/otpVerify', {
+                const response = await fetch('/otpVerify', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -102,7 +102,7 @@
                     // Redirect the user to a success page or perform necessary actions
                     errorMessage.textContent = 'Account Created Successfully.';
                     setTimeout(() => {
-                        window.location.href = '/user/login';
+                        window.location.href = '/login';
                     }, 2000);
                     // After successful OTP verification, you can stop or reset the timer as needed
                     clearInterval(timerInterval); // Stop the timer
@@ -123,7 +123,7 @@
             const toast = document.getElementById('toast');
             try {
                 // Send a POST request to the server using async/await
-                const response = await fetch(`/user/signup`, {
+                const response = await fetch(`/signup`, {
                     method: 'POST',
                     headers: {
                         "Content-Type": "application/json",
@@ -148,7 +148,7 @@
 
                 }
                 if (response.ok) {
-                    window.location.href = "/user/otpVerify"
+                    window.location.href = "/otpVerify"
                 }
 
 

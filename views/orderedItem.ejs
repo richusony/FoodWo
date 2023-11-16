@@ -48,7 +48,7 @@
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="w-full">
                         <h3 class="text-white font-semibold text-xl cursor-pointer w-fit mb-5"
-                            onclick="redirectTo('/user/my-orders/<%=order.userId%>')"><i
+                            onclick="redirectTo('/my-orders/<%=order.userId%>')"><i
                                 class="fa-solid fa-arrow-left"></i> Orders</h3>
                         <h2 class="text-white flex items-center"><span class="text-sm mr-2">Order ID :
                                 <%=order.orderId%>
@@ -115,7 +115,7 @@
                 async function cancelOrder(event) {
                     const orderId = event.target.dataset.oid;
                     if (orderId) {
-                        const response = await fetch(`/user/cancel-order/${orderId}`, {
+                        const response = await fetch(`/cancel-order/${orderId}`, {
                             method: 'PATCH'
                         })
 
@@ -169,7 +169,7 @@
                     const downloadLink = document.createElement('a');
 
                     // Set the href to the PDF download URL
-                    downloadLink.href = `/user/download-invoice/${orderId}`;
+                    downloadLink.href = `/download-invoice/${orderId}`;
 
                     // Set the download attribute with the desired file name
                     downloadLink.download = `invoice_${orderId}.pdf`;

@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 })
 
 // User Routes
-app.use('/user', userRouter);
+app.use('/', userRouter);
 
 app.use('/admin', adminRouter)
 
