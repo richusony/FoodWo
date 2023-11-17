@@ -19,16 +19,19 @@
         <section class="px-4 py-2">
             <div class="flex flex-col md:flex-row items-center justify-center px-4 py-5">
                 <div onclick="redirectTo('/admin/orders')"
-                    class="transition delay-150 py-3 px-2 text-white bg-[#80FF00] mx-3 my-3 h-32 w-52 text-center flex justify-center items-center font-bold rounded shadow-md cursor-pointer text-xl ease-linear hover:-translate-y-2">
-                    <span class="">Orders <i class="fa-solid fa-book text-xl text-orange-500"></i></span>
+                    class="transition delay-150 py-3 px-2 text-white bg-[#80FF00] mx-3 my-3 h-32 w-52 text-center flex flex-col justify-center items-center font-bold rounded shadow-md cursor-pointer text-xl ease-linear hover:-translate-y-2">
+                    <span class="">New Orders</span>
+                    <span class=""><%=ordersCount%> <i class="fa-solid fa-book text-xl text-orange-500"></i></span>
                 </div>
                 <div
-                    class="transition delay-150 py-3 px-2 text-white bg-[#2279FB] mx-3 my-3 h-32 w-52 text-center flex justify-center items-center font-bold rounded shadow-md cursor-pointer text-xl ease-linear hover:-translate-y-2">
-                    <span class="">Total Revenue <i class="fa-solid fa-dollar-sign text-xl text-orange-500"></i></span>
+                    class="transition delay-150 py-3 px-2 text-white bg-[#2279FB] mx-3 my-3 h-32 w-52 text-center flex flex-col justify-center items-center font-bold rounded shadow-md cursor-pointer text-xl ease-linear hover:-translate-y-2">
+                    <span class="">Total Revenue</span>
+                    <span class=""><i class="fa-solid fa-indian-rupee-sign text-xl text-orange-500"></i><%=totalProfit%></span>
                 </div>
                 <div onclick="redirectTo('/admin/users')"
-                    class="transition delay-150 py-3 px-2 text-white bg-[#FED000] mx-3 my-3 h-32 w-52 text-center flex justify-center items-center font-bold rounded shadow-md cursor-pointer text-xl ease-linear hover:-translate-y-2">
-                    <span class="">New Users <i class="fa-solid fa-users text-xl text-orange-500"></i></span>
+                    class="transition delay-150 py-3 px-2 text-white bg-[#FED000] mx-3 my-3 h-32 w-52 text-center flex flex-col justify-center items-center font-bold rounded shadow-md cursor-pointer text-xl ease-linear hover:-translate-y-2">
+                    <span class="">New Users</span>
+                    <span class=""><%=usersCount%> <i class="fa-solid fa-users text-2xl text-orange-500 "></i></span>
                 </div>
             </div>
         </section>

@@ -10,8 +10,35 @@ const orderModel = require('../models/orderSchema')
 async function viewDashboard(req, res) {
     const topCustomers = await userModel.find({}).sort({ purchaseCount: -1 }).limit(3);
     const topProducts = await productModel.find({}).sort({ purchaseCount: -1 }).limit(3);
-    res.render('../views/Admin/adminDashboard', { topCust: topCustomers, topProd: topProducts })
+    const usersCount = await userModel.countDocuments();
+    const ordersCount = await orderModel.countDocuments({orderStatus:"Pending"});
+
+    const totalProfitResult = await orderModel.aggregate([
+        {
+            $match: { orderStatus: { $ne: "Pending" } }
+        },
+        {
+            $group: {
+                _id: null,
+                totalProfit: {
+                    $sum: { $multiply: ["$productPrice", "$productQty"] }
+                }
+            }
+        }
+    ]);
+
+    // Extract the total profit from the aggregation result
+    const totalProfit = totalProfitResult.length > 0 ? totalProfitResult[0].totalProfit : 0;
+
+    res.render('../views/Admin/adminDashboard', {
+        topCust: topCustomers,
+        topProd: topProducts,
+        usersCount: usersCount,
+        ordersCount: ordersCount,
+        totalProfit: totalProfit // Include total profit in the rendered view
+    });
 }
+
 
 function viewLogInPage(req, res) {
     res.render('../views/Admin/adminLogin')
