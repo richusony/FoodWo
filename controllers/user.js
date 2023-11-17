@@ -21,6 +21,14 @@ function viewLoginInPage(req, res) {
     res.render('userLogin')
 }
 
+function userSession(req,res){
+    if(req.session.user){
+        res.status(200).json({userData:req.session.user});
+    }else{
+        res.status(400).json({error:"User session not available"})
+    }
+}
+
 // Function to generate a random OTP
 function generateOTP() {
     return Math.floor(100000 + Math.random() * 900000);
@@ -847,5 +855,6 @@ module.exports = {
     addNewAddress,
     checkingQuantity,
     deleteAccount,
-    viewPageNotFound
+    viewPageNotFound,
+    userSession
 }

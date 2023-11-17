@@ -5,7 +5,7 @@ const { isBlocked } = require('../middleware/userBlocked')
 const { upload } = require('../middleware/multer')
 const { viewProductSearchPage, searchFoodItems } = require('../controllers/searchController')
 const { viewWishlistPage, removeWishlist } = require('../controllers/wishlistController')
-const { signInUser, addToWishlist, viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage, viewOrderItemPage, cancelOrder, updateUserAddress, addNewAddress, checkingQuantity, deleteAccount, viewPageNotFound } = require('../controllers/user');
+const { signInUser, addToWishlist, viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage, viewOrderItemPage, cancelOrder, updateUserAddress, addNewAddress, checkingQuantity, deleteAccount, viewPageNotFound, userSession } = require('../controllers/user');
 const { createOrders, verifyOrders } = require('../controllers/paymentController');
 const { checkingCoupon } = require('../controllers/couponController');
 const { viewWalletPage, addMoney } = require('../controllers/walletController');
@@ -28,6 +28,9 @@ router.route('/search-products')
 
 router.route('/search-food')
     .get(searchFoodItems)
+
+router.route('/user-session')
+.get(userSession)
 
 // User Products Page Get Request
 router.route('/products').get(productPage)
