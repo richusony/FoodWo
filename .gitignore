@@ -1,7 +1,7 @@
 # Ignore the .env file
 .env
-.pdf
-.xlsx
+*.pdf
+*.xlsx
 
 # Ignore the node_modules folder and its contents
 node_modules/
