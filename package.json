@@ -1,6 +1,6 @@
 {
   "name": "foodwo",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Welcome to FoodWo, your one-stop destination for online food ordering in Kannur District! FoodWo provides a convenient platform for customers to browse and order delicious food items from a single restaurant without leaving the comfort of their homes. ",
   "main": "index.js",
   "scripts": {

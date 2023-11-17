@@ -31,7 +31,7 @@ function viewInvoice(req, res) {
 
             // Create PDF from dynamic HTML
             const pdfOptions = { format: "Letter" };
-            pdf.create(dynamicHtml, pdfOptions).toFile(`${orderId}.pdf`, function (err, pdfRes) {
+            pdf.create(dynamicHtml, pdfOptions).toFile(`/workspaces/FoodWo/invoice/${orderId}.pdf`, function (err, pdfRes) {
                 if (err) {
                     console.error(err);
                     res.status(500).send('Error generating PDF');
@@ -39,7 +39,7 @@ function viewInvoice(req, res) {
                     console.log(pdfRes); // { filename: '/app/businesscard.pdf' }
 
                     // Send the generated PDF as a response
-                    res.sendFile(`${orderId}.pdf`, { root: './' });
+                    res.sendFile(`${orderId}.pdf`, { root: '/workspaces/FoodWo/invoice/' });
                 }
             });
         })
