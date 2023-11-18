@@ -191,6 +191,7 @@
                         const clearIcon = document.getElementById('clearIcon')
                         const searchedItemsCon = document.getElementById('searchedItemsCon')
                         const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
+                        const searchInput = document.getElementById('searchInput');
 
                         searchIcon.classList.add('hidden')
                         clearIcon.classList.remove('hidden')
@@ -204,6 +205,7 @@
                             searchedItemsMainCon.classList.add('hidden')
                             return;
                         }
+                        searchInput.value=mainSearch.trim();
                         const searching = await fetch(`/search-food?query=${mainSearch.trim()}`);
                         searches = mainSearch;
                         if (searching.ok) {
