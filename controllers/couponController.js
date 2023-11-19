@@ -3,13 +3,13 @@ const productModel = require('../models/productSchema');
 const { userModel } = require('../models/userSchema');
 
 // Helper function to format date in DD/MM/YYYY
-function formatDate(date) { 
+function formatDate(date) {
     const d = new Date(date);
     const day = String(d.getDate()).padStart(2, '0');
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const year = d.getFullYear();
     return `${day}/${month}/${year}`;
-} 
+}
 
 async function viewCouponMangemenPage(req, res) {
     const foodItem = await productModel.find({}).sort({ productName: 1 })
@@ -27,13 +27,13 @@ async function viewCouponMangemenPage(req, res) {
 
 async function createCoupon(req, res) {
     const { userLimit, usageLimit, startTime, endTime, couponCode, foodItem, discountType, discountValue } = req.body;
-    const exists = await couponModel.findOne({couponCode:couponCode});
-    if(exists){
-        res.status(400).json({err:'coupon already existed'});
+    const exists = await couponModel.findOne({ couponCode: couponCode });
+    if (exists) {
+        res.status(400).json({ err: 'coupon already existed' });
         return;
     }
-    const food = await productModel.findOne({_id:foodItem})
-    const addCoupon = await couponModel.create({ usersLimit: userLimit, usageLimit: usageLimit, startDate: startTime, endDate: endTime, couponCode: couponCode, foodId: foodItem,foodName:food.productName, discountType: discountType, discountValue: discountValue, status: "active",usedUsersCount:0 });
+    const food = await productModel.findOne({ _id: foodItem })
+    const addCoupon = await couponModel.create({ usersLimit: userLimit, usageLimit: usageLimit, startDate: startTime, endDate: endTime, couponCode: couponCode, foodId: foodItem, foodName: food.productName, discountType: discountType, discountValue: discountValue, status: "active", usedUsersCount: 0 });
     if (addCoupon) {
         res.status(200).json({ added: true })
     } else {
@@ -45,9 +45,9 @@ async function deleteCoupon(req, res) {
     const coupId = req.params.id;
     const deleteCoup = await couponModel.deleteOne({ _id: coupId })
     if (deleteCoup) {
-        res.status(200).json({deleted:true})
+        res.status(200).json({ deleted: true })
     } else {
-        res.status(400).json({deleted:false})
+        res.status(400).json({ deleted: false })
     }
 }
 
@@ -84,10 +84,13 @@ async function checkingCoupon(req, res) {
     console.log("foodids : ", foodids)
     const exists = await couponModel.findOne({ couponCode: coupon })
     const checkFood = foodids.includes(exists?.foodId)
+    const foodId = foodids.filter(id => id == exists?.foodId);
+    
     console.log("food checking : ", checkFood)
     if (exists) {
-        if(exists.usedUsersCount>=exists.usageLimit){
-            res.status(400).json({err:"you are late. maximum user limit has been reached"})
+        console.log("count : ", exists.usedUsersCount)
+        if (exists.usedUsersCount >= exists.usersLimit) {
+            res.status(400).json({ err: "you are late. maximum user limit has been reached" })
             return;
         }
         if (checkFood) {
@@ -123,7 +126,7 @@ async function checkingCoupon(req, res) {
                         // if (updatingUser) {
                         //     const updateCoupon = await couponModel.updateOne({_id:exists._id.toString()},{$inc:{usedUsersCount:1}})
                         //     console.log(updateCoupon)
-                            res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue })
+                        res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue })
 
                         //     console.log("usedCoupons after update: ", userModel.usedCoupons);
                         // } else {
@@ -141,7 +144,7 @@ async function checkingCoupon(req, res) {
                         // const updating = await userModel.updateOne({ _id: userId, 'usedCoupons.couponId': findCoupon[0].couponId },
                         //     { $inc: { 'usedCoupons.$.usedCount': 1 } })
                         // if (updating) {
-                            res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue })
+                        res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue })
                         // } else {
                         //     res.status(500).json({ added: false, err: "Database is having some issues" })
                         // }
@@ -161,14 +164,14 @@ async function checkingCoupon(req, res) {
 
 }
 
-async function getPrice(req,res){
- const fid = req.params.fid;
- const food = await productModel.findOne({_id:fid});
- if(food){
-    res.status(200).json({foodData:food})
- }else{
-    res.status(400).json({err:"food dosen't exists."})
- }
+async function getPrice(req, res) {
+    const fid = req.params.fid;
+    const food = await productModel.findOne({ _id: fid });
+    if (food) {
+        res.status(200).json({ foodData: food })
+    } else {
+        res.status(400).json({ err: "food dosen't exists." })
+    }
 }
 
 module.exports = {

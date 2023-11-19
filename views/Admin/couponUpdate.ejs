@@ -115,7 +115,8 @@
             <script>
                 let food;
                 const alertBox = document.getElementById('alert')
-                const alertMsg = document.getElementById('alertMsg')
+                const alertMsg = document.getElementById('alertMsg');
+                
                 (async()=>{
                     const foodId = document.getElementById('foodItem').value
                     const fetchingFood = await fetch(`/admin/food-price/${foodId}`);
@@ -125,7 +126,7 @@
                             food = data.foodData;
                         }
                     }
-                })()
+                })();
 
                 function userLimitRange(event) {
                     if (parseInt(event.target.value) <= 0) {
@@ -211,6 +212,7 @@
                         const data = await fetchingFood.json();
                         if (fetchingFood.status == 200) {
                             food = data.foodData;
+                            console.log("food ",food)
                         }
                     }
                 }
