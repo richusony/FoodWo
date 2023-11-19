@@ -613,7 +613,7 @@ async function updateStock(req, res) {
                 }
             }
 
-        } else {
+        } else { 
             return res.status(404).json({ err: "Coupon not found" })
         }
     }
