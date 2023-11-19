@@ -367,32 +367,6 @@
                     event.target.classList.add('bg-white', 'text-orange-500');
                 }
 
-
-                // function checkChange(event) {
-                //     event.preventDefault();
-                //     console.log("clikcedddd : ", event)
-                //     const cod = document.getElementById('cod');
-                //     const walletPay = document.getElementById('walletPay');
-                //     const onlinePayment = document.getElementById('onlinePayment');
-                //     const walletBalance = document.getElementById('walletBalance');
-
-                //     if (cod.checked) {
-                //         walletPay.checked = false;
-                //         onlinePayment.checked = false;
-                //         walletBalance.classList.add('hidden')
-                //     } else if (walletPay.checked) {
-                //         walletBalance.classList.remove('hidden')
-                //         cod.checked = false;
-                //         onlinePayment.checked = false;
-                //     } else if (onlinePayment.checked) {
-                //         walletBalance.classList.add('hidden')
-                //         cod.checked = false;
-                //         walletPay.checked = false;
-                //     } else {
-                //         console.log('Not selected any payment methods...')
-                //     }
-                // }
-
                 function priceUp(event) {
                     const index = event.currentTarget.getAttribute('data-index');
                     const qty = document.getElementById(`qty${index}`);
@@ -419,9 +393,10 @@
                         // Update the displayed quantity and price
                         qty.innerText = quantity;
                         currentPrice.innerText = "₹" + newPrice
-                        final.forEach((item) => {
-                            item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
-                        })
+                        // final.forEach((item) => {
+                        //     item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
+                        // })
+                        finalamountElement.innerText=finalPrice.toFixed(2)
                         // Update the final price
                         // finalPrice = newPrice;
 
@@ -451,10 +426,10 @@
                         // Update the displayed quantity and price
                         qty.innerText = quantity;
                         currentPrice.innerText = "₹" + newPrice;
-                        final.forEach((item) => {
-                            item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
-                        })
-
+                        // final.forEach((item) => {
+                        //     item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
+                        // })
+                        finalamountElement.innerText=finalPrice.toFixed(2)
                         // Update the final price
                         // finalPrice = newPrice;
 
@@ -865,12 +840,12 @@
                             couponAlert.classList.remove('hidden');
                             const finalP = parseInt('<%= totalPrice%>')
                             if (disType == "per") {
-                                finalamout = finalP - (disValue * finalP / 100);
+                                finalamout = parseFloat(finalamountElement.innerText) - (disValue * parseFloat(finalamountElement.innerText) / 100);
                                 finalamountElement.innerText = finalamout;
                                 console.log('fianlPreview ', finalamountElement.innerText)
                             } else {
-                                finalamout = finalP - disValue;
-                                finalamountElement.innerText = finalamout;
+                                finalamout = parseFloat(finalamountElement.innerText) - disValue;
+                                finalamountElement.innerText = finalamout.toFixed(2);
                             }
 
                         } else {
