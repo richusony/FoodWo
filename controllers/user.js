@@ -527,6 +527,7 @@ async function updateStock(req, res) {
     console.log(user_id, productId, productQty);
     let discountAddedOrNot = false;
     let afterDiscountPrice = parseInt(productPrice);
+    let discountAmount = 0;
     const currentDate = moment().format('DD-MM-YYYY');
     // const coupon = req.body.coupon;
     const existCoupon = await couponModel.findOne({ couponCode: coupon })
@@ -577,6 +578,7 @@ async function updateStock(req, res) {
                                 console.log(updateCoupon)
                                 if (existCoupon.discountType == "per") {
                                     afterDiscountPrice = parseInt(productPrice * productQty) - (existCoupon.discountValue * parseInt(productPrice) / 100);
+                                    discountAmount = (existCoupon.discountValue * parseInt(productPrice) / 100);
                                     console.log("after discount : : : : : ", afterDiscountPrice)
                                     discountAddedOrNot = true;
                                 }
@@ -598,6 +600,7 @@ async function updateStock(req, res) {
                                 if (existCoupon.discountType == "per") {
                                     afterDiscountPrice = parseInt(productQty) * parseInt(productPrice) - (existCoupon.discountValue * parseInt(productPrice) / 100);
                                     console.log("after discount : : : : : ", afterDiscountPrice)
+                                    discountAmount = (existCoupon.discountValue * parseInt(productPrice) / 100);
                                 } else {
                                     afterDiscountPrice = parseInt(productQty) * parseInt(productPrice) - existCoupon.discountValue;
                                 }
@@ -698,7 +701,8 @@ async function updateStock(req, res) {
 
 
             if (result) {
-                const createInvoice = await invoiceModel.create({ userId: user_id, orderId: orderId, productId: productId, productName: productName, productQty: productQty, shippingAddress: address, amount: afterDiscountPrice, paymentMethod: paymentMethod })
+                console.log("discounted AMOUnt :::: ",discountAmount.toFixed(2))
+                const createInvoice = await invoiceModel.create({ userId: user_id, orderId: orderId, productId: productId, productName: productName, productQty: productQty, shippingAddress: address, discount: discountAmount.toFixed(2), amount: afterDiscountPrice.toFixed(2), paymentMethod: paymentMethod })
                 res.status(200).json({ orderid: orderId, address: address });
 
             } else {
