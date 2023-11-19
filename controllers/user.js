@@ -21,11 +21,11 @@ function viewLoginInPage(req, res) {
     res.render('userLogin')
 }
 
-function userSession(req,res){
-    if(req.session.user){
-        res.status(200).json({userData:req.session.user});
-    }else{
-        res.status(400).json({error:"User session not available"})
+function userSession(req, res) {
+    if (req.session.user) {
+        res.status(200).json({ userData: req.session.user });
+    } else {
+        res.status(400).json({ error: "User session not available" })
     }
 }
 
@@ -596,8 +596,10 @@ async function updateStock(req, res) {
                                 { $inc: { 'usedCoupons.$.usedCount': 1 } })
                             if (updating) {
                                 if (existCoupon.discountType == "per") {
-                                    afterDiscountPrice = parseInt(productPrice) - (existCoupon.discountValue * parseInt(productPrice) / 100);
+                                    afterDiscountPrice = parseInt(productQty) * parseInt(productPrice) - (existCoupon.discountValue * parseInt(productPrice) / 100);
                                     console.log("after discount : : : : : ", afterDiscountPrice)
+                                } else {
+                                    afterDiscountPrice = parseInt(productQty) * parseInt(productPrice) - existCoupon.discountValue;
                                 }
                                 console.log("coupon added")
                             } else {

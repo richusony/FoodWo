@@ -93,14 +93,14 @@
                                                 </div>
 
                                                 <div class=" flex mr-2 md:mr-3 relative text-center justify-center">
-                                                    <div onclick="priceDown(event)" data-index="<%= index %>"
+                                                    <div onclick="priceDown(event)" data-index="<%= index %>" data-fid="<%= cart._id %>"
                                                         data-stock="<%=cart.productInStock%>"
                                                         class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-l-full">
                                                         <i class="fa-solid fa-minus"></i>
                                                     </div>
                                                     <span id="<%= `qty${index}` %>"
                                                         class="qty mx-3 text-sm my-auto">1</span>
-                                                    <div onclick="priceUp(event)" data-index="<%= index %>"
+                                                    <div onclick="priceUp(event)" data-index="<%= index %>" data-fid="<%= cart._id %>"
                                                         data-stock="<%=cart.productInStock%>"
                                                         class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-r-full">
                                                         <i class="fa-solid fa-plus"></i>
@@ -324,6 +324,7 @@
                 let disType;
                 let disValue;
                 let couponAddedOrNot = false;
+                let idQtyObj = {};
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const couponAlert = document.getElementById('couponAlert');
@@ -340,13 +341,26 @@
 
                 const final = document.querySelectorAll(`.finalPrice`);
 
+                (() => {
+                    const cartItems = '<%-JSON.stringify(cartItems).trim()%>';
+                    console.log(cartItems);
+                    const check = JSON.parse(cartItems);
+                    const ids = check.filter(item => item._id);
+                    console.log(ids);
+                    ids.forEach((item) => {
+                        idQtyObj[item._id] = { id: item._id, qty: 1 }; // Setting each _id as a key in idQtyObj with value 1
+                    });
+
+                    console.log(idQtyObj);
+                })();
+
                 function handlePayment(id) {
                     const radioInput = document.getElementById(id);
                     const walletBalance = document.getElementById('walletBalance');
                     radioInput.checked = true;
                     paymentMethods(event);
                     walletBalance.classList.add('hidden')
-                    if(id=="walletPay"){
+                    if (id == "walletPay") {
                         walletBalance.classList.remove('hidden')
                     }
                 }
@@ -369,6 +383,7 @@
 
                 function priceUp(event) {
                     const index = event.currentTarget.getAttribute('data-index');
+                    const fid = event.currentTarget.getAttribute('data-fid');
                     const qty = document.getElementById(`qty${index}`);
                     const currentPrice = document.getElementById(`price${index}`);
                     const actualPrice = currentPrice.getAttribute('data-actualPrice');
@@ -392,11 +407,13 @@
 
                         // Update the displayed quantity and price
                         qty.innerText = quantity;
+                        idQtyObj[fid].qty=quantity;
+                        console.log(idQtyObj)
                         currentPrice.innerText = "₹" + newPrice
                         // final.forEach((item) => {
                         //     item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
                         // })
-                        finalamountElement.innerText=finalPrice.toFixed(2)
+                        finalamountElement.innerText = finalPrice.toFixed(2)
                         // Update the final price
                         // finalPrice = newPrice;
 
@@ -407,6 +424,7 @@
                 function priceDown(event) {
                     const index = event.currentTarget.getAttribute('data-index');
                     const qty = document.getElementById(`qty${index}`);
+                    const fid = event.currentTarget.getAttribute('data-fid');
                     const currentPrice = document.getElementById(`price${index}`);
                     const actualPrice = currentPrice.getAttribute('data-actualPrice');
                     const remainingStock = parseInt(event.currentTarget.getAttribute('data-stock'));
@@ -425,11 +443,13 @@
                         finalPrice -= parseFloat(actualPrice);
                         // Update the displayed quantity and price
                         qty.innerText = quantity;
+                        idQtyObj[fid].qty=quantity;
+                        console.log(idQtyObj)
                         currentPrice.innerText = "₹" + newPrice;
                         // final.forEach((item) => {
                         //     item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
                         // })
-                        finalamountElement.innerText=finalPrice.toFixed(2)
+                        finalamountElement.innerText = finalPrice.toFixed(2)
                         // Update the final price
                         // finalPrice = newPrice;
 
@@ -800,7 +820,7 @@
                     const userId = sessionStorage.getItem('user_id');
                     const foodides = '<%=foodIds%>'
                     console.log('success : ', foodides)
-                    const coupon = { coupon: couponInput, foodids: foodides }
+                    const coupon = { coupon: couponInput, foodids: foodides,idQtyObj:idQtyObj }
                     const reqData = JSON.stringify(coupon)
                     console.log(reqData, userId)
 
@@ -839,8 +859,9 @@
                             couponAddedOrNot = true;
                             couponAlert.classList.remove('hidden');
                             const finalP = parseInt('<%= totalPrice%>')
+                            const foodPrice = parseInt(data.foodPrice)
                             if (disType == "per") {
-                                finalamout = parseFloat(finalamountElement.innerText) - (disValue * parseFloat(finalamountElement.innerText) / 100);
+                                finalamout = parseFloat(finalamountElement.innerText) - (disValue * foodPrice / 100);
                                 finalamountElement.innerText = finalamout;
                                 console.log('fianlPreview ', finalamountElement.innerText)
                             } else {
@@ -1181,7 +1202,7 @@
                             } else {
                                 const totalAmount = parseInt('<%=totalPrice%>')
                                 const orderUrl = '/orders'
-                                const paying = await axios.post(orderUrl, { amount: finalamout == 0 ? totalAmount : finalamout })
+                                const paying = await axios.post(orderUrl, { amount: finalamout == 0 ? totalAmount.toFixed(2) : finalamout.toFixed(2) })
                                 console.log(paying)
                                 initPayment(paying.data)
                             }
