@@ -37,6 +37,7 @@ const {viewCouponMangemenPage,createCoupon, deleteCoupon, viewCouponUpdatePage, 
 const { salesToExcel, salesToPdf, viewSalePage, filterSales } = require('../controllers/reportController');
 const { viewPageNotFound } = require('../controllers/user');
 const { listAllBanners, uploadBanner, viewBannerPage, deleteBanner } = require('../controllers/bannerController');
+const { viewOfferMainPage, viewCreateOfferPage } = require('../controllers/offerController');
 
 // Admin Login Get Request
 router.route('/login')
@@ -175,7 +176,11 @@ router.route('/banners')
 .post(bannerUpload.array("banner"),uploadBanner)
 .delete(deleteBanner)
 
+router.route('/offers')
+.get(viewOfferMainPage)
 
+router.route('/new-offer')
+.get(viewCreateOfferPage)
 
 // 404 Page Not Found
 router.route('/*')

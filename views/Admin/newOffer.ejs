@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Offer</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-auto::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <%- include('adminNavbar') %>
+
+        <section class="px-5 py-2 min-h-screen">
+            <div class="my-5 px-5 py-3 flex justify-evenly border-b border-gray-500">
+                <span class="text-lg md:text-xl font-bold cursor-pointer text-gray-500" onclick="offerSelection(event)"
+                    id="productOffer">Product Offer</span>
+                <span class="text-lg md:text-xl font-bold cursor-pointer text-gray-500" onclick="offerSelection(event)"
+                    id="categoryOffer">Category Offer</span>
+            </div>
+
+            <div id="mainContainer" class="px-5 py-3">
+
+                <!-- productOffer -->
+                <div>
+                    <form id="productForm">
+                        <div class="w-full flex flex-col my-2">
+                            <label for="images">Offer Images</label>
+                            <input type="file" name="offerImage" id="offerImage" accept="image/*" maxlength="1"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="hidden flex-col my-2 ">
+                           
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">Food Item</label>
+                            <select name="" id="foodItem" onchange="foodItemValidator(event)"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                                <option value="none">None</option>
+                                <% food.forEach((fd)=>{%>
+                                    <option value="<%=fd._id%>">
+                                        <%=fd.productName%>
+                                    </option>
+                                    <%})%>
+                            </select>
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">Discription</label>
+                            <input type="text" id="discountValue" value=""
+                                onchange="discountValidator(event)"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">Discount Type</label>
+                            <select name="" id="discountType"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                                <option value="per">Percentage</option>
+                                <option value="amt">Amount</option>
+                            </select>
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">Discount Value</label>
+                            <input type="text" id="discountValue" value=""
+                                onchange="discountValidator(event)"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="relatedImages">Expires On</label>
+                            <input type="date" id="endTime" value=""
+                                onchange="dateValidatorEnd(event)"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+        <%- include('adminFooter') %>
+
+            <script>
+                function offerSelection(event) {
+                    event.preventDefault();
+                    const productOffer = document.getElementById("productOffer");
+                    const categoryOffer = document.getElementById("categoryOffer");
+
+                    if (event.target.id == "productOffer") {
+                        categoryOffer.classList.remove("text-orange-500");
+                        categoryOffer.classList.add("text-gray-500");
+                        productOffer.classList.remove("text-gray-500");
+                        productOffer.classList.add("text-orange-500");
+                    } else {
+                        productOffer.classList.remove("text-orange-500");
+                        productOffer.classList.add("text-gray-500");
+
+                        categoryOffer.classList.remove("text-gray-500");
+                        categoryOffer.classList.add("text-orange-500");
+                    }
+
+                }
+            </script>
+</body>
+
+</html>
