@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,6 +35,7 @@
         }
     </style>
 </head>
+
 <body>
     <%-include('userNavbar') %>
 
@@ -42,23 +44,46 @@
 
             <div class="flex flex-wrap gap-5 justify-center overflow-hidden">
                 <% if(productOff){ productOff.forEach((off,index)=>{%>
-                <div class="transition delay-75 w-52 h-36 relative rounded-xl shadow-lg text-center overflow-hidden ease-linear hover:scale-95">
-                    <img class="w-full h-full object-cover rounded-xl" src="/<%=off.offerImage%>" alt="offerImage">
-                    <div class="absolute bg-[rgba(0,0,0,0.33)] bottom-0 py-1 w-full  text-white font-bold text-center"><span class="mx-auto"><%=off.description%></span></div>
-                </div>
-                <%})}%>
+                    <div class="transition delay-75 w-52 h-36 relative rounded-xl shadow-lg text-center overflow-hidden ease-linear hover:scale-95 cursor-pointer"
+                        onclick="redirectTo('/product-details/<%=off.foodId%>')">
+                        <img class="w-full h-full object-cover rounded-xl" src="/<%=off.offerImage%>" alt="offerImage">
+                        <div
+                            class="absolute bg-[rgba(0,0,0,0.33)] bottom-0 py-1 w-full  text-white font-bold text-center">
+                            <span class="mx-auto">
+                                <%=off.description%>
+                            </span></div>
+                    </div>
+                    <%})}%>
 
-                 <% if(categoryOff){ categoryOff.forEach((off,index)=>{%>
-                <div class="transition delay-75 w-52 h-36 relative rounded-xl shadow-lg text-center overflow-hidden ease-linear hover:scale-95">
-                    <img class="w-full h-full object-cover rounded-xl" src="/<%=off.offerImage%>" alt="offerImage">
-                    <div class="absolute bg-[rgba(0,0,0,0.33)] bottom-0 py-1 w-full  text-white font-bold text-center"><span class="mx-auto"><%=off.description%></span></div>
-                </div>
-                <%})}%>
-        
+                        <% if(categoryOff){ categoryOff.forEach((off,index)=>{%>
+                            <div
+                                class="transition delay-75 w-52 h-36 relative rounded-xl shadow-lg text-center overflow-hidden ease-linear hover:scale-95 cursor-pointer" onclick="categoryRedirect(event,'<%=off.categoryName%>')">
+                                <img class="w-full h-full object-cover rounded-xl" src="/<%=off.offerImage%>"
+                                    alt="offerImage">
+                                <div
+                                    class="absolute bg-[rgba(0,0,0,0.33)] bottom-0 py-1 w-full  text-white font-bold text-center">
+                                    <span class="mx-auto">
+                                        <%=off.description%>
+                                    </span></div>
+                            </div>
+                            <%})}%>
+
             </div>
-        
+
         </section>
 
-    <%-include('userFooter') %>
+        <%-include('userFooter') %>
+
+            <script>
+                function redirectTo(endpoint) {
+                    window.location.href = endpoint;
+                }
+
+                function categoryRedirect(event,category){
+                    sessionStorage.setItem("foodSearch",category.trim());
+                    window.location.href=`/search-products`
+                }
+            </script>
 </body>
+
 </html>
