@@ -45,7 +45,9 @@
             <h1 class="text-2xl font-bold my-5">Offer Management</h1>
 
             <div class="py-2 px-3 text-end">
-                <button onclick="redirectTo('/admin/new-offer')" class="px-3 py-2 bg-orange-500 text-white rounded">Create Offer <i class="fa-solid fa-tag"></i></button>
+                <button onclick="redirectTo('/admin/new-offer')"
+                    class="px-3 py-2 bg-orange-500 text-white rounded">Create Offer <i
+                        class="fa-solid fa-tag"></i></button>
             </div>
 
             <div class="flex flex-col md:flex-row justify-between items-center py-2 px-3">
@@ -54,12 +56,21 @@
 
                     <h1 class="py-2 font-semibold text-lg border-b border-gray-500">Product Offers</h1>
 
-                    <div class="flex justify-between py-2 my-2">
-                        <span class="mx-2">1</span>
-                        <span class="mx-2">Product Name</span>
-                        <span class="mx-2">25%</span>
-                        <span class="mx-2"><i class="fa-regular text-orange-500 cursor-pointer fa-pen-to-square"></i></span>
-                    </div>
+                    <% if(productOff){ productOff.forEach((off,index)=>{%>
+                        <div class="flex justify-between py-2 my-2">
+                            <span class="mx-2">
+                                <%=index+1%>
+                            </span>
+                            <span class="mx-2">
+                                <%=off.productName%>
+                            </span>
+                            <span class="mx-2">
+                                <%=off.discountValue%><% if(off.discountType=="per" ){ %>%<%}else{%>Rs<%}%>
+                            </span>
+                            <span class="mx-2"><i
+                                    class="fa-regular text-orange-500 cursor-pointer fa-pen-to-square"></i></span>
+                        </div>
+                        <%})}%>
 
                 </div>
 
@@ -67,12 +78,21 @@
                 <div class="bg-white py-2 px-3">
 
                     <h1 class="py-2 font-semibold text-lg border-b border-gray-500">Category Offers</h1>
-
-                    <div>
-                        <span>1</span>
-                        <span>Product Name</span>
-                        <span>25%</span>
-                    </div>
+                    <% if(categoryOff){ categoryOff.forEach((off,index)=>{%>
+                        <div class="flex justify-between py-2 my-2">
+                            <span class="mx-2">
+                                <%=index+1%>
+                            </span>
+                            <span class="mx-2">
+                                <%=off.categoryName%>
+                            </span>
+                            <span class="mx-2">
+                                <%=off.discountValue%><% if(off.discountType=="per" ){ %> % <%}else{%>Rs<%}%>
+                            </span>
+                            <span class="mx-2"><i
+                                    class="fa-regular text-orange-500 cursor-pointer fa-pen-to-square"></i></span>
+                        </div>
+                        <%})}%>
 
                 </div>
 
@@ -83,11 +103,13 @@
         <!-- Footer -->
         <%- include('adminFooter') %>
 
-        <script>
-            function redirectTo(endpoint){
-                window.location.href=endpoint;
-            }
-        </script>
+            <script>
+                function redirectTo(endpoint) {
+                    window.location.href = endpoint;
+                }
+                const data = '<%=productOff%>';
+                console.log(data)
+            </script>
 </body>
 
 </html>

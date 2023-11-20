@@ -6,11 +6,19 @@ const productOfferSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    description: {
+        type: String,
+        required: true
+    },
     discountType: {
         type: String,
         required: true
     },
     discountValue: {
+        type: String,
+        required: true
+    },
+    offerImage: {
         type: String,
         required: true
     },
@@ -29,11 +37,20 @@ const categoryOfferSchema = new mongoose.Schema({
     catId: {
         type: String,
         required: true
-    }, discountType: {
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    discountType: {
         type: String,
         required: true
     },
     discountValue: {
+        type: String,
+        required: true
+    },
+    offerImage: {
         type: String,
         required: true
     },

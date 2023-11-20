@@ -11,6 +11,7 @@ const { checkingCoupon } = require('../controllers/couponController');
 const { viewWalletPage, addMoney } = require('../controllers/walletController');
 const { viewInvoice } = require('../controllers/invoiceController');
 const { viewReferalPage, verifyReferal } = require('../controllers/referalController');
+const { viewUserOfferPage } = require('../controllers/offerController');
 
 
 // User SignUp Get Request
@@ -138,6 +139,9 @@ router.route('/download-invoice/:oid')
 
 router.route('/referal/:uid')
     .get(viewReferalPage)
+
+router.route('/offers')
+.get(viewUserOfferPage)
 
 router.route('/*')
 .get(viewPageNotFound)
