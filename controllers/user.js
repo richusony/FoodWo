@@ -582,6 +582,11 @@ async function updateStock(req, res) {
                                     discountAmount = (existCoupon.discountValue * parseInt(productPrice) / 100);
                                     console.log("after discount : : : : : ", afterDiscountPrice)
                                     discountAddedOrNot = true;
+                                }else{
+                                    afterDiscountPrice = parseInt(productQty) * parseInt(productPrice) - existCoupon.discountValue;
+                                    discountAmount = existCoupon.discountValue;
+                                    console.log("after discount : : : : : ", afterDiscountPrice)
+                                    discountAddedOrNot = true;
                                 }
                                 console.log("usedCoupons after update: ", userModel.usedCoupons);
                             } else {
@@ -604,6 +609,7 @@ async function updateStock(req, res) {
                                     discountAmount = (existCoupon.discountValue * parseInt(productPrice) / 100);
                                 } else {
                                     afterDiscountPrice = parseInt(productQty) * parseInt(productPrice) - existCoupon.discountValue;
+                                    discountAmount = existCoupon.discountValue;
                                 }
                                 console.log("coupon added")
                             } else {
