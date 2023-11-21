@@ -46,9 +46,26 @@ const bannerStorage = multer.diskStorage({
 });
 
 
-
 // Corrected the multer configurations for mainImageUpload and relatedImageUpload.
 const bannerUpload = multer({ storage: bannerStorage });
 
-module.exports = { upload, productUpload ,bannerUpload};
+
+
+const offerStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    // Define the destination directory for main images.
+    cb(null, 'offers');
+  },
+  filename: function (req, file, cb) {
+    console.log('not main')
+    // Define the filename for main images.
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+
+// Corrected the multer configurations for mainImageUpload and relatedImageUpload.
+const offerUpload = multer({ storage: offerStorage });
+
+module.exports = { upload, productUpload ,bannerUpload,offerUpload};
  

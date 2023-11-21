@@ -6,7 +6,7 @@ const worksheet = workbook.addWorksheet('Sales Data');
 const moment = require('moment');
 const orderModel = require('../models/orderSchema');
 
-async function viewSalePage(req,res){
+async function viewSalePage(req, res) {
     res.render('../views/Admin/salesReport.ejs');
 }
 async function filterSales(req, res) {
@@ -131,7 +131,9 @@ async function salesToExcel(req, res) {
         column.alignment = { horizontal: 'center' };
     });
 
-    let result = await orderModel.find({ orderStatus: 'Confirmed' })
+    let result = await orderModel.aggregate([
+        { $match: { orderStatus: { $ne: "Pending" } } }
+    ])
     console.log(result)
     // Add Data Rows
     result.forEach(document => {
@@ -151,8 +153,18 @@ async function salesToExcel(req, res) {
     console.log('not here');
 
     // Write to File
-    await workbook.xlsx.writeFile('/workspaces/FoodWo/reports/Sales-Report.xlsx');
-    res.status(200);
+    const filePath = '/workspaces/FoodWo/reports/Sales-Report.xlsx';
+    await workbook.xlsx.writeFile(filePath);
+    res.download(filePath, 'Sales-Report.xlsx', (err) => {
+        if (err) {
+            console.error('Error sending file:', err);
+            // Handle any potential error while sending the file
+            res.status(500).send('Error downloading the file');
+        } else {
+            // File sent successfully
+            console.log('File sent successfully');
+        }
+    });
 }
 
 

@@ -15,7 +15,7 @@
 <body>
     <!-- Navigation -->
     <%- include('adminNavbar') %>
-    <section class="px-5 py-3">
+        <section class="px-5 py-3">
             <div id="alert"
                 class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
                 <span id="alertMsg"></span>
@@ -56,7 +56,7 @@
                         </div>
                         <div class="w-full flex flex-col my-2">
                             <label for="relatedImages">Food Item</label>
-                    <select name="" id="foodItem" onchange="foodItemValidator(event)"
+                            <select name="" id="foodItem" onchange="foodItemValidator(event)"
                                 class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                                 <% food.forEach((fd)=>{%>
                                     <%if(fd._id==coupon[0].foodId){%>
@@ -116,8 +116,8 @@
                 let food;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg');
-                
-                (async()=>{
+
+                (async () => {
                     const foodId = document.getElementById('foodItem').value
                     const fetchingFood = await fetch(`/admin/food-price/${foodId}`);
                     if (fetchingFood.ok) {
@@ -212,7 +212,7 @@
                         const data = await fetchingFood.json();
                         if (fetchingFood.status == 200) {
                             food = data.foodData;
-                            console.log("food ",food)
+                            console.log("food ", food)
                         }
                     }
                 }

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Offer</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-auto::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <%- include('adminNavbar') %>
+
+        <section class="px-5 py-2 min-h-screen">
+            <div id="toast"
+                class="transition duration-150 mx-auto md:w-80 bg-orange-500 py-5 px-3 ease-linear opacity-0 -translate-x-full rounded-md text-center text-white">
+            </div>
+
+            <div class="my-5 px-5 py-3 flex justify-evenly border-b border-gray-500">
+                <span class="text-lg md:text-xl font-bold cursor-pointer text-gray-500" onclick="offerSelection(event)"
+                    id="productOffer">Product Offer</span>
+                <span class="text-lg md:text-xl font-bold cursor-pointer text-gray-500" onclick="offerSelection(event)"
+                    id="categoryOffer">Category Offer</span>
+            </div>
+
+            <div id="mainContainer" class="px-5 py-3">
+
+                <!-- productOffer -->
+                <div id="productContainer" class="">
+                    <form id="productForm">
+                        <div class="w-full flex flex-col my-2">
+                            <label for="images">Offer Images</label>
+                            <input type="file" name="productOfferImage" id="offerImage" accept="image/*" maxlength="1"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="hidden flex-col my-2 ">
+
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="">Food Item</label>
+                            <select name="food" id="foodItem"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                                <option value="none">None</option>
+                                <% food.forEach((fd)=>{%>
+                                    <option value="<%=fd._id%>">
+                                        <%=fd.productName%>
+                                    </option>
+                                    <%})%>
+                            </select>
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="">Discription</label>
+                            <input name="description" type="text" id="productDescription" value=""
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="">Discount Type</label>
+                            <select name="discountType" id="productdiscountType"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                                <option value="per">Percentage</option>
+                                <option value="amt">Amount</option>
+                            </select>
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="">Discount Value</label>
+                            <input name="discountValue" type="text" id="productdiscountValue" value=""
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="">Expires On</label>
+                            <input name="productExpiry" type="date" id="productExpiry" value=""
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+
+                        <div class="text-center my-5">
+                            <button class="px-4 py-2 text-xl bg-orange-500 text-white rounded"
+                                onclick="createProductOffer(event)">Create</button>
+                        </div>
+                    </form>
+                </div>
+
+
+                <!-- categoryOffer -->
+                <div id="categoryContainer" class="hidden">
+                    <form id="categoryForm">
+                        <div class="w-full flex flex-col my-2">
+                            <label for="images">Offer Images</label>
+                            <input type="file" name="categoryOfferImage" id="categoryOfferImage" accept="image/*"
+                                maxlength="1"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="hidden flex-col my-2 ">
+
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="">Category</label>
+                            <select name="category" id="category"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                                <option value="none">None</option>
+                                <% category.forEach((cat)=>{%>
+                                    <option value="<%=cat._id%>">
+                                        <%=cat.category%>
+                                    </option>
+                                    <%})%>
+                            </select>
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="">Discription</label>
+                            <input type="text" name="description" id="categoryDescription" value=""
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="">Discount Type</label>
+                            <select name="discountType" id="categorydiscountType"
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                                <option value="per">Percentage</option>
+                                <option value="amt">Amount</option>
+                            </select>
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="">Discount Value</label>
+                            <input type="text" name="discountValue" id="categorydiscountValue" value=""
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+                        <div class="w-full flex flex-col my-2">
+                            <label for="">Expires On</label>
+                            <input type="date" name="categoryExpiry" id="categoryExpiry" value=""
+                                class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        </div>
+
+                        <div class="text-center my-5">
+                            <button class="px-4 py-2 text-xl bg-orange-500 text-white rounded"
+                                onclick="createCategoryOffer(event)">Create</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+        <%- include('adminFooter') %>
+
+            <script>
+                const toast = document.getElementById('toast');
+
+
+                function offerSelection(event) {
+                    event.preventDefault();
+                    const productOffer = document.getElementById("productOffer");
+                    const categoryOffer = document.getElementById("categoryOffer");
+                    const mainContainer = document.getElementById("mainContainer");
+                    const productContainer = document.getElementById("productContainer");
+                    const categoryContainer = document.getElementById("categoryContainer");
+
+                    if (event.target.id == "productOffer") {
+                        categoryOffer.classList.remove("text-orange-500");
+                        categoryOffer.classList.add("text-gray-500");
+                        productOffer.classList.remove("text-gray-500");
+                        productOffer.classList.add("text-orange-500");
+                        productContainer.classList.remove("hidden");
+                        categoryContainer.classList.add("hidden");
+                    } else {
+                        productOffer.classList.remove("text-orange-500");
+                        productOffer.classList.add("text-gray-500");
+
+                        categoryOffer.classList.remove("text-gray-500");
+                        categoryOffer.classList.add("text-orange-500");
+
+                        productContainer.classList.add("hidden");
+                        categoryContainer.classList.remove("hidden");
+                    }
+
+                }
+
+                async function createProductOffer(event) {
+                    event.preventDefault();
+                    const productofferImage = document.getElementById("productofferImage");
+                    const foodItem = document.getElementById("foodItem").value;
+                    const productDescription = document.getElementById("productDescription").value;
+                    const productdiscountType = document.getElementById("productdiscountType").value;
+                    const productdiscountValue = document.getElementById("productdiscountValue").value;
+                    const productExpiry = document.getElementById("productExpiry").value;
+                    const productForm = document.getElementById("productForm")
+
+                    const currentDate = new Date();
+                    const selectedExpiryDate = new Date(productExpiry);
+
+                    function countWords(str) {
+                        // Trim the string to remove extra spaces and then split by spaces
+                        const words = str.trim().split(/\s+/);
+                        return words.length;
+                    }
+                    const descriptionWordCount = countWords(productDescription);
+
+                    console.log(
+                        foodItem,
+                        productDescription,
+                        productdiscountType,
+                        productdiscountValue,
+                        productExpiry
+                    )
+
+                    if (foodItem == "none" || !productDescription || !productdiscountType || !productdiscountValue || !productExpiry) {
+                        window.scrollTo(0, 0);
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> All fields are required</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000)
+                        return;
+                    } else if (descriptionWordCount > 4) {
+                        window.scrollTo(0, 0);
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Description is too long</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000)
+                        return;
+                    } else if (productdiscountValue <= 0) {
+                        window.scrollTo(0, 0);
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Zero or lesser is not acceptable</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000)
+                        return;
+                    } else if (selectedExpiryDate < currentDate) {
+                        window.scrollTo(0, 0);
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Invalid Date </span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000)
+                        return;
+                    } else {
+                        const productFormData = new FormData(productForm);
+                        for (let item of productFormData) {
+                            console.log(item[0], " ", item[1])
+                        }
+
+                        const creatingProductOffer = await fetch('/admin/product-offer', {
+                            method: "POST",
+                            body: productFormData
+                        });
+                        const data = await creatingProductOffer.json()
+                        if (creatingProductOffer.status == 400) {
+                            window.scrollTo(0, 0);
+                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.failed} </span>`;
+                            toast.classList.remove("opacity-0");
+                            toast.classList.remove("-translate-x-full");
+                            setTimeout(() => {
+                                toast.classList.add("opacity-0");
+                                toast.classList.add("-translate-x-full");
+                            }, 3000)
+                            return;
+                        }
+                        if (creatingProductOffer.ok) {
+                            window.scrollTo(0, 0);
+                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-check text-xl"></i> ${data.success} </span>`;
+                            toast.classList.remove("opacity-0");
+                            toast.classList.remove("-translate-x-full");
+                            setTimeout(() => {
+                                toast.classList.add("opacity-0");
+                                toast.classList.add("-translate-x-full");
+                            }, 3000)
+                            return;
+                        }
+                    }
+
+                }
+
+                async function createCategoryOffer(event) {
+                    event.preventDefault();
+                    const categoryofferImage = document.getElementById("categoryOfferImage");
+                    const category = document.getElementById("category").value;
+                    const categoryDescription = document.getElementById("categoryDescription").value;
+                    const categorydiscountType = document.getElementById("categorydiscountType").value;
+                    const categorydiscountValue = document.getElementById("categorydiscountValue").value;
+                    const categoryExpiry = document.getElementById("categoryExpiry").value;
+                    const categoryForm = document.getElementById("categoryForm")
+
+                    const currentDate = new Date();
+                    const selectedExpiryDate = new Date(categoryExpiry);
+
+                    function countWords(str) {
+                        // Trim the string to remove extra spaces and then split by spaces
+                        const words = str.trim().split(/\s+/);
+                        return words.length;
+                    }
+                    const descriptionWordCount = countWords(categoryDescription);
+
+                    console.log(
+                        category,
+                        categoryDescription,
+                        categorydiscountType,
+                        categorydiscountValue,
+                        categoryExpiry
+                    )
+
+                    if (category == "none" || !categoryDescription || !categorydiscountType || !categorydiscountValue || !categoryExpiry) {
+                        window.scrollTo(0, 0);
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> All fields are required</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000)
+                        return;
+                    } else if (descriptionWordCount > 4) {
+                        window.scrollTo(0, 0);
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Description is too long</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000)
+                        return;
+                    } else if (productdiscountValue <= 0) {
+                        window.scrollTo(0, 0);
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Zero or lesser is not acceptable</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000)
+                        return;
+                    } else if (selectedExpiryDate < currentDate) {
+                        window.scrollTo(0, 0);
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Invalid Date </span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000)
+                        return;
+                    } else {
+                        const categoryFormData = new FormData(categoryForm);
+                        for (let item of categoryFormData) {
+                            console.log(item[0], " ", item[1])
+                        }
+
+                        const creatingCategoryOffer = await fetch('/admin/category-offer', {
+                            method: "POST",
+                            body: categoryFormData
+                        });
+
+                        const data = await creatingCategoryOffer.json();
+
+                        if (creatingCategoryOffer.status == 400) {
+                            window.scrollTo(0, 0);
+                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.failed} </span>`;
+                            toast.classList.remove("opacity-0");
+                            toast.classList.remove("-translate-x-full");
+                            setTimeout(() => {
+                                toast.classList.add("opacity-0");
+                                toast.classList.add("-translate-x-full");
+                            }, 3000)
+                            return;
+                        }
+                        if (creatingCategoryOffer.ok) {
+                            window.scrollTo(0, 0);
+                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-check text-xl"></i> ${data.success} </span>`;
+                            toast.classList.remove("opacity-0");
+                            toast.classList.remove("-translate-x-full");
+                            setTimeout(() => {
+                                toast.classList.add("opacity-0");
+                                toast.classList.add("-translate-x-full");
+                            }, 3000)
+                            return;
+                        }
+                    }
+
+                }
+            </script>
+</body>
+
+</html>

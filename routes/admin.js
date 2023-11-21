@@ -32,11 +32,12 @@ const { viewLogInPage,
 } = require('../controllers/admin');
 const router = express.Router();
 const { adminAuth } = require('../middleware/sessionAuth')
-const {productUpload,bannerUpload} = require('../middleware/multer')
+const {productUpload,bannerUpload, offerUpload} = require('../middleware/multer')
 const {viewCouponMangemenPage,createCoupon, deleteCoupon, viewCouponUpdatePage, updateCoupon, checkingCoupon, getPrice}= require('../controllers/couponController');
 const { salesToExcel, salesToPdf, viewSalePage, filterSales } = require('../controllers/reportController');
 const { viewPageNotFound } = require('../controllers/user');
 const { listAllBanners, uploadBanner, viewBannerPage, deleteBanner } = require('../controllers/bannerController');
+const { viewOfferMainPage, viewCreateOfferPage, createProductOffer, createCategoryOffer } = require('../controllers/offerController');
 
 // Admin Login Get Request
 router.route('/login')
@@ -175,7 +176,17 @@ router.route('/banners')
 .post(bannerUpload.array("banner"),uploadBanner)
 .delete(deleteBanner)
 
+router.route('/offers')
+.get(viewOfferMainPage)
 
+router.route('/product-offer')
+.post(offerUpload.single("productOfferImage"),createProductOffer)
+
+router.route('/category-offer')
+.post(offerUpload.single("categoryOfferImage"),createCategoryOffer)
+
+router.route('/new-offer')
+.get(viewCreateOfferPage)
 
 // 404 Page Not Found
 router.route('/*')

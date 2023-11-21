@@ -80,15 +80,24 @@ async function updateCoupon(req, res) {
 async function checkingCoupon(req, res) {
     const userId = req.params.uid;
     const coupon = req.body.coupon;
+    const idQtyObj = req.body.idQtyObj;
+    console.log("working ", idQtyObj);
     const foodids = req.body.foodids.split(",");
     console.log("foodids : ", foodids)
     const exists = await couponModel.findOne({ couponCode: coupon })
     const checkFood = foodids.includes(exists?.foodId)
     const foodId = foodids.filter(id => id == exists?.foodId);
-    
+    const quantities = Object.values(idQtyObj)
+        .map((item) => { if (item.id == exists.foodId) { return item.qty } }); // Mapping to extract the qty values
+
+    console.log("working ", quantities);
+    const quantity = quantities.filter(qty => qty !== undefined);
+
+    console.log("work ", quantity);
     console.log("food checking : ", checkFood)
     if (exists) {
         console.log("count : ", exists.usedUsersCount)
+        const food = await productModel.findOne({ _id: exists.foodId });
         if (exists.usedUsersCount >= exists.usersLimit) {
             res.status(400).json({ err: "you are late. maximum user limit has been reached" })
             return;
@@ -126,7 +135,7 @@ async function checkingCoupon(req, res) {
                         // if (updatingUser) {
                         //     const updateCoupon = await couponModel.updateOne({_id:exists._id.toString()},{$inc:{usedUsersCount:1}})
                         //     console.log(updateCoupon)
-                        res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue })
+                        res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue, quantity: quantity, foodPrice: food.productPrice })
 
                         //     console.log("usedCoupons after update: ", userModel.usedCoupons);
                         // } else {
@@ -144,7 +153,7 @@ async function checkingCoupon(req, res) {
                         // const updating = await userModel.updateOne({ _id: userId, 'usedCoupons.couponId': findCoupon[0].couponId },
                         //     { $inc: { 'usedCoupons.$.usedCount': 1 } })
                         // if (updating) {
-                        res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue })
+                        res.status(200).json({ added: true, sucess: "coupon added", discountType: discountType, discountValue: discountValue, quantity: quantity, foodPrice: food.productPrice })
                         // } else {
                         //     res.status(500).json({ added: false, err: "Database is having some issues" })
                         // }
