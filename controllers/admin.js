@@ -20,14 +20,13 @@ async function viewDashboard(req, res) {
         {
             $group: {
                 _id: null,
-                totalProfit: {
-                    $sum: { $multiply: ["$productPrice", "$productQty"] }
-                }
+                totalProfit: { $sum: "$productPrice" }
             }
         }
     ]);
+    
 
-    // Extract the total profit from the aggregation result
+    // // Extract the total profit from the aggregation result
     const totalProfit = totalProfitResult.length > 0 ? totalProfitResult[0].totalProfit : 0;
 
     res.render('../views/Admin/adminDashboard', {
