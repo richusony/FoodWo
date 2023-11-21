@@ -674,7 +674,7 @@ async function updateStock(req, res) {
                 if (paymentMethod == "FoodWo Wallet") {
                     const historyData = {
                         date: currentDate,
-                        amt: (parseInt(productPrice) * parseInt(productQty)) - productPrice + afterDiscountPrice,
+                        amt: afterDiscountPrice,
                         update: "dec"
                     };
 
@@ -684,7 +684,7 @@ async function updateStock(req, res) {
                     const walletUpdate = await walletModel.updateOne(
                         { userId: user_id },
                         {
-                            $inc: { balance: -calculatedAmount + afterDiscountPrice }, // Decrement the balance
+                            $inc: { balance: -afterDiscountPrice }, // Decrement the balance
                             $push: { history: historyData }
                         }
                     );
