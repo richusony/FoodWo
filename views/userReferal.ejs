@@ -27,13 +27,44 @@
                 <div class="md:w-1/2 bg-orange-500 my-2 rounded flex justify-center items-center py-5 md:py-0">
                     <div>
                         <h3 class="text-white my-2">Your Referal Code :</h3>
-                        <span class="bg-white text-gray-500 py-2 px-3 rounded"><%=referCode%></span><span
-                            class="px-3 py-2 text-gray-500 bg-white rounded mx-2">copy</span>
+                        <span id="referralCode" class="bg-white text-gray-500 py-2 px-3 rounded">
+                            <%=referCode%>
+                        </span>
+                        <button id="copyButton" class="px-3 py-2 text-gray-500 bg-white rounded mx-2">Copy</button>
+
                     </div>
                 </div>
             </div>
         </section>
         <%-include('userFooter')%>
+
+        <script>
+            // Get the referral code and copy button elements
+const referralCode = document.getElementById('referralCode');
+const copyButton = document.getElementById('copyButton');
+
+// Add click event listener to the copy button
+copyButton.addEventListener('click', () => {
+    // Create a textarea element to temporarily hold the referral code
+    const textarea = document.createElement('textarea');
+    textarea.value = referralCode.textContent.trim(); // Set the referral code as the textarea value
+    document.body.appendChild(textarea); // Append the textarea to the DOM
+
+    // Select and copy the referral code from the textarea
+    textarea.select();
+    document.execCommand('copy');
+
+    // Remove the textarea from the DOM
+    document.body.removeChild(textarea);
+
+    // Provide a visual indication or feedback that the code has been copied (optional)
+    copyButton.textContent = 'Copied!';
+    setTimeout(() => {
+        copyButton.textContent = 'Copy';
+    }, 3000); // Reset the button text after 1.5 seconds
+});
+
+        </script>
 </body>
 
 </html>
