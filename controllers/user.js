@@ -519,6 +519,7 @@ async function checkingQuantity(req, res) {
             return res.status(400).json({ err: `only ${product.productInStock} left for ${product.productName}` })
         }
     }
+    res.status(200).json({success:"Qty is ok"})
 }
 
 
@@ -581,6 +582,11 @@ async function updateStock(req, res) {
                                     discountAmount = (existCoupon.discountValue * parseInt(productPrice) / 100);
                                     console.log("after discount : : : : : ", afterDiscountPrice)
                                     discountAddedOrNot = true;
+                                }else{
+                                    afterDiscountPrice = parseInt(productQty) * parseInt(productPrice) - existCoupon.discountValue;
+                                    discountAmount = existCoupon.discountValue;
+                                    console.log("after discount : : : : : ", afterDiscountPrice)
+                                    discountAddedOrNot = true;
                                 }
                                 console.log("usedCoupons after update: ", userModel.usedCoupons);
                             } else {
@@ -603,6 +609,7 @@ async function updateStock(req, res) {
                                     discountAmount = (existCoupon.discountValue * parseInt(productPrice) / 100);
                                 } else {
                                     afterDiscountPrice = parseInt(productQty) * parseInt(productPrice) - existCoupon.discountValue;
+                                    discountAmount = existCoupon.discountValue;
                                 }
                                 console.log("coupon added")
                             } else {
@@ -667,7 +674,7 @@ async function updateStock(req, res) {
                 if (paymentMethod == "FoodWo Wallet") {
                     const historyData = {
                         date: currentDate,
-                        amt: (parseInt(productPrice) * parseInt(productQty)) - productPrice + afterDiscountPrice,
+                        amt: afterDiscountPrice,
                         update: "dec"
                     };
 
@@ -677,7 +684,7 @@ async function updateStock(req, res) {
                     const walletUpdate = await walletModel.updateOne(
                         { userId: user_id },
                         {
-                            $inc: { balance: -calculatedAmount + afterDiscountPrice }, // Decrement the balance
+                            $inc: { balance: -afterDiscountPrice }, // Decrement the balance
                             $push: { history: historyData }
                         }
                     );
