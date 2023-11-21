@@ -93,15 +93,15 @@
                                                 </div>
 
                                                 <div class=" flex mr-2 md:mr-3 relative text-center justify-center">
-                                                    <div onclick="priceDown(event)" data-index="<%= index %>" data-fid="<%= cart._id %>"
-                                                        data-stock="<%=cart.productInStock%>"
+                                                    <div onclick="priceDown(event)" data-index="<%= index %>"
+                                                        data-fid="<%= cart._id %>" data-stock="<%=cart.productInStock%>"
                                                         class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-l-full">
                                                         <i class="fa-solid fa-minus"></i>
                                                     </div>
                                                     <span id="<%= `qty${index}` %>"
                                                         class="qty mx-3 text-sm my-auto">1</span>
-                                                    <div onclick="priceUp(event)" data-index="<%= index %>" data-fid="<%= cart._id %>"
-                                                        data-stock="<%=cart.productInStock%>"
+                                                    <div onclick="priceUp(event)" data-index="<%= index %>"
+                                                        data-fid="<%= cart._id %>" data-stock="<%=cart.productInStock%>"
                                                         class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-r-full">
                                                         <i class="fa-solid fa-plus"></i>
                                                     </div>
@@ -407,13 +407,14 @@
 
                         // Update the displayed quantity and price
                         qty.innerText = quantity;
-                        idQtyObj[fid].qty=quantity;
+                        idQtyObj[fid].qty = quantity;
                         console.log(idQtyObj)
                         currentPrice.innerText = "₹" + newPrice
                         // final.forEach((item) => {
                         //     item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
                         // })
                         finalamountElement.innerText = finalPrice.toFixed(2)
+                        finalamout = finalPrice.toFixed(2);
                         // Update the final price
                         // finalPrice = newPrice;
 
@@ -443,13 +444,14 @@
                         finalPrice -= parseFloat(actualPrice);
                         // Update the displayed quantity and price
                         qty.innerText = quantity;
-                        idQtyObj[fid].qty=quantity;
+                        idQtyObj[fid].qty = quantity;
                         console.log(idQtyObj)
                         currentPrice.innerText = "₹" + newPrice;
                         // final.forEach((item) => {
                         //     item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
                         // })
                         finalamountElement.innerText = finalPrice.toFixed(2)
+                        finalamout = finalPrice.toFixed(2);
                         // Update the final price
                         // finalPrice = newPrice;
 
@@ -820,7 +822,7 @@
                     const userId = sessionStorage.getItem('user_id');
                     const foodides = '<%=foodIds%>'
                     console.log('success : ', foodides)
-                    const coupon = { coupon: couponInput, foodids: foodides,idQtyObj:idQtyObj }
+                    const coupon = { coupon: couponInput, foodids: foodides, idQtyObj: idQtyObj }
                     const reqData = JSON.stringify(coupon)
                     console.log(reqData, userId)
 
@@ -1182,7 +1184,7 @@
                                     body: checkingData
                                 })
 
-                                if (checkingQty.status == 400) {
+                                if (checkingQty.status != 200) {
                                     const data = await checkingQty.json();
                                     alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.err}`;
                                     alertBox.classList.remove('-translate-x-full')
@@ -1202,7 +1204,7 @@
                             } else {
                                 const totalAmount = parseInt('<%=totalPrice%>')
                                 const orderUrl = '/orders'
-                                const paying = await axios.post(orderUrl, { amount: finalamout == 0 ? totalAmount.toFixed(2) : finalamout.toFixed(2) })
+                                const paying = await axios.post(orderUrl, { amount: finalamout == 0 ? totalAmount : finalamout })
                                 console.log(paying)
                                 initPayment(paying.data)
                             }

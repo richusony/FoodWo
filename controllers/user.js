@@ -519,6 +519,7 @@ async function checkingQuantity(req, res) {
             return res.status(400).json({ err: `only ${product.productInStock} left for ${product.productName}` })
         }
     }
+    res.status(200).json({success:"Qty is ok"})
 }
 
 
