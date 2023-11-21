@@ -210,8 +210,8 @@ async function updateProducts(req, res) {
         res.status(400).json({ err: "Stock must be greater than zero." })
         return;
     }
-
-    if (images.length != 0) {
+ 
+   
         const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock, $push: { productImages: { $each: images, $slice: -5 } } }, { new: true });
         if (updating) {
             const updatedDetails = await productModel.find({ _id: id });
@@ -219,9 +219,6 @@ async function updateProducts(req, res) {
         } else {
             res.status(500).json({ err: "Database is having some issues." })
         }
-    } else {
-        res.status(400).json({ err: "Product images is required" })
-    }
 
 }
 
