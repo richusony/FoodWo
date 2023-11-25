@@ -13,6 +13,7 @@ const { addressModel } = require('../models/addressSchema');
 const { invoiceModel } = require('../models/invoiceSchema');
 const { referModel } = require('../models/referalSchema');
 const { bannerModel } = require('../models/bannerSchema');
+const { productOfferModel } = require('../models/offerSchema');
 
 function viewSignInPage(req, res) {
     res.render('userSignUp')
@@ -203,8 +204,9 @@ async function productPage(req, res) {
     console.log(categories[0].category)
     const catProducts = await productModel.find({ category: categories[0].category })
     const banners = await bannerModel.find({}).sort({ createdAt: 1 });
+    const productOffers = await productOfferModel.find({});
     // console.log("random :: ",categories);
-    res.render('mainProducts', { data: products, category: catProducts, userId: userId, wishData: wishlist, banners: banners });
+    res.render('mainProducts', { data: products, category: catProducts, userId: userId, wishData: wishlist, banners: banners,offers:productOffers });
 }
 
 async function viewCartPage(req, res) {
@@ -747,8 +749,13 @@ async function viewProductDetailsPage(req, res) {
             }
         ]
     )
+    const productOffer = await productOfferModel.findOne({foodId:id});
     const foodDetails = await productModel.findOne({ _id: id });
-    res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist })
+    if(productOffer){
+        res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist,offers:productOffer })
+    }else{
+        res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist })
+    }
 }
 
 
