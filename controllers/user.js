@@ -206,7 +206,7 @@ async function productPage(req, res) {
     const banners = await bannerModel.find({}).sort({ createdAt: 1 });
     const productOffers = await productOfferModel.find({});
     // console.log("random :: ",categories);
-    res.render('mainProducts', { data: products, category: catProducts, userId: userId, wishData: wishlist, banners: banners,offers:productOffers });
+    res.render('mainProducts', { data: products, category: catProducts, userId: userId, wishData: wishlist, banners: banners, offers: productOffers });
 }
 
 async function viewCartPage(req, res) {
@@ -241,13 +241,19 @@ async function viewCartPage(req, res) {
                 return item;
             });
         }
+        let offers = await productOfferModel.find({ foodId: { $in: foodIds } });
+        if(offers.length <= 0){
+            offers = false;
+        }
+        console.log(offers)
 
         res.render('../views/userCart', {
             cartItems: cartItems,
             userId: uid,
             userData: userDetails,
             wallet: wallet,
-            userAddress: addressDetails
+            userAddress: addressDetails,
+            offers:offers
         });
     } catch (err) {
         console.error('Error fetching cart details:', err);
@@ -521,7 +527,7 @@ async function checkingQuantity(req, res) {
             return res.status(400).json({ err: `only ${product.productInStock} left for ${product.productName}` })
         }
     }
-    res.status(200).json({success:"Qty is ok"})
+    res.status(200).json({ success: "Qty is ok" })
 }
 
 
@@ -584,7 +590,7 @@ async function updateStock(req, res) {
                                     discountAmount = (existCoupon.discountValue * parseInt(productPrice) / 100);
                                     console.log("after discount : : : : : ", afterDiscountPrice)
                                     discountAddedOrNot = true;
-                                }else{
+                                } else {
                                     afterDiscountPrice = parseInt(productQty) * parseInt(productPrice) - existCoupon.discountValue;
                                     discountAmount = existCoupon.discountValue;
                                     console.log("after discount : : : : : ", afterDiscountPrice)
@@ -622,7 +628,7 @@ async function updateStock(req, res) {
                 }
             }
 
-        } else { 
+        } else {
             return res.status(404).json({ err: "Coupon not found" })
         }
     }
@@ -710,7 +716,7 @@ async function updateStock(req, res) {
 
 
             if (result) {
-                console.log("discounted AMOUnt :::: ",discountAmount.toFixed(2))
+                console.log("discounted AMOUnt :::: ", discountAmount.toFixed(2))
                 const createInvoice = await invoiceModel.create({ userId: user_id, orderId: orderId, productId: productId, productName: productName, productQty: productQty, shippingAddress: address, discount: discountAmount.toFixed(2), amount: afterDiscountPrice.toFixed(2), paymentMethod: paymentMethod })
                 res.status(200).json({ orderid: orderId, address: address });
 
@@ -749,11 +755,11 @@ async function viewProductDetailsPage(req, res) {
             }
         ]
     )
-    const productOffer = await productOfferModel.findOne({foodId:id});
+    const productOffer = await productOfferModel.findOne({ foodId: id });
     const foodDetails = await productModel.findOne({ _id: id });
-    if(productOffer){
-        res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist,offers:productOffer })
-    }else{
+    if (productOffer) {
+        res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist, offers: productOffer })
+    } else {
         res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist })
     }
 }

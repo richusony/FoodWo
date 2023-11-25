@@ -90,6 +90,9 @@
                                                     <h2 class="text-sm md:text-xl font-semibold">
                                                         <%= cart.productName %>
                                                     </h2>
+                                                    <% if(offers[0].foodId == cart._id){%>
+                                                        <span class="font-normal text-sm text-orange-500">*Special Offer</span>
+                                                    <%}%>
                                                 </div>
 
                                                 <div class=" flex mr-2 md:mr-3 relative text-center justify-center">
@@ -114,7 +117,8 @@
                                                         <span data-actualPrice="<%= cart.productPrice %>"
                                                             id="<%= `price${index}` %>">
                                                             <%= '₹' +cart.productPrice %>
-                                                        </span></span>
+                                                        </span>
+                                                    </span>
                                                 </div>
                                                 <% totalItems +=quantities[index]; %>
                                                     <% totalPrice +=quantities[index] * parseFloat(cart.productPrice);
@@ -302,6 +306,9 @@
                                                     </span></span></div>
                                             <hr class="py-[0.28px] bg-white rounded my-5">
                                             <div class="flex justify-between px-3 font-bold"><span>Total : </span>
+                                                <% if(offers){%>
+                                                    <span>offer</span>
+                                                <%}%>
                                                 <span class="finalPrice">₹ <span id="dynamicTotalAmt">
                                                         <%= totalPrice.toFixed(2) %>
                                                     </span></span>
