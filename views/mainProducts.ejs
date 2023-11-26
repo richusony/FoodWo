@@ -33,6 +33,27 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
+        .loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #F97316;
+  width: 80px;
+  height: 80px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
     </style>
 </head>
 
@@ -198,27 +219,31 @@
                                     <% if(offers){ offers.forEach((off)=>{%>
                                         <% if(off.foodId==food._id){%>
                                             <%let offerAmount;%>
-                                            <% if(off.discountType=="per" ){%>
-                                                <% offerAmount = food.productPrice - (off.discountValue*food.productPrice/100)%>
-                                                <%}else{%>
-                                                   <% offerAmount = food.productPrice - off.discountValue%>
-                                                    <% }%>
-                                                        <span class="font-bold text-md my-2"><span class="text-orange-500">*Offer</span> Price : <span
-                                                                class="text-orange-500">₹<%= offerAmount%>
-                                                            </span>/ <%= food.productType %>
-                                                        </span>
+                                                <% if(off.discountType=="per" ){%>
+                                                    <% offerAmount=food.productPrice -
+                                                        (off.discountValue*food.productPrice/100)%>
                                                         <%}else{%>
-                                                            <span class="font-bold text-lg my-2">Price : <span
-                                                                    class="text-orange-500">₹<%= food.productPrice %>
-                                                                </span>/ <%= food.productType %>
-                                                            </span>
-                                                            <%}})}else{%>
-                                                                    <span class="font-bold text-lg my-2">Price : <span
-                                                                            class="text-orange-500">₹<%=
-                                                                                food.productPrice %> </span>/ <%=
-                                                                            food.productType %>
+                                                            <% offerAmount=food.productPrice - off.discountValue%>
+                                                                <% }%>
+                                                                    <span class="font-bold text-md my-2"><span
+                                                                            class="text-orange-500">*Offer</span> Price
+                                                                        : <span class="text-orange-500">₹<%=
+                                                                                offerAmount%>
+                                                                        </span>/ <%= food.productType %>
                                                                     </span>
-                                                                    <%}%>
+                                                                    <%}else{%>
+                                                                        <span class="font-bold text-lg my-2">Price :
+                                                                            <span class="text-orange-500">₹<%=
+                                                                                    food.productPrice %>
+                                                                            </span>/ <%= food.productType %>
+                                                                        </span>
+                                                                        <%}})}else{%>
+                                                                            <span class="font-bold text-lg my-2">Price :
+                                                                                <span class="text-orange-500">₹<%=
+                                                                                        food.productPrice %> </span>/
+                                                                                <%= food.productType %>
+                                                                            </span>
+                                                                            <%}%>
 
                                 </div>
                                 <div class="my-2 w-full flex justify-between items-center ">
@@ -313,15 +338,133 @@
                     </div>
                 </div>
             </div>
+
+            <div class="md:px-10 my-5">
+
+                <h2 class="font-bold text-md text-center md:text-3xl py-5">More Items</h2>
+
+                <div class="flex flex-wrap my-5 gap-10 justify-center items-center" id="allFoodItemContainer">
+
+                    <!-- <div class="overflow-hidden w-56">
+                        <div class="w-56 h-40 rounded-xl">
+                            <img class="w-full h-full rounded-xl object-cover "
+                                src="/products/1696516368114-Chicken Biriyani.webp" alt="">
+                        </div>
+
+                        <h1 class="font-semibold text-lg my-1">Chicken Biryani</h1>
+                        <div>
+                            <span><i class="fa-regular fa-star text-orange-500"></i> 4.2</span>
+                        </div>
+                        <div class="overflow-hidden text-gray-500 text-md">
+                            <span>Ginger and lemon combination was tra</span>
+                        </div>
+                        <div>
+                            <span class="text-xl font-semibold">Price : <span class="text-orange-500">₹169</span> / Plate</span>
+                        </div>
+                        <div class="my-2 w-full flex justify-between items-center ">
+                            <span class="text-3xl cursor-pointer" id="wish">
+                                <i data-userid="" onclick="wishlistadder(event)" data-foodid=""
+                                    class="wishlist fa-regular fa-heart text-orange-500"></i>
+                            </span>
+                            <i data-foodid="" data-userid="" onclick="addToCart(event)"
+                                class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
+                        </div>
+                    </div> -->
+
+
+                </div>
+                <div class="loader mx-auto hidden" id="loadMoreLoader"></div>
+                <div class="text-center py-5"><button onclick="loadMore(event)" class="text-center px-10 py-2 text-xl text-white  hover:text-gray-800 rounded bg-orange-500">Load more</button></div>
+            </div>
         </section>
 
         <!-- footer -->
-        <%- include('../views/userFooter.ejs') %>
+        <%- include('userFooter') %>
 
 
             <script>
+                let loadNumber =1;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
+                const loadMoreLoader = document.getElementById('loadMoreLoader')
+                const allFoodItemContainer = document.getElementById('allFoodItemContainer');
+                (async()=>{
+                    const allFood = await fetch('/food?items=1');
+                    const data = await allFood.json()
+                    console.log(data);
+                    data.food.forEach((food)=>{
+                        allFoodItemContainer.innerHTML+=`
+                    <div class="overflow-hidden w-56">
+                        <div class="w-56 h-40 rounded-xl">
+                            <img class="transition w-full h-full rounded-xl object-cover ease-linear hover:scale-95"
+                                src="/${food.productImages[0]}" alt="">
+                        </div>
+
+                        <h1 class="font-semibold text-lg my-1">${food.productName}</h1>
+                        <div>
+                            <span><i class="fa-regular fa-star text-orange-500"></i> 4.2</span>
+                        </div>
+                        <div class="overflow-hidden text-gray-500 text-md">
+                            <span>${food.description.substring(0,50)}...</span>
+                        </div>
+                        <div>
+                            <span class="text-xl font-semibold">Price : <span class="text-orange-500">₹${food.productPrice}</span> / ${food.productType}</span>
+                        </div>
+                        <div class="my-2 w-full flex justify-between items-center ">
+                            <span class="text-3xl cursor-pointer" id="wish">
+                                <i data-userid="" onclick="wishlistadder(event)" data-foodid=""
+                                    class="wishlist fa-regular fa-heart text-orange-500"></i>
+                            </span>
+                            <i data-foodid="${food._id}" data-userid="${sessionStorage.getItem("user_id")}" onclick="addToCart(event)"
+                                class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
+                        </div>
+                    </div>
+                    `;
+                    })
+                })();
+
+async function loadMore(event){
+    event.preventDefault();
+    loadNumber++;
+    event.target.classList.add('hidden');
+    loadMoreLoader.classList.remove('hidden');
+    const allFood = await fetch(`/food?items=${loadNumber}`);
+                    const data = await allFood.json()
+                    console.log(data);
+                    event.target.classList.remove('hidden');
+                    loadMoreLoader.classList.add('hidden');
+                    data.food.forEach((food)=>{
+                        allFoodItemContainer.innerHTML+=`
+                    <div class="overflow-hidden w-56">
+                        <div class="w-56 h-40 rounded-xl">
+                            <img class="transition w-full h-full rounded-xl object-cover ease-linear hover:scale-95"
+                                src="/${food.productImages[0]}" alt="">
+                        </div>
+
+                        <h1 class="font-semibold text-lg my-1">${food.productName}</h1>
+                        <div>
+                            <span><i class="fa-regular fa-star text-orange-500"></i> 4.2</span>
+                        </div>
+                        <div class="overflow-hidden text-gray-500 text-md">
+                            <span>${food.description.substring(0,50)}...</span>
+                        </div>
+                        <div>
+                            <span class="text-xl font-semibold">Price : <span class="text-orange-500">₹${food.productPrice}</span> / ${food.productType}</span>
+                        </div>
+                        <div class="my-2 w-full flex justify-between items-center ">
+                            <span class="text-3xl cursor-pointer" id="wish">
+                                <i data-userid="" onclick="wishlistadder(event)" data-foodid=""
+                                    class="wishlist fa-regular fa-heart text-orange-500"></i>
+                            </span>
+                            <i data-foodid="" data-userid="" onclick="addToCart(event)"
+                                class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
+                        </div>
+                    </div>
+                    `;
+                    })
+
+}
+
                 async function addToCart(event) {
                     event.stopPropagation();
                     event.preventDefault();

@@ -861,6 +861,18 @@ function viewPageNotFound(req, res) {
     }
 }
 
+async function getAllfoodItems(req, res) { 
+    const foodLimit = 1;
+    const foodSkip = req.query.items;
+    const allFood = await productModel.find({}).limit(foodLimit).skip(foodSkip).sort({createdAt:-1});
+    if (allFood) {
+        res.status(200).json({ food: allFood });
+    }
+    else {
+        res.status(400).json({ food: false });
+    }
+}
+
 module.exports = {
     signInUser,
     viewSignInPage,
@@ -891,5 +903,6 @@ module.exports = {
     checkingQuantity,
     deleteAccount,
     viewPageNotFound,
-    userSession
+    userSession,
+    getAllfoodItems
 }
