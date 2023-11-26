@@ -65,14 +65,12 @@ async function searchFoodItems(req, res) {
 }
 
 async function recentSearches(req, res) {
-    console.log("reached here ")
     if (req.session.user) {
         try {
             const recentSearch = await recentSearchModel.findOne({ userId: req.session.user._id });
             
             if (recentSearch) {
                 res.status(200).json({ recent: recentSearch });
-                console.log("adfadfadfadfafafa adfadfa af",recentSearch)
             } else {
                 res.status(400).json({ recent: null });
             }

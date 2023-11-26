@@ -60,8 +60,8 @@
                     <h2 class="font-semibold my-2">Recent Searches</h2>
                     <div id="recentSearches">
 
-                        <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
-                        <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                        <!-- <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                        <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div> -->
                     </div>
                 </div>
 
@@ -181,6 +181,7 @@
                 const alertMsg = document.getElementById('alertMsg')
                 const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
                 const recentSearches = document.getElementById("recentSearches");
+                const searchInput = document.getElementById('searchInput');
                 let searches;
                 (async () => {
                     const mainSearch = sessionStorage.getItem("foodSearch");
@@ -249,6 +250,7 @@
 
                         } else {
                             sessionStorage.removeItem("foodSearch")
+                            searchedItemsCon.innerText = 'NO ITEMS';
                             // Handle errors if the request is not successful
                             console.error('Error:', searching.status, searching.statusText);
                         }
@@ -264,11 +266,11 @@
                         data.recent.recent.forEach((rec) => {
                             recentSearches.innerHTML += `
             <div class="my-3">
-                <i class="fa-solid text-gray-500 text-lg fa-search"></i> ${rec}
+                <i class="fa-solid fa-clock-rotate-left"></i> <button class="outline-none cursor-pointer bg-transparent" value="${rec}" onclick="searchFood(event)">${rec}</button>
             </div>`;
                         });
                     }
-                })
+                })();
 
                 async function searchFood(event) {
                     event.preventDefault();
@@ -278,6 +280,7 @@
                     const clearIcon = document.getElementById('clearIcon')
                     const searchedItemsCon = document.getElementById('searchedItemsCon')
                     const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
+                    searchInput.value=event.target.value;
 
                     searchIcon.classList.add('hidden')
                     clearIcon.classList.remove('hidden')
@@ -286,6 +289,7 @@
                     recentSearchCon.classList.add('hidden')
 
                     if (event.target.value === "") {
+                        console.log("search input is empty")
                         popularCuisinesCon.classList.remove('hidden')
                         recentSearchCon.classList.remove('hidden')
                         searchedItemsMainCon.classList.add('hidden')
@@ -293,7 +297,8 @@
                     }
                     const searching = await fetch(`/search-food?query=${event.target.value}`);
                     searches = event.target.value;
-                    if(searching.status=404){
+                    
+                    if(searching.status != 200){
                         searchedItemsCon.innerText = 'NO ITEMS';
                     }
                     if (searching.ok) {
@@ -331,6 +336,7 @@
 
                     } else {
                         // Handle errors if the request is not successful
+                        searchedItemsCon.innerText = 'NO ITEMS';
                         console.error('Error:', searching.status, searching.statusText);
                     }
                 }
