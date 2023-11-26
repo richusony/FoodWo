@@ -58,9 +58,11 @@
 
                 <div class="px-2 my-5" id="recentSearchCon">
                     <h2 class="font-semibold my-2">Recent Searches</h2>
-                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
-                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
-                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                    <div id="recentSearches">
+
+                        <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                        <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                    </div>
                 </div>
 
 
@@ -178,13 +180,14 @@
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
+                const recentSearches = document.getElementById("recentSearches");
                 let searches;
                 (async () => {
                     const mainSearch = sessionStorage.getItem("foodSearch");
                     console.log(mainSearch)
                     if (mainSearch == "" || mainSearch == undefined || mainSearch == null) {
-                     return;
-                    }else{
+                        return;
+                    } else {
                         const popularCuisinesCon = document.getElementById('popularCuisinesCon')
                         const recentSearchCon = document.getElementById('recentSearchCon')
                         const searchIcon = document.getElementById('searchIcon')
@@ -205,7 +208,7 @@
                             searchedItemsMainCon.classList.add('hidden')
                             return;
                         }
-                        searchInput.value=mainSearch.trim();
+                        searchInput.value = mainSearch.trim();
                         const searching = await fetch(`/search-food?query=${mainSearch.trim()}`);
                         searches = mainSearch;
                         if (searching.ok) {
@@ -252,6 +255,21 @@
                     }
                 })();
 
+                (async () => {
+                    const fetchRecent = await fetch('/recent-searches');
+                    console.log(fetchRecent)
+                    if (fetchRecent.ok) {
+                        const data = await fetchRecent.json();
+                        console.log("nokate", data)
+                        data.recent.recent.forEach((rec) => {
+                            recentSearches.innerHTML += `
+            <div class="my-3">
+                <i class="fa-solid text-gray-500 text-lg fa-search"></i> ${rec}
+            </div>`;
+                        });
+                    }
+                })
+
                 async function searchFood(event) {
                     event.preventDefault();
                     const popularCuisinesCon = document.getElementById('popularCuisinesCon')
@@ -275,6 +293,9 @@
                     }
                     const searching = await fetch(`/search-food?query=${event.target.value}`);
                     searches = event.target.value;
+                    if(searching.status=404){
+                        searchedItemsCon.innerText = 'NO ITEMS';
+                    }
                     if (searching.ok) {
                         searchedItemsMainCon.classList.remove('hidden')
                         // Handle a successful response (e.g., display search results)
@@ -304,8 +325,6 @@
                                 // Append the item's HTML to the container
                                 searchedItemsCon.innerHTML += itemHTML;
                             });
-                        } else {
-                            searchedItemsCon.innerText = 'NO ITEMS';
                         }
 
 

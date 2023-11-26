@@ -242,7 +242,7 @@ async function viewCartPage(req, res) {
             });
         }
         let offers = await productOfferModel.find({ foodId: { $in: foodIds } });
-        if(offers.length <= 0){
+        if (offers.length <= 0) {
             offers = false;
         }
         console.log(offers)
@@ -253,7 +253,7 @@ async function viewCartPage(req, res) {
             userData: userDetails,
             wallet: wallet,
             userAddress: addressDetails,
-            offers:offers
+            offers: offers
         });
     } catch (err) {
         console.error('Error fetching cart details:', err);
@@ -534,11 +534,13 @@ async function checkingQuantity(req, res) {
 async function updateStock(req, res) {
     const { user_id, productId, productName, image, customerName, productPrice, paymentMethod, productQty, address, coupon } = req.body;
     console.log(user_id, productId, productQty);
+    let offerDiscount = 0;
     let discountAddedOrNot = false;
     let afterDiscountPrice = parseInt(productPrice);
     let discountAmount = 0;
     const currentDate = moment().format('DD-MM-YYYY');
     // const coupon = req.body.coupon;
+    const productOffer = await productOfferModel.findOne({ foodId: productId });
     const existCoupon = await couponModel.findOne({ couponCode: coupon })
     const checkFood = existCoupon && existCoupon.foodId == productId;
     const product = await productModel.findOne({ _id: productId });
@@ -632,6 +634,13 @@ async function updateStock(req, res) {
             return res.status(404).json({ err: "Coupon not found" })
         }
     }
+    if (productOffer) {
+        if (productOffer.discountType == "per") {
+            offerDiscount = parseInt(productOffer.discountValue * productOffer.actualPrice / 100);
+        } else {
+            offerDiscount = parseInt(productOffer.discountValue)
+        }
+    }
     function generateOrderID() {
         // Generate a random number between 1000 and 9999
         const randomPart = Math.floor(Math.random() * 9000) + 1000;
@@ -670,7 +679,7 @@ async function updateStock(req, res) {
                 }
             );
 
-            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, customerName: customerName, productId: productId, productName: productName, productQty: productQty, productImage: image, productPrice: afterDiscountPrice, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
+            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, customerName: customerName, productId: productId, productName: productName, productQty: productQty, productImage: image, productPrice: afterDiscountPrice - offerDiscount, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
 
             const updating = await userModel.updateOne(
                 { _id: user_id },
@@ -682,7 +691,7 @@ async function updateStock(req, res) {
                 if (paymentMethod == "FoodWo Wallet") {
                     const historyData = {
                         date: currentDate,
-                        amt: afterDiscountPrice,
+                        amt: afterDiscountPrice - offerDiscount,
                         update: "dec"
                     };
 
@@ -692,7 +701,7 @@ async function updateStock(req, res) {
                     const walletUpdate = await walletModel.updateOne(
                         { userId: user_id },
                         {
-                            $inc: { balance: -afterDiscountPrice }, // Decrement the balance
+                            $inc: { balance: -(afterDiscountPrice - offerDiscount) }, // Decrement the balance
                             $push: { history: historyData }
                         }
                     );
@@ -701,13 +710,13 @@ async function updateStock(req, res) {
                 if (paymentMethod == "FoodWo Wallet") {
                     const historyData = {
                         date: currentDate,
-                        amt: parseInt(productPrice) * parseInt(productQty),
+                        amt: (parseInt(productPrice) * parseInt(productQty) - offerDiscount),
                         update: "dec"
                     };
                     const walletUpdate = await walletModel.updateOne(
                         { userId: user_id },
                         {
-                            $inc: { balance: -parseInt(productPrice) * parseInt(productQty) }, // Decrement the balance
+                            $inc: { balance: -(parseInt(productPrice) * parseInt(productQty) - offerDiscount) }, // Decrement the balance
                             $push: { history: historyData }
                         }
                     );
@@ -717,7 +726,7 @@ async function updateStock(req, res) {
 
             if (result) {
                 console.log("discounted AMOUnt :::: ", discountAmount.toFixed(2))
-                const createInvoice = await invoiceModel.create({ userId: user_id, orderId: orderId, productId: productId, productName: productName, productQty: productQty, shippingAddress: address, discount: discountAmount.toFixed(2), amount: afterDiscountPrice.toFixed(2), paymentMethod: paymentMethod })
+                const createInvoice = await invoiceModel.create({ userId: user_id, orderId: orderId, productId: productId, productName: productName, productQty: productQty, shippingAddress: address, discount: offerDiscount == 0 ? discountAmount.toFixed(2) : offerDiscount, amount: afterDiscountPrice - offerDiscount, paymentMethod: paymentMethod })
                 res.status(200).json({ orderid: orderId, address: address });
 
             } else {
