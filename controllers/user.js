@@ -862,7 +862,7 @@ function viewPageNotFound(req, res) {
 }
 
 async function getAllfoodItems(req, res) { 
-    const foodLimit = 1;
+    const foodLimit = 2;
     const foodSkip = req.query.items;
     const allFood = await productModel.find({}).limit(foodLimit).skip(foodSkip).sort({createdAt:-1});
     if (allFood) {
