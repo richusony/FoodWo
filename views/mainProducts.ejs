@@ -341,7 +341,8 @@
 
             <div class="md:px-10 my-5">
 
-                <h2 class="font-bold text-md text-center md:text-3xl py-5">More Items</h2>
+                <h2 class="font-bold  text-center text-2xl md:text-3xl py-4">More Items</h2>
+                <!-- <div class="text-center"><span class="rounded-full"><i class="fa-solid text-2xl text-orange-500 fa-angle-down"></i></span></div> -->
 
                 <div class="flex flex-wrap my-5 gap-10 justify-center items-center" id="allFoodItemContainer">
 
@@ -383,7 +384,7 @@
 
 
             <script>
-                let loadNumber =1;
+                let loadNumber =2;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const loadMoreLoader = document.getElementById('loadMoreLoader')
@@ -396,8 +397,8 @@
                         allFoodItemContainer.innerHTML+=`
                     <div class="overflow-hidden w-56">
                         <div class="w-56 h-40 rounded-xl">
-                            ${food.productInStock==0?`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full h-full grayscale rounded-xl  object-cover ease-linear hover:scale-95"
-                                src="/${food.productImages[0]}" alt="">`:`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full h-full rounded-xl object-cover ease-linear hover:scale-95"
+                            ${food.productInStock==0?`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full cursor-pointer h-full grayscale rounded-xl  object-cover ease-linear hover:scale-95"
+                                src="/${food.productImages[0]}" alt="">`:`<img onclick="redirectTo('/product-details/${food._id}')" class="transition cursor-pointer w-full h-full rounded-xl object-cover ease-linear hover:scale-95"
                                 src="/${food.productImages[0]}" alt="">`}
                         </div>
 
@@ -422,7 +423,7 @@
 
 async function loadMore(event){
     event.preventDefault();
-    loadNumber++;
+    loadNumber=loadNumber+2;
     event.target.classList.add('hidden');
     loadMoreLoader.classList.remove('hidden');
     const allFood = await fetch(`/food?items=${loadNumber}`);
@@ -434,8 +435,8 @@ async function loadMore(event){
                         allFoodItemContainer.innerHTML+=`
                     <div class="overflow-hidden w-56">
                         <div class="w-56 h-40 rounded-xl">
-                            ${food.productInStock==0?`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full h-full grayscale rounded-xl  object-cover ease-linear hover:scale-95"
-                                src="/${food.productImages[0]}" alt="">`:`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full h-full rounded-xl object-cover ease-linear hover:scale-95"
+                            ${food.productInStock==0?`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full h-full cursor-pointer grayscale rounded-xl  object-cover ease-linear hover:scale-95"
+                                src="/${food.productImages[0]}" alt="">`:`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full h-full rounded-xl cursor-pointer object-cover ease-linear hover:scale-95"
                                 src="/${food.productImages[0]}" alt="">`}
                         </div>
 

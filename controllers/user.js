@@ -1,19 +1,19 @@
-const { userModel } = require('../models/userSchema');
+const { sessAuth } = require("../middleware/sessionAuth");
 const productModel = require('../models/productSchema');
 const wishListModel = require('../models/wishlistSchema');
 const categoryModel = require('../models/categorySchema');
-const bcrypt = require('bcrypt');
-const { sessAuth } = require("../middleware/sessionAuth");
 const cartModel = require('../models/cartSchema');
 const orderModel = require('../models/orderSchema');
+const { userModel } = require('../models/userSchema');
 const { walletModel } = require('../models/walletSchema');
-const moment = require('moment');
 const { couponModel } = require('../models/couponSchema');
 const { addressModel } = require('../models/addressSchema');
 const { invoiceModel } = require('../models/invoiceSchema');
 const { referModel } = require('../models/referalSchema');
 const { bannerModel } = require('../models/bannerSchema');
 const { productOfferModel } = require('../models/offerSchema');
+const bcrypt = require('bcrypt');
+const moment = require('moment');
 
 function viewSignInPage(req, res) {
     res.render('userSignUp')
@@ -186,7 +186,7 @@ async function otpVerification(req, res) {
 
 async function productPage(req, res) {
     const userId = req.session.user?._id;
-    const products = await productModel.find({});
+    const products = await productModel.find({}).limit(6);
     const wishlist = await wishListModel.aggregate(
         [
             {
