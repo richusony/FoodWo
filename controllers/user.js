@@ -769,7 +769,7 @@ async function viewProductDetailsPage(req, res) {
     if (productOffer) {
         res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist, offers: productOffer })
     } else {
-        res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist })
+        res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist,offers:false })
     }
 }
 

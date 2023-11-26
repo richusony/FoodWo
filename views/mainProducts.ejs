@@ -396,8 +396,9 @@
                         allFoodItemContainer.innerHTML+=`
                     <div class="overflow-hidden w-56">
                         <div class="w-56 h-40 rounded-xl">
-                            <img class="transition w-full h-full rounded-xl object-cover ease-linear hover:scale-95"
-                                src="/${food.productImages[0]}" alt="">
+                            ${food.productInStock==0?`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full h-full grayscale rounded-xl  object-cover ease-linear hover:scale-95"
+                                src="/${food.productImages[0]}" alt="">`:`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full h-full rounded-xl object-cover ease-linear hover:scale-95"
+                                src="/${food.productImages[0]}" alt="">`}
                         </div>
 
                         <h1 class="font-semibold text-lg my-1">${food.productName}</h1>
@@ -410,11 +411,7 @@
                         <div>
                             <span class="text-xl font-semibold">Price : <span class="text-orange-500">₹${food.productPrice}</span> / ${food.productType}</span>
                         </div>
-                        <div class="my-2 w-full flex justify-between items-center ">
-                            <span class="text-3xl cursor-pointer" id="wish">
-                                <i data-userid="" onclick="wishlistadder(event)" data-foodid=""
-                                    class="wishlist fa-regular fa-heart text-orange-500"></i>
-                            </span>
+                        <div class="my-2 w-full flex justify-center items-center ">
                             <i data-foodid="${food._id}" data-userid="${sessionStorage.getItem("user_id")}" onclick="addToCart(event)"
                                 class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
                         </div>
@@ -437,8 +434,9 @@ async function loadMore(event){
                         allFoodItemContainer.innerHTML+=`
                     <div class="overflow-hidden w-56">
                         <div class="w-56 h-40 rounded-xl">
-                            <img class="transition w-full h-full rounded-xl object-cover ease-linear hover:scale-95"
-                                src="/${food.productImages[0]}" alt="">
+                            ${food.productInStock==0?`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full h-full grayscale rounded-xl  object-cover ease-linear hover:scale-95"
+                                src="/${food.productImages[0]}" alt="">`:`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full h-full rounded-xl object-cover ease-linear hover:scale-95"
+                                src="/${food.productImages[0]}" alt="">`}
                         </div>
 
                         <h1 class="font-semibold text-lg my-1">${food.productName}</h1>
@@ -451,12 +449,8 @@ async function loadMore(event){
                         <div>
                             <span class="text-xl font-semibold">Price : <span class="text-orange-500">₹${food.productPrice}</span> / ${food.productType}</span>
                         </div>
-                        <div class="my-2 w-full flex justify-between items-center ">
-                            <span class="text-3xl cursor-pointer" id="wish">
-                                <i data-userid="" onclick="wishlistadder(event)" data-foodid=""
-                                    class="wishlist fa-regular fa-heart text-orange-500"></i>
-                            </span>
-                            <i data-foodid="" data-userid="" onclick="addToCart(event)"
+                        <div class="my-2 w-full flex justify-center items-center ">
+                            <i data-foodid="${food._id}" data-userid="${sessionStorage.getItem("user_id")}" onclick="addToCart(event)"
                                 class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
                         </div>
                     </div>
