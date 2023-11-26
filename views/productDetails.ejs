@@ -131,9 +131,23 @@
                         <div class="my-2"><span class="text-xl"><i class="fa-regular fa-star text-orange-500"></i> <i
                                     class="fa-regular fa-star text-orange-500"></i> <i
                                     class="fa-regular fa-star text-orange-500"></i></span></div>
-                        <div class="my-2"><span class="text-2xl font-semibold"><span class="text-orange-500">₹</span>
+                        <div class="my-2">
+                            <% if(offers){%>
+                                <% let offerAmount;%>
+                                <% if(offers.discountType == "per"){%>
+                                    <%offerAmount = food.productPrice - (offers.discountValue*food.productPrice/100);%>
+                                <%}else{%>
+                                    <%offerAmount = food.productPrice - offers.discountValue;%>
+                                <%}%>
+                                <span class="text-2xl font-semibold line-through"><span class="text-orange-500">₹</span>
                                 <%=food.productPrice%>
-                            </span></div>
+                            </span>&nbsp;<span class="text-xl font-semibold"><span class="text-orange-500">*Offer Price </span>: ₹<%=offerAmount%></span>
+                                <%}else{%>
+                            <span class="text-2xl font-semibold"><span class="text-orange-500">₹</span>
+                                <%=food.productPrice%>
+                            </span>
+                            <%}%>
+                        </div>
                         <div class="my-5"><span class="text-gray-500 text-md md:text-xl">
                                 <%=food.description%>
                             </span></div>

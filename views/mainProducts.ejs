@@ -33,6 +33,27 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
+        .loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #F97316;
+  width: 80px;
+  height: 80px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
     </style>
 </head>
 
@@ -58,12 +79,12 @@
             </div>
             <div class="my-2 md:my-6 overflow-hidden flex justify-center items-center">
                 <div class="foodContainer md:py-3 overflow-x-scroll overflow-y-hidden w-screen h-3/4 whitespace-nowrap">
-                   <% if(banners){banners.forEach((banner)=>{ %>
-                    <div class="md:w-96 h-[150px] md:h-[200px] mx-3 inline-block">
-                        <img class="w-full h-full rounded-xl object-cover" src="/<%=banner.imageUrl%>" alt="banner">
-                    </div>
-                <%})} %>
-                    <!-- <div class="md:w-96 h-full mx-3 inline-block">
+                    <% if(banners){banners.forEach((banner)=>{ %>
+                        <div class="md:w-96 h-[150px] md:h-[200px] mx-3 inline-block">
+                            <img class="w-full h-full rounded-xl object-cover" src="/<%=banner.imageUrl%>" alt="banner">
+                        </div>
+                        <%})} %>
+                            <!-- <div class="md:w-96 h-full mx-3 inline-block">
                         <img class="w-full h-full" src="/public/images/banner2.svg" alt="banner">
                     </div>
                     <div class="md:w-96 h-full mx-3 inline-block">
@@ -175,16 +196,16 @@
                         <% if(data){ data.forEach((food)=>{ %>
                             <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
                                 <div class="w-full h-36 rounded-2xl">
-                                   <% if(food.productInStock <=0){%>
-                                    <img onclick="redirectTo('/product-details/<%=food._id%>')"
-                                    class="w-full h-full cursor-pointer grayscale rounded-2xl object-cover"
-                                    src="/<%= food.productImages[0] %>" alt="">
-                                    <%}else{%>
-                                    <img onclick="redirectTo('/product-details/<%=food._id%>')"
-                                        class="w-full h-full cursor-pointer rounded-2xl object-cover"
-                                        src="/<%= food.productImages[0] %>" alt="">
-                                        <%}%>
-                                    </div>
+                                    <% if(food.productInStock <=0){%>
+                                        <img onclick="redirectTo('/product-details/<%=food._id%>')"
+                                            class="w-full h-full cursor-pointer grayscale rounded-2xl object-cover"
+                                            src="/<%= food.productImages[0] %>" alt="">
+                                        <%}else{%>
+                                            <img onclick="redirectTo('/product-details/<%=food._id%>')"
+                                                class="w-full h-full cursor-pointer rounded-2xl object-cover"
+                                                src="/<%= food.productImages[0] %>" alt="">
+                                            <%}%>
+                                </div>
                                 <h3 class="font-bold my-1 text-xl">
                                     <%= food.productName %>
                                 </h3>
@@ -194,8 +215,37 @@
                                         class="text-gray-500 text-sm w-full block">
                                         <%= food.description %>
                                     </span></div>
-                                <div><span class="font-bold text-lg my-2">Price : <span class="text-orange-500">₹<%=
-                                                food.productPrice %> </span>/ <%= food.productType %></span></div>
+                                <div>
+                                    <% if(offers){ offers.forEach((off)=>{%>
+                                        <% if(off.foodId==food._id){%>
+                                            <%let offerAmount;%>
+                                                <% if(off.discountType=="per" ){%>
+                                                    <% offerAmount=food.productPrice -
+                                                        (off.discountValue*food.productPrice/100)%>
+                                                        <%}else{%>
+                                                            <% offerAmount=food.productPrice - off.discountValue%>
+                                                                <% }%>
+                                                                    <span class="font-bold text-md my-2"><span
+                                                                            class="text-orange-500">*Offer</span> Price
+                                                                        : <span class="text-orange-500">₹<%=
+                                                                                offerAmount%>
+                                                                        </span>/ <%= food.productType %>
+                                                                    </span>
+                                                                    <%}else{%>
+                                                                        <span class="font-bold text-lg my-2">Price :
+                                                                            <span class="text-orange-500">₹<%=
+                                                                                    food.productPrice %>
+                                                                            </span>/ <%= food.productType %>
+                                                                        </span>
+                                                                        <%}})}else{%>
+                                                                            <span class="font-bold text-lg my-2">Price :
+                                                                                <span class="text-orange-500">₹<%=
+                                                                                        food.productPrice %> </span>/
+                                                                                <%= food.productType %>
+                                                                            </span>
+                                                                            <%}%>
+
+                                </div>
                                 <div class="my-2 w-full flex justify-between items-center ">
                                     <span class="text-3xl cursor-pointer" id="wish">
                                         <i data-userid="<%= userId %>" onclick="wishlistadder(event)"
@@ -204,17 +254,17 @@
                                     </span>
 
                                     <!-- <button type="button" onclick="addToCart(event)" data-userid="<%= userId %>" data-foodid="<%= food._id%>" class=""> -->
-                                        <% if(food.productInStock<=0){%>
-                                            <span class="text-orange-500 font-semibold">Stock Out</span>
-                                            <%}else{%>
-                                    <i data-foodid="<%= food._id%>" data-userid="<%= userId %>"
-                                        onclick="addToCart(event)"
-                                        class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
-                                    <!-- </button> -->
-                                    <%}%>
+                                    <% if(food.productInStock<=0){%>
+                                        <span class="text-orange-500 font-semibold">Stock Out</span>
+                                        <%}else{%>
+                                            <i data-foodid="<%= food._id%>" data-userid="<%= userId %>"
+                                                onclick="addToCart(event)"
+                                                class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
+                                            <!-- </button> -->
+                                            <%}%>
                                 </div>
-                                
-                               
+
+
                             </div>
                             <% }) } %>
                     </div>
@@ -240,12 +290,16 @@
                         <% category.forEach((food)=>{ %>
                             <div class="w-60 h-full py-5 mx-3 inline-block overflow-hidden">
                                 <div class="w-full h-36 rounded-2xl">
-                                 <% if(food.productInStock <=0){%>
-                            <img onclick="redirectTo('/product-details/<%=food._id%>')" class="cursor-pointer grayscale w-full h-full rounded-2xl object-cover" src="/<%= food.productImages[0] %>" alt="">
-                                <%}else{%>
-                            <img onclick="redirectTo('/product-details/<%=food._id%>')" class="cursor-pointer w-full h-full rounded-2xl object-cover" src="/<%= food.productImages[0] %>" alt="">
-                                <%}%>
-                            </div>
+                                    <% if(food.productInStock <=0){%>
+                                        <img onclick="redirectTo('/product-details/<%=food._id%>')"
+                                            class="cursor-pointer grayscale w-full h-full rounded-2xl object-cover"
+                                            src="/<%= food.productImages[0] %>" alt="">
+                                        <%}else{%>
+                                            <img onclick="redirectTo('/product-details/<%=food._id%>')"
+                                                class="cursor-pointer w-full h-full rounded-2xl object-cover"
+                                                src="/<%= food.productImages[0] %>" alt="">
+                                            <%}%>
+                                </div>
                                 <h3 class="font-bold my-1 text-xl">
                                     <%= food.productName %>
                                 </h3>
@@ -265,13 +319,13 @@
 
                                     <!-- <button type="button" onclick="addToCart(event)" data-userid="<%= userId %>" data-foodid="<%= food._id%>" class=""> -->
                                     <% if(food.productInStock<=0){%>
-                                            <span class="text-orange-500 font-semibold">Stock Out</span>
-                                            <%}else{%>
-                                    <i data-foodid="<%= food._id%>" data-userid="<%= userId %>"
-                                        onclick="addToCart(event)"
-                                        class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
-                                    <%}%>
-                                    <!-- </button> -->
+                                        <span class="text-orange-500 font-semibold">Stock Out</span>
+                                        <%}else{%>
+                                            <i data-foodid="<%= food._id%>" data-userid="<%= userId %>"
+                                                onclick="addToCart(event)"
+                                                class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
+                                            <%}%>
+                                                <!-- </button> -->
                                 </div>
                             </div>
                             <% }) }else{ %>
@@ -284,15 +338,128 @@
                     </div>
                 </div>
             </div>
+
+            <div class="md:px-10 my-5">
+
+                <h2 class="font-bold  text-center text-2xl md:text-3xl py-4">More Items</h2>
+                <!-- <div class="text-center"><span class="rounded-full"><i class="fa-solid text-2xl text-orange-500 fa-angle-down"></i></span></div> -->
+
+                <div class="flex flex-wrap my-5 gap-10 justify-center items-center" id="allFoodItemContainer">
+
+                    <!-- <div class="overflow-hidden w-56">
+                        <div class="w-56 h-40 rounded-xl">
+                            <img class="w-full h-full rounded-xl object-cover "
+                                src="/products/1696516368114-Chicken Biriyani.webp" alt="">
+                        </div>
+
+                        <h1 class="font-semibold text-lg my-1">Chicken Biryani</h1>
+                        <div>
+                            <span><i class="fa-regular fa-star text-orange-500"></i> 4.2</span>
+                        </div>
+                        <div class="overflow-hidden text-gray-500 text-md">
+                            <span>Ginger and lemon combination was tra</span>
+                        </div>
+                        <div>
+                            <span class="text-xl font-semibold">Price : <span class="text-orange-500">₹169</span> / Plate</span>
+                        </div>
+                        <div class="my-2 w-full flex justify-between items-center ">
+                            <span class="text-3xl cursor-pointer" id="wish">
+                                <i data-userid="" onclick="wishlistadder(event)" data-foodid=""
+                                    class="wishlist fa-regular fa-heart text-orange-500"></i>
+                            </span>
+                            <i data-foodid="" data-userid="" onclick="addToCart(event)"
+                                class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
+                        </div>
+                    </div> -->
+
+
+                </div>
+                <div class="loader mx-auto hidden" id="loadMoreLoader"></div>
+                <div class="text-center py-5"><button onclick="loadMore(event)" class="text-center px-10 py-2 text-xl text-white  hover:text-gray-800 rounded bg-orange-500">Load more</button></div>
+            </div>
         </section>
 
         <!-- footer -->
-        <%- include('../views/userFooter.ejs') %>
+        <%- include('userFooter') %>
 
 
             <script>
+                let loadNumber =2;
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
+                const loadMoreLoader = document.getElementById('loadMoreLoader')
+                const allFoodItemContainer = document.getElementById('allFoodItemContainer');
+                (async()=>{
+                    const allFood = await fetch('/food?items=1');
+                    const data = await allFood.json()
+                    console.log(data);
+                    data.food.forEach((food)=>{
+                        allFoodItemContainer.innerHTML+=`
+                    <div class="overflow-hidden w-56">
+                        <div class="w-56 h-40 rounded-xl">
+                            ${food.productInStock==0?`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full cursor-pointer h-full grayscale rounded-xl  object-cover ease-linear hover:scale-95"
+                                src="/${food.productImages[0]}" alt="">`:`<img onclick="redirectTo('/product-details/${food._id}')" class="transition cursor-pointer w-full h-full rounded-xl object-cover ease-linear hover:scale-95"
+                                src="/${food.productImages[0]}" alt="">`}
+                        </div>
+
+                        <h1 class="font-semibold text-lg my-1">${food.productName}</h1>
+                        <div>
+                            <span><i class="fa-regular fa-star text-orange-500"></i> 4.2</span>
+                        </div>
+                        <div class="overflow-hidden text-gray-500 text-md">
+                            <span>${food.description.substring(0,50)}...</span>
+                        </div>
+                        <div>
+                            <span class="text-xl font-semibold">Price : <span class="text-orange-500">₹${food.productPrice}</span> / ${food.productType}</span>
+                        </div>
+                        <div class="my-2 w-full flex justify-center items-center ">
+                            <i data-foodid="${food._id}" data-userid="${sessionStorage.getItem("user_id")}" onclick="addToCart(event)"
+                                class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
+                        </div>
+                    </div>
+                    `;
+                    })
+                })();
+
+async function loadMore(event){
+    event.preventDefault();
+    loadNumber=loadNumber+2;
+    event.target.classList.add('hidden');
+    loadMoreLoader.classList.remove('hidden');
+    const allFood = await fetch(`/food?items=${loadNumber}`);
+                    const data = await allFood.json()
+                    console.log(data);
+                    event.target.classList.remove('hidden');
+                    loadMoreLoader.classList.add('hidden');
+                    data.food.forEach((food)=>{
+                        allFoodItemContainer.innerHTML+=`
+                    <div class="overflow-hidden w-56">
+                        <div class="w-56 h-40 rounded-xl">
+                            ${food.productInStock==0?`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full h-full cursor-pointer grayscale rounded-xl  object-cover ease-linear hover:scale-95"
+                                src="/${food.productImages[0]}" alt="">`:`<img onclick="redirectTo('/product-details/${food._id}')" class="transition w-full h-full rounded-xl cursor-pointer object-cover ease-linear hover:scale-95"
+                                src="/${food.productImages[0]}" alt="">`}
+                        </div>
+
+                        <h1 class="font-semibold text-lg my-1">${food.productName}</h1>
+                        <div>
+                            <span><i class="fa-regular fa-star text-orange-500"></i> 4.2</span>
+                        </div>
+                        <div class="overflow-hidden text-gray-500 text-md">
+                            <span>${food.description.substring(0,50)}...</span>
+                        </div>
+                        <div>
+                            <span class="text-xl font-semibold">Price : <span class="text-orange-500">₹${food.productPrice}</span> / ${food.productType}</span>
+                        </div>
+                        <div class="my-2 w-full flex justify-center items-center ">
+                            <i data-foodid="${food._id}" data-userid="${sessionStorage.getItem("user_id")}" onclick="addToCart(event)"
+                                class="bg-orange-500 cursor-pointer rounded-full px-6 py-2 text-xl text-white text-center fa-solid fa-cart-shopping"></i>
+                        </div>
+                    </div>
+                    `;
+                    })
+
+}
+
                 async function addToCart(event) {
                     event.stopPropagation();
                     event.preventDefault();

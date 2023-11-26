@@ -58,9 +58,11 @@
 
                 <div class="px-2 my-5" id="recentSearchCon">
                     <h2 class="font-semibold my-2">Recent Searches</h2>
-                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
-                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
-                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                    <div id="recentSearches">
+
+                        <!-- <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                        <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div> -->
+                    </div>
                 </div>
 
 
@@ -178,13 +180,15 @@
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
+                const recentSearches = document.getElementById("recentSearches");
+                const searchInput = document.getElementById('searchInput');
                 let searches;
                 (async () => {
                     const mainSearch = sessionStorage.getItem("foodSearch");
                     console.log(mainSearch)
                     if (mainSearch == "" || mainSearch == undefined || mainSearch == null) {
-                     return;
-                    }else{
+                        return;
+                    } else {
                         const popularCuisinesCon = document.getElementById('popularCuisinesCon')
                         const recentSearchCon = document.getElementById('recentSearchCon')
                         const searchIcon = document.getElementById('searchIcon')
@@ -205,7 +209,7 @@
                             searchedItemsMainCon.classList.add('hidden')
                             return;
                         }
-                        searchInput.value=mainSearch.trim();
+                        searchInput.value = mainSearch.trim();
                         const searching = await fetch(`/search-food?query=${mainSearch.trim()}`);
                         searches = mainSearch;
                         if (searching.ok) {
@@ -246,9 +250,25 @@
 
                         } else {
                             sessionStorage.removeItem("foodSearch")
+                            searchedItemsCon.innerText = 'NO ITEMS';
                             // Handle errors if the request is not successful
                             console.error('Error:', searching.status, searching.statusText);
                         }
+                    }
+                })();
+
+                (async () => {
+                    const fetchRecent = await fetch('/recent-searches');
+                    console.log(fetchRecent)
+                    if (fetchRecent.ok) {
+                        const data = await fetchRecent.json();
+                        console.log("nokate", data)
+                        data.recent.recent.forEach((rec) => {
+                            recentSearches.innerHTML += `
+            <div class="my-3">
+                <i class="fa-solid fa-clock-rotate-left"></i> <button class="outline-none cursor-pointer bg-transparent" value="${rec}" onclick="searchFood(event)">${rec}</button>
+            </div>`;
+                        });
                     }
                 })();
 
@@ -260,6 +280,7 @@
                     const clearIcon = document.getElementById('clearIcon')
                     const searchedItemsCon = document.getElementById('searchedItemsCon')
                     const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
+                    searchInput.value=event.target.value;
 
                     searchIcon.classList.add('hidden')
                     clearIcon.classList.remove('hidden')
@@ -268,6 +289,7 @@
                     recentSearchCon.classList.add('hidden')
 
                     if (event.target.value === "") {
+                        console.log("search input is empty")
                         popularCuisinesCon.classList.remove('hidden')
                         recentSearchCon.classList.remove('hidden')
                         searchedItemsMainCon.classList.add('hidden')
@@ -275,6 +297,10 @@
                     }
                     const searching = await fetch(`/search-food?query=${event.target.value}`);
                     searches = event.target.value;
+                    
+                    if(searching.status != 200){
+                        searchedItemsCon.innerText = 'NO ITEMS';
+                    }
                     if (searching.ok) {
                         searchedItemsMainCon.classList.remove('hidden')
                         // Handle a successful response (e.g., display search results)
@@ -304,14 +330,13 @@
                                 // Append the item's HTML to the container
                                 searchedItemsCon.innerHTML += itemHTML;
                             });
-                        } else {
-                            searchedItemsCon.innerText = 'NO ITEMS';
                         }
 
 
 
                     } else {
                         // Handle errors if the request is not successful
+                        searchedItemsCon.innerText = 'NO ITEMS';
                         console.error('Error:', searching.status, searching.statusText);
                     }
                 }

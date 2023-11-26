@@ -15,8 +15,12 @@ const productOfferSchema = new mongoose.Schema({
         required: true
     },
     discountValue: {
-        type: String,
+        type: Number,
         required: true
+    },
+    actualPrice:{
+        type:Number,
+        required:true
     },
     offerImage: {
         type: String,
@@ -47,7 +51,7 @@ const categoryOfferSchema = new mongoose.Schema({
         required: true
     },
     discountValue: {
-        type: String,
+        type: Number,
         required: true
     },
     offerImage: {

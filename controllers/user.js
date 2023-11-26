@@ -1,18 +1,19 @@
-const { userModel } = require('../models/userSchema');
+const { sessAuth } = require("../middleware/sessionAuth");
 const productModel = require('../models/productSchema');
 const wishListModel = require('../models/wishlistSchema');
 const categoryModel = require('../models/categorySchema');
-const bcrypt = require('bcrypt');
-const { sessAuth } = require("../middleware/sessionAuth");
 const cartModel = require('../models/cartSchema');
 const orderModel = require('../models/orderSchema');
+const { userModel } = require('../models/userSchema');
 const { walletModel } = require('../models/walletSchema');
-const moment = require('moment');
 const { couponModel } = require('../models/couponSchema');
 const { addressModel } = require('../models/addressSchema');
 const { invoiceModel } = require('../models/invoiceSchema');
 const { referModel } = require('../models/referalSchema');
 const { bannerModel } = require('../models/bannerSchema');
+const { productOfferModel } = require('../models/offerSchema');
+const bcrypt = require('bcrypt');
+const moment = require('moment');
 
 function viewSignInPage(req, res) {
     res.render('userSignUp')
@@ -185,7 +186,7 @@ async function otpVerification(req, res) {
 
 async function productPage(req, res) {
     const userId = req.session.user?._id;
-    const products = await productModel.find({});
+    const products = await productModel.find({}).limit(6);
     const wishlist = await wishListModel.aggregate(
         [
             {
@@ -203,8 +204,9 @@ async function productPage(req, res) {
     console.log(categories[0].category)
     const catProducts = await productModel.find({ category: categories[0].category })
     const banners = await bannerModel.find({}).sort({ createdAt: 1 });
+    const productOffers = await productOfferModel.find({});
     // console.log("random :: ",categories);
-    res.render('mainProducts', { data: products, category: catProducts, userId: userId, wishData: wishlist, banners: banners });
+    res.render('mainProducts', { data: products, category: catProducts, userId: userId, wishData: wishlist, banners: banners, offers: productOffers });
 }
 
 async function viewCartPage(req, res) {
@@ -239,13 +241,19 @@ async function viewCartPage(req, res) {
                 return item;
             });
         }
+        let offers = await productOfferModel.find({ foodId: { $in: foodIds } });
+        if (offers.length <= 0) {
+            offers = false;
+        }
+        console.log(offers)
 
         res.render('../views/userCart', {
             cartItems: cartItems,
             userId: uid,
             userData: userDetails,
             wallet: wallet,
-            userAddress: addressDetails
+            userAddress: addressDetails,
+            offers: offers
         });
     } catch (err) {
         console.error('Error fetching cart details:', err);
@@ -519,18 +527,20 @@ async function checkingQuantity(req, res) {
             return res.status(400).json({ err: `only ${product.productInStock} left for ${product.productName}` })
         }
     }
-    res.status(200).json({success:"Qty is ok"})
+    res.status(200).json({ success: "Qty is ok" })
 }
 
 
 async function updateStock(req, res) {
     const { user_id, productId, productName, image, customerName, productPrice, paymentMethod, productQty, address, coupon } = req.body;
     console.log(user_id, productId, productQty);
+    let offerDiscount = 0;
     let discountAddedOrNot = false;
     let afterDiscountPrice = parseInt(productPrice);
     let discountAmount = 0;
     const currentDate = moment().format('DD-MM-YYYY');
     // const coupon = req.body.coupon;
+    const productOffer = await productOfferModel.findOne({ foodId: productId });
     const existCoupon = await couponModel.findOne({ couponCode: coupon })
     const checkFood = existCoupon && existCoupon.foodId == productId;
     const product = await productModel.findOne({ _id: productId });
@@ -582,7 +592,7 @@ async function updateStock(req, res) {
                                     discountAmount = (existCoupon.discountValue * parseInt(productPrice) / 100);
                                     console.log("after discount : : : : : ", afterDiscountPrice)
                                     discountAddedOrNot = true;
-                                }else{
+                                } else {
                                     afterDiscountPrice = parseInt(productQty) * parseInt(productPrice) - existCoupon.discountValue;
                                     discountAmount = existCoupon.discountValue;
                                     console.log("after discount : : : : : ", afterDiscountPrice)
@@ -620,8 +630,15 @@ async function updateStock(req, res) {
                 }
             }
 
-        } else { 
+        } else {
             return res.status(404).json({ err: "Coupon not found" })
+        }
+    }
+    if (productOffer) {
+        if (productOffer.discountType == "per") {
+            offerDiscount = parseInt(productOffer.discountValue * productOffer.actualPrice / 100);
+        } else {
+            offerDiscount = parseInt(productOffer.discountValue)
         }
     }
     function generateOrderID() {
@@ -662,7 +679,7 @@ async function updateStock(req, res) {
                 }
             );
 
-            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, customerName: customerName, productId: productId, productName: productName, productQty: productQty, productImage: image, productPrice: afterDiscountPrice, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
+            const addToOrder = await orderModel.create({ orderId: orderId, userId: user_id, customerName: customerName, productId: productId, productName: productName, productQty: productQty, productImage: image, productPrice: afterDiscountPrice - offerDiscount, address: address, paymentMethod: paymentMethod, orderStatus: 'Pending' })
 
             const updating = await userModel.updateOne(
                 { _id: user_id },
@@ -674,7 +691,7 @@ async function updateStock(req, res) {
                 if (paymentMethod == "FoodWo Wallet") {
                     const historyData = {
                         date: currentDate,
-                        amt: afterDiscountPrice,
+                        amt: afterDiscountPrice - offerDiscount,
                         update: "dec"
                     };
 
@@ -684,7 +701,7 @@ async function updateStock(req, res) {
                     const walletUpdate = await walletModel.updateOne(
                         { userId: user_id },
                         {
-                            $inc: { balance: -afterDiscountPrice }, // Decrement the balance
+                            $inc: { balance: -(afterDiscountPrice - offerDiscount) }, // Decrement the balance
                             $push: { history: historyData }
                         }
                     );
@@ -693,13 +710,13 @@ async function updateStock(req, res) {
                 if (paymentMethod == "FoodWo Wallet") {
                     const historyData = {
                         date: currentDate,
-                        amt: parseInt(productPrice) * parseInt(productQty),
+                        amt: (parseInt(productPrice) * parseInt(productQty) - offerDiscount),
                         update: "dec"
                     };
                     const walletUpdate = await walletModel.updateOne(
                         { userId: user_id },
                         {
-                            $inc: { balance: -parseInt(productPrice) * parseInt(productQty) }, // Decrement the balance
+                            $inc: { balance: -(parseInt(productPrice) * parseInt(productQty) - offerDiscount) }, // Decrement the balance
                             $push: { history: historyData }
                         }
                     );
@@ -708,8 +725,8 @@ async function updateStock(req, res) {
 
 
             if (result) {
-                console.log("discounted AMOUnt :::: ",discountAmount.toFixed(2))
-                const createInvoice = await invoiceModel.create({ userId: user_id, orderId: orderId, productId: productId, productName: productName, productQty: productQty, shippingAddress: address, discount: discountAmount.toFixed(2), amount: afterDiscountPrice.toFixed(2), paymentMethod: paymentMethod })
+                console.log("discounted AMOUnt :::: ", discountAmount.toFixed(2))
+                const createInvoice = await invoiceModel.create({ userId: user_id, orderId: orderId, productId: productId, productName: productName, productQty: productQty, shippingAddress: address, discount: offerDiscount == 0 ? discountAmount.toFixed(2) : offerDiscount, amount: afterDiscountPrice - offerDiscount, paymentMethod: paymentMethod })
                 res.status(200).json({ orderid: orderId, address: address });
 
             } else {
@@ -747,8 +764,13 @@ async function viewProductDetailsPage(req, res) {
             }
         ]
     )
+    const productOffer = await productOfferModel.findOne({ foodId: id });
     const foodDetails = await productModel.findOne({ _id: id });
-    res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist })
+    if (productOffer) {
+        res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist, offers: productOffer })
+    } else {
+        res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist,offers:false })
+    }
 }
 
 
@@ -839,6 +861,18 @@ function viewPageNotFound(req, res) {
     }
 }
 
+async function getAllfoodItems(req, res) { 
+    const foodLimit = 2;
+    const foodSkip = req.query.items;
+    const allFood = await productModel.find({}).limit(foodLimit).skip(foodSkip).sort({createdAt:-1});
+    if (allFood) {
+        res.status(200).json({ food: allFood });
+    }
+    else {
+        res.status(400).json({ food: false });
+    }
+}
+
 module.exports = {
     signInUser,
     viewSignInPage,
@@ -869,5 +903,6 @@ module.exports = {
     checkingQuantity,
     deleteAccount,
     viewPageNotFound,
-    userSession
+    userSession,
+    getAllfoodItems
 }
