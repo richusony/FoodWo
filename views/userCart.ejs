@@ -90,9 +90,9 @@
                                                     <h2 class="text-sm md:text-xl font-semibold">
                                                         <%= cart.productName %>
                                                     </h2>
-                                                    <% if(offers[0].foodId == cart._id){%>
+                                                    <%if(offers){ if(offers[0].foodId == cart._id){%>
                                                         <span class="font-normal text-sm text-orange-500">*Special Offer</span>
-                                                    <%}%>
+                                                    <%}}%>
                                                 </div>
 
                                                 <div class=" flex mr-2 md:mr-3 relative text-center justify-center">
@@ -305,11 +305,22 @@
                                                                 <%} else{%>0.00<%}%>
                                                     </span></span></div>
                                             <hr class="py-[0.28px] bg-white rounded my-5">
+                                            <% if(offers){ %>
+                                                <%let offerAmount;%>
+                                                <% if(offers[0].discountType=="per" ){%>
+                                                    <% offerAmount = (offers[0].discountValue*offers[0].actualPrice/100)%>
+                                                    <%}else{%>
+                                                       <% offerAmount = offers[0].discountValue%>
+                                                        <% }%>
+                                                <div class="flex justify-between px-3 font-bold">
+                                                    <span>offer discount : </span><span>-<%=offerAmount%>Rs</span>
+                                                    <% totalPrice = totalPrice - offerAmount%>
+                                                </div>
+                                            <%}%>
                                             <div class="flex justify-between px-3 font-bold"><span>Total : </span>
-                                                <% if(offers){%>
-                                                    <span>offer</span>
-                                                <%}%>
+                                              
                                                 <span class="finalPrice">₹ <span id="dynamicTotalAmt">
+
                                                         <%= totalPrice.toFixed(2) %>
                                                     </span></span>
 

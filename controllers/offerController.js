@@ -47,8 +47,9 @@ async function createProductOffer(req, res) {
     const offerImage = req.file;
     const { food, description, discountType, discountValue, productExpiry } = req.body;
     console.log(offerImage, food, description, discountType, discountValue, productExpiry);
+    const foodItem = await productModel.findOne({_id:food});
 
-    const creatingProductOffer = await productOfferModel.create({ foodId: food, description: description, discountType: discountType, discountValue: discountValue, offerImage: offerImage.path, expiry: productExpiry });
+    const creatingProductOffer = await productOfferModel.create({ foodId: food, description: description, discountType: discountType, discountValue: discountValue,actualPrice:parseInt(foodItem.productPrice), offerImage: offerImage.path, expiry: productExpiry });
 
     if (creatingProductOffer) {
         res.status(200).json({ success: "Product Offer Created" })
