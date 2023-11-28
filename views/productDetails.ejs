@@ -48,36 +48,35 @@
             text-overflow: ellipsis;
         }
 
-        * {box-sizing: border-box;}
+        * {
+            box-sizing: border-box;
+        }
 
-.img-zoom-container {
-  position: relative;
-}
+        .img-zoom-container {
+            position: relative;
+        }
 
-.img-zoom-lens {
-  position: absolute;
-  border: 1px solid #d4d4d4;
-  /*set the size of the lens:*/
-  width: 40px;
-  height: 40px;
-}
+        .img-zoom-lens {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            /*set the size of the lens:*/
+            width: 40px;
+            height: 40px;
+        }
 
-.img-zoom-result {
-  border: 1px solid #d4d4d4;
-  /*set the size of the result div:*/
-  width: 300px;
-  height: 300px;
-}
-
-
-
+        .img-zoom-result {
+            border: 1px solid #d4d4d4;
+            /*set the size of the result div:*/
+            width: 300px;
+            height: 300px;
+        }
     </style>
 </head>
 
 <body>
     <%- include('../views/userNavbar.ejs')%>
 
-        <section class="px-5 py-5 md:mt-5">
+        <section class="px-2 md:px-5 py-5 md:mt-5">
             <div id="alert"
                 class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
                 <span id="alertMsg"></span>
@@ -90,33 +89,32 @@
                     <div class="my-4 md:my-0">
 
                         <!-- Main Image -->
-                        <div class="img-zoom-container transition delay-150 w-full rounded-xl h-80 md:w-96 md:h-96 mx-auto overflow-hidden">
+                        <div
+                            class="img-zoom-container transition delay-150 w-full rounded-xl h-80 md:w-96 md:h-96 mx-auto overflow-hidden">
                             <% if(food.productInStock<=0){%>
-                            <img class="transition delay-150 w-full h-full grayscale rounded-xl object-cover  ease-linear " id="mainImage"
-                                src="/<%=food.productImages[0]%>" alt="" >
+                                <img class="transition delay-150 w-full h-full grayscale rounded-xl object-cover  ease-linear "
+                                    id="mainImage" src="/<%=food.productImages[0]%>" alt="">
                                 <%}else{%>
-                            <img class="transition delay-150 w-full h-full rounded-xl object-cover  ease-linear " id="mainImage"
-                                src="/<%=food.productImages[0]%>" alt="">
-                                <%}%>
-                            </div>
-                        
+                                    <img class="transition delay-150 w-full h-full rounded-xl object-cover  ease-linear "
+                                        id="mainImage" src="/<%=food.productImages[0]%>" alt="">
+                                    <%}%>
+                        </div>
+
 
                         <!-- Related Images -->
                         <div class="flex md:w-96 mx-auto justify-between my-2">
                             <% food.productImages.forEach((img)=>{ %>
                                 <div class="mx-1 rounded w-20 h-20">
                                     <% if(food.productInStock<=0){%>
-                                        <img data-foodpath="/<%=img%>"
-                                            onclick="changePhoto(event)"
-                                            class="cursor-pointer w-full h-full grayscale rounded-xl object-cover" src="/<%= img%>"
-                                            alt="">
-                                    <%}else{%>
-                                    <img data-foodpath="/<%=img%>"
-                                        onclick="changePhoto(event)"
-                                        class="cursor-pointer w-full h-full rounded-xl object-cover" src="/<%= img%>"
-                                        alt="">
-                                        <%}%>
-                                    </div>
+                                        <img data-foodpath="/<%=img%>" onclick="changePhoto(event)"
+                                            class="cursor-pointer w-full h-full grayscale rounded-xl object-cover"
+                                            src="/<%= img%>" alt="">
+                                        <%}else{%>
+                                            <img data-foodpath="/<%=img%>" onclick="changePhoto(event)"
+                                                class="cursor-pointer w-full h-full rounded-xl object-cover"
+                                                src="/<%= img%>" alt="">
+                                            <%}%>
+                                </div>
                                 <% }) %>
                         </div>
 
@@ -134,19 +132,25 @@
                         <div class="my-2">
                             <% if(offers){%>
                                 <% let offerAmount;%>
-                                <% if(offers.discountType == "per"){%>
-                                    <%offerAmount = food.productPrice - (offers.discountValue*food.productPrice/100);%>
-                                <%}else{%>
-                                    <%offerAmount = food.productPrice - offers.discountValue;%>
-                                <%}%>
-                                <span class="text-2xl font-semibold line-through"><span class="text-orange-500">₹</span>
-                                <%=food.productPrice%>
-                            </span>&nbsp;<span class="text-xl font-semibold"><span class="text-orange-500">*Offer Price </span>: ₹<%=offerAmount%></span>
-                                <%}else{%>
-                            <span class="text-2xl font-semibold"><span class="text-orange-500">₹</span>
-                                <%=food.productPrice%>
-                            </span>
-                            <%}%>
+                                    <% if(offers.discountType=="per" ){%>
+                                        <%offerAmount=food.productPrice -
+                                            (offers.discountValue*food.productPrice/100);%>
+                                            <%}else{%>
+                                                <%offerAmount=food.productPrice - offers.discountValue;%>
+                                                    <%}%>
+                                                        <span class="text-2xl font-semibold line-through"><span
+                                                                class="text-orange-500">₹</span>
+                                                            <%=food.productPrice%>
+                                                        </span>&nbsp;<span class="text-xl font-semibold"><span
+                                                                class="text-orange-500">*Offer Price </span>: ₹
+                                                            <%=offerAmount%>
+                                                        </span>
+                                                        <%}else{%>
+                                                            <span class="text-2xl font-semibold"><span
+                                                                    class="text-orange-500">₹</span>
+                                                                <%=food.productPrice%>
+                                                            </span>
+                                                            <%}%>
                         </div>
                         <div class="my-5"><span class="text-gray-500 text-md md:text-xl">
                                 <%=food.description%>
@@ -159,9 +163,11 @@
                             </span>
                             <% if(food.productInStock<=0){%>
                                 <span class="text-orange-500 text-xl font-semibold">Stock Out</span>
-                            <%}else{%>
-                            <button data-foodid="<%= food._id%>" data-userid="<%= userId %>" onclick="addToCart(event)" class="bg-orange-500 px-4 py-2 text-white rounded">add to cart</button>
-                            <%}%>
+                                <%}else{%>
+                                    <button data-foodid="<%= food._id%>" data-userid="<%= userId %>"
+                                        onclick="addToCart(event)"
+                                        class="bg-orange-500 px-4 py-2 text-white rounded">add to cart</button>
+                                    <%}%>
                         </div>
                     </div>
 
@@ -172,136 +178,50 @@
                     <h1 class="text-2xl font-semibold border-b-2 border-b-orange-500 my-3">Reviews</h1>
 
                     <div class="h-80 overflow-y-auto overflow-x-hidden shadow-inner">
+                        <%if(reviews.length !=0){ reviews.forEach((rev)=>{%>
                         <div class=" border-b-2 border-b-gray-100 my-3">
                             <div class="flex">
                                 <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
-                                        src="/public/images/user" alt=""></div>
+                                        src="/<%= rev.user.image?rev.user.image:'public/images/userIcon.png'%>" alt="userProfile"></div>
                                 <div class="mx-3">
-                                    <h3 class="font-semibold">Thomas Roy</h3>
-                                    <span><i class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i></span>
+                                    <h3 class="font-semibold"><%=rev.user.fullname%></h3>
+                                    <h5 class="text-gray-500"><%=rev.review.created_at%></h5>
+                                    <span>
+                                        <% for (let i = 0; i < rev.review.starCount; i++) { %>
+                                            <i class="fa-solid fa-star text-orange-500"></i>
+                                        <% } %>
+                                    </span>
                                 </div>
                             </div>
 
                             <div class="my-2">
-                                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, ratione quia ab ea
-                                    ullam, sequi vel magnam eligendi, veniam tempore facere cumque commodi ex laboriosam
-                                    quasi atque est? Rem minus soluta voluptatibus?</span>
+                                <span class=""><%=rev.review.review%></span>
                             </div>
                         </div>
-                        <div class=" border-b-2 border-b-gray-100 my-3">
-                            <div class="flex">
-                                <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
-                                        src="/public/images/user" alt=""></div>
-                                <div class="mx-3">
-                                    <h3 class="font-semibold">Thomas Roy</h3>
-                                    <span><i class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i></span>
-                                </div>
-                            </div>
+                        <%})}else{%>
+                            <div class="text-center py-5"><span class="text-2xl font-bold">No reviews yet</span></div>
+                        <%}%>
+                    </div>
+                </div>
 
-                            <div class="my-2">
-                                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, ratione quia ab ea
-                                    ullam, sequi vel magnam eligendi, veniam tempore facere cumque commodi ex laboriosam
-                                    quasi atque est? Rem minus soluta voluptatibus?</span>
-                            </div>
-                        </div>
-                        <div class=" border-b-2 border-b-gray-100 my-3">
-                            <div class="flex">
-                                <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
-                                        src="/public/images/user" alt=""></div>
-                                <div class="mx-3">
-                                    <h3 class="font-semibold">Thomas Roy</h3>
-                                    <span><i class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i></span>
-                                </div>
-                            </div>
+                <div class="static my-4">
 
-                            <div class="my-2">
-                                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, ratione quia ab ea
-                                    ullam, sequi vel magnam eligendi, veniam tempore facere cumque commodi ex laboriosam
-                                    quasi atque est? Rem minus soluta voluptatibus?</span>
-                            </div>
-                        </div>
-                        <div class=" border-b-2 border-b-gray-100 my-3">
-                            <div class="flex">
-                                <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
-                                        src="/public/images/user" alt=""></div>
-                                <div class="mx-3">
-                                    <h3 class="font-semibold">Thomas Roy</h3>
-                                    <span><i class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i></span>
-                                </div>
-                            </div>
-
-                            <div class="my-2">
-                                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, ratione quia ab ea
-                                    ullam, sequi vel magnam eligendi, veniam tempore facere cumque commodi ex laboriosam
-                                    quasi atque est? Rem minus soluta voluptatibus?</span>
-                            </div>
-                        </div>
-                        <div class=" border-b-2 border-b-gray-100 my-3">
-                            <div class="flex">
-                                <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
-                                        src="/public/images/user" alt=""></div>
-                                <div class="mx-3">
-                                    <h3 class="font-semibold">Thomas Roy</h3>
-                                    <span><i class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i></span>
-                                </div>
-                            </div>
-
-                            <div class="my-2">
-                                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, ratione quia ab ea
-                                    ullam, sequi vel magnam eligendi, veniam tempore facere cumque commodi ex laboriosam
-                                    quasi atque est? Rem minus soluta voluptatibus?</span>
-                            </div>
-                        </div>
-                        <div class=" border-b-2 border-b-gray-100 my-3">
-                            <div class="flex">
-                                <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
-                                        src="/public/images/user" alt=""></div>
-                                <div class="mx-3">
-                                    <h3 class="font-semibold">Thomas Roy</h3>
-                                    <span><i class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i><i
-                                            class="fa-regular fa-star text-orange-500"></i></span>
-                                </div>
-                            </div>
-
-                            <div class="my-2">
-                                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis, ratione quia ab ea
-                                    ullam, sequi vel magnam eligendi, veniam tempore facere cumque commodi ex laboriosam
-                                    quasi atque est? Rem minus soluta voluptatibus?</span>
-                            </div>
-                        </div>
+                    <div class="w-32 text-sm my-2">
+                        <i class="fa-regular fa-star rate-star text-lg text-orange-500" onclick="starRating(event)"></i>
+                        <i class="fa-regular fa-star rate-star text-lg text-orange-500" onclick="starRating(event)"></i>
+                        <i class="fa-regular fa-star rate-star text-lg text-orange-500" onclick="starRating(event)"></i>
+                        <i class="fa-regular fa-star rate-star text-lg text-orange-500" onclick="starRating(event)"></i>
+                        <i class="fa-regular fa-star rate-star text-lg text-orange-500" onclick="starRating(event)"></i>
                     </div>
 
-                    <div class="flex static my-4">
-                        <div class="bg-slate-200 rounded-full px-4 flex items-center w-full">
-                            <div class="w-32 text-sm"><i class="fa-regular fa-star text-orange-500"></i><i
-                                    class="fa-regular fa-star text-orange-500"></i><i
-                                    class="fa-regular fa-star text-orange-500"></i><i
-                                    class="fa-regular fa-star text-orange-500"></i><i
-                                    class="fa-regular fa-star text-orange-500"></i></div>
-                            <input class="bg-transparent w-full py-3 outline-none" type="text" name=""
-                                placeholder="write review" id="">
-                        </div>
+                    <div class="flex">
+                        <form class="bg-slate-200 rounded-full flex items-center w-full">
+                            <input class="bg-transparent w-full px-2 py-3 outline-none" type="text" name=""
+                                placeholder="write review" id="reviewText">
+                        </form>
                         <button class="mx-1 rounded-full bg-orange-500 py-2 px-4"><i
-                                class="text-white fa-solid fa-paper-plane"></i></button>
+                                class="text-white fa-solid fa-paper-plane" onclick="submitReview(event)"></i></button>
                     </div>
-
                 </div>
                 <% } %>
 
@@ -317,6 +237,33 @@
                     const imgPath = event.target.dataset.foodpath;
                     mainImage.src = imgPath;
                 }
+
+
+                let selectedStars = 0;
+                function starRating(event) {
+                    const stars = document.querySelectorAll('.rate-star');
+
+                    const clickedStarIndex = Array.from(stars).indexOf(event.target);
+
+                    if (clickedStarIndex !== -1) {
+                        if (event.target.classList.contains('fa-solid')) {
+                            for (let i = clickedStarIndex; i < stars.length; i++) {
+                                stars[i].classList.remove('fa-solid');
+                                stars[i].classList.add('fa-regular');
+                            }
+                            selectedStars = clickedStarIndex;
+                        } else {
+                            for (let i = 0; i <= clickedStarIndex; i++) {
+                                stars[i].classList.remove('fa-regular');
+                                stars[i].classList.add('fa-solid');
+                            }
+                            selectedStars = clickedStarIndex + 1;
+                        }
+                    }
+
+                    console.log('Selected Stars:', selectedStars);
+                }
+
 
                 async function wishlistadder(event) {
                     event.preventDefault();
@@ -409,72 +356,133 @@
 
             <script>
                 function imageZoom(imgID, resultID) {
-  var img, lens, result, cx, cy;
-  img = document.getElementById(imgID);
-  result = document.getElementById(resultID);
-  /* Create lens: */
-  lens = document.createElement("DIV");
-  lens.setAttribute("class", "img-zoom-lens");
-  /* Insert lens: */
-  img.parentElement.insertBefore(lens, img);
-  /* Calculate the ratio between result DIV and lens: */
-  cx = result.offsetWidth / lens.offsetWidth;
-  cy = result.offsetHeight / lens.offsetHeight;
-  /* Set background properties for the result DIV */
-  result.style.width=`50%`
-  result.style.backgroundImage = "url('" + img.src + "')";
-  result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
-  /* Execute a function when someone moves the cursor over the image, or the lens: */
-  lens.addEventListener("mousemove", moveLens);
-  img.addEventListener("mousemove", moveLens);
-  /* And also for touch screens: */
-  lens.addEventListener("touchmove", moveLens);
-  img.addEventListener("touchmove", moveLens);
+                    var img, lens, result, cx, cy;
+                    img = document.getElementById(imgID);
+                    result = document.getElementById(resultID);
+                    /* Create lens: */
+                    lens = document.createElement("DIV");
+                    lens.setAttribute("class", "img-zoom-lens");
+                    /* Insert lens: */
+                    img.parentElement.insertBefore(lens, img);
+                    /* Calculate the ratio between result DIV and lens: */
+                    cx = result.offsetWidth / lens.offsetWidth;
+                    cy = result.offsetHeight / lens.offsetHeight;
+                    /* Set background properties for the result DIV */
+                    result.style.width = `50%`
+                    result.style.backgroundImage = "url('" + img.src + "')";
+                    result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
+                    /* Execute a function when someone moves the cursor over the image, or the lens: */
+                    lens.addEventListener("mousemove", moveLens);
+                    img.addEventListener("mousemove", moveLens);
+                    /* And also for touch screens: */
+                    lens.addEventListener("touchmove", moveLens);
+                    img.addEventListener("touchmove", moveLens);
 
-  img.addEventListener("mouseenter",()=>{
-    result.style.display='block'
-  })
-  img.addEventListener("mouseleave",()=>{
-    result.style.display='none'
-  })
-  function moveLens(e) {
-      var pos, x, y;
-      /* Prevent any other actions that may occur when moving over the image */
-      e.preventDefault();
-      /* Get the cursor's x and y positions: */
-      pos = getCursorPos(e);
-      /* Calculate the position of the lens: */
-      x = pos.x - (lens.offsetWidth / 2);
-      y = pos.y - (lens.offsetHeight / 2);
-      /* Prevent the lens from being positioned outside the image: */
-      if (x > img.width - lens.offsetWidth) {x = img.width - lens.offsetWidth;}
-      if (x < 0) {x = 0;}
-      if (y > img.height - lens.offsetHeight) {y = img.height - lens.offsetHeight;}
-      if (y < 0) {y = 0;}
-      /* Set the position of the lens: */
-      lens.style.left = x + "px";
-      lens.style.top = y + "px";
-      /* Display what the lens "sees": */
-      result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
-      result.style.display='block'
-    }
-    result.style.display='none'
-  function getCursorPos(e) {
-    var a, x = 0, y = 0;
-    e = e || window.event;
-    /* Get the x and y positions of the image: */
-    a = img.getBoundingClientRect();
-    /* Calculate the cursor's x and y coordinates, relative to the image: */
-    x = e.pageX - a.left;
-    y = e.pageY - a.top;
-    /* Consider any page scrolling: */
-    x = x - window.pageXOffset;
-    y = y - window.pageYOffset;
-    return {x : x, y : y};
-  }
-}
+                    img.addEventListener("mouseenter", () => {
+                        result.style.display = 'block'
+                    })
+                    img.addEventListener("mouseleave", () => {
+                        result.style.display = 'none'
+                    })
+                    function moveLens(e) {
+                        var pos, x, y;
+                        /* Prevent any other actions that may occur when moving over the image */
+                        e.preventDefault();
+                        /* Get the cursor's x and y positions: */
+                        pos = getCursorPos(e);
+                        /* Calculate the position of the lens: */
+                        x = pos.x - (lens.offsetWidth / 2);
+                        y = pos.y - (lens.offsetHeight / 2);
+                        /* Prevent the lens from being positioned outside the image: */
+                        if (x > img.width - lens.offsetWidth) { x = img.width - lens.offsetWidth; }
+                        if (x < 0) { x = 0; }
+                        if (y > img.height - lens.offsetHeight) { y = img.height - lens.offsetHeight; }
+                        if (y < 0) { y = 0; }
+                        /* Set the position of the lens: */
+                        lens.style.left = x + "px";
+                        lens.style.top = y + "px";
+                        /* Display what the lens "sees": */
+                        result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
+                        result.style.display = 'block'
+                    }
+                    result.style.display = 'none'
+                    function getCursorPos(e) {
+                        var a, x = 0, y = 0;
+                        e = e || window.event;
+                        /* Get the x and y positions of the image: */
+                        a = img.getBoundingClientRect();
+                        /* Calculate the cursor's x and y coordinates, relative to the image: */
+                        x = e.pageX - a.left;
+                        y = e.pageY - a.top;
+                        /* Consider any page scrolling: */
+                        x = x - window.pageXOffset;
+                        y = y - window.pageYOffset;
+                        return { x: x, y: y };
+                    }
+                }
 
-imageZoom("mainImage","myresult")
+                imageZoom("mainImage", "myresult")
+
+
+                async function submitReview(event) {
+                    const foodId = '<%=food._id%>';
+                    const reviewText = document.getElementById('reviewText').value;
+                    if (reviewText == "" || !reviewText) {
+                        window.scrollTo(0, 0)
+                        alertBox.classList.remove('opacity-0')
+                        alertBox.classList.remove('-translate-x-full')
+                        alertMsg.innerText = `Type something to submit`;
+                        setTimeout(() => {
+                            alertBox.classList.add('opacity-0')
+                            alertBox.classList.add('-translate-x-full')
+                        }, 3000)
+                        return;
+                    } else {
+                        const data = {
+                            foodId: foodId,
+                            starCount: selectedStars,
+                            reviewText: reviewText.trim()
+                        }
+                        console.log(data)
+                        const reqData = await JSON.stringify(data);
+                        console.log(reqData)
+                        const response = await fetch('/review', {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': "application/json"
+                            },
+                            body: reqData
+                        });
+                        console.log(response)
+                        if (response.status == 401) {
+                            window.location.href='/login'
+                        }
+                        if (response.status == 404) {
+                            const resData = await response.json();
+                            window.scrollTo(0, 0)
+                            alertBox.classList.remove('opacity-0')
+                            alertBox.classList.remove('-translate-x-full')
+                            alertMsg.innerText = `${resData.failed}`;
+                            setTimeout(() => {
+                                alertBox.classList.add('opacity-0')
+                                alertBox.classList.add('-translate-x-full')
+                            }, 3000)
+                            return;
+                        }
+                        if (response.ok) {
+                            const resData = await response.json();
+                            window.scrollTo(0, 0)
+                            alertBox.classList.remove('opacity-0')
+                            alertBox.classList.remove('-translate-x-full')
+                            alertMsg.innerText = `${resData.success}`;
+                            setTimeout(() => {
+                                alertBox.classList.add('opacity-0')
+                                alertBox.classList.add('-translate-x-full')
+                                window.location.reload();
+                            }, 3000);
+                        }
+                    }
+                }
             </script>
 </body>
 

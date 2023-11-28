@@ -12,6 +12,7 @@ const { viewWalletPage, addMoney } = require('../controllers/walletController');
 const { viewInvoice } = require('../controllers/invoiceController');
 const { viewReferalPage, verifyReferal } = require('../controllers/referalController');
 const { viewUserOfferPage } = require('../controllers/offerController');
+const { addReview } = require('../controllers/fdReviewController');
 
 
 // User SignUp Get Request
@@ -24,7 +25,7 @@ router.route('/login')
     .get(viewLoginInPage)
     .post(loginUser)
 
-    router.route('/food')
+router.route('/food')
     .get(getAllfoodItems)
 
 router.route('/search-products')
@@ -63,6 +64,10 @@ router.route('/product-details/:id')
 
 router.route('/verify-referal')
     .get(verifyReferal)
+
+router.route('/review')
+.post(addReview)
+
 
 // User Session Middleware
 router.use(userAuth)
