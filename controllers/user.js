@@ -14,6 +14,7 @@ const { bannerModel } = require('../models/bannerSchema');
 const { productOfferModel } = require('../models/offerSchema');
 const bcrypt = require('bcrypt');
 const moment = require('moment');
+const { fdReviewModel } = require("../models/fdReviewSchema");
 
 function viewSignInPage(req, res) {
     res.render('userSignUp')
@@ -749,27 +750,49 @@ async function updateStock(req, res) {
 }
 
 async function viewProductDetailsPage(req, res) {
-    const id = req.params.id;
-    const userId = req.session.user?._id;
-    const wishlist = await wishListModel.aggregate(
-        [
-            {
-                $match: { userId: userId }
-            },
-            {
-                $project: {
-                    _id: 0,
-                    foodId: 1,
-                }
-            }
-        ]
-    )
-    const productOffer = await productOfferModel.findOne({ foodId: id });
-    const foodDetails = await productModel.findOne({ _id: id });
-    if (productOffer) {
-        res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist, offers: productOffer })
-    } else {
-        res.render('../views/productDetails.ejs', { userId: userId, food: foodDetails, wishData: wishlist,offers:false })
+    try {
+        const id = req.params.id;
+        const userId = req.session.user?._id;
+        
+        const wishlist = await wishListModel.aggregate([
+            { $match: { userId: userId } },
+            { $project: { _id: 0, foodId: 1 } }
+        ]);
+        
+        const productOffer = await productOfferModel.findOne({ foodId: id });
+        const foodDetails = await productModel.findOne({ _id: id });
+
+        if (!foodDetails) {
+            // Handle case where product details are not found
+            return res.status(404).send('Product not found');
+        }
+
+        const fdReviews = await fdReviewModel.find({ foodId: id });
+
+        // Fetch user details for each review
+        const reviewsWithUserDetails = await Promise.all(
+            fdReviews.map(async (review) => {
+                const user = await userModel.findOne({ _id: review.userId });
+                return {
+                    review,
+                    user: {
+                        fullname: user.fullname,
+                        image: user.image,
+                        // Include any other user details you need
+                    },
+                };
+            })
+        );
+        console.log(reviewsWithUserDetails)
+        if (productOffer) {
+            res.render('../views/productDetails.ejs', { userId, food: foodDetails, wishData: wishlist, offers: productOffer, reviews: reviewsWithUserDetails });
+        } else {
+            res.render('../views/productDetails.ejs', { userId, food: foodDetails, wishData: wishlist, offers: false, reviews: reviewsWithUserDetails });
+        }
+    } catch (error) {
+        // Handle any caught errors
+        console.error(error);
+        res.status(500).send('Internal Server Error');
     }
 }
 
