@@ -182,7 +182,7 @@
                         <div class=" border-b-2 border-b-gray-100 my-3">
                             <div class="flex">
                                 <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
-                                        src="/<%=rev.user.image%>" alt="userProfile"></div>
+                                        src="/<%= rev.user.image?rev.user.image:'public/images/userIcon.png'%>" alt="userProfile"></div>
                                 <div class="mx-3">
                                     <h3 class="font-semibold"><%=rev.user.fullname%></h3>
                                     <h5 class="text-gray-500"><%=rev.review.created_at%></h5>

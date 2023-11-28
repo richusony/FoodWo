@@ -767,7 +767,7 @@ async function viewProductDetailsPage(req, res) {
             return res.status(404).send('Product not found');
         }
 
-        const fdReviews = await fdReviewModel.find({ foodId: id });
+        const fdReviews = await fdReviewModel.find({ foodId: id }).sort({createdAt:-1});
 
         // Fetch user details for each review
         const reviewsWithUserDetails = await Promise.all(
