@@ -178,7 +178,7 @@
                     <h1 class="text-2xl font-semibold border-b-2 border-b-orange-500 my-3">Reviews</h1>
 
                     <div class="h-80 overflow-y-auto overflow-x-hidden shadow-inner">
-                        <%if(reviews){ reviews.forEach((rev)=>{%>
+                        <%if(reviews.length !=0){ reviews.forEach((rev)=>{%>
                         <div class=" border-b-2 border-b-gray-100 my-3">
                             <div class="flex">
                                 <div class="w-12 h-12 rounded-full"><img class="w-full h-full object-cover rounded-full"
@@ -198,8 +198,9 @@
                                 <span class=""><%=rev.review.review%></span>
                             </div>
                         </div>
-                        <%})}%>
-                        
+                        <%})}else{%>
+                            <div class="text-center py-5"><span class="text-2xl font-bold">No reviews yet</span></div>
+                        <%}%>
                     </div>
                 </div>
 

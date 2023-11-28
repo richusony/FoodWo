@@ -783,7 +783,6 @@ async function viewProductDetailsPage(req, res) {
                 };
             })
         );
-        console.log(reviewsWithUserDetails)
         if (productOffer) {
             res.render('../views/productDetails.ejs', { userId, food: foodDetails, wishData: wishlist, offers: productOffer, reviews: reviewsWithUserDetails });
         } else {
