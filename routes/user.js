@@ -13,6 +13,7 @@ const { viewInvoice } = require('../controllers/invoiceController');
 const { viewReferalPage, verifyReferal } = require('../controllers/referalController');
 const { viewUserOfferPage } = require('../controllers/offerController');
 const { addReview } = require('../controllers/fdReviewController');
+const { viewNewAddressPage } = require('../controllers/addressController');
 
 
 // User SignUp Get Request
@@ -153,6 +154,9 @@ router.route('/offers')
 
 router.route('/recent-searches')
     .get(recentSearches)
+
+router.route('/new-address')
+.get(viewNewAddressPage)
 
 router.route('/*')
     .get(viewPageNotFound)

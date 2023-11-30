@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoodWo - Add Address</title>
+    <link href="/public/css/output.css" rel="stylesheet" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/public/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/public/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/public/images/favicon-16x16.png"
+    />
+    <script
+      src="https://kit.fontawesome.com/70218ce737.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      /* Hide the default scrollbar */
+      .overflow-x-scroll::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Define the scrollbar track (optional) */
+      .overflow-x-scroll::-webkit-scrollbar-track {
+        background: transparent;
+        /* You can customize the track's appearance */
+      }
+
+      /* Define the scrollbar thumb (optional) */
+      .overflow-x-scroll::-webkit-scrollbar-thumb {
+        background: transparent;
+        /* You can customize the thumb's appearance */
+      }
+
+      .text-ellipsis {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    </style>
+  </head>
+
+  <body>
+    <%-include('userNavbar') %>
+    <section class="px-5 py-2 min-h-screen">
+      <div class="bg-orange-500 py-3 px-3 text-white rounded text-center">
+        <span
+          ><i class="fa-solid fa-circle-info"></i> Currently we are providing
+          services only for Kannur District!!</span
+        >
+      </div>
+      <h1 class="my-5 text-orange-500 text-2xl text-center font-bold">
+        Add Address
+      </h1>
+
+      <div class="flex justify-center w-full">
+        <form id="form" class=" md:w-1/2">
+          <div class="my-2 flex flex-col">
+            <label for="houseName">House Name</label>
+            <input
+              type="text"
+              id="houseName"
+              class="w-full py-1 px-2 border-2 border-orange-500 rounded-xl"
+              placeholder="House Name, Building No., Flat No."
+            />
+          </div>
+
+          <div class="my-2 flex flex-col">
+            <label for="country">Country</label>
+            <input
+              type="text"
+              id="country"
+              value="India"
+              class="w-full py-1 px-2 border-2 border-orange-500 rounded-xl"
+              placeholder="India"
+              disabled
+            />
+          </div>
+
+          <div class="my-2 flex flex-col">
+            <label for="state">State</label>
+            <input
+              type="text"
+              id="state"
+              value="Kerala"
+              class="w-full py-1 px-2 border-2 border-orange-500 rounded-xl"
+              placeholder="Kerala"
+              disabled
+            />
+          </div>
+
+          <div class="my-2 flex flex-col">
+            <label for="district">District</label>
+            <input
+              type="text"
+              id="district"
+              value="Kannur"
+              class="w-full py-1 px-2 border-2 border-orange-500 rounded-xl"
+              placeholder="Kannur"
+              disabled
+            />
+          </div>
+
+          <div class="my-2 flex flex-col">
+            <label for="city">City</label>
+            <input
+              type="text"
+              id="city"
+              value=""
+              class="w-full py-1 px-2 border-2 border-orange-500 rounded-xl"
+              placeholder="City"
+            />
+          </div>
+
+          <div class="my-2 flex flex-col">
+            <label for="pincode">Pincode</label>
+            <input
+              type="text"
+              id="pincode"
+              value=""
+              class="w-full py-1 px-2 border-2 border-orange-500 rounded-xl"
+              placeholder="Pincode"
+            />
+          </div>
+
+        <div class="text-center my-2">
+            <button class="py-2 px-4 text-white bg-orange-500 text-xl rounded-full">Submit</button>
+        </div>
+        </form>
+      </div>
+    </section>
+    <%-include('userFooter') %>
+  </body>
+</html>
