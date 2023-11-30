@@ -1,26 +1,59 @@
 const mongoose = require('mongoose');
 const moment = require('moment');
 
-const addressSchema = new mongoose.Schema({
-    userId:{
-        type:String, 
-        required:true,
-        unique:true
+const addressComponentsSchema = {
+    country: {
+        type: String,
+        default: 'India',
+        enum: ['India']
     },
-    address1:{
-        type:String,
-        required:true
+    state: {
+        type: String,
+        required: true,
+        enum: ['Kerala']
     },
-    address2:{
-        type:String,
+    district: {
+        type: String,
+        required: true,
+        enum: ['Kannur']
     },
-    address3:{
-        type:String,
+    city: {
+        type: String,
+        required: true,
+    },
+    houseName: {
+        type: String,
+        required: true,
+    },
+    pincode: {
+        type: String,
+        required: true,
+    },
+    label: {
+        type: String
     }
-})
+};
 
-const addressModel = mongoose.model('address',addressSchema);
+const addressSchema = new mongoose.Schema({
+    userId: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    address1: {
+        type: addressComponentsSchema,
+        required: true // Address1 is required
+    },
+    address2: {
+        type: addressComponentsSchema // Address2 is optional
+    },
+    address3: {
+        type: addressComponentsSchema // Address3 is optional
+    }
+});
 
-module.exports={
+const addressModel = mongoose.model('address', addressSchema);
+
+module.exports = {
     addressModel
-}
+};
