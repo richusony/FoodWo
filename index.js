@@ -18,6 +18,8 @@ app.set('view engine', 'ejs');
 app.use('/public/', express.static('./public')); 
 app.use('/uploads/', express.static('./uploads'));
 app.use('/products/', express.static('./products'));
+app.use('/banners/', express.static('./banners'));
+app.use('/offers/', express.static('./offers'));
 
 // Session and Cookie
 app.use(session({
@@ -34,10 +36,11 @@ app.get('/', (req, res) => {
   res.render('mainSearch');
 })
 
-// User Routes
-app.use('/user', userRouter);
-
+// Admin Routes
 app.use('/admin', adminRouter)
+
+// User Routes
+app.use('/', userRouter);
 
 
 app.listen(PORT, () => {

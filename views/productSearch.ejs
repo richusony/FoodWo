@@ -46,7 +46,8 @@
                 <span id="alertMsg"></span>
             </div>
             <div class="px-2 md:px-20 mt-10">
-                <div class="border border-gray-400 active:border-orange-500 hover:border-orange-500 w-full mx-auto py-3 px-5 rounded flex">
+                <div
+                    class="border border-gray-400 active:border-orange-500 hover:border-orange-500 w-full mx-auto py-3 px-5 rounded flex">
                     <input type="text" name="" id="searchInput" value="" placeholder="Search for your favourite food"
                         class="w-full text-gray-500 placeholder:text-gray-500 outline-none"
                         onchange="searchFood(event)">
@@ -57,9 +58,11 @@
 
                 <div class="px-2 my-5" id="recentSearchCon">
                     <h2 class="font-semibold my-2">Recent Searches</h2>
-                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
-                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
-                    <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                    <div id="recentSearches">
+
+                        <!-- <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div>
+                        <div class="my-3"><i class="fa-solid text-gray-500 text-lg fa-search"></i> Chicken Biryani</div> -->
+                    </div>
                 </div>
 
 
@@ -177,7 +180,98 @@
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
+                const recentSearches = document.getElementById("recentSearches");
+                const searchInput = document.getElementById('searchInput');
                 let searches;
+                (async () => {
+                    const mainSearch = sessionStorage.getItem("foodSearch");
+                    console.log(mainSearch)
+                    if (mainSearch == "" || mainSearch == undefined || mainSearch == null) {
+                        return;
+                    } else {
+                        const popularCuisinesCon = document.getElementById('popularCuisinesCon')
+                        const recentSearchCon = document.getElementById('recentSearchCon')
+                        const searchIcon = document.getElementById('searchIcon')
+                        const clearIcon = document.getElementById('clearIcon')
+                        const searchedItemsCon = document.getElementById('searchedItemsCon')
+                        const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
+                        const searchInput = document.getElementById('searchInput');
+
+                        searchIcon.classList.add('hidden')
+                        clearIcon.classList.remove('hidden')
+
+                        popularCuisinesCon.classList.add('hidden')
+                        recentSearchCon.classList.add('hidden')
+
+                        if (mainSearch === "") {
+                            popularCuisinesCon.classList.remove('hidden')
+                            recentSearchCon.classList.remove('hidden')
+                            searchedItemsMainCon.classList.add('hidden')
+                            return;
+                        }
+                        searchInput.value = mainSearch.trim();
+                        const searching = await fetch(`/search-food?query=${mainSearch.trim()}`);
+                        searches = mainSearch;
+                        if (searching.ok) {
+                            sessionStorage.removeItem("foodSearch")
+                            searchedItemsMainCon.classList.remove('hidden')
+                            // Handle a successful response (e.g., display search results)
+                            const data = await searching.json(); // Assuming the server returns JSON
+                            console.log(data); // Replace this with your logic to handle the response data
+                            if (data.searchedItems.length > 0) {
+
+                                // Clear any existing content
+                                searchedItemsCon.innerHTML = '';
+
+                                // Iterate through the items and append their HTML
+                                data.searchedItems.forEach((item) => {
+                                    const itemHTML = `
+            <div class="flex bg-[#FFFFFF] rounded-xl px-4 py-6 items-center justify-between w-full md:w-fit shadow-md">
+                <div class="w-56">
+                    <h2 class="font-semibold lg:text-lg my-1">${item.productName}</h2>
+                    <span><span class="text-orange-500">₹</span>${item.productPrice}</span>
+                    <p class="text-sm text-gray-500">${item.description}</p>
+                </div>
+
+                <div class="relative flex justify-center ml-4 md:mx-2">
+                    <div class="w-28 h-28"><img onclick="redirectTo('/product-details/${item._id}')" class="w-full h-full ${item.productInStock <= 0 ? 'grayscale' : ''} object-cover cursor-pointer rounded" src="/${item.productImages[0]}" alt=""></div>
+                    <button onclick="addToCart(event)" data-foodid="${item._id}" class="absolute -bottom-2 px-5 py-2 bg-orange-500 rounded text-white"><i data-foodid="${item._id}" class="fa-solid text-xl fa-cart-shopping"></i></button>
+                </div>
+            </div>`;
+
+                                    // Append the item's HTML to the container
+                                    searchedItemsCon.innerHTML += itemHTML;
+                                });
+                            } else {
+                                searchedItemsCon.innerText = 'NO ITEMS';
+                            }
+
+
+
+                        } else {
+                            sessionStorage.removeItem("foodSearch")
+                            searchedItemsCon.innerText = 'NO ITEMS';
+                            // Handle errors if the request is not successful
+                            console.error('Error:', searching.status, searching.statusText);
+                        }
+                    }
+                })();
+
+                (async () => {
+                    const fetchRecent = await fetch('/recent-searches');
+                    console.log(fetchRecent)
+                    if (fetchRecent.ok) {
+                        const data = await fetchRecent.json();
+                        console.log("nokate", data)
+                        data.recent.recent.forEach((rec) => {
+                            recentSearches.innerHTML += `
+            <div class="my-3">
+                <i class="fa-solid fa-clock-rotate-left"></i> <button class="outline-none cursor-pointer bg-transparent" value="${rec}" onclick="searchFood(event)">${rec}</button>
+            </div>`;
+                        });
+                    }
+                })();
+
                 async function searchFood(event) {
                     event.preventDefault();
                     const popularCuisinesCon = document.getElementById('popularCuisinesCon')
@@ -186,8 +280,7 @@
                     const clearIcon = document.getElementById('clearIcon')
                     const searchedItemsCon = document.getElementById('searchedItemsCon')
                     const searchedItemsMainCon = document.getElementById('searchedItemsMainCon')
-
-
+                    searchInput.value=event.target.value;
 
                     searchIcon.classList.add('hidden')
                     clearIcon.classList.remove('hidden')
@@ -196,13 +289,18 @@
                     recentSearchCon.classList.add('hidden')
 
                     if (event.target.value === "") {
+                        console.log("search input is empty")
                         popularCuisinesCon.classList.remove('hidden')
                         recentSearchCon.classList.remove('hidden')
                         searchedItemsMainCon.classList.add('hidden')
                         return;
                     }
-                    const searching = await fetch(`/user/search-food?query=${event.target.value}`);
+                    const searching = await fetch(`/search-food?query=${event.target.value}`);
                     searches = event.target.value;
+                    
+                    if(searching.status != 200){
+                        searchedItemsCon.innerText = 'NO ITEMS';
+                    }
                     if (searching.ok) {
                         searchedItemsMainCon.classList.remove('hidden')
                         // Handle a successful response (e.g., display search results)
@@ -224,7 +322,7 @@
                 </div>
 
                 <div class="relative flex justify-center ml-4 md:mx-2">
-                    <div class="w-28 h-28"><img onclick="redirectTo('/user/product-details/${item._id}')" class="w-full h-full ${item.productInStock <= 0 ? 'grayscale' : ''} object-cover cursor-pointer rounded" src="/${item.productMainImage}" alt=""></div>
+                    <div class="w-28 h-28"><img onclick="redirectTo('/product-details/${item._id}')" class="w-full h-full ${item.productInStock <= 0 ? 'grayscale' : ''} object-cover cursor-pointer rounded" src="/${item.productImages[0]}" alt=""></div>
                     <button onclick="addToCart(event)" data-foodid="${item._id}" class="absolute -bottom-2 px-5 py-2 bg-orange-500 rounded text-white"><i data-foodid="${item._id}" class="fa-solid text-xl fa-cart-shopping"></i></button>
                 </div>
             </div>`;
@@ -232,14 +330,13 @@
                                 // Append the item's HTML to the container
                                 searchedItemsCon.innerHTML += itemHTML;
                             });
-                        } else {
-                            searchedItemsCon.innerText = 'NO ITEMS';
                         }
 
 
 
                     } else {
                         // Handle errors if the request is not successful
+                        searchedItemsCon.innerText = 'NO ITEMS';
                         console.error('Error:', searching.status, searching.statusText);
                     }
                 }
@@ -274,9 +371,9 @@
                     console.log(reqData)
                     const realData = JSON.stringify(reqData);
                     if (!userid) {
-                        window.location.href = '/user/login';
+                        window.location.href = '/login';
                     } else {
-                        const response = await fetch('/user/addToCart/', {
+                        const response = await fetch('/addToCart/', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': "application/json",
@@ -315,7 +412,7 @@
                 async function sortFood(event) {
                     const sortText = event.target.value;
                     console.log(sortText, searches)
-                    const sorting = await fetch(`/user/search-food?query=${searches}&sortfood=${sortText}`)
+                    const sorting = await fetch(`/search-food?query=${searches}&sortfood=${sortText}`)
                     if (sorting.ok) {
                         searchedItemsMainCon.classList.remove('hidden')
                         // Handle a successful response (e.g., display search results)
@@ -337,30 +434,30 @@
                 </div>
 
                 <div class="relative flex justify-center ml-4 md:mx-2">
-                    <div class="w-28 h-28"><img onclick="redirectTo('/user/product-details/${item._id}')" class="w-full h-full ${item.productInStock <= 0 ? 'grayscale' : ''} object-cover rounded cursor-pointer" src="/${item.productMainImage}" alt=""></div>
+                    <div class="w-28 h-28"><img onclick="redirectTo('/product-details/${item._id}')" class="w-full h-full ${item.productInStock <= 0 ? 'grayscale' : ''} object-cover rounded cursor-pointer" src="/${item.productImages[0]}" alt=""></div>
                     <button onclick="addToCart(event)" data-foodid="${item._id}" class="absolute -bottom-2 px-5 py-2 bg-orange-500 rounded text-white"><i data-foodid="${item._id}" class="fa-solid text-xl fa-cart-shopping"></i></button>
                 </div>
             </div>
            `;
 
-            // Append the item's HTML to the container
-            searchedItemsCon.innerHTML += itemHTML;
-            });
-            } else {
-            searchedItemsCon.innerText = 'NO ITEMS';
-            }
+                                // Append the item's HTML to the container
+                                searchedItemsCon.innerHTML += itemHTML;
+                            });
+                        } else {
+                            searchedItemsCon.innerText = 'NO ITEMS';
+                        }
 
 
 
-            } else {
-            // Handle errors if the request is not successful
-            console.error('Error:', sorting.status, sorting.statusText);
-            }
+                    } else {
+                        // Handle errors if the request is not successful
+                        console.error('Error:', sorting.status, sorting.statusText);
+                    }
 
-            }
-            function redirectTo(url){
-            window.location.href=url;
-            }
+                }
+                function redirectTo(url) {
+                    window.location.href = url;
+                }
             </script>
 </body>
 

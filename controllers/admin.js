@@ -10,8 +10,34 @@ const orderModel = require('../models/orderSchema')
 async function viewDashboard(req, res) {
     const topCustomers = await userModel.find({}).sort({ purchaseCount: -1 }).limit(3);
     const topProducts = await productModel.find({}).sort({ purchaseCount: -1 }).limit(3);
-    res.render('../views/Admin/adminDashboard', { topCust: topCustomers, topProd: topProducts })
+    const usersCount = await userModel.countDocuments();
+    const ordersCount = await orderModel.countDocuments({orderStatus:"Pending"});
+
+    const totalProfitResult = await orderModel.aggregate([
+        {
+            $match: { orderStatus: { $ne: "Pending" } }
+        },
+        {
+            $group: {
+                _id: null,
+                totalProfit: { $sum: "$productPrice" }
+            }
+        }
+    ]);
+    
+
+    // // Extract the total profit from the aggregation result
+    const totalProfit = totalProfitResult.length > 0 ? totalProfitResult[0].totalProfit : 0;
+
+    res.render('../views/Admin/adminDashboard', {
+        topCust: topCustomers,
+        topProd: topProducts,
+        usersCount: usersCount,
+        ordersCount: ordersCount,
+        totalProfit: totalProfit // Include total profit in the rendered view
+    });
 }
+
 
 function viewLogInPage(req, res) {
     res.render('../views/Admin/adminLogin')
@@ -126,18 +152,18 @@ async function viewAddProductsPage(req, res) {
 async function addProduct(req, res) {
     const { productName, description, productPrice, productType, category, sold, inStock, baseImage } = req.body;
     console.log(req.body)
-    if(productPrice <=0){
-        res.status(400).json({err:"Product Price must be greater than zero."})
-        return ;
+    if (productPrice <= 0) {
+        res.status(400).json({ err: "Product Price must be greater than zero." })
+        return;
     }
-    if(inStock <=0){
-        res.status(400).json({err:"Stock must be greater than zero."})
-        return ;
+    if (inStock <= 0) {
+        res.status(400).json({ err: "Stock must be greater than zero." })
+        return;
     }
-    const relatedImages = req.files.relatedimages.map(img => img.path);
-    const mainImage = req.files.mainimage.map(img => img.path);
-    console.log('mainImage : ', mainImage)
-    console.log('files : ', relatedImages)
+    // const relatedImages = req.files.relatedimages.map(img => img.path);
+    const images = req.files.map(img => img.path);
+    // console.log('mainImage : ', mainImage)
+    console.log('files : ', req.files)
     res.status(200)
     const addingProduct = await productModel.create(
         {
@@ -148,12 +174,17 @@ async function addProduct(req, res) {
             category: category.trim(),
             productSold: 0,
             productInStock: inStock,
-            productMainImage: mainImage[0],
-            productRelatedImages: [...relatedImages],
+            productMainImage: "aldkfadf",
+            productRelatedImages: [],
+            productImages: images,
             purchaseCount: 0,
         });
     console.log('addingProduct :: ', addingProduct)
-    res.redirect('/admin/products')
+    if (addingProduct) {
+        res.status(200).json({ success: "Product Added." })
+    } else {
+        res.status(400).json({ err: "Problem while adding products" })
+    }
 }
 
 async function viewProductUpdatePage(req, res) {
@@ -166,63 +197,38 @@ async function viewProductUpdatePage(req, res) {
 
 //  Admin updates products
 async function updateProducts(req, res) {
-    const { id, productName, description, productPrice, productType, category, sold, inStock, image } = req.body;
-    const mainImage = req.files.mainimage ? req.files.mainimage.map(img => img.path) : [];
-    const relatedImages = req.files.relatedimages ? req.files.relatedimages.map(img => img.path) : [];
-    console.log('checkkinng  .. ', relatedImages, mainImage)
+    const { id, productName, description, productPrice, productType, category, sold, inStock } = req.body;
+    const images = req.files ? req.files.map(img => img.path) : [];
+    // const relatedImages = req.files.relatedimages ? req.files.relatedimages.map(img => img.path) : [];
+    console.log('checkkinng  .. ', images)
 
-    if(productPrice <=0){
-        res.status(400).json({err:"Product Price must be greater than zero."})
-        return ;
+    if (productPrice <= 0) {
+        res.status(400).json({ err: "Product Price must be greater than zero." })
+        return;
     }
-    if(inStock <=0){
-        res.status(400).json({err:"Stock must be greater than zero."})
-        return ;
+    if (inStock <= 0) {
+        res.status(400).json({ err: "Stock must be greater than zero." })
+        return;
     }
-
-    if (mainImage.length == 0 && relatedImages.length == 0) {
-        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock });
+ 
+   
+        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock, $push: { productImages: { $each: images, $slice: -5 } } }, { new: true });
         if (updating) {
             const updatedDetails = await productModel.find({ _id: id });
-            res.redirect(`/admin/productUpdateDetails/${id}`)
+            res.status(200).json({ success: "Product updated" })
         } else {
             res.status(500).json({ err: "Database is having some issues." })
         }
-    } else if (mainImage && relatedImages.length == 0) {
-        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock, productMainImage: mainImage[0] });
-        if (updating) {
-            const updatedDetails = await productModel.find({ _id: id });
-            res.redirect(`/admin/productUpdateDetails/${id}`)
-        } else {
-            res.status(500).json({ err: "Database is having some issues." })
-        }
-    } else if (mainImage.length == 0 && relatedImages) {
-        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock, $push: { productRelatedImages: relatedImages } });
-        if (updating) {
-            const updatedDetails = await productModel.find({ _id: id });
-            res.redirect(`/admin/productUpdateDetails/${id}`)
-        } else {
-            res.status(500).json({ err: "Database is having some issues." })
-        }
-    } else {
-        const updating = await productModel.updateOne({ _id: id }, { productName: productName, description: description, productPrice: productPrice, productType: productType, category: category.trim(), productInStock: inStock, productMainImage: mainImage[0], $push: { productRelatedImages: relatedImages } });
-        if (updating) {
-            const updatedDetails = await productModel.find({ _id: id });
-            res.redirect(`/admin/productUpdateDetails/${id}`)
-        } else {
-            res.status(500).json({ err: "Database is having some issues." })
-        }
-    }
 
 }
- 
+
 async function deleteProduct(req, res) {
-    const id = req.params.id;  
+    const id = req.params.id;
     const deleting = await productModel.deleteOne({ _id: id });
     if (deleting) {
-        res.status(200).json({deleted:true}) 
+        res.status(200).json({ deleted: true })
     } else {
-        res.status(500).json({deleted:false, err: "Database having some issues.." })
+        res.status(500).json({ deleted: false, err: "Database having some issues.." })
     }
 }
 
@@ -272,12 +278,12 @@ async function updateCategory(req, res) {
     const id = req.params.id;
     const { category } = req.body;
     const upperCategory = category.toUpperCase();
-    const exist = await categoryModel.findOne({category:upperCategory});
-    if(exist){
-        if(exist._id === id){
+    const exist = await categoryModel.findOne({ category: upperCategory });
+    if (exist) {
+        if (exist._id === id) {
             console.log("got it :: ", id, category);
             const updating = await categoryModel.updateOne({ _id: id }, { category: upperCategory.trim() });
-        
+
             if (updating) {
                 const updatedDetails = await categoryModel.find({ _id: id });
                 if (updatedDetails) {
@@ -289,13 +295,13 @@ async function updateCategory(req, res) {
             } else {
                 res.status(500).json({ err: "Database is having some issues" })
             }
-        }else{
+        } else {
             res.status(401).json({ err: 'Category already existed.' })
         }
-    }else{
+    } else {
         console.log("got it :: ", id, category);
         const updating = await categoryModel.updateOne({ _id: id }, { category: upperCategory.trim() });
-    
+
         if (updating) {
             const updatedDetails = await categoryModel.find({ _id: id });
             if (updatedDetails) {
@@ -380,25 +386,25 @@ async function deleteType(req, res) {
     }
 }
 
-async function removeImage(req, res) { 
+async function removeImage(req, res) {
     const { foodid, foodimg } = req.body;
-    const removeImage = await productModel.updateOne({ _id: foodid }, { $pull: { productRelatedImages: foodimg } })
+    const removeImage = await productModel.updateOne({ _id: foodid }, { $pull: { productImages: foodimg } })
     if (removeImage) {
         res.status(200).json({ success: 'image removed.' })
     } else {
-        res.status(500).json({ err: "couldn't remove image." })
+        res.status(400).json({ err: "couldn't remove image." })
     }
 }
 
 
-async function updateOrderStatus(req,res){
+async function updateOrderStatus(req, res) {
     const orderId = req.params.oid;
     const orderStatus = req.body.status;
 
-    if(orderId&&orderStatus){
-        const updating = await orderModel.updateOne({orderId:orderId},{orderStatus:orderStatus})
-        if(updating){
-            res.status(200).json({updated:true})
+    if (orderId && orderStatus) {
+        const updating = await orderModel.updateOne({ orderId: orderId }, { orderStatus: orderStatus })
+        if (updating) {
+            res.status(200).json({ updated: true })
         }
     }
 }

@@ -26,20 +26,20 @@
             <span class="text-orange-500 font-bold text-2xl md:text-3xl ">FoodWo</span>
         </div>
         <div class="flex justify-between items-center">
-            <a href="/user/login" class="font-semibold text-xl mx-2">Login</a>
-            <a href="/user/signup"
+            <a href="/login" class="font-semibold text-xl mx-2">Login</a>
+            <a href="/signup"
                 class="px-4 text-center py-2 text-white bg-orange-500 rounded-full mx-2 md:text-xl">Signup</a>
         </div>
     </nav>
 
     <!-- main section -->
     <section class="mt-10 px-5 overflow-x-hidden">
-        <h1 class="my-5 text-center font-bold text-orange-500 text-2xl md:text-3xl">Sign Up</h1>
+        <h1 class="my-5 text-center font-bold text-orange-500 text-2xl md:text-4xl">Sign Up</h1>
 
-        <div class="md:flex md:justify-between md:items-center">
-            <div class="md:w-1/2 md:px-4">
+        <div class="">
+            <div class="mx-auto md:w-1/2 md:px-4">
                 <!-- Input Fields -->
-                <form action="">
+                <form id="form">
                     <div class="flex flex-col my-2">
                         <label for="">Full Name</label>
                         <input type="text" name="fullname" maxlength="20" id="fullname" placeholder="Enter fullname"
@@ -66,22 +66,14 @@
                             placeholder="Enter Password"
                             class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
                     </div>
+                    <div class="flex flex-col my-2">
+                        <label for="">Referal Code</label>
+                        <input type="text" name="referCode" id="referCode" placeholder="Referal Code (optional)"
+                            class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
+                        <div class="text-end my-2"><span onclick="verifyReferalCode(event)"
+                                class="text-orange-500 cursor-pointer">verify code</span></div>
+                    </div>
                 </form>
-            </div>
-
-            <!-- screen divider -->
-            <hr class="my-8 border border-orange-500 md:hidden">
-            <div class="hidden md:block h-72 rounded-full mx-20  bg-orange-500 text-orange-500">.</div>
-
-            <div class="md:w-1/2 md:px-4">
-                <!-- image upload -->
-                <label for="doc"
-                    class="md:w-2/3 md:mx-auto bg-orange-100 rounded h-72 w-full text-center flex flex-col justify-center items-centerd cursor-pointer">
-                    <img src="#" class="w-full h-full hidden rounded object-cover" alt="" id="imagetag">
-                    <div class="text-orange-500 text-6xl my-3" id="userIcon"><i class="fa-regular fa-user"></i></div>
-                    <input type="file" name="" placeholder="upload profile" id="doc" class="" hidden>
-                    <span id="uploadtext">Upload Profile</span>
-                </label>
             </div>
         </div>
 
@@ -92,49 +84,51 @@
 
 
         <div id="toast"
-            class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+            class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto my-2 ease-linear opacity-0 -translate-x-full">
         </div>
 
 
     </section>
 
     <!-- footer -->
-    <%- include('../views/userFooter.ejs') %>
+    <%- include('userFooter') %>
 
 
         <script>
-            let baseImage = "";
-            // Image Details
-            const image = document.getElementById('doc');
-            const imagetag = document.getElementById('imagetag');
-            const uploadtext = document.getElementById('uploadtext');
-            const userIcon = document.getElementById('userIcon');
+            // let baseImage = "";
+            // // Image Details
+            // const image = document.getElementById('doc');
+            // const imagetag = document.getElementById('imagetag');
+            // const uploadtext = document.getElementById('uploadtext');
+            // const userIcon = document.getElementById('userIcon');
 
             const toast = document.getElementById('toast');
-            // const toastMessage = document.getElementById('toastMessage');
+            const toastMessage = document.getElementById('toastMessage');
+
+            let codeVerifiedOrNot = false;
 
 
 
-            image.addEventListener('change', async (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    baseImage = await ImagetoBase64(file);
-                    imagetag.style.display = "block";
-                    userIcon.style.display = "none";
-                    uploadtext.style.display = "none";
-                    imagetag.setAttribute("src", baseImage);
-                }
-            });
+            // image.addEventListener('change', async (event) => {
+            //     baseImage = event.target.files[0];
+            // if (file) {
+            //     baseImage = await ImagetoBase64(file);
+            //     imagetag.style.display = "block";
+            //     userIcon.style.display = "none";
+            //     uploadtext.style.display = "none";
+            //     imagetag.setAttribute("src", baseImage);
+            // }
+            // });
 
-            async function ImagetoBase64(file) {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
+            // async function ImagetoBase64(file) {
+            //     const reader = new FileReader();
+            //     reader.readAsDataURL(file);
 
-                return new Promise((resolve, reject) => {
-                    reader.onload = () => resolve(reader.result);
-                    reader.onerror = err => reject(err);
-                });
-            }
+            //     return new Promise((resolve, reject) => {
+            //         reader.onload = () => resolve(reader.result);
+            //         reader.onerror = err => reject(err);
+            //     });
+            // }
 
             async function handleSignIn(event) {
                 event.preventDefault();
@@ -144,6 +138,8 @@
                 const phone = document.getElementById('phone').value;
                 const address = document.getElementById('address').value;
                 const password = document.getElementById('password').value;
+                const referCode = document.getElementById('referCode').value;
+
 
                 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
                 const isPasswordValid = passwordRegex.test(password);
@@ -187,6 +183,14 @@
                         toast.classList.add("opacity-0");
                         toast.classList.add("-translate-x-full");
                     }, 3000)
+                } else if (referCode !== "" && !codeVerifiedOrNot) {
+                    toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Verify you code before creating your Account.</span>`;
+                    toast.classList.remove("opacity-0");
+                    toast.classList.remove("-translate-x-full");
+                    setTimeout(() => {
+                        toast.classList.add("opacity-0");
+                        toast.classList.add("-translate-x-full");
+                    }, 3000)
                 }
                 else {
                     const formData = {
@@ -195,15 +199,16 @@
                         phone: phone,
                         address: address,
                         password: password,
-                        baseImage: baseImage
+                        referCode: referCode
                     }
 
 
                     const userData = await JSON.stringify(formData);
-                    sessionStorage.setItem('signUpUserDetails',userData);
+                    sessionStorage.setItem('signUpUserDetails', userData);
+                    console.log("userdDATA :: : :", formData)
                     try {
                         // Send a POST request to the server using async/await
-                        const response = await fetch(`/user/signup`, {
+                        const response = await fetch(`/signup`, {
                             method: 'POST',
                             headers: {
                                 "Content-Type": "application/json",
@@ -228,9 +233,8 @@
 
                         }
                         if (response.ok) {
-                            window.location.href = "/user/otpVerify"
+                            window.location.href = "/otpVerify"
                         }
-
 
 
                         // Handle the server's response here (e.g., display a success message or handle errors)
@@ -238,6 +242,49 @@
                     } catch (error) {
                         // Handle any network, request, or other errors here
                         console.error(error);
+                    }
+                }
+            }
+
+            async function verifyReferalCode(event) {
+                event.preventDefault();
+                const referCode = document.getElementById('referCode').value;
+                if (referCode == "") {
+                    toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Enter Referal code for verifying</span>`;
+                    toast.classList.remove("opacity-0");
+                    toast.classList.remove("-translate-x-full");
+                    setTimeout(() => {
+                        toast.classList.add("opacity-0");
+                        toast.classList.add("-translate-x-full");
+                    }, 3000);
+                    return;
+                }
+                console.log(`/verify-referal?code=${referCode.trim()}`)
+                const res = await fetch(`/verify-referal?code=${referCode.trim()}`);
+                if (res.status == 400) {
+                    const data = await res.json();
+                    toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.failed}</span>`;
+                    toast.classList.remove("opacity-0");
+                    toast.classList.remove("-translate-x-full");
+                    setTimeout(() => {
+                        toast.classList.add("opacity-0");
+                        toast.classList.add("-translate-x-full");
+                    }, 3000);
+                    return;
+                }
+                if (res.ok) {
+                    console.log(res)
+                    const data = await res.json();
+                    console.log(data)
+                    if (data.sucess) {
+                        toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-check text-xl"></i> Your Referal Code has been verified.</span>`;
+                        toast.classList.remove("opacity-0");
+                        toast.classList.remove("-translate-x-full");
+                        setTimeout(() => {
+                            toast.classList.add("opacity-0");
+                            toast.classList.add("-translate-x-full");
+                        }, 3000);
+                        codeVerifiedOrNot = true;
                     }
                 }
             }

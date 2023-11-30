@@ -37,7 +37,7 @@
 </head>
 
 <body>
-    <%-include('../views/userNavbar.ejs') %>
+    <%-include('userNavbar') %>
 
         <section class="px-5 py-2 min-h-screen">
             <div id="alert"
@@ -63,7 +63,7 @@
 
                             <div class="flex justify-center ml-4 md:mx-2">
                                 <div class="w-28 h-28"><img class="w-full h-full object-cover rounded"
-                                        src="/<%=wish.productMainImage%>" alt=""></div>
+                                        src="/<%=wish.productImages[0]%>" alt=""></div>
                             </div>
                         </div>
 
@@ -79,7 +79,7 @@
             </div>
         </section>
 
-        <%-include('../views/userFooter.ejs') %>
+        <%-include('userFooter') %>
 
             <script>
                 const alertBox = document.getElementById('alert')
@@ -92,7 +92,7 @@
                         userId
                     }
                     const reqData = await JSON.stringify(removeDetails);
-                    const removing = await fetch(`/user/remove-wishlist`,{
+                    const removing = await fetch(`/remove-wishlist`,{
                         method:'Delete',
                         headers:{
                             'Content-Type':"application/json"
@@ -138,9 +138,9 @@
                     }
                     const realData = JSON.stringify(reqData);
                     if (!userid) {
-                        window.location.href = '/user/login';
+                        window.location.href = '/login';
                     } else {
-                        const response = await fetch('/user/addToCart/', {
+                        const response = await fetch('/addToCart/', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': "application/json",

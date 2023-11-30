@@ -20,8 +20,8 @@
             <a href="/" class="text-orange-500 font-bold text-2xl md:text-3xl ">FoodWo</a>
         </div>
         <div class="flex justify-between items-center">
-            <a href="/user/login" class="font-semibold text-xl mx-2">Login</a>
-            <a href="/user/signup"
+            <a href="/login" class="font-semibold text-xl mx-2">Login</a>
+            <a href="/signup"
                 class="px-4 text-center py-2 text-white bg-orange-500 rounded-full mx-2 md:text-xl">Signup</a>
         </div>
     </nav>
@@ -43,7 +43,7 @@
                     class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500">
             </div>
             <div class="text-end">
-                <a class="text-orange-500 hover:underline" href="/user/verifyPhone">forgot password</a>
+                <a class="text-orange-500 hover:underline" href="/verifyPhone">forgot password</a>
             </div>
         </div>
 
@@ -101,7 +101,7 @@
                     const userData = await JSON.stringify(formData);
                     try {
                         // Send a POST request to the server using async/await
-                        const response = await fetch(`/user/login`, {
+                        const response = await fetch(`/login`, {
                             method: 'POST',
                             headers: {
                                 "Content-Type": "application/json",
@@ -130,7 +130,7 @@
                             setTimeout(() => {
                                 toast.classList.add("opacity-0");
                                 toast.classList.add("-translate-x-full");
-                                window.location.href = "/user/products"
+                                window.location.href = "/products"
                             }, 3000);
                         }
 

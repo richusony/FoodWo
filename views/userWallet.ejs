@@ -126,7 +126,7 @@
                         handler: async (response) => {
                             try {
                                 console.log('response :', response)
-                                const verifyUrl = '/user/verify'
+                                const verifyUrl = '/verify'
                                 const datas = await axios.post(verifyUrl, response)
                                 console.log('verifyData : ', datas)
                                 if (datas.status === 200) {
@@ -134,7 +134,7 @@
                                     const customerName = sessionStorage.getItem('username');
                                     const addedAmt = { amount: parseInt(data.data.amount) }
                                     const reqData = JSON.stringify(addedAmt)
-                                    const res = await fetch(`/user/addto-wallet/${user_id}`, {
+                                    const res = await fetch(`/addto-wallet/${user_id}`, {
                                         method: 'POST',
                                         headers: {
                                             'Content-Type': "application/json"
@@ -191,7 +191,7 @@
                         return
                     }
                     try {
-                        const orderUrl = '/user/orders'
+                        const orderUrl = '/orders'
                         const paying = await axios.post(orderUrl, { amount: selectedAmt })
                         console.log(paying)
                         initPayment(paying.data)

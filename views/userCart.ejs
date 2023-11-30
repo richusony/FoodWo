@@ -65,7 +65,7 @@
             </div>
             <div class="flex items-center justify-between px-3 py-5">
                 <span class=" px-3 py-2 text-lg md:text-2xl text-center font-bold">Shopping Cart</span>
-                <a href="/user/products"
+                <a href="/products"
                     class="flex items-center justify-between text-sm md:text-lg hover:text-orange-500 cursor-pointer"><i
                         class="fa-solid fa-arrow-left mx-2"></i> <span>Continue Shopping</span></a>
             </div>
@@ -83,25 +83,28 @@
                                                 class="bg-[#f0efef] md:px-5 py-3 my-2 flex justify-between items-center rounded shadow-md">
                                                 <div class=" w-20 h-16 object-cover rounded mx-2 md:mr-3 ">
                                                     <img class="w-full h-full rounded object-cover"
-                                                        src="/<%= cart.productMainImage%>" alt="">
+                                                        src="/<%= cart.productImages[0]%>" alt="">
                                                 </div>
 
                                                 <div class=" mr-2 md:mr-3 w-40 overflow-hidden shadow-inner ">
                                                     <h2 class="text-sm md:text-xl font-semibold">
                                                         <%= cart.productName %>
                                                     </h2>
+                                                    <%if(offers){ if(offers[0].foodId == cart._id){%>
+                                                        <span class="font-normal text-sm text-orange-500">*Special Offer</span>
+                                                    <%}}%>
                                                 </div>
 
                                                 <div class=" flex mr-2 md:mr-3 relative text-center justify-center">
                                                     <div onclick="priceDown(event)" data-index="<%= index %>"
-                                                        data-stock="<%=cart.productInStock%>"
+                                                        data-fid="<%= cart._id %>" data-stock="<%=cart.productInStock%>"
                                                         class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-l-full">
                                                         <i class="fa-solid fa-minus"></i>
                                                     </div>
                                                     <span id="<%= `qty${index}` %>"
                                                         class="qty mx-3 text-sm my-auto">1</span>
                                                     <div onclick="priceUp(event)" data-index="<%= index %>"
-                                                        data-stock="<%=cart.productInStock%>"
+                                                        data-fid="<%= cart._id %>" data-stock="<%=cart.productInStock%>"
                                                         class="bg-orange-500 cursor-pointer text-white py-1 px-2 md:py-1 md:px-2 text-sm md:text-md rounded-r-full">
                                                         <i class="fa-solid fa-plus"></i>
                                                     </div>
@@ -114,7 +117,8 @@
                                                         <span data-actualPrice="<%= cart.productPrice %>"
                                                             id="<%= `price${index}` %>">
                                                             <%= '₹' +cart.productPrice %>
-                                                        </span></span>
+                                                        </span>
+                                                    </span>
                                                 </div>
                                                 <% totalItems +=quantities[index]; %>
                                                     <% totalPrice +=quantities[index] * parseFloat(cart.productPrice);
@@ -158,7 +162,7 @@
                                             <div
                                                 class='<%if(userAddress.address1 !=="false" ){%> block <%}else{%>hidden<%}%>'>
                                                 <span>
-                                                    <div class="flex my-2 text-sm w-80">
+                                                    <div class="flex my-2 text-sm md:w-80">
                                                         <input type="checkbox" name="" id="addressCheck1" class="mx-2">
                                                         <span id="currentAdd1">
                                                             <%=userAddress.address1%>
@@ -178,7 +182,7 @@
                                             <div
                                                 class='<%if(userAddress.address2 !=="false" ){%> block <%}else{%>hidden <% } %>'>
                                                 <span>
-                                                    <div class="flex my-2 text-sm w-80">
+                                                    <div class="flex my-2 text-sm md:w-80">
                                                         <input type="checkbox" name="" id="addressCheck2" class="mx-2">
                                                         <span id="currentAdd2">
                                                             <%=userAddress.address2%>
@@ -197,7 +201,7 @@
                                             <div
                                                 class='<%if(userAddress.address3 !=="false" ){%> block <%}else{%>hidden<%}%>'>
                                                 <span>
-                                                    <div class="flex my-2 text-sm w-80">
+                                                    <div class="flex my-2 text-sm md:w-80">
                                                         <input type="checkbox" name="" id="addressCheck3" class="mx-2">
                                                         <span id="currentAdd3">
                                                             <%=userAddress.address3%>
@@ -251,7 +255,35 @@
                                                     <p class="hidden" id="couponAlert"></p>
                                                 </div>
                                             </div>
-                                            <div class="my-3 px-3 flex justify-center items-center">
+
+                                            <h2 class="text-center font-bold mt-5">Payment Method</h2>
+                                            <div class="flex flex-col md:flex-row justify-between items-center my-5">
+                                                <label for="cod"
+                                                    class="my-2 md:my-0 w-52 md:w-36 text-center py-2 px-3 text-white border border-white cursor-pointer rounded ease-linear hover:text-orange-500 hover:bg-white paymentBtns"
+                                                    onclick="handlePayment('cod')">
+                                                    <input type="radio" name="paymentMethod" id="cod" class="hidden"
+                                                        onchange="checkChange(event)" />
+                                                    COD
+                                                </label>
+
+                                                <label for="walletPay"
+                                                    class="my-2 md:my-0 w-52 md:w-36 text-center py-2 px-3 text-white border border-white cursor-pointer rounded ease-linear hover:text-orange-500 hover:bg-white paymentBtns"
+                                                    onclick="handlePayment('walletPay')">
+                                                    <input type="radio" name="paymentMethod" id="walletPay"
+                                                        class="hidden" onchange="checkChange(event)" />
+                                                    FoodWo Wallet
+                                                </label>
+
+                                                <label for="onlinePayment"
+                                                    class="my-2 md:my-0 w-52 md:w-36 text-center py-2 px-3 text-white border border-white cursor-pointer rounded ease-linear hover:text-orange-500 hover:bg-white paymentBtns"
+                                                    onclick="handlePayment('onlinePayment')">
+                                                    <input type="radio" name="paymentMethod" id="onlinePayment"
+                                                        class="hidden" onchange="checkChange(event)" checked />
+                                                    Online Payment
+                                                </label>
+                                            </div>
+
+                                            <!-- <div class="my-3 px-3 flex justify-center items-center">
                                                 <input type="checkbox" name="" id="cod" onchange="checkChange(event)"
                                                     class="mr-2"><span>Cash on
                                                     Delivery</span>
@@ -265,7 +297,7 @@
                                             <div class="my-3 px-3 flex justify-center items-center">
                                                 <input type="checkbox" checked name="" id="onlinePayment"
                                                     onchange="checkChange(event)" class="mr-2"><span>pay online</span>
-                                            </div>
+                                            </div> -->
                                             <div class="transition delay-150 text-end ease-linear hidden"
                                                 id="walletBalance"><span>Wallet Balance : ₹<span class="font-semibold">
                                                         <% if(wallet){%>
@@ -273,8 +305,22 @@
                                                                 <%} else{%>0.00<%}%>
                                                     </span></span></div>
                                             <hr class="py-[0.28px] bg-white rounded my-5">
+                                            <% if(offers){ %>
+                                                <%let offerAmount;%>
+                                                <% if(offers[0].discountType=="per" ){%>
+                                                    <% offerAmount = (offers[0].discountValue*offers[0].actualPrice/100)%>
+                                                    <%}else{%>
+                                                       <% offerAmount = offers[0].discountValue%>
+                                                        <% }%>
+                                                <div class="flex justify-between px-3 font-bold">
+                                                    <span>offer discount : </span><span>-<%=offerAmount%>Rs</span>
+                                                    <% totalPrice = totalPrice - offerAmount%>
+                                                </div>
+                                            <%}%>
                                             <div class="flex justify-between px-3 font-bold"><span>Total : </span>
+                                              
                                                 <span class="finalPrice">₹ <span id="dynamicTotalAmt">
+
                                                         <%= totalPrice.toFixed(2) %>
                                                     </span></span>
 
@@ -296,6 +342,7 @@
                 let disType;
                 let disValue;
                 let couponAddedOrNot = false;
+                let idQtyObj = {};
                 const alertBox = document.getElementById('alert')
                 const alertMsg = document.getElementById('alertMsg')
                 const couponAlert = document.getElementById('couponAlert');
@@ -312,32 +359,49 @@
 
                 const final = document.querySelectorAll(`.finalPrice`);
 
-                function checkChange(event) {
-                    event.preventDefault();
-                    const cod = document.getElementById('cod');
-                    const walletPay = document.getElementById('walletPay');
-                    const onlinePayment = document.getElementById('onlinePayment');
-                    const walletBalance = document.getElementById('walletBalance');
+                (() => {
+                    const cartItems = '<%-JSON.stringify(cartItems).trim()%>';
+                    console.log(cartItems);
+                    const check = JSON.parse(cartItems);
+                    const ids = check.filter(item => item._id);
+                    console.log(ids);
+                    ids.forEach((item) => {
+                        idQtyObj[item._id] = { id: item._id, qty: 1 }; // Setting each _id as a key in idQtyObj with value 1
+                    });
 
-                    if (cod.checked) {
-                        walletPay.checked = false;
-                        onlinePayment.checked = false;
-                        walletBalance.classList.add('hidden')
-                    } else if (walletPay.checked) {
+                    console.log(idQtyObj);
+                })();
+
+                function handlePayment(id) {
+                    const radioInput = document.getElementById(id);
+                    const walletBalance = document.getElementById('walletBalance');
+                    radioInput.checked = true;
+                    paymentMethods(event);
+                    walletBalance.classList.add('hidden')
+                    if (id == "walletPay") {
                         walletBalance.classList.remove('hidden')
-                        cod.checked = false;
-                        onlinePayment.checked = false;
-                    } else if (onlinePayment.checked) {
-                        walletBalance.classList.add('hidden')
-                        cod.checked = false;
-                        walletPay.checked = false;
-                    } else {
-                        console.log('Not selected any payment methods...')
                     }
+                }
+
+                function paymentMethods(event) {
+                    event.preventDefault();
+                    console.log(event)
+                    // Get all elements with the 'paymentBtns' class
+                    const paymentButtons = document.querySelectorAll('.paymentBtns');
+
+                    // Remove the 'bg-white' and 'text-orange-500' classes from all buttons
+                    paymentButtons.forEach(button => {
+                        button.classList.remove('bg-white', 'text-orange-500');
+                    });
+
+                    // Add the 'bg-white' and 'text-orange-500' classes to the clicked button
+                    event.target.classList.remove('text-white');
+                    event.target.classList.add('bg-white', 'text-orange-500');
                 }
 
                 function priceUp(event) {
                     const index = event.currentTarget.getAttribute('data-index');
+                    const fid = event.currentTarget.getAttribute('data-fid');
                     const qty = document.getElementById(`qty${index}`);
                     const currentPrice = document.getElementById(`price${index}`);
                     const actualPrice = currentPrice.getAttribute('data-actualPrice');
@@ -361,10 +425,14 @@
 
                         // Update the displayed quantity and price
                         qty.innerText = quantity;
+                        idQtyObj[fid].qty = quantity;
+                        console.log(idQtyObj)
                         currentPrice.innerText = "₹" + newPrice
-                        final.forEach((item) => {
-                            item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
-                        })
+                        // final.forEach((item) => {
+                        //     item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
+                        // })
+                        finalamountElement.innerText = finalPrice.toFixed(2)
+                        finalamout = finalPrice.toFixed(2);
                         // Update the final price
                         // finalPrice = newPrice;
 
@@ -375,6 +443,7 @@
                 function priceDown(event) {
                     const index = event.currentTarget.getAttribute('data-index');
                     const qty = document.getElementById(`qty${index}`);
+                    const fid = event.currentTarget.getAttribute('data-fid');
                     const currentPrice = document.getElementById(`price${index}`);
                     const actualPrice = currentPrice.getAttribute('data-actualPrice');
                     const remainingStock = parseInt(event.currentTarget.getAttribute('data-stock'));
@@ -393,11 +462,14 @@
                         finalPrice -= parseFloat(actualPrice);
                         // Update the displayed quantity and price
                         qty.innerText = quantity;
+                        idQtyObj[fid].qty = quantity;
+                        console.log(idQtyObj)
                         currentPrice.innerText = "₹" + newPrice;
-                        final.forEach((item) => {
-                            item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
-                        })
-
+                        // final.forEach((item) => {
+                        //     item.innerHTML = "₹" + `<span id="dynamicTotalAmt">${finalPrice.toFixed(2)}</span>`
+                        // })
+                        finalamountElement.innerText = finalPrice.toFixed(2)
+                        finalamout = finalPrice.toFixed(2);
                         // Update the final price
                         // finalPrice = newPrice;
 
@@ -422,7 +494,7 @@
                     }
                     const realData = await JSON.stringify(reqData);
 
-                    const response = await fetch('/user/removeFromCart', {
+                    const response = await fetch('/removeFromCart', {
                         method: 'POST',
                         headers: {
                             'Content-Type': "application/json",
@@ -491,7 +563,7 @@
                     }
                     const userid = sessionStorage.getItem('user_id');
                     const reqData = await JSON.stringify(newaddress)
-                    const adding = await fetch(`/user/add-newaddres/${userid}/${flag}`, {
+                    const adding = await fetch(`/add-newaddres/${userid}/${flag}`, {
                         method: 'PATCH',
                         headers: {
                             'Content-Type': "application/json"
@@ -550,7 +622,7 @@
                         address: currentAdd.innerText,
                     }
                     const address = JSON.stringify(newaddress)
-                    const saveAddressToDB = await fetch(`/user/save-address/${userid}/${id}`, {
+                    const saveAddressToDB = await fetch(`/save-address/${userid}/${id}`, {
                         method: 'PATCH',
                         headers: {
                             'Content-Type': "application/json"
@@ -602,7 +674,7 @@
                         handler: async (response) => {
                             try {
                                 console.log('response :', response)
-                                const verifyUrl = '/user/verify'
+                                const verifyUrl = '/verify'
                                 const data = await axios.post(verifyUrl, response)
                                 console.log('verifyData : ', data)
                                 if (data.status === 200) {
@@ -646,7 +718,7 @@
                                         // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                                         const productId = item._id;
                                         const productName = item.productName;
-                                        const image = item.productMainImage[0];
+                                        const image = item.productImages[0];
                                         const productPrice = item.productPrice;
                                         const productQty = parseInt(qty[index].innerText);
                                         console.log('productName : ', productName)
@@ -669,7 +741,7 @@
                                         }
 
                                         const reqData = await JSON.stringify(productData);
-                                        const checkResponse = await fetch('/user/cart-checkout', {
+                                        const checkResponse = await fetch('/cart-checkout', {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': "application/json",
@@ -697,7 +769,7 @@
                                             }
                                             const realData = await JSON.stringify(reqData);
 
-                                            const response = await fetch('/user/removeFromCart', {
+                                            const response = await fetch('/removeFromCart', {
                                                 method: 'POST',
                                                 headers: {
                                                     'Content-Type': "application/json",
@@ -709,7 +781,7 @@
                                                 console.log(data)
                                                 sessionStorage.setItem('orderid', data.orderid)
                                                 sessionStorage.setItem('orderaddress', data.address)
-                                                window.location.href = '/user/order-success'
+                                                window.location.href = '/order-success'
                                             }
                                             console.log(`${productName} Ok.`)
                                         }
@@ -768,11 +840,11 @@
                     const userId = sessionStorage.getItem('user_id');
                     const foodides = '<%=foodIds%>'
                     console.log('success : ', foodides)
-                    const coupon = { coupon: couponInput, foodids: foodides }
+                    const coupon = { coupon: couponInput, foodids: foodides, idQtyObj: idQtyObj }
                     const reqData = JSON.stringify(coupon)
                     console.log(reqData, userId)
 
-                    const res = await fetch(`/user/check-coupon/${userId}`, {
+                    const res = await fetch(`/check-coupon/${userId}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': "application/json"
@@ -807,13 +879,14 @@
                             couponAddedOrNot = true;
                             couponAlert.classList.remove('hidden');
                             const finalP = parseInt('<%= totalPrice%>')
+                            const foodPrice = parseInt(data.foodPrice)
                             if (disType == "per") {
-                                finalamout = finalP - (disValue * finalP / 100);
+                                finalamout = parseFloat(finalamountElement.innerText) - (disValue * foodPrice / 100);
                                 finalamountElement.innerText = finalamout;
                                 console.log('fianlPreview ', finalamountElement.innerText)
                             } else {
-                                finalamout = finalP - disValue;
-                                finalamountElement.innerText = finalamout;
+                                finalamout = parseFloat(finalamountElement.innerText) - disValue;
+                                finalamountElement.innerText = finalamout.toFixed(2);
                             }
 
                         } else {
@@ -960,7 +1033,7 @@
                             // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                             const productId = item._id;
                             const productName = item.productName;
-                            const image = item.productMainImage[0];
+                            const image = item.productImages[0];
                             const productPrice = item.productPrice;
                             const productQty = parseInt(qty[index].innerText);
                             console.log('productName : ', productName)
@@ -983,7 +1056,7 @@
                             }
 
                             const reqData = await JSON.stringify(productData);
-                            const checkResponse = await fetch('/user/cart-checkout', {
+                            const checkResponse = await fetch('/cart-checkout', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': "application/json",
@@ -1011,7 +1084,7 @@
                                 }
                                 const realData = await JSON.stringify(reqData);
 
-                                const response = await fetch('/user/removeFromCart', {
+                                const response = await fetch('/removeFromCart', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': "application/json",
@@ -1023,7 +1096,7 @@
                                     console.log(data)
                                     sessionStorage.setItem('orderid', data.orderid)
                                     sessionStorage.setItem('orderaddress', data.address)
-                                    window.location.href = '/user/order-success'
+                                    window.location.href = '/order-success'
                                 }
                                 console.log(`${productName} Ok.`)
                             }
@@ -1033,7 +1106,7 @@
                             // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                             const productId = item._id;
                             const productName = item.productName;
-                            const image = item.productMainImage[0];
+                            const image = item.productImages[0];
                             const productPrice = item.productPrice;
                             const productQty = parseInt(qty[index].innerText);
                             console.log('productName : ', productName)
@@ -1056,7 +1129,7 @@
                             }
 
                             const reqData = await JSON.stringify(productData);
-                            const checkResponse = await fetch('/user/cart-checkout', {
+                            const checkResponse = await fetch('/cart-checkout', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': "application/json",
@@ -1084,7 +1157,7 @@
                                 }
                                 const realData = await JSON.stringify(reqData);
 
-                                const response = await fetch('/user/removeFromCart', {
+                                const response = await fetch('/removeFromCart', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': "application/json",
@@ -1096,7 +1169,7 @@
                                     console.log(data)
                                     sessionStorage.setItem('orderid', data.orderid)
                                     sessionStorage.setItem('orderaddress', data.address)
-                                    window.location.href = '/user/order-success'
+                                    window.location.href = '/order-success'
                                 }
                                 console.log(`${productName} Ok.`)
                             }
@@ -1104,11 +1177,11 @@
                     } else {
                         let valid = true;
                         try {
-                             check.map(async (item, index) => {
+                            check.map(async (item, index) => {
                                 // console.log(item.productName,item.productPrice,finalPrice,qty[index].innerText);
                                 const productId = item._id;
                                 const productName = item.productName;
-                                const image = item.productMainImage[0];
+                                const image = item.productImages[0];
                                 const productPrice = item.productPrice;
                                 const productQty = parseInt(qty[index].innerText);
                                 console.log('productName : ', productName)
@@ -1121,7 +1194,7 @@
                                     productQty: productQty
                                 }
                                 const checkingData = await JSON.stringify(qtyData);
-                                const checkingQty = await fetch('/user/check-qty', {
+                                const checkingQty = await fetch('/check-qty', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': "application/json"
@@ -1129,7 +1202,7 @@
                                     body: checkingData
                                 })
 
-                                if (checkingQty.status == 400) {
+                                if (checkingQty.status != 200) {
                                     const data = await checkingQty.json();
                                     alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> ${data.err}`;
                                     alertBox.classList.remove('-translate-x-full')
@@ -1143,12 +1216,12 @@
                                     return false;
                                 }
                             })
-                            console.log('checkinggggg : : ',valid)
+                            console.log('checkinggggg : : ', valid)
                             if (valid == false) {
                                 return
                             } else {
                                 const totalAmount = parseInt('<%=totalPrice%>')
-                                const orderUrl = '/user/orders'
+                                const orderUrl = '/orders'
                                 const paying = await axios.post(orderUrl, { amount: finalamout == 0 ? totalAmount : finalamout })
                                 console.log(paying)
                                 initPayment(paying.data)

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offers</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <%-include('userNavbar') %>
+
+        <section class="px-5 py-2 min-h-screen">
+            <h1 class="my-5 px-5 text-2xl font-bold">Offers</h1>
+
+            <div class="flex flex-wrap gap-5 justify-center overflow-hidden">
+                <% if(productOff){ productOff.forEach((off,index)=>{%>
+                    <div class="transition delay-75 w-52 h-36 relative rounded-xl shadow-lg text-center overflow-hidden ease-linear hover:scale-95 cursor-pointer"
+                        onclick="redirectTo('/product-details/<%=off.foodId%>')">
+                        <img class="w-full h-full object-cover rounded-xl" src="/<%=off.offerImage%>" alt="offerImage">
+                        <div
+                            class="absolute bg-[rgba(0,0,0,0.33)] bottom-0 py-1 w-full  text-white font-bold text-center">
+                            <span class="mx-auto">
+                                <%=off.description%>
+                            </span></div>
+                    </div>
+                    <%})}%>
+
+                        <% if(categoryOff){ categoryOff.forEach((off,index)=>{%>
+                            <div
+                                class="transition delay-75 w-52 h-36 relative rounded-xl shadow-lg text-center overflow-hidden ease-linear hover:scale-95 cursor-pointer" onclick="categoryRedirect(event,'<%=off.categoryName%>')">
+                                <img class="w-full h-full object-cover rounded-xl" src="/<%=off.offerImage%>"
+                                    alt="offerImage">
+                                <div
+                                    class="absolute bg-[rgba(0,0,0,0.33)] bottom-0 py-1 w-full  text-white font-bold text-center">
+                                    <span class="mx-auto">
+                                        <%=off.description%>
+                                    </span></div>
+                            </div>
+                            <%})}%>
+
+            </div>
+
+        </section>
+
+        <%-include('userFooter') %>
+
+            <script>
+                function redirectTo(endpoint) {
+                    window.location.href = endpoint;
+                }
+
+                function categoryRedirect(event,category){
+                    sessionStorage.setItem("foodSearch",category.trim());
+                    window.location.href=`/search-products`
+                }
+            </script>
+</body>
+
+</html>

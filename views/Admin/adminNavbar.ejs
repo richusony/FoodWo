@@ -16,7 +16,7 @@
     </div>
 </nav>
 <div id="sidebar"
-    class="transition duration-1000 ease-in-out -translate-x-full rounded flex flex-col bg-orange-500 px-3 py-4 w-60 absolute top-0 z-10">
+    class="transition duration-1000 ease-in-out -translate-x-full rounded flex flex-col bg-orange-500 px-3 py-4 w-60 absolute top-0 z-10 shadow-md">
     <div class="flex justify-between items-center text-white py-5">
         <h2 class="mx-2 text-xl font-bold">FoodWo</h2><i id="close"
             class="transition duration-1000 ease-linear cursor-pointer fa-solid mx-2 fa-xmark text-xl"></i>
@@ -34,15 +34,12 @@
         class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">New Orders</span>
     <span onclick="redirectTo('/admin/coupons')"
         class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Coupon Management</span>
-    <span
-        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Product
-        Details</span>
-    <span
-        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Product
-        Details</span>
-    <span
-        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Product
-        Details</span>
+    <span onclick="redirectTo('/admin/sales')"
+        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Sales Report</span>
+    <span onclick="redirectTo('/admin/view-banners')"
+        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Banners</span>
+    <span onclick="redirectTo('/admin/offers')"
+        class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Offer Management</span>
     <span
         class=" border-b-[1px] my-2 text-white cursor-pointer hover:bg-white hover:text-orange-500 py-2 px-2 rounded">Product
         Details</span>

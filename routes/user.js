@@ -1,56 +1,73 @@
 const express = require('express');
 const router = express.Router();
-const {userAuth} = require('../middleware/sessionAuth')
-const {isBlocked}= require('../middleware/userBlocked')
-const {upload} = require('../middleware/multer')
-const {viewProductSearchPage, searchFoodItems} = require('../controllers/searchController')
-const {viewWishlistPage, removeWishlist} = require('../controllers/wishlistController')
-const {signInUser,addToWishlist,viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage, viewOrderItemPage, cancelOrder, updateUserAddress, addNewAddress, checkingQuantity} = require('../controllers/user');
+const { userAuth } = require('../middleware/sessionAuth')
+const { isBlocked } = require('../middleware/userBlocked')
+const { upload } = require('../middleware/multer')
+const { viewProductSearchPage, searchFoodItems, recentSearches } = require('../controllers/searchController')
+const { viewWishlistPage, removeWishlist } = require('../controllers/wishlistController')
+const { signInUser, addToWishlist, viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage, viewOrderItemPage, cancelOrder, updateUserAddress, addNewAddress, checkingQuantity, deleteAccount, viewPageNotFound, userSession, getAllfoodItems } = require('../controllers/user');
 const { createOrders, verifyOrders } = require('../controllers/paymentController');
-const {checkingCoupon} = require('../controllers/couponController');
-const {viewWalletPage, addMoney}=require('../controllers/walletController')
+const { checkingCoupon } = require('../controllers/couponController');
+const { viewWalletPage, addMoney } = require('../controllers/walletController');
+const { viewInvoice } = require('../controllers/invoiceController');
+const { viewReferalPage, verifyReferal } = require('../controllers/referalController');
+const { viewUserOfferPage } = require('../controllers/offerController');
+const { addReview } = require('../controllers/fdReviewController');
 
 
 // User SignUp Get Request
 router.route('/signup')
-.get(viewSignInPage)
-.post(signInUser);
+    .get(viewSignInPage)
+    .post(signInUser);
 
 // User Login Get Request
 router.route('/login')
-.get(viewLoginInPage) 
-.post(loginUser)
+    .get(viewLoginInPage)
+    .post(loginUser)
+
+router.route('/food')
+    .get(getAllfoodItems)
 
 router.route('/search-products')
-.get(viewProductSearchPage)
+    .get(viewProductSearchPage)
 
 router.route('/search-food')
-.get(searchFoodItems)
+    .get(searchFoodItems)
+
+router.route('/user-session')
+    .get(userSession)
 
 // User Products Page Get Request
 router.route('/products').get(productPage)
 
 // User SignIn Post Request
-router.post('/signin',signInUser)   
+router.post('/signin', signInUser)
 
 //User otp verification
 router.route('/otpVerify')
-.get(otppage)
-.post(otpVerification)
+    .get(otppage)
+    .post(otpVerification)
 
 router.route('/verifyPhone')
-.get(viewverifyPhonePage)
-.post(sendResetUrl)
+    .get(viewverifyPhonePage)
+    .post(sendResetUrl)
 
 router.route('/forgotPassword/:id')
-.get(viewForgotPasswordPage)
+    .get(viewForgotPasswordPage)
 
 router.route('/newpassword')
-.post(updateNewPassword)
+    .post(updateNewPassword)
 
 
 router.route('/product-details/:id')
-.get(viewProductDetailsPage)
+    .get(viewProductDetailsPage)
+
+router.route('/verify-referal')
+    .get(verifyReferal)
+
+router.route('/review')
+.post(addReview)
+
 
 // User Session Middleware
 router.use(userAuth)
@@ -59,67 +76,85 @@ router.use(userAuth)
 router.use(isBlocked)
 
 router.route('/wishlist/:uid')
-.get(viewWishlistPage)  
+    .get(viewWishlistPage)
 
 router.route('/userProfile/:id')
-.get(viewUserProfile)
-.post(upload.single('image'),updateUserProfile)
+    .get(viewUserProfile)
+    .post(upload.single('image'), updateUserProfile)
 
 router.route('/cart/:id')
-.get(viewCartPage)
+    .get(viewCartPage)
 
 router.route('/addToCart')
-.post(addToCart)
+    .post(addToCart)
 
-router.route('/logout') 
-.get(logoutUser)
+router.route('/logout')
+    .get(logoutUser)
 
 router.route('/addWishlist/:fid/:uid')
-.post(addToWishlist)
+    .post(addToWishlist)
 
 router.route('/remove-wishlist')
-.delete(removeWishlist)
+    .delete(removeWishlist)
 
 router.route('/check-qty')
-.post(checkingQuantity)
+    .post(checkingQuantity)
 
 router.route('/removeFromCart/')
-.post(removeFromCart)
+    .post(removeFromCart)
 
 router.route('/cart-checkout')
-.post(updateStock)
+    .post(updateStock)
 
 router.route('/my-orders/:id')
-.get(viewMyOrderPage)
+    .get(viewMyOrderPage)
 
 router.route('/order-success')
-.get(viewOrderSuccessPage)
+    .get(viewOrderSuccessPage)
 
 router.route('/order-details/:oid')
-.get(viewOrderItemPage)
- 
+    .get(viewOrderItemPage)
+
 router.route('/cancel-order/:oid')
-.patch(cancelOrder)
+    .patch(cancelOrder)
 
 router.route('/save-address/:uid/:aid')
-.patch(updateUserAddress)
+    .patch(updateUserAddress)
 
 router.route('/add-newaddres/:uid/:aid')
-.patch(addNewAddress)
+    .patch(addNewAddress)
 
 router.route('/orders')
-.post(createOrders)
+    .post(createOrders)
 
 router.route('/verify')
-.post(verifyOrders)
+    .post(verifyOrders)
 
 router.route('/check-coupon/:uid')
-.post(checkingCoupon)
+    .post(checkingCoupon)
 
 router.route('/wallet/:uid')
-.get(viewWalletPage)
+    .get(viewWalletPage)
 
 router.route('/addto-wallet/:uid')
-.post(addMoney)
+    .post(addMoney)
+
+router.route('/delete-account/:uid')
+    .delete(deleteAccount)
+
+router.route('/download-invoice/:oid')
+    .get(viewInvoice)
+
+router.route('/referal/:uid')
+    .get(viewReferalPage)
+
+router.route('/offers')
+    .get(viewUserOfferPage)
+
+router.route('/recent-searches')
+    .get(recentSearches)
+
+router.route('/*')
+    .get(viewPageNotFound)
 
 module.exports = router;

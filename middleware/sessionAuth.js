@@ -17,7 +17,7 @@ function userAuth(req,res,next){
         next();
     }else{
         console.log("User is Dead...")
-        res.redirect('/user/login')
+        res.redirect('/login')
     }
 }
 

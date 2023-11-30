@@ -32,8 +32,12 @@ const { viewLogInPage,
 } = require('../controllers/admin');
 const router = express.Router();
 const { adminAuth } = require('../middleware/sessionAuth')
-const {productUpload} = require('../middleware/multer')
-const {viewCouponMangemenPage,createCoupon, deleteCoupon, viewCouponUpdatePage, updateCoupon, checkingCoupon, getPrice}= require('../controllers/couponController')
+const {productUpload,bannerUpload, offerUpload} = require('../middleware/multer')
+const {viewCouponMangemenPage,createCoupon, deleteCoupon, viewCouponUpdatePage, updateCoupon, checkingCoupon, getPrice}= require('../controllers/couponController');
+const { salesToExcel, salesToPdf, viewSalePage, filterSales } = require('../controllers/reportController');
+const { viewPageNotFound } = require('../controllers/user');
+const { listAllBanners, uploadBanner, viewBannerPage, deleteBanner } = require('../controllers/bannerController');
+const { viewOfferMainPage, viewCreateOfferPage, createProductOffer, createCategoryOffer } = require('../controllers/offerController');
 
 // Admin Login Get Request
 router.route('/login')
@@ -84,7 +88,7 @@ router.route('/addProducts')
 
 // Admin adds Products
 router.route('/addproduct')
-    .post(productUpload.fields([{name:'mainimage',maxCount:5},{name:'relatedimages',maxCount:10}]),addProduct)
+    .post(productUpload.array("images"),addProduct)
 
 // Admin views updateProduct page
 router.route('/productUpdateDetails/:id')
@@ -92,7 +96,7 @@ router.route('/productUpdateDetails/:id')
 
 // Admin update products
 router.route('/update-product')
-    .post(productUpload.fields([{name:'mainimage',maxCount:5},{name:'relatedimages',maxCount:10}]),updateProducts)
+    .post(productUpload.array("images"),updateProducts)
 
 // Admin deletes products
 router.route('/product-delete/:id')
@@ -151,6 +155,42 @@ router.route('/coupon-update/:id')
 
 router.route('/food-price/:fid')
 .get(getPrice)
+
+router.route('/sales')
+.get(viewSalePage)
+
+router.route('/sales-to-pdf')
+.get(salesToPdf)
+
+router.route('/sales-to-excel')
+.get(salesToExcel)
+
+router.route('/sales-filter')
+.get(filterSales)
+
+router.route('/view-banners')
+.get(viewBannerPage)
+
+router.route('/banners')
+.get(listAllBanners)
+.post(bannerUpload.array("banner"),uploadBanner)
+.delete(deleteBanner)
+
+router.route('/offers')
+.get(viewOfferMainPage)
+
+router.route('/product-offer')
+.post(offerUpload.single("productOfferImage"),createProductOffer)
+
+router.route('/category-offer')
+.post(offerUpload.single("categoryOfferImage"),createCategoryOffer)
+
+router.route('/new-offer')
+.get(viewCreateOfferPage)
+
+// 404 Page Not Found
+router.route('/*')
+.get(viewPageNotFound)
 
 
 module.exports = router;

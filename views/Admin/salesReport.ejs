@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Report</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <%-include("adminNavbar")%>
+
+        <section class="min-h-screen px-5 py-5">
+            <h1 class="my-5 text-3xl text-center font-bold">Sales Report</h1>
+
+            <div class="px-5">
+                <!-- Add buttons for Monthly and Yearly sales filtering -->
+                <button class="my-5 mx-2 border border-orange-500 text-center px-3 py-2 rounded hover:bg-orange-500 hover:text-white" onclick="loadSalesData('monthly')">Monthly Sales</button>
+                <button class="my-5 mx-2 border border-orange-500 text-center px-3 py-2 rounded hover:bg-orange-500 hover:text-white" onclick="loadSalesData('yearly')">Yearly Sales</button>
+
+                <div class="flex flex-wrap gap-5 justify-center items-center">
+                    <!-- Wrap canvas in a container for better styling -->
+                    <div class="chart-container px-5 py-2 w-80 bg-slate-200 rounded-xl">
+                        <canvas id="myChart1"></canvas>
+                    </div>
+                    <!-- Wrap canvas in a container for better styling -->
+                    <div class="chart-container px-5 py-2 w-80 bg-slate-200 rounded-xl">
+                        <canvas id="myChart2"></canvas>
+                    </div>
+                    <!-- Wrap canvas in a container for better styling -->
+                    <div class="chart-container px-5 py-2 w-80 bg-slate-200 rounded-xl">
+                        <canvas id="myChart3"></canvas>
+                    </div>
+                </div>
+
+                <div>
+                    <button class="px-3 py-2 bg-orange-500 text-white" onclick="downloadSalesPdf(event)">Download PDF</button>
+                    <button class="px-3 py-2 bg-orange-500 text-white" onclick="downloadSalesExcel(event)">Download Excel</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <%-include("adminFooter")%>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <script>
+                const ctx1 = document.getElementById('myChart1');
+                const ctx2 = document.getElementById('myChart2');
+                const ctx3 = document.getElementById('myChart3');
+                let chartData = {}; // Variable to store chart data
+
+                // Function to load sales data based on the filter
+                async function loadSalesData(filter) {
+                    try {
+                        const response = await fetch(`/admin/sales-filter?filter=${filter}`);
+                        chartData = await response.json();
+
+                        updateChart();
+                    } catch (error) {
+                        console.error('Error fetching sales data:', error);
+                    }
+                }
+
+                // Function to update the chart based on the loaded data
+                function updateChart() {
+                    // Destroy existing charts before creating new ones
+                    if (window.barChart) {
+                        window.barChart.destroy();
+                    }
+
+                    if (window.lineChart) {
+                        window.lineChart.destroy();
+                    }
+
+                    if (window.pieChart) {
+                        window.pieChart.destroy();
+                    }
+
+                    // Create and update the bar chart
+                    window.barChart = new Chart(ctx1, {
+                        type: 'bar',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [{
+                                label: 'Sales',
+                                data: chartData.data,
+                                borderWidth: 1,
+                                backgroundColor: generateRandomColors(chartData.labels.length),
+                                borderColor: 'rgba(255, 255, 255, 1)', // Border color
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                x: {
+                                    type: 'category',
+                                    labels: chartData.labels,
+                                },
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                    // Create and update the line chart
+                    window.lineChart = new Chart(ctx2, {
+                        type: 'line',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [{
+                                label: 'Sales',
+                                data: chartData.data,
+                                borderWidth: 1,
+                                borderColor: 'rgba(255, 161, 181, 0.2)', // Border color
+                                backgroundColor: generateRandomColors(chartData.labels.length), // Fill color
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                x: {
+                                    type: 'category',
+                                    labels: chartData.labels,
+                                },
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                    // Create and update the pie chart
+                    window.pieChart = new Chart(ctx3, {
+                        type: 'pie',
+                        data: {
+                            labels: chartData.labels,
+                            datasets: [{
+                                label: 'Sales',
+                                data: chartData.data,
+                                borderWidth: 1,
+                                borderColor: 'rgba(255, 255, 255, 1)', // Border color
+                                backgroundColor: generateRandomColors(chartData.labels.length),
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                x: {
+                                    type: 'category',
+                                    labels: chartData.labels,
+                                },
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                    // Function to generate random colors
+                    function generateRandomColors(numColors) {
+                        const colors = [];
+                        for (let i = 0; i < numColors; i++) {
+                            colors.push(`rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.7)`);
+                        }
+                        return colors;
+                    }
+
+                }
+
+                // Initial load (you can choose monthly or yearly as default)
+                loadSalesData('monthly');
+
+
+                async function downloadSalesPdf(event){
+                    event.preventDefault();
+
+                    // Create a link element
+                    const downloadLink = document.createElement('a');
+
+                    // Set the href to the PDF download URL
+                    downloadLink.href = `/admin/sales-to-pdf`;
+
+                    // Set the download attribute with the desired file name
+                    downloadLink.download = `Sales-Report.pdf`;
+
+                    // Append the link to the document
+                    document.body.appendChild(downloadLink);
+
+                    // Trigger a click on the link to start the download
+                    downloadLink.click();
+
+                    // Remove the link from the document
+                    document.body.removeChild(downloadLink);
+                }
+
+                async function downloadSalesExcel(event){
+                    event.preventDefault();
+
+                    // Create a link element
+                    const downloadLink = document.createElement('a');
+
+                    // Set the href to the PDF download URL
+                    downloadLink.href = `/admin/sales-to-excel`;
+
+                    // Set the download attribute with the desired file name
+                    downloadLink.download = `Sales-Report.xlsx`;
+
+                    // Append the link to the document
+                    document.body.appendChild(downloadLink);
+
+                    // Trigger a click on the link to start the download
+                    downloadLink.click();
+
+                    // Remove the link from the document
+                    document.body.removeChild(downloadLink);
+                }
+            </script>
+</body>
+
+</html>

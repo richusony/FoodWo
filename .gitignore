@@ -1,6 +1,18 @@
 # Ignore the .env file
 .env
 
+# Ignore all PDFs
+*.pdf
+
+# Ignore all xlsx
+*.xlsx
+
 # Ignore the node_modules folder and its contents
 node_modules/
+
+# Ignore the invoice folder and its contents
+invoice/
+
+# Ignore the reports folder and its contents
+reports/
 

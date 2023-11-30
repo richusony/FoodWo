@@ -7,7 +7,7 @@ async function isBlocked(req, res, next) {
     const userdata = await userModel.findOne({ _id: userId },{address:0,email:0,password:0,phone:0,fullname:0})
     if (userdata.blocked) {
         console.log('user is blocked')
-        res.redirect('/user/login')
+        res.redirect('/login')
     } else {
         console.log('user is not blocked')
         next();

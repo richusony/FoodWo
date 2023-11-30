@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+</head>
+
+<body>
+    <section class="px-5 py-2">
+        <div class="px-5">
+            <div class="flex border-b-2 border-slate-300">
+                <span class="mx-2 text-xl font-bold">FoodWo Invoice</span>
+                <span>Order Id : {{orderId}}</span>
+            </div>
+
+            <div>
+                <h2 class="font-semibold">Shipping Address</h2>
+                <p>{{shippingAddress}}</p>
+            </div>
+
+            <div class="w-8/12 my-5">
+                <table class="w-full border-2 border-black text-center">
+                    <tr class="border-b-2 border-black" style="margin: 5px;">
+                        <th style="margin-right:5px;">Product</th>
+                        <th style="margin-right:5px;text-align: center;">Qty</th>
+                        <th style="margin-right:5px;">Discount</th>
+                        <th style="margin-right:5px;">Total</th>
+                    </tr>
+
+                    <tr>
+                        <td style="margin-right: 5px;">{{productName}}</td>
+                        <td style="margin-right: 5px;text-align: center;">{{productQty}}</td>
+                        <td style="margin-right: 5px;">-{{discount}}Rs</td>
+                        <td style="margin-right: 5px;">{{amount}}Rs</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
