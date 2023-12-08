@@ -362,18 +362,16 @@ async function sendResetUrl(req, res) {
 
 async function viewUserProfile(req, res) {
     try {
+        let canAddAddress;
+        const address = await addressModel.findOne({ userId: req.session.user._id });
+        if (address.address1 && address.address2 && address.address3) {
+            canAddAddress = false;
+        } else {
+            canAddAddress = true;
+        }
         const id = req.params.id;
 
-        const [userDetails, addressDetails] = await Promise.all([
-            userModel.findOne({ _id: id }),
-            addressModel.findOne({ userId: id })
-        ]);
-
-        if (userDetails) {
-            res.render('../views/userProfile.ejs', { userData: userDetails, userAddress: addressDetails || {} });
-        } else {
-            res.status(404).json({ err: 'User not found.' });
-        }
+        res.render('../views/userProfile.ejs', { canAddAddress , address});
     } catch (err) {
         console.error('Error fetching user profile:', err);
         res.redirect('../views/pageNotFound.ejs');
@@ -753,12 +751,12 @@ async function viewProductDetailsPage(req, res) {
     try {
         const id = req.params.id;
         const userId = req.session.user?._id;
-        
+
         const wishlist = await wishListModel.aggregate([
             { $match: { userId: userId } },
             { $project: { _id: 0, foodId: 1 } }
         ]);
-        
+
         const productOffer = await productOfferModel.findOne({ foodId: id });
         const foodDetails = await productModel.findOne({ _id: id });
 
@@ -767,7 +765,7 @@ async function viewProductDetailsPage(req, res) {
             return res.status(404).send('Product not found');
         }
 
-        const fdReviews = await fdReviewModel.find({ foodId: id }).sort({createdAt:-1});
+        const fdReviews = await fdReviewModel.find({ foodId: id }).sort({ createdAt: -1 });
 
         // Fetch user details for each review
         const reviewsWithUserDetails = await Promise.all(
@@ -883,10 +881,10 @@ function viewPageNotFound(req, res) {
     }
 }
 
-async function getAllfoodItems(req, res) { 
+async function getAllfoodItems(req, res) {
     const foodLimit = 2;
     const foodSkip = req.query.items;
-    const allFood = await productModel.find({}).limit(foodLimit).skip(foodSkip).sort({createdAt:-1});
+    const allFood = await productModel.find({}).limit(foodLimit).skip(foodSkip).sort({ createdAt: -1 });
     if (allFood) {
         res.status(200).json({ food: allFood });
     }

@@ -13,7 +13,7 @@ const { viewInvoice } = require('../controllers/invoiceController');
 const { viewReferalPage, verifyReferal } = require('../controllers/referalController');
 const { viewUserOfferPage } = require('../controllers/offerController');
 const { addReview } = require('../controllers/fdReviewController');
-const { viewNewAddressPage, newAddress } = require('../controllers/addressController');
+const { viewNewAddressPage, newAddress, deleteAddress } = require('../controllers/addressController');
 
 
 // User SignUp Get Request
@@ -160,6 +160,9 @@ router.route('/new-address')
 
 router.route('/address')
     .post(newAddress)
+
+router.route('/delete-address/:addressId')
+.get(deleteAddress);
 
 router.route('/*')
     .get(viewPageNotFound)

@@ -52,11 +52,13 @@
                     </div>
 
                     <div class="my-1">
-                        <span class="text-white text-lg"><i class="fa-solid fa-envelope"></i> thomas@gmail.com <i class="fa-solid text-sm fa-pencil"></i></span>
+                        <span class="text-white text-lg"><i class="fa-solid fa-envelope"></i> thomas@gmail.com <i
+                                class="fa-solid text-sm fa-pencil"></i></span>
                     </div>
 
                     <div class="my-1">
-                        <span class="text-white text-lg"><i class="fa-solid fa-phone"></i> 9234325252 <i class="fa-solid text-sm fa-pencil"></i></span>
+                        <span class="text-white text-lg"><i class="fa-solid fa-phone"></i> 9234325252 <i
+                                class="fa-solid text-sm fa-pencil"></i></span>
                     </div>
                 </div>
 
@@ -65,30 +67,51 @@
                     <h1 class="text-xl font-semibold">Address Management</h1>
 
                     <div class="flex flex-wrap justify-center gap-3 py-2">
-
+                        <%if(address.address1){%>
                         <div class="border-2 w-72 border-orange-500 rounded-xl">
                             <div class="px-3 py-2 flex justify-between items-center">
-                                <p>Karimthakara Kunnel House,<br> Chuzhali P.O, Chempanthotty,<br> Kannur, Kerala, India -<br> 670142</p>
+                                <p><%=address.address1.houseName%>,<br> <%=address.address1.city%>,<br> <%=address.address1.district%>, <%=address.address1.state%>, <%=address.address1.country%>
+                                    -<br> <%=address.address1.pincode%></p>
                                 <div class="md:mx-2 flex flex-col justify-between">
-                                    <i class="my-2 fa-solid text-sm fa-pencil cursor-pointer hover:text-orange-500"></i>
-                                    <i class="my-2 fa-solid text-sm fa-trash cursor-pointer hover:text-orange-500"></i>
+                                    <i class="my-2 fa-solid text-sm fa-pencil cursor-pointer hover:text-orange-500" onclick="editAddress(event,'<%=address.address1._id%>')"></i>
+                                    <i class="my-2 fa-solid text-sm fa-trash cursor-pointer hover:text-orange-500" onclick="deleteAddress(event,'<%=address.address1._id%>')"></i>
                                 </div>
                             </div>
                         </div>
+                        <%}%>
 
+                        <%if(address.address2){%>
                         <div class="border-2 w-72 border-orange-500 rounded-xl">
                             <div class="px-3 py-2 flex justify-between items-center">
-                                <p>Karimthakara Kunnel House,<br> Chuzhali P.O, Chempanthotty,<br> Kannur, Kerala, India -<br> 670142</p>
+                                <p><%=address.address2.houseName%>,<br> <%=address.address2.city%>,<br> <%=address.address2.district%>, <%=address.address2.state%>, <%=address.address2.country%>
+                                    -<br> <%=address.address2.pincode%></p>
                                 <div class="md:mx-2 flex flex-col justify-between">
-                                    <i class="my-2 fa-solid text-sm fa-pencil cursor-pointer hover:text-orange-500"></i>
-                                    <i class="my-2 fa-solid text-sm fa-trash cursor-pointer hover:text-orange-500"></i>
+                                    <i class="my-2 fa-solid text-sm fa-pencil cursor-pointer hover:text-orange-500" onclick="editAddress(event,'<%=address.address2._id%>')"></i>
+                                    <i class="my-2 fa-solid text-sm fa-trash cursor-pointer hover:text-orange-500" onclick="deleteAddress(event,'<%=address.address2._id%>')"></i>
                                 </div>
                             </div>
                         </div>
+                        <%}%>
 
-                        <div class="w-72 bg-orange-500 flex justify-center items-center rounded-xl px-3 py-5 text-center text-white cursor-pointer">
+                        <%if(address.address3){%>
+                        <div class="border-2 w-72 border-orange-500 rounded-xl">
+                            <div class="px-3 py-2 flex justify-between items-center">
+                                <p><%=address.address3.houseName%>,<br> <%=address.address3.city%>,<br> <%=address.address3.district%>, <%=address.address3.state%>, <%=address.address3.country%>
+                                    -<br> <%=address.address3.pincode%></p>
+                                <div class="md:mx-2 flex flex-col justify-between">
+                                    <i class="my-2 fa-solid text-sm fa-pencil cursor-pointer hover:text-orange-500" onclick="editAddress(event,'<%=address.address3._id%>')"></i>
+                                    <i class="my-2 fa-solid text-sm fa-trash cursor-pointer hover:text-orange-500" onclick="deleteAddress(event,'<%=address.address3._id%>')"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <%}%>
+
+                        <% if(canAddAddress){ %>
+                        <div onclick="redirectTo('/new-address')"
+                            class="w-72 bg-orange-500 flex justify-center items-center rounded-xl px-3 py-5 text-center text-white cursor-pointer">
                             <span class="text-xl my-auto">Add Address <i class="fa-solid fa-plus"></i></span>
                         </div>
+                        <% } %>
 
                     </div>
                 </div>
@@ -129,7 +152,7 @@
         <%-include('userFooter') %>
 
             <script>
-
+                const toast = document.getElementById('toast');
                 let baseImage = "";
                 // Image Details
                 const image = document.getElementById('doc');
@@ -154,7 +177,6 @@
                 });
 
 
-                const toast = document.getElementById('toast');
                 async function userProfileUpdate(event) {
 
                     const fullname = document.getElementById('fullname').value;
@@ -306,6 +328,44 @@
                             }
                         }
                     }
+                }
+
+                function redirectTo(url) {
+                    window.location.href = url;
+                }
+
+                async function deleteAddress(event,aid){
+                    event.preventDefault();
+                    const confirm = window.confirm("Are you sure you want to delete this address.");
+                    if(confirm){
+                        const response = await fetch(`/delete-address/${aid}`);
+                        const data = await response.json();
+                        if(response.status == 404 || response.status == 500){
+                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-check text-xl"></i>${data.err}</span>`;
+                                toast.classList.remove("opacity-0");
+                                toast.classList.remove("-translate-x-full");
+                                setTimeout(() => {
+                                    toast.classList.add("opacity-0");
+                                    toast.classList.add("-translate-x-full");
+                                }, 3000);
+                                return;
+                        }
+                        if(response.status == 200){
+                            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-check text-xl"></i>Address deleted</span>`;
+                                toast.classList.remove("opacity-0");
+                                toast.classList.remove("-translate-x-full");
+                                setTimeout(() => {
+                                    toast.classList.add("opacity-0");
+                                    toast.classList.add("-translate-x-full");
+                                    window.location.reload();
+                                }, 3000);
+                                return;
+                        }
+
+                    }
+                }
+                async function editAddress(event,aid){
+                    window.loaction.href=`/edit-address/${aid}`;
                 }
             </script>
 
