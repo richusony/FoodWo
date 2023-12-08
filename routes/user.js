@@ -13,6 +13,7 @@ const { viewInvoice } = require('../controllers/invoiceController');
 const { viewReferalPage, verifyReferal } = require('../controllers/referalController');
 const { viewUserOfferPage } = require('../controllers/offerController');
 const { addReview } = require('../controllers/fdReviewController');
+const { viewNewAddressPage, newAddress } = require('../controllers/addressController');
 
 
 // User SignUp Get Request
@@ -66,7 +67,7 @@ router.route('/verify-referal')
     .get(verifyReferal)
 
 router.route('/review')
-.post(addReview)
+    .post(addReview)
 
 
 // User Session Middleware
@@ -153,6 +154,12 @@ router.route('/offers')
 
 router.route('/recent-searches')
     .get(recentSearches)
+
+router.route('/new-address')
+    .get(viewNewAddressPage)
+
+router.route('/address')
+    .post(newAddress)
 
 router.route('/*')
     .get(viewPageNotFound)
