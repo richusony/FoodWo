@@ -172,6 +172,19 @@
                             }, 2000);
                             return;
                         }
+                        
+                        if(response.ok){
+                            window.scrollTo(0, 0);
+                            alertBox.classList.remove('opacity-0');
+                            alertBox.classList.remove('-translate-x-full');
+                            alertMsg.innerText = `Address Added Successfully`;
+                            setTimeout(() => {
+                                alertBox.classList.add('-translate-x-full');
+                                alertBox.classList.add('opacity-0');
+                                window.location.href=`/userProfile/${sessionStorage.getItem("user_id")}`;
+                            }, 2000);
+                            return;
+                        }
                     }
                 }
             </script>
