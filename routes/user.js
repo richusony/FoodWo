@@ -14,6 +14,7 @@ const { viewReferalPage, verifyReferal } = require('../controllers/referalContro
 const { viewUserOfferPage } = require('../controllers/offerController');
 const { addReview } = require('../controllers/fdReviewController');
 const { viewNewAddressPage, newAddress, deleteAddress } = require('../controllers/addressController');
+const { viewEditProfilePage } = require('../controllers/userProfileController');
 
 
 // User SignUp Get Request
@@ -163,6 +164,9 @@ router.route('/address')
 
 router.route('/delete-address/:addressId')
 .get(deleteAddress);
+
+router.route('/edit-profile')
+.get(viewEditProfilePage);
 
 router.route('/*')
     .get(viewPageNotFound)
