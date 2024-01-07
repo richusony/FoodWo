@@ -54,6 +54,11 @@
   <body>
     <%-include('userNavbar') %>
     <section class="px-5 py-2 w-full">
+      <div
+        id="toast"
+        class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full"
+      ></div>
+
       <div class="h-screen flex justify-center items-center">
         <form
           id="form"
@@ -62,19 +67,21 @@
           method="post"
           enctype="multipart/form-data"
         >
-        <div class="w-44 rounded-full mx-auto">
-            <img class="mx-auto w-full h-full rounded-full" src="/<%=user.image%>" alt="userProfile">
-        </div>
+          <div class="w-44 rounded-full mx-auto shadow-xl">
+            <img
+              class="mx-auto w-full h-full rounded-full"
+              src="/<%=user.image%>"
+              alt="userProfile"
+            />
+          </div>
 
           <div class="w-full flex flex-col my-2">
             <label for="images">Profile Image</label>
             <input
               type="file"
-              name="images"
-              id="images"
+              name="profileImage"
+              id="profileImage"
               accept="image/*"
-              maxlength="4"
-              multiple="multiple"
               class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500"
             />
           </div>
@@ -85,8 +92,8 @@
               name="fullName"
               value="<%=user.fullname%>"
               maxlength="20"
-              id="productName"
-              placeholder="Product Name"
+              id="fullName"
+              placeholder="Full Name"
               class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500"
             />
           </div>
@@ -94,11 +101,11 @@
             <label for="">Email</label>
             <input
               type="email"
-              name="eamil"
+              name="email"
               value="<%=user.email%>"
               maxlength="20"
-              id="productName"
-              placeholder="Product Name"
+              id="email"
+              placeholder="Email"
               class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500"
             />
           </div>
@@ -108,13 +115,13 @@
               type="tel"
               maxlength="10"
               value="<%=user.phone%>"
-              name="productPrice"
-              id="productPrice"
-              placeholder="Product Price"
+              name="phone"
+              id="phone"
+              placeholder="Phone"
               class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500"
             />
           </div>
-          
+
           <div class="my-8 text-center">
             <button
               type="submit"
@@ -129,5 +136,50 @@
       </div>
     </section>
     <%-include('userFooter') %>
+
+    <script>
+      const toast = document.getElementById("toast");
+
+      async function handleSubmit(event) {
+        event.preventDefault();
+
+        const fullName = document.getElementById("fullName");
+        const email = document.getElementById("email");
+        const phone = document.getElementById("phone");
+        const profileImage = document.getElementById("profileImage");
+
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+        // Check if the email address matches the regular expression
+        const isEmailValid = emailRegex.test(email.value);
+
+        if (fullName.value == "" || email.value == "" || phone.value == "") {
+          window.scrollTo(0, 0);
+          toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> All fields are required.</span>`;
+          toast.classList.remove("opacity-0");
+          toast.classList.remove("-translate-x-full");
+          setTimeout(() => {
+            toast.classList.add("opacity-0");
+            toast.classList.add("-translate-x-full");
+          }, 3000);
+        } else if (!isEmailValid) {
+          toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Please enter a valid email address.</span>`;
+          toast.classList.remove("opacity-0");
+          toast.classList.remove("-translate-x-full");
+          setTimeout(() => {
+            toast.classList.add("opacity-0");
+            toast.classList.add("-translate-x-full");
+          }, 3000);
+        } else if (phone.length < 10) {
+          toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Please enter a valid phone no.</span>`;
+          toast.classList.remove("opacity-0");
+          toast.classList.remove("-translate-x-full");
+          setTimeout(() => {
+            toast.classList.add("opacity-0");
+            toast.classList.add("-translate-x-full");
+          }, 3000);
+        }
+      }
+    </script>
   </body>
 </html>
