@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { userAuth } = require('../middleware/sessionAuth')
 const { isBlocked } = require('../middleware/userBlocked')
-const { upload } = require('../middleware/multer')
+const { upload, profileUpload } = require('../middleware/multer')
 const { viewProductSearchPage, searchFoodItems, recentSearches } = require('../controllers/searchController')
 const { viewWishlistPage, removeWishlist } = require('../controllers/wishlistController')
 const { signInUser, addToWishlist, viewSignInPage, viewLoginInPage, loginUser, productPage, otppage, otpVerification, logoutUser, viewCartPage, removeFromWishlist, addToCart, removeFromCart, viewForgotPasswordPage, viewverifyPhonePage, sendResetUrl, updateNewPassword, viewUserProfile, updateUserProfile, updateStock, viewProductDetailsPage, viewMyOrderPage, viewOrderSuccessPage, viewOrderItemPage, cancelOrder, updateUserAddress, addNewAddress, checkingQuantity, deleteAccount, viewPageNotFound, userSession, getAllfoodItems } = require('../controllers/user');
@@ -14,7 +14,7 @@ const { viewReferalPage, verifyReferal } = require('../controllers/referalContro
 const { viewUserOfferPage } = require('../controllers/offerController');
 const { addReview } = require('../controllers/fdReviewController');
 const { viewNewAddressPage, newAddress, deleteAddress } = require('../controllers/addressController');
-const { viewEditProfilePage } = require('../controllers/userProfileController');
+const { viewEditProfilePage, updateUserDetails } = require('../controllers/userProfileController');
 
 
 // User SignUp Get Request
@@ -80,11 +80,11 @@ router.use(isBlocked)
 router.route('/wishlist/:uid')
     .get(viewWishlistPage)
 
-router.route('/userProfile/:id')
+router.route('/userProfile')
     .get(viewUserProfile)
     .post(upload.single('image'), updateUserProfile)
 
-router.route('/cart/:id')
+router.route('/cart')
     .get(viewCartPage)
 
 router.route('/addToCart')
@@ -166,7 +166,8 @@ router.route('/delete-address/:addressId')
 .get(deleteAddress);
 
 router.route('/edit-profile')
-.get(viewEditProfilePage);
+.get(viewEditProfilePage)
+.patch(profileUpload.single('profileImage'), updateUserDetails)
 
 router.route('/*')
     .get(viewPageNotFound)

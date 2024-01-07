@@ -64,19 +64,20 @@
           id="form"
           class="md:w-1/2"
           action=""
-          method="post"
+          method="patch"
           enctype="multipart/form-data"
         >
-          <div class="w-44 rounded-full mx-auto shadow-xl">
+          <div class="w-44 h-44 rounded-full mx-auto shadow-xl">
             <img
-              class="mx-auto w-full h-full rounded-full"
+              id="imagePreview"
+              class="mx-auto w-full h-full rounded-full object-cover"
               src="/<%=user.image%>"
               alt="userProfile"
             />
           </div>
 
           <div class="w-full flex flex-col my-2">
-            <label for="images">Profile Image</label>
+            <label for="profileImage">Profile Image</label>
             <input
               type="file"
               name="profileImage"
@@ -139,6 +140,8 @@
 
     <script>
       const toast = document.getElementById("toast");
+      const profileInput = document.getElementById("profileImage");
+      const imagePreview = document.getElementById("imagePreview");
 
       async function handleSubmit(event) {
         event.preventDefault();
@@ -147,6 +150,7 @@
         const email = document.getElementById("email");
         const phone = document.getElementById("phone");
         const profileImage = document.getElementById("profileImage");
+        const form = document.getElementById("form");
 
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -162,6 +166,7 @@
             toast.classList.add("opacity-0");
             toast.classList.add("-translate-x-full");
           }, 3000);
+          return;
         } else if (!isEmailValid) {
           toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Please enter a valid email address.</span>`;
           toast.classList.remove("opacity-0");
@@ -170,6 +175,7 @@
             toast.classList.add("opacity-0");
             toast.classList.add("-translate-x-full");
           }, 3000);
+          return;
         } else if (phone.length < 10) {
           toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> Please enter a valid phone no.</span>`;
           toast.classList.remove("opacity-0");
@@ -178,8 +184,47 @@
             toast.classList.add("opacity-0");
             toast.classList.add("-translate-x-full");
           }, 3000);
+          return;
+        } else {
+          const formData = new FormData(form);
+          const res = await fetch("/edit-profile", {
+            method: "PATCH",
+            body: formData,
+          });
+
+          const resData = await res.json();
+          if (res.status === 400) {
+            window.scrollTo(0,0);
+            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-triangle-exclamation text-xl"></i> ${resData.err}</span>`;
+            toast.classList.remove("opacity-0");
+            toast.classList.remove("-translate-x-full");
+            setTimeout(() => {
+              toast.classList.add("opacity-0");
+              toast.classList.add("-translate-x-full");
+            }, 3000);
+            return;
+          }
+          if (res.status === 200) {
+            window.scrollTo(0,0);
+            toast.innerHTML = `<span id="toastMessage" class="text-sm"><i class="fa-solid fa-tick text-xl"></i> ${resData.success}</span>`;
+            toast.classList.remove("opacity-0");
+            toast.classList.remove("-translate-x-full");
+            setTimeout(() => {
+              toast.classList.add("opacity-0");
+              toast.classList.add("-translate-x-full");
+              window.location.href='/userProfile';
+            }, 3000);
+            return;
+          }
         }
       }
+      profileInput.addEventListener("change", () => {
+        console.log("changed")
+        const selectedFile = profileInput.files[0]; // Access the first selected file
+        if (selectedFile) {
+          imagePreview.src = URL.createObjectURL(selectedFile);
+        }
+      });
     </script>
   </body>
 </html>
