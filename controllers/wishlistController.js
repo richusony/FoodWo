@@ -3,7 +3,7 @@ const wishListModel = require('../models/wishlistSchema');
 
 
 async function viewWishlistPage(req, res) {
-    const userId = req.params.uid;
+    const userId = req.session.user._id;
     const wishes = await wishListModel.aggregate([
         {
             $match: { userId: userId }

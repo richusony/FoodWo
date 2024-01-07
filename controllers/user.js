@@ -994,7 +994,7 @@ async function viewProductDetailsPage(req, res) {
 }
 
 async function viewMyOrderPage(req, res) {
-  const user_id = req.params.id;
+  const user_id = req.session.user._id;
   const allOrders = await orderModel
     .find({ userId: user_id })
     .sort({ createdAt: -1 });

@@ -43,7 +43,7 @@
             <div class="my-5 flex flex-col md:flex-row justify-evenly">
 
                 <div class="md:w-1/3 bg-orange-500 px-3 py-2 rounded-xl flex flex-col justify-center items-center shadow-xl">
-                    <div class="w-52 rounded-full mt-2 shadow-xl">
+                    <div class="w-52 h-52 rounded-full mt-2 shadow-xl">
                         <img class="w-full h-full object-cover rounded-full" src="/<%=userDetails.image%>" alt="user">
                     </div>
 
@@ -68,7 +68,7 @@
                 <div class="mt-5 md:mt-0 md:ml-5">
                     <h1 class="text-xl font-semibold">Address Management</h1>
 
-                    <div class="flex flex-wrap justify-center gap-3 py-2">
+                    <div class="mt-5 flex flex-wrap justify-center gap-3 py-2">
                         <%if(address.address1){%>
                         <div class="border-2 w-72 border-orange-500 rounded-xl">
                             <div class="px-3 py-2 flex justify-between items-center">
@@ -110,7 +110,7 @@
 
                         <% if(canAddAddress){ %>
                         <div onclick="redirectTo('/new-address')"
-                            class="w-72 bg-orange-500 flex justify-center items-center rounded-xl px-3 py-5 text-center text-white cursor-pointer">
+                            class="transition delay-150 w-72 bg-orange-500 ease-linear hover:bg-orange-600 flex justify-center items-center rounded-xl px-3 py-5 text-center text-white cursor-pointer shadow-xl">
                             <span class="text-xl my-auto">Add Address <i class="fa-solid fa-plus"></i></span>
                         </div>
                         <% } %>
@@ -257,18 +257,18 @@
                 }
 
                 function redirectToOrders() {
-                    window.location.href = `/my-orders/${sessionStorage.getItem('user_id')}`;
+                    window.location.href = `/my-orders`;
                 }
 
                 function redirectToWish() {
-                    window.location.href = `/wishlist/${sessionStorage.getItem('user_id')}`;
+                    window.location.href = `/wishlist`;
                 }
 
                 function redirectToWallet() {
-                    window.location.href = `/wallet/${sessionStorage.getItem('user_id')}`;
+                    window.location.href = `/wallet`;
                 }
                 function redirectToReferal() {
-                    window.location.href = `/referal/${sessionStorage.getItem('user_id')}`;
+                    window.location.href = `/referal`;
                 }
 
                 let address3 = '';

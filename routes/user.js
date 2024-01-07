@@ -77,7 +77,7 @@ router.use(userAuth)
 // Checking wether User is Blocked or Not
 router.use(isBlocked)
 
-router.route('/wishlist/:uid')
+router.route('/wishlist')
     .get(viewWishlistPage)
 
 router.route('/userProfile')
@@ -108,7 +108,7 @@ router.route('/removeFromCart/')
 router.route('/cart-checkout')
     .post(updateStock)
 
-router.route('/my-orders/:id')
+router.route('/my-orders')
     .get(viewMyOrderPage)
 
 router.route('/order-success')
@@ -135,7 +135,7 @@ router.route('/verify')
 router.route('/check-coupon/:uid')
     .post(checkingCoupon)
 
-router.route('/wallet/:uid')
+router.route('/wallet')
     .get(viewWalletPage)
 
 router.route('/addto-wallet/:uid')
@@ -147,7 +147,7 @@ router.route('/delete-account/:uid')
 router.route('/download-invoice/:oid')
     .get(viewInvoice)
 
-router.route('/referal/:uid')
+router.route('/referal')
     .get(viewReferalPage)
 
 router.route('/offers')
