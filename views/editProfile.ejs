@@ -1,41 +1,133 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FoodWo - Your Profile</title>
-    <link href="/public/css/output.css" rel="stylesheet">
-    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
-    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <link href="/public/css/output.css" rel="stylesheet" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/public/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/public/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/public/images/favicon-16x16.png"
+    />
+    <script
+      src="https://kit.fontawesome.com/70218ce737.js"
+      crossorigin="anonymous"
+    ></script>
     <style>
-        /* Hide the default scrollbar */
-        .overflow-x-scroll::-webkit-scrollbar {
-            display: none;
-        }
+      /* Hide the default scrollbar */
+      .overflow-x-scroll::-webkit-scrollbar {
+        display: none;
+      }
 
-        /* Define the scrollbar track (optional) */
-        .overflow-x-scroll::-webkit-scrollbar-track {
-            background: transparent;
-            /* You can customize the track's appearance */
-        }
+      /* Define the scrollbar track (optional) */
+      .overflow-x-scroll::-webkit-scrollbar-track {
+        background: transparent;
+        /* You can customize the track's appearance */
+      }
 
-        /* Define the scrollbar thumb (optional) */
-        .overflow-x-scroll::-webkit-scrollbar-thumb {
-            background: transparent;
-            /* You can customize the thumb's appearance */
-        }
+      /* Define the scrollbar thumb (optional) */
+      .overflow-x-scroll::-webkit-scrollbar-thumb {
+        background: transparent;
+        /* You can customize the thumb's appearance */
+      }
 
-        .text-ellipsis {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+      .text-ellipsis {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     </style>
-</head>
+  </head>
+  <body>
+    <%-include('userNavbar') %>
+    <section class="px-5 py-2 w-full">
+      <div class="h-screen flex justify-center items-center">
+        <form
+          id="form"
+          class="md:w-1/2"
+          action=""
+          method="post"
+          enctype="multipart/form-data"
+        >
+        <div class="w-44 rounded-full mx-auto">
+            <img class="mx-auto w-full h-full rounded-full" src="/<%=user.image%>" alt="userProfile">
+        </div>
 
-<body>
-</body>
+          <div class="w-full flex flex-col my-2">
+            <label for="images">Profile Image</label>
+            <input
+              type="file"
+              name="images"
+              id="images"
+              accept="image/*"
+              maxlength="4"
+              multiple="multiple"
+              class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500"
+            />
+          </div>
+          <div class="flex flex-col my-2">
+            <label for="">Full Name</label>
+            <input
+              type="text"
+              name="fullName"
+              value="<%=user.fullname%>"
+              maxlength="20"
+              id="productName"
+              placeholder="Product Name"
+              class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500"
+            />
+          </div>
+          <div class="flex flex-col my-2">
+            <label for="">Email</label>
+            <input
+              type="email"
+              name="eamil"
+              value="<%=user.email%>"
+              maxlength="20"
+              id="productName"
+              placeholder="Product Name"
+              class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500"
+            />
+          </div>
+          <div class="flex flex-col my-2">
+            <label for="">Phone </label>
+            <input
+              type="tel"
+              maxlength="10"
+              value="<%=user.phone%>"
+              name="productPrice"
+              id="productPrice"
+              placeholder="Product Price"
+              class="px-2 placeholder:px-2 py-2 rounded outline-orange-500 border border-orange-500"
+            />
+          </div>
+          
+          <div class="my-8 text-center">
+            <button
+              type="submit"
+              id="submit"
+              onclick="handleSubmit(event)"
+              class="bg-orange-500 rounded-full py-2 px-6 md:px-6 text-white text-xl md:text-xl"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+    <%-include('userFooter') %>
+  </body>
 </html>
