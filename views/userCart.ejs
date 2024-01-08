@@ -970,7 +970,7 @@
                     console.log(cartItems);
                     const check = JSON.parse(cartItems);
 
-                    if (!checkAddress1.checked && !checkAddress2.checked && !checkAddress3.checked) {
+                    if (!checkAddress1?.checked && !checkAddress2?.checked && !checkAddress3?.checked) {
                         alertMsg.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-xl"></i> Please select one address to deliver`;
                         alertBox.classList.remove('-translate-x-full')
                         alertBox.classList.remove('opacity-0')
@@ -985,11 +985,11 @@
 
                     let selectedAddress = '';
 
-                    if (checkAddress1.checked) {
+                    if (checkAddress1?.checked) {
                         selectedAddress = currentAdd1.innerText;
-                    } else if (checkAddress2.checked) {
+                    } else if (checkAddress2?.checked) {
                         selectedAddress = currentAdd2.innerText;
-                    } else if (checkAddress3.checked) {
+                    } else if (checkAddress3?.checked) {
                         selectedAddress = currentAdd3.innerText;
                     } else {
                         selectedAddress = 'No address selected';

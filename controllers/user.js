@@ -1097,18 +1097,25 @@ function viewPageNotFound(req, res) {
 
 async function getAllfoodItems(req, res) {
   const foodLimit = 2;
-  const foodSkip = req.query.items;
+  const foodSkip = req.query.items ? parseInt(req.query.items) : 0; // Parse the skip value as an integer
+  const totalCount = await productModel.countDocuments({}); // Get the total count of products
+
+  const remainingItems = totalCount - foodSkip;
+  const finalSkip = remainingItems > 0 ? foodSkip : 0; // Calculate the final skip value
+
   const allFood = await productModel
     .find({})
     .limit(foodLimit)
-    .skip(foodSkip)
+    .skip(finalSkip)
     .sort({ createdAt: -1 });
+
   if (allFood) {
     res.status(200).json({ food: allFood });
   } else {
     res.status(400).json({ food: false });
   }
 }
+
 
 module.exports = {
   signInUser,
