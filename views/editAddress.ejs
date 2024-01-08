@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FoodWo - Add Address</title>
+    <title>FoodWo - Edit Address</title>
     <link href="/public/css/output.css" rel="stylesheet">
     <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
@@ -49,44 +49,47 @@
                 <span id="alertMsg"></span>
             </div>
 
-            <h1 class="my-5 text-2xl text-orange-500 text-center font-bold">Add Address</h1>
+            <h1 class="my-5 text-2xl text-orange-500 text-center font-bold">Edit Address</h1>
 
             <div class="flex justify-center">
                 <form id="form" class="px-3 w-full md:w-1/2 mb-5">
                     <div class="my-2 flex flex-col">
                         <label for="HouseName" class="font-semibold">House Name</label>
                         <input id="HouseName" class="py-1 px-2 border-2 w-full border-orange-500 rounded" type="text"
-                            placeholder="House Name, Building No, Flat No" />
+                            placeholder="House Name, Building No, Flat No" value="<%=address.houseName%>" />
                     </div>
                     <div class="my-2 flex flex-col">
                         <label for="Country" class="font-semibold">Country</label>
                         <input id="Country" class="py-1 px-2 border-2 w-full border-orange-500 rounded" disabled
-                            type="text" placeholder="India" value="India" />
+                            type="text" placeholder="India" value="India" value="<%=address.country%>" />
                     </div>
                     <div class="my-2 flex flex-col">
                         <label for="State" class="font-semibold">State</label>
                         <input id="State" class="py-1 px-2 border-2 w-full border-orange-500 rounded" type="text"
-                            disabled value="Kerala" placeholder="Kerala" />
+                            disabled value="Kerala" placeholder="Kerala" value="<%=address.state%>"/>
                     </div>
                     <div class="my-2 flex flex-col">
                         <label for="District" class="font-semibold">District</label>
                         <input id="District" class="py-1 px-2 border-2 w-full border-orange-500 rounded" type="text"
-                            disabled value="Kannur" placeholder="Kannur" />
+                            disabled value="Kannur" placeholder="Kannur" value="<%=address.district%>"/>
                     </div>
                     <div class="my-2 flex flex-col">
                         <label for="City" class="font-semibold">City/Village</label>
                         <input id="City" class="py-1 px-2 border-2 w-full border-orange-500 rounded" type="text"
-                            placeholder="City, Village, Landmark" />
+                            placeholder="City, Village, Landmark" value="<%=address.city%>"/>
                     </div>
                     <div class="my-2 flex flex-col">
                         <label for="Pincode" class="font-semibold">Pincode</label>
                         <input id="Pincode" class="py-1 px-2 border-2 w-full border-orange-500 rounded" type="text"
-                            placeholder="Pincode" />
+                            placeholder="Pincode" value="<%=address.pincode%>"/>
                     </div>
                     <div class="my-2 flex flex-col">
                         <label for="Label" class="font-semibold">Label</label>
                         <select id="Label" class="py-1 px-2 border-2 w-full border-orange-500 rounded" name="label"
                             id="Label">
+                            <% if(address.label !== "none") {%>
+                            <option value="<%=address.label%>"><%=address.label%></option>
+                            <%}%>
                             <option value="none">None</option>
                             <option value="home">Home</option>
                             <option value="work">Work</option>
@@ -152,8 +155,8 @@
 
                         const reqData = await JSON.stringify(formData);
                         console.log(reqData);
-                        const response = await fetch('/address', {
-                            method: "POST",
+                        const response = await fetch('/edit-address/<%=address._id%>', {
+                            method: "PATCH",
                             headers: {
                                 'Content-Type': "application/json",
                             },
@@ -177,7 +180,7 @@
                             window.scrollTo(0, 0);
                             alertBox.classList.remove('opacity-0');
                             alertBox.classList.remove('-translate-x-full');
-                            alertMsg.innerText = `Address Added Successfully`;
+                            alertMsg.innerText = `Address Updated Successfully`;
                             setTimeout(() => {
                                 alertBox.classList.add('-translate-x-full');
                                 alertBox.classList.add('opacity-0');

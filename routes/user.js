@@ -13,7 +13,7 @@ const { viewInvoice } = require('../controllers/invoiceController');
 const { viewReferalPage, verifyReferal } = require('../controllers/referalController');
 const { viewUserOfferPage } = require('../controllers/offerController');
 const { addReview } = require('../controllers/fdReviewController');
-const { viewNewAddressPage, newAddress, deleteAddress } = require('../controllers/addressController');
+const { viewNewAddressPage, newAddress, deleteAddress, viewUpdateAddressPage, updateAddress } = require('../controllers/addressController');
 const { viewEditProfilePage, updateUserDetails } = require('../controllers/userProfileController');
 
 
@@ -158,6 +158,10 @@ router.route('/recent-searches')
 
 router.route('/new-address')
     .get(viewNewAddressPage)
+
+router.route('/edit-address/:aid')
+    .get(viewUpdateAddressPage)
+    .patch(updateAddress)
 
 router.route('/address')
     .post(newAddress)

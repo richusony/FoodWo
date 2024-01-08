@@ -163,20 +163,20 @@
                 const userIcon = document.getElementById('userIcon');
 
 
-                image.addEventListener('change', async (event) => {
-                    const file = event.target.files[0];
-                    if (file) {
-                        console.log(event);
-                        const reader = new FileReader();
-                        reader.onload = function () {
-                            baseImage = reader.result; // This is the data URL
-                            imagetag.style.display = "block";
-                            userIcon.style.display = "none";
-                            imagetag.setAttribute("src", baseImage);
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
+                // image.addEventListener('change', async (event) => {
+                //     const file = event.target.files[0];
+                //     if (file) {
+                //         console.log(event);
+                //         const reader = new FileReader();
+                //         reader.onload = function () {
+                //             baseImage = reader.result; // This is the data URL
+                //             imagetag.style.display = "block";
+                //             userIcon.style.display = "none";
+                //             imagetag.setAttribute("src", baseImage);
+                //         };
+                //         reader.readAsDataURL(file);
+                //     }
+                // });
 
 
                 async function userProfileUpdate(event) {
@@ -367,7 +367,7 @@
                     }
                 }
                 async function editAddress(event,aid){
-                    window.loaction.href=`/edit-address/${aid}`;
+                    window.location.href=`/edit-address/${aid}`;
                 }
             </script>
 
