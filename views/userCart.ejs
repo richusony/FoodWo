@@ -159,6 +159,7 @@
                                     <div class="px-3 my-3">
                                         <h3 class="font-bold">Shipping to :</h3>
                                         <div id="addContainer">
+                                            <% if(userAddress.address1){%>
                                             <div
                                                 class='<%if(userAddress.address1 !=="false" ){%> block <%}else{%>hidden<%}%>'>
                                                 <span>
@@ -171,21 +172,21 @@
                                                 </span>
 
                                                 <div class="text-end"><span class="cursor-pointer" id="editAdd1"
-                                                        data-id="1" onclick="editAddress(event)">edit address</span>
+                                                        data-id="1" onclick="editAddress(event,'<%=userAddress.address1._id%>')">edit address</span>
                                                 </div>
                                                 <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd1"
                                                         data-id="1" onclick="saveAddress(event)">save
                                                         address</span></div>
                                             </div>
-
-
+                                            <%}%>
+                                            <% if(userAddress.address2){%>
                                             <div
-                                                class='<%if(userAddress.address2 !=="false" ){%> block <%}else{%>hidden <% } %>'>
+                                                class='<%if(userAddress.address2 !=="false" ){%> block <%}else{%>hidden<%}%>'>
                                                 <span>
                                                     <div class="flex my-2 text-sm md:w-80">
                                                         <input type="checkbox" name="" id="addressCheck2" class="mx-2">
                                                         <span id="currentAdd2">
-                                                            <%=userAddress.address2%>
+                                                            <%=userAddress.address2.houseName%>, <%=userAddress.address2.city%>, <%=userAddress.address2.district%>, <%=userAddress.address2.state%>, <%=userAddress.address2.country%> - <%=userAddress.address2.pincode%>
                                                         </span>
                                                     </div>
                                                 </span>
@@ -197,7 +198,9 @@
                                                         address</span></div>
 
                                             </div>
+                                            <%}%>
 
+                                            <% if(userAddress.address3){%>
                                             <div
                                                 class='<%if(userAddress.address3 !=="false" ){%> block <%}else{%>hidden<%}%>'>
                                                 <span>
@@ -209,7 +212,7 @@
                                                     </div>
                                                 </span>
                                                 <div class="text-end"><span class="cursor-pointer" data-id="3"
-                                                        id="editAdd3" onclick="editAddress(event)">edit
+                                                        id="editAdd3" onclick="editAddress(event,'<%=userAddress.address3._id%>')">edit
                                                         address</span>
                                                 </div>
                                                 <div class="text-end"><span class="cursor-pointer hidden" id="saveAdd3"
@@ -217,6 +220,7 @@
                                                         address</span>
                                                 </div>
                                             </div>
+                                            <%}%>
                                         </div>
                                         <textarea class="text-black hidden w-full px-3 rounded" name="" id="newAdd1"
                                             cols="" rows="4"></textarea>
@@ -597,17 +601,19 @@
                     }
                 }
 
-                function editAddress(event) {
-                    event.preventDefault();
-                    const id = event.target.dataset.id;
-                    const currentAdd = document.getElementById(`currentAdd${id}`)
-                    const newAdd = document.getElementById(`newAdd${id}`)
-                    const saveAdd = document.getElementById(`saveAdd${id}`)
-                    currentAdd.style.display = 'none';
-                    newAdd.innerText = currentAdd.innerText.trim();
-                    newAdd.classList.remove('hidden');
-                    event.target.classList.add('hidden')
-                    saveAdd.classList.remove('hidden')
+                function editAddress(event,aid) {
+                    // event.preventDefault();
+                    window.location.href=`/edit-address/${aid}`;
+
+                    // const id = event.target.dataset.id;
+                    // const currentAdd = document.getElementById(`currentAdd${id}`)
+                    // const newAdd = document.getElementById(`newAdd${id}`)
+                    // const saveAdd = document.getElementById(`saveAdd${id}`)
+                    // currentAdd.style.display = 'none';
+                    // newAdd.innerText = currentAdd.innerText.trim();
+                    // newAdd.classList.remove('hidden');
+                    // event.target.classList.add('hidden')
+                    // saveAdd.classList.remove('hidden')
 
                 }
                 async function saveAddress(event) {
