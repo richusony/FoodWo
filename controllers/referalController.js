@@ -8,7 +8,7 @@ async function generateUniqueReferalCode() {
 
 async function viewReferalPage(req, res) {
     try {
-        const userId = req.params.uid;
+        const userId = req.session.user._id;
         let referCode;
 
         const user = await userModel.findOne({ _id: userId });

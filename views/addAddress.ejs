@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodWo - Add Address</title>
+    <link href="/public/css/output.css" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/images/favicon-16x16.png">
+    <script src="https://kit.fontawesome.com/70218ce737.js" crossorigin="anonymous"></script>
+    <style>
+        /* Hide the default scrollbar */
+        .overflow-x-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Define the scrollbar track (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-track {
+            background: transparent;
+            /* You can customize the track's appearance */
+        }
+
+        /* Define the scrollbar thumb (optional) */
+        .overflow-x-scroll::-webkit-scrollbar-thumb {
+            background: transparent;
+            /* You can customize the thumb's appearance */
+        }
+
+        .text-ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <%-include('userNavbar') %>
+        <section class="px-5 py-2 min-h-screen">
+            <div class="bg-orange-500 py-3 px-3 rounded text-center">
+                <span class="text-white text-lg"><i class="fa-solid fa-circle-info"></i> Currently we are providing
+                    services only for Kannur District.</span>
+            </div>
+
+            <div id="alert"
+                class="transition mt-2 delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
+                <span id="alertMsg"></span>
+            </div>
+
+            <h1 class="my-5 text-2xl text-orange-500 text-center font-bold">Add Address</h1>
+
+            <div class="flex justify-center">
+                <form id="form" class="px-3 w-full md:w-1/2 mb-5">
+                    <div class="my-2 flex flex-col">
+                        <label for="HouseName" class="font-semibold">House Name</label>
+                        <input id="HouseName" class="py-1 px-2 border-2 w-full border-orange-500 rounded" type="text"
+                            placeholder="House Name, Building No, Flat No" />
+                    </div>
+                    <div class="my-2 flex flex-col">
+                        <label for="Country" class="font-semibold">Country</label>
+                        <input id="Country" class="py-1 px-2 border-2 w-full border-orange-500 rounded" disabled
+                            type="text" placeholder="India" value="India" />
+                    </div>
+                    <div class="my-2 flex flex-col">
+                        <label for="State" class="font-semibold">State</label>
+                        <input id="State" class="py-1 px-2 border-2 w-full border-orange-500 rounded" type="text"
+                            disabled value="Kerala" placeholder="Kerala" />
+                    </div>
+                    <div class="my-2 flex flex-col">
+                        <label for="District" class="font-semibold">District</label>
+                        <input id="District" class="py-1 px-2 border-2 w-full border-orange-500 rounded" type="text"
+                            disabled value="Kannur" placeholder="Kannur" />
+                    </div>
+                    <div class="my-2 flex flex-col">
+                        <label for="City" class="font-semibold">City/Village</label>
+                        <input id="City" class="py-1 px-2 border-2 w-full border-orange-500 rounded" type="text"
+                            placeholder="City, Village, Landmark" />
+                    </div>
+                    <div class="my-2 flex flex-col">
+                        <label for="Pincode" class="font-semibold">Pincode</label>
+                        <input id="Pincode" class="py-1 px-2 border-2 w-full border-orange-500 rounded" type="text"
+                            placeholder="Pincode" />
+                    </div>
+                    <div class="my-2 flex flex-col">
+                        <label for="Label" class="font-semibold">Label</label>
+                        <select id="Label" class="py-1 px-2 border-2 w-full border-orange-500 rounded" name="label"
+                            id="Label">
+                            <option value="none">None</option>
+                            <option value="home">Home</option>
+                            <option value="work">Work</option>
+                        </select>
+                    </div>
+
+                    <div class="text-center">
+                        <button onclick="newAddress(event)"
+                            class="py-2 px-4 bg-orange-500 text-white rounded-xl">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+        </section>
+        <%-include('userFooter')%>
+
+            <script>
+                const alertBox = document.getElementById('alert');
+                const alertMsg = document.getElementById('alertMsg');
+
+                async function newAddress(event) {
+                    event.preventDefault();
+                    const houseName = document.getElementById("HouseName");
+                    const country = document.getElementById("Country");
+                    const state = document.getElementById("State");
+                    const district = document.getElementById("District");
+                    const city = document.getElementById("City");
+                    const pincode = document.getElementById("Pincode");
+                    const label = document.getElementById("Label");
+                    const form = document.getElementById("form")
+
+                    if (!houseName.value || !city.value || !pincode.value) {
+                        window.scrollTo(0, 0);
+                        alertBox.classList.remove('opacity-0');
+                        alertBox.classList.remove('-translate-x-full');
+                        alertMsg.innerText = `All fields are required!!`;
+                        setTimeout(() => {
+                            alertBox.classList.add('-translate-x-full');
+                            alertBox.classList.add('opacity-0');
+                        }, 2000)
+                        return;
+                    }
+                    if (isNaN(parseInt(pincode.value))) {
+                        window.scrollTo(0, 0);
+                        alertBox.classList.remove('opacity-0');
+                        alertBox.classList.remove('-translate-x-full');
+                        alertMsg.innerText = `Invalid Pincode!!`;
+                        setTimeout(() => {
+                            alertBox.classList.add('-translate-x-full');
+                            alertBox.classList.add('opacity-0');
+                        }, 2000);
+                        return;
+                    } else {
+                        const formData = {
+                            houseName: houseName.value,
+                            country: country.value,
+                            state: state.value,
+                            district: district.value,
+                            city: city.value,
+                            pincode: pincode.value,
+                            label: label.value
+                        }
+
+                        const reqData = await JSON.stringify(formData);
+                        console.log(reqData);
+                        const response = await fetch('/address', {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': "application/json",
+                            },
+                            body: reqData
+                        });
+                        console.log(response);
+                        const data = await response.json();
+                        if (response.status == 404) {
+                            window.scrollTo(0, 0);
+                            alertBox.classList.remove('opacity-0');
+                            alertBox.classList.remove('-translate-x-full');
+                            alertMsg.innerText = `${data.err}`;
+                            setTimeout(() => {
+                                alertBox.classList.add('-translate-x-full');
+                                alertBox.classList.add('opacity-0');
+                            }, 2000);
+                            return;
+                        }
+                        
+                        if(response.ok){
+                            window.scrollTo(0, 0);
+                            alertBox.classList.remove('opacity-0');
+                            alertBox.classList.remove('-translate-x-full');
+                            alertMsg.innerText = `Address Added Successfully`;
+                            setTimeout(() => {
+                                alertBox.classList.add('-translate-x-full');
+                                alertBox.classList.add('opacity-0');
+                                window.location.href=`/userProfile`;
+                            }, 2000);
+                            return;
+                        }
+                    }
+                }
+            </script>
+</body>
+
+</html>

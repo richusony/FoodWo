@@ -3,7 +3,7 @@ const { userModel } = require('../models/userSchema');
 const moment = require('moment');
 
 async function viewWalletPage(req, res) {
-    const userId = req.params.uid;
+    const userId = req.session.user._id;
     const user = await walletModel.findOne({userId:userId}).sort({created_at:-1})
     res.render('../views/userWallet.ejs',{data:user})
 }

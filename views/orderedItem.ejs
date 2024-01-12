@@ -39,7 +39,7 @@
 <body>
     <%-include('userNavbar') %>
 
-        <section class="px-5 md:px-10 py-10">
+        <section class="px-5 md:px-10 py-10 min-h-screen">
             <div id="alert"
                 class="transition delay-150 bg-orange-500 py-3 px-4 text-center w-56 rounded text-white mx-auto ease-linear opacity-0 -translate-x-full">
                 <span id="alertMsg"></span>
@@ -48,7 +48,7 @@
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div class="w-full">
                         <h3 class="text-white font-semibold text-xl cursor-pointer w-fit mb-5"
-                            onclick="redirectTo('/my-orders/<%=order.userId%>')"><i
+                            onclick="redirectTo('/my-orders')"><i
                                 class="fa-solid fa-arrow-left"></i> Orders</h3>
                         <h2 class="text-white flex items-center"><span class="text-sm mr-2">Order ID :
                                 <%=order.orderId%>

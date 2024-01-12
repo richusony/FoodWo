@@ -29,13 +29,13 @@ if (fetchUser.ok) {
     const data = await fetchUser.json();
         const Name = data.userData.fullname.split(' ')
         const id = data.userData._id;
-        logged.innerHTML = `<a href='/userProfile/${id}' onclick="" class=""><i class="fa-regular fa-user"></i> ${Name[0]}</a>`;
+        logged.innerHTML = `<a href='/userProfile' onclick="" class=""><i class="fa-regular fa-user"></i> ${Name[0]}</a>`;
     } else {
         logged.innerHTML = `<a href="/login"><i class="fa-solid fa-life-ring"></i> Login</a>`
     }
 })()
     function toCart(){
-        window.location.href=`/cart/${sessionStorage.getItem('user_id')}`
+        window.location.href=`/cart`
     }
     const open = document.getElementById('open');
     const closes = document.getElementById('close');
