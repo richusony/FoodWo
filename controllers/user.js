@@ -1116,6 +1116,9 @@ async function getAllfoodItems(req, res) {
   }
 }
 
+async function serverReactivation(req, res) {
+  res.status(200).json({message: "FoodWo: server re-activate"})
+}
 
 module.exports = {
   signInUser,
@@ -1149,4 +1152,5 @@ module.exports = {
   viewPageNotFound,
   userSession,
   getAllfoodItems,
+  serverReactivation
 };
