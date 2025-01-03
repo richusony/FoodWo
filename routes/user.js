@@ -16,6 +16,7 @@ const { addReview } = require('../controllers/fdReviewController');
 const { viewNewAddressPage, newAddress, deleteAddress, viewUpdateAddressPage, updateAddress } = require('../controllers/addressController');
 const { viewEditProfilePage, updateUserDetails } = require('../controllers/userProfileController');
 
+router.route('/keep-alive').get(serverReactivation)
 
 // User SignUp Get Request
 router.route('/signup')
@@ -173,7 +174,6 @@ router.route('/edit-profile')
 .get(viewEditProfilePage)
 .patch(profileUpload.single('profileImage'), updateUserDetails)
 
-router.route('/keep-alive').get(serverReactivation)
 
 router.route('/*')
     .get(viewPageNotFound)
